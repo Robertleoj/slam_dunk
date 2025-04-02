@@ -1,3 +1,4 @@
+#include <slam_dunk/tree.hpp>
 #include <thread>
 
 namespace sdunk {
@@ -12,6 +13,7 @@ class Slamvas {
     bool should_stop;
 
     std::thread render_thread;
+    Tree tree;
 };
 
 }  // namespace sdunk

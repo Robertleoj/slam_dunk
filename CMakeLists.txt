@@ -27,28 +27,26 @@ target_sources(
     slam_dunk
 
     PUBLIC
-        include/public/slam_dunk/slam_dunk.hpp
-        include/public/slam_dunk/slamvas.hpp
+        include/slam_dunk/slam_dunk.hpp
+        include/slam_dunk/slamvas.hpp
 
-    PRIVATE
         src/slamvas.cpp
 
-        include/private/slam_dunk/glfw.hpp
+        include/slam_dunk/glfw.hpp
         src/glfw.cpp
 
-        include/private/slam_dunk/tree.hpp
+        include/slam_dunk/tree.hpp
+        src/tree.cpp
 
-        include/private/slam_dunk/node.hpp
+        include/slam_dunk/node.hpp
 )
 
 target_include_directories(
     slam_dunk 
 
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/public
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
     
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/private
 )
 
 target_link_libraries(
