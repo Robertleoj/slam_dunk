@@ -1,0 +1,10 @@
+{
+    "name": "opengllearn",
+    "version-string": "0.1.0",
+    "dependencies": [
+        "spdlog",
+        "glbinding",
+        "glfw3",
+        "glm"
+    ]
+}
