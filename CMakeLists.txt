@@ -22,15 +22,35 @@ find_package(spdlog CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
 
-add_library(slam_dunk 
-    include/slam_dunk/slam_dunk.hpp
+add_library(slam_dunk)
+target_sources(
+    slam_dunk
 
-    src/renderer.cpp
-    include/slam_dunk/renderer.hpp
+    PUBLIC
+        include/public/slam_dunk/slam_dunk.hpp
+        include/public/slam_dunk/renderer.hpp
+
+    PRIVATE
+        src/renderer.cpp
+
+        include/private/slam_dunk/glfw.hpp
+        src/glfw.cpp
+)
+
+target_include_directories(
+    slam_dunk 
+
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/public
+    
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/private
 )
 
 target_link_libraries(
-    slam_dunk PRIVATE
+    slam_dunk 
+    
+    PUBLIC
 
     glbinding::glbinding
     glbinding::glbinding-aux
@@ -38,13 +58,8 @@ target_link_libraries(
     spdlog::spdlog
 
     glm::glm
+
+    glfw
 )
-
-target_include_directories(
-    slam_dunk PUBLIC
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
 
 add_subdirectory(examples)
