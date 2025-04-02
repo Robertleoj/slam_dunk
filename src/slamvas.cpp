@@ -5,7 +5,7 @@
 #include <spdlog/spdlog.h>
 #include <chrono>
 #include <slam_dunk/glfw.hpp>
-#include <slam_dunk/renderer.hpp>
+#include <slam_dunk/slamvas.hpp>
 
 namespace sdunk {
 
@@ -26,11 +26,11 @@ void process_input(
     }
 }
 
-Renderer::Renderer() {
-    render_thread = std::thread(&Renderer::render_job, this);
+Slamvas::Slamvas() {
+    render_thread = std::thread(&Slamvas::render_job, this);
 }
 
-void Renderer::render_job() {
+void Slamvas::render_job() {
     const uint window_height = 1000, window_width = 1000;
     auto window =
         glutils::make_window("Slam Dunk", window_width, window_height);
@@ -46,7 +46,7 @@ void Renderer::render_job() {
     }
 }
 
-Renderer::~Renderer() {
+Slamvas::~Slamvas() {
     this->should_stop = true;
     if (this->render_thread.joinable()) {
         this->render_thread.join();

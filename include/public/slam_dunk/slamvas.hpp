@@ -2,10 +2,10 @@
 
 namespace sdunk {
 
-class Renderer {
+class Slamvas {
    public:
-    Renderer();
-    ~Renderer();
+    Slamvas();
+    ~Slamvas();
 
    private:
     void render_job();

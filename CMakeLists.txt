@@ -28,13 +28,17 @@ target_sources(
 
     PUBLIC
         include/public/slam_dunk/slam_dunk.hpp
-        include/public/slam_dunk/renderer.hpp
+        include/public/slam_dunk/slamvas.hpp
 
     PRIVATE
-        src/renderer.cpp
+        src/slamvas.cpp
 
         include/private/slam_dunk/glfw.hpp
         src/glfw.cpp
+
+        include/private/slam_dunk/tree.hpp
+
+        include/private/slam_dunk/node.hpp
 )
 
 target_include_directories(
