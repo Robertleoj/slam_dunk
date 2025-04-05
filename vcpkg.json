@@ -5,6 +5,7 @@
         "spdlog",
         "glbinding",
         "glfw3",
-        "glm"
+        "glm",
+        "imgui"
     ]
 }
