@@ -20,6 +20,7 @@ find_package(glbinding CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
 
 
 add_library(slam_dunk)
@@ -62,6 +63,8 @@ target_link_libraries(
     glm::glm
 
     glfw
+
+    imgui::imgui
 )
 
 add_subdirectory(examples)

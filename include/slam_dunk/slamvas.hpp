@@ -6,13 +6,8 @@ namespace sdunk {
 class Slamvas {
    public:
     Slamvas();
-    ~Slamvas();
 
    private:
-    void render_job();
-    bool should_stop;
-
-    std::thread render_thread;
     Tree tree;
 };
 
