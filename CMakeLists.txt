@@ -53,6 +53,10 @@ target_sources(
 
         include/slam_dunk/scene_objects/box.hpp
         src/scene_objects/box.cpp
+
+        include/slam_dunk/scene_objects/simple_mesh.hpp
+        src/scene_objects/simple_mesh.cpp
+
 )
 
 target_include_directories(

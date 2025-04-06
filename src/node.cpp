@@ -1,7 +1,7 @@
 #include <slam_dunk/node.hpp>
 
 namespace sdunk {
-std::optional<std::shared_ptr<SceneObject>> ObjectReference::get_object() {
+std::optional<std::shared_ptr<SceneObject>> ObjectReference::get_object() const{
     switch (tag) {
         case WEAK: {
             return this->weak_obj.lock();
@@ -31,6 +31,14 @@ void Node::set_transform(
     glm::mat4 transform
 ) {
     this->transform = transform;
+}
+
+std::optional<std::shared_ptr<SceneObject>> Node::get_object() const {
+    if (!this->object_reference.has_value()) {
+        return std::nullopt;
+    }
+
+    return this->object_reference.value().get_object();
 }
 
 }  // namespace sdunk

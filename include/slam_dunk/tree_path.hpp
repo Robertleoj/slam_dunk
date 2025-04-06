@@ -8,6 +8,7 @@ class TreePath {
    public:
     TreePath(const std::string& path_string);
     TreePath(const std::vector<std::string>& components);
+    TreePath(const char* path_string);
 
     const std::vector<std::string> components;
 

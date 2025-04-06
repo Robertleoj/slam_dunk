@@ -46,6 +46,11 @@ TreePath::TreePath(
     : components(split_path(path_string)) {}
 
 TreePath::TreePath(
+    const char* path_string
+)
+    : TreePath(std::string(path_string)) {}
+
+TreePath::TreePath(
     const std::vector<std::string>& components
 )
     : components(components) {}

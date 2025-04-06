@@ -27,6 +27,11 @@ int main() {
 
     sdunk::Scene scene{};
 
+    // scene.tree.set_object(
+    //     sdunk::TreePath("/box"), std::make_shared<sdunk::Box>()
+    // );
+    scene.tree.set_object("/box", std::make_shared<sdunk::Box>());
+
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     IMGUI_CHECKVERSION();

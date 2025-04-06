@@ -33,7 +33,7 @@ class ObjectReference {
         }
     }
 
-    std::optional<std::shared_ptr<SceneObject>> get_object();
+    std::optional<std::shared_ptr<SceneObject>> get_object() const;
 
    private:
     enum {
@@ -56,7 +56,7 @@ class Node {
     std::optional<ObjectReference> object_reference;
 
    public:
-    std::optional<std::shared_ptr<SceneObject>> get_object();
+    std::optional<std::shared_ptr<SceneObject>> get_object() const;
     void set_object(std::shared_ptr<SceneObject> object);
     void set_object(std::weak_ptr<SceneObject> object);
     void set_transform(glm::mat4 transform);
