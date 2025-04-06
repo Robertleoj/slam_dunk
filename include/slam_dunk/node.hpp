@@ -12,6 +12,8 @@ class Node {
     std::optional<glm::mat4> pose;
 };
 
+class TransientNode : public Node {};
+
 class OwningNode : public Node {};
 
 class WeakNode : public Node {};

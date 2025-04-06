@@ -43,6 +43,12 @@ target_sources(
 
         include/slam_dunk/frame_buffer.hpp
         src/frame_buffer.cpp
+
+        include/slam_dunk/tree_path.hpp
+        src/tree_path.cpp
+
+        include/slam_dunk/scene_object.hpp
+        src/scene_object.cpp
 )
 
 target_include_directories(
