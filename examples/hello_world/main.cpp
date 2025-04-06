@@ -46,16 +46,16 @@ glm::mat4 random_transform() {
     );
     axis = glm::normalize(axis);  // make sure it's a unit vector
 
-    glm::vec3 scale(
-        (std::rand() % 200) / 100.0f + 0.1f,  // 0.1 to 2.0
-        (std::rand() % 200) / 100.0f + 0.1f,
-        (std::rand() % 200) / 100.0f + 0.1f
-    );
+    // glm::vec3 scale(
+    //     (std::rand() % 200) / 100.0f + 0.1f,  // 0.1 to 2.0
+    //     (std::rand() % 200) / 100.0f + 0.1f,
+    //     (std::rand() % 200) / 100.0f + 0.1f
+    // );
 
     glm::mat4 transform =
         glm::translate(glm::mat4(1.0f), position) *
-        glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis) *
-        glm::scale(glm::mat4(1.0f), scale);
+        glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis);
+    // glm::scale(glm::mat4(1.0f), scale);
 
     return transform;
 }
@@ -69,7 +69,7 @@ int main() {
 
     sdunk::Scene scene{};
 
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 500; i++) {
         std::string box_path = std::format("/box{}", i);
 
         scene.tree.set_object(box_path, std::make_shared<sdunk::Box>());

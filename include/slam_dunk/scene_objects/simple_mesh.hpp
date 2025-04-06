@@ -3,10 +3,10 @@
 #include <glbinding/glbinding.h>
 #include <glm/glm.hpp>
 #include <slam_dunk/scene_object.hpp>
+#include <slam_dunk/shaders.hpp>
 #include <vector>
 
 namespace sdunk {
-
 struct Vertex {
     glm::vec3 position;
     glm::vec3 color;
@@ -25,6 +25,8 @@ class SimpleMesh : public SceneObject {
     gl::GLuint vao_id;
     gl::GLuint vbo_id;
     gl::GLuint eab_id;
+
+    ShaderProgram shader;
 
     size_t num_vertices;
 };

@@ -10,7 +10,8 @@ Camera::Camera(
 )
     : fov(fov),
       near_plane(near_plane),
-      far_plane(far_plane) {}
+      far_plane(far_plane),
+      pose(1.0) {}
 
 glm::mat4 Camera::get_projection_matrix(
     double aspect_ratio

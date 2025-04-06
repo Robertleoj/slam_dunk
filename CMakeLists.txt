@@ -60,6 +60,14 @@ target_sources(
         include/slam_dunk/camera.hpp
         src/camera.cpp
 
+        include/slam_dunk/io.hpp
+        src/io.cpp
+
+        include/slam_dunk/shaders.hpp
+        src/shaders.cpp
+
+        include/slam_dunk/paths.hpp
+
 )
 
 target_include_directories(

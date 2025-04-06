@@ -1,11 +1,19 @@
+#include <slam_dunk/paths.hpp>
 #include <slam_dunk/scene_objects/simple_mesh.hpp>
 
 namespace sdunk {
+
+const fs::path vertex_shader_path =
+    shader_folder() / "simple_mesh" / "vertex_shader.vert";
+const fs::path fragment_shader_path =
+    shader_folder() / "simple_mesh" / "fragment_shader.frag";
+
 SimpleMesh::SimpleMesh(
     std::vector<Vertex> vertices,
     std::vector<uint32_t> triangle_indices
 )
-    : num_vertices(triangle_indices.size()) {
+    : num_vertices(triangle_indices.size()),
+      shader(vertex_shader_path, fragment_shader_path) {
     // create the vertex array object
     gl::glGenVertexArrays(1, &this->vao_id);
     gl::glBindVertexArray(this->vao_id);
@@ -43,7 +51,7 @@ SimpleMesh::SimpleMesh(
     gl::glEnableVertexAttribArray(0);
 
     // Color attribute (location = 1)
-    glVertexAttribPointer(
+    gl::glVertexAttribPointer(
         1,
         3,
         gl::GL_FLOAT,
@@ -63,6 +71,10 @@ void SimpleMesh::render(
     glm::mat4 projection
 ) {
     gl::glBindVertexArray(this->vao_id);
+    this->shader.use();
+    this->shader.setUniform("model", model);
+    this->shader.setUniform("view", view);
+    this->shader.setUniform("projection", projection);
     gl::glDrawElements(
         gl::GL_TRIANGLES, this->num_vertices, gl::GL_UNSIGNED_INT, 0
     );

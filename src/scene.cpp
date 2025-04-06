@@ -29,6 +29,8 @@ void Scene::render_to_frame_buffer() {
     this->frame_buffer.bind();
 
     spdlog::debug("Rendering triangle");
+    gl::glClear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
+    gl::glEnable(gl::GL_DEPTH_TEST);
 
     gl::glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     gl::glClear(gl::GL_COLOR_BUFFER_BIT);
