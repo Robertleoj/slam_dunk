@@ -32,19 +32,6 @@ void Scene::render_to_frame_buffer() {
     gl::glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     gl::glClear(gl::GL_COLOR_BUFFER_BIT);
 
-    gl::glBegin(gl::GL_TRIANGLES);
-    gl::glColor3f(1.0, 0.0, 0.0);  // Red
-    gl::glVertex2f(-0.5f, -0.5f);
-
-    gl::glColor3f(0.0, 1.0, 0.0);  // Green
-    gl::glVertex2f(0.5f, -0.5f);
-
-    gl::glColor3f(0.0, 0.0, 1.0);  // Blue
-    gl::glVertex2f(0.0f, 0.5f);
-    gl::glEnd();
-
-    gl::glFlush();
-
     this->frame_buffer.unbind();
 }
 
