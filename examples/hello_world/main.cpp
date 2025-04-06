@@ -31,8 +31,9 @@ int main() {
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+
     ImGuiIO& io = ImGui::GetIO();
-    (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 130");
@@ -41,15 +42,12 @@ int main() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        ImGuiID main_dockspace_id = ImGui::DockSpaceOverViewport();
 
-        // ImGui content here
-        ImGui::Begin("Yo");
-        ImGui::Text("Sup, brochacho!");
-        ImGui::End();
-
-        ImGui::BeginChild("Scene");
+        ImGui::SetNextWindowDockID(main_dockspace_id, ImGuiCond_Once);
+        ImGui::Begin("Scene");
         scene.render_to_imgui();
-        ImGui::EndChild();
+        ImGui::End();
 
         ImGui::Render();
 
