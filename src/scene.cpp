@@ -9,7 +9,6 @@ Scene::Scene()
       camera(45.0, 0.1f, 100.0f) {}
 
 void Scene::render_to_imgui() {
-    spdlog::debug("Rendering to imgui");
     ImVec2 availSize = ImGui::GetContentRegionAvail();
     int width = static_cast<int>(availSize.x);
     int height = static_cast<int>(availSize.y);
@@ -28,7 +27,6 @@ void Scene::render_to_imgui() {
 void Scene::render_to_frame_buffer() {
     this->frame_buffer.bind();
 
-    spdlog::debug("Rendering triangle");
     gl::glClear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
     gl::glEnable(gl::GL_DEPTH_TEST);
 

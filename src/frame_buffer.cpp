@@ -85,6 +85,7 @@ void FrameBuffer::rescale(
     }
 
     spdlog::debug("Resizing to {} {}", width, height);
+    gl::glViewport(0, 0, width, height);
 
     gl::glBindTexture(gl::GL_TEXTURE_2D, this->texture_id);
     gl::glTexImage2D(
@@ -129,7 +130,6 @@ void FrameBuffer::rescale(
 }
 
 void FrameBuffer::bind() const {
-    spdlog::debug("Binding framebuffer");
     gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, this->frame_buffer_object_id);
 }
 
