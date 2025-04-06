@@ -1,1 +1,1 @@
-#include <slam_dunk/slamvas.hpp>
+#include <slam_dunk/scene.hpp>

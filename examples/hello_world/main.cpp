@@ -19,11 +19,13 @@ void framebuffer_size_callback(
 }
 
 int main() {
-    sdunk::Slamvas slamvas{};
+    spdlog::set_level(spdlog::level::debug);
 
     const uint window_height = 1000, window_width = 1000;
     auto window =
         sdunk::glutils::make_window("Slam Dunk", window_width, window_height);
+
+    sdunk::Scene scene{};
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
@@ -44,6 +46,10 @@ int main() {
         ImGui::Begin("Yo");
         ImGui::Text("Sup, brochacho!");
         ImGui::End();
+
+        ImGui::BeginChild("Scene");
+        scene.render_to_imgui();
+        ImGui::EndChild();
 
         ImGui::Render();
 

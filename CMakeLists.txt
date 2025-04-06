@@ -29,9 +29,9 @@ target_sources(
 
     PUBLIC
         include/slam_dunk/slam_dunk.hpp
-        include/slam_dunk/slamvas.hpp
 
-        src/slamvas.cpp
+        include/slam_dunk/scene.hpp
+        src/scene.cpp
 
         include/slam_dunk/glfw.hpp
         src/glfw.cpp
@@ -40,6 +40,9 @@ target_sources(
         src/tree.cpp
 
         include/slam_dunk/node.hpp
+
+        include/slam_dunk/frame_buffer.hpp
+        src/frame_buffer.cpp
 )
 
 target_include_directories(
