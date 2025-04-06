@@ -1,6 +1,7 @@
+#include <iostream>
 #include <slam_dunk/tree_path.hpp>
+#include <sstream>
 #include <stdexcept>
-#include <vector>
 
 namespace sdunk {
 
@@ -67,6 +68,20 @@ TreePath TreePath::parent() const {
     return TreePath(
         std::vector(this->components.begin(), this->components.end() - 1)
     );
+}
+
+std::string TreePath::string() const {
+    if (this->is_root()) {
+        return "/";
+    }
+
+    std::stringstream ss;
+
+    for (auto& comp : this->components) {
+        ss << "/" << comp;
+    }
+
+    return ss.str();
 }
 
 TreePath operator/(

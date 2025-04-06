@@ -25,5 +25,7 @@ class SimpleMesh : public SceneObject {
     gl::GLuint vao_id;
     gl::GLuint vbo_id;
     gl::GLuint eab_id;
+
+    size_t num_vertices;
 };
 }  // namespace sdunk

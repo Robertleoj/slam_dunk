@@ -5,6 +5,11 @@
 #include <imgui_impl_opengl3.h>
 #include <spdlog/spdlog.h>
 #include <chrono>
+#include <cstdlib>
+#include <ctime>
+#include <format>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <slam_dunk/glfw.hpp>
 #include <slam_dunk/slam_dunk.hpp>
 #include <thread>
@@ -18,6 +23,43 @@ void framebuffer_size_callback(
     gl::glViewport(0, 0, width, height);
 }
 
+glm::mat4 random_transform() {
+    // Seed once (if not already seeded somewhere else)
+    static bool seeded = false;
+    if (!seeded) {
+        std::srand(static_cast<unsigned>(std::time(0)));
+        seeded = true;
+    }
+
+    glm::vec3 position(
+        (std::rand() % 200 - 100) / 10.0f,  // -10.0 to 10.0
+        (std::rand() % 200 - 100) / 10.0f,
+        (std::rand() % 200 - 100) / 10.0f
+    );
+
+    float angle = static_cast<float>(std::rand() % 360);  // 0 to 359 degrees
+
+    glm::vec3 axis(
+        (std::rand() % 200 - 100) / 100.0f,
+        (std::rand() % 200 - 100) / 100.0f,
+        (std::rand() % 200 - 100) / 100.0f
+    );
+    axis = glm::normalize(axis);  // make sure it's a unit vector
+
+    glm::vec3 scale(
+        (std::rand() % 200) / 100.0f + 0.1f,  // 0.1 to 2.0
+        (std::rand() % 200) / 100.0f + 0.1f,
+        (std::rand() % 200) / 100.0f + 0.1f
+    );
+
+    glm::mat4 transform =
+        glm::translate(glm::mat4(1.0f), position) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis) *
+        glm::scale(glm::mat4(1.0f), scale);
+
+    return transform;
+}
+
 int main() {
     spdlog::set_level(spdlog::level::debug);
 
@@ -27,10 +69,12 @@ int main() {
 
     sdunk::Scene scene{};
 
-    // scene.tree.set_object(
-    //     sdunk::TreePath("/box"), std::make_shared<sdunk::Box>()
-    // );
-    scene.tree.set_object("/box", std::make_shared<sdunk::Box>());
+    for (int i = 0; i < 30; i++) {
+        std::string box_path = std::format("/box{}", i);
+
+        scene.tree.set_object(box_path, std::make_shared<sdunk::Box>());
+        scene.tree.set_transform(box_path, random_transform());
+    }
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 

@@ -137,4 +137,9 @@ void FrameBuffer::unbind() const {
     gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, 0);
 }
 
+double FrameBuffer::aspect() const {
+    return static_cast<double>(this->current_width) /
+           static_cast<double>(this->current_height);
+}
+
 }  // namespace sdunk

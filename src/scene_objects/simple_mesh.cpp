@@ -4,7 +4,8 @@ namespace sdunk {
 SimpleMesh::SimpleMesh(
     std::vector<Vertex> vertices,
     std::vector<uint32_t> triangle_indices
-) {
+)
+    : num_vertices(triangle_indices.size()) {
     // create the vertex array object
     gl::glGenVertexArrays(1, &this->vao_id);
     gl::glBindVertexArray(this->vao_id);
@@ -62,7 +63,9 @@ void SimpleMesh::render(
     glm::mat4 projection
 ) {
     gl::glBindVertexArray(this->vao_id);
-    gl::glDrawElements(gl::GL_TRIANGLES, 6, gl::GL_UNSIGNED_INT, 0);
+    gl::glDrawElements(
+        gl::GL_TRIANGLES, this->num_vertices, gl::GL_UNSIGNED_INT, 0
+    );
     gl::glBindVertexArray(0);
 };
 }  // namespace sdunk

@@ -57,6 +57,9 @@ target_sources(
         include/slam_dunk/scene_objects/simple_mesh.hpp
         src/scene_objects/simple_mesh.cpp
 
+        include/slam_dunk/camera.hpp
+        src/camera.cpp
+
 )
 
 target_include_directories(

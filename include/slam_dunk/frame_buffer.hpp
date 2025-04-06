@@ -13,6 +13,7 @@ class FrameBuffer {
     void rescale(size_t width, size_t height);
     void bind() const;
     void unbind() const;
+    double aspect() const;
 
    private:
     void render_to_frame_buffer();

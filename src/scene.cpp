@@ -5,7 +5,8 @@
 namespace sdunk {
 
 Scene::Scene()
-    : frame_buffer(500, 500) {}
+    : frame_buffer(500, 500),
+      camera(45.0, 0.1f, 100.0f) {}
 
 void Scene::render_to_imgui() {
     spdlog::debug("Rendering to imgui");
@@ -31,6 +32,12 @@ void Scene::render_to_frame_buffer() {
 
     gl::glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     gl::glClear(gl::GL_COLOR_BUFFER_BIT);
+
+    auto view = this->camera.get_view_matrix();
+    auto projection =
+        this->camera.get_projection_matrix(this->frame_buffer.aspect());
+
+    this->tree.render(view, projection);
 
     this->frame_buffer.unbind();
 }

@@ -53,6 +53,8 @@ void Box::render(
     glm::mat4 model,
     glm::mat4 view,
     glm::mat4 projection
-) {}
+) {
+    this->box_mesh.render(model, view, projection);
+}
 
 }  // namespace sdunk

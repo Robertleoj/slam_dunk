@@ -1,3 +1,4 @@
+#include <spdlog/spdlog.h>
 #include <slam_dunk/tree.hpp>
 #include <stack>
 
@@ -74,6 +75,8 @@ void Tree::set_transform(
     if (path.is_root()) {
         throw std::runtime_error("Setting root transform is not allowed");
     }
+
+    spdlog::debug("Setting transform for {}", path.string());
 
     Node* node = this->make_path(path);
     node->set_transform(transform);
