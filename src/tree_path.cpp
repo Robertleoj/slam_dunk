@@ -7,6 +7,11 @@ namespace sdunk {
 std::vector<std::string> split_path(
     const std::string& path
 ) {
+    // allow the root path
+    if (path == "/") {
+        return {};
+    }
+
     if (path.empty() || path[0] != '/') {
         throw std::invalid_argument("Path must start with '/'");
     }
@@ -37,8 +42,35 @@ std::vector<std::string> split_path(
 
 TreePath::TreePath(
     const std::string& path_string
+)
+    : components(split_path(path_string)) {}
+
+TreePath::TreePath(
+    const std::vector<std::string>& components
+)
+    : components(components) {}
+
+bool TreePath::is_root() const {
+    return this->components.size() == 0;
+}
+
+TreePath TreePath::parent() const {
+    if (this->components.size() == 0) {
+        throw std::runtime_error("Cannot pop empty path");
+    }
+
+    return TreePath(
+        std::vector(this->components.begin(), this->components.end() - 1)
+    );
+}
+
+TreePath operator/(
+    const TreePath& path,
+    const std::string& part
 ) {
-    this->components = split_path(path_string);
+    std::vector<std::string> new_components = path.components;
+    new_components.push_back(part);
+    return TreePath(new_components);
 }
 
 }  // namespace sdunk

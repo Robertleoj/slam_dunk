@@ -40,6 +40,7 @@ target_sources(
         src/tree.cpp
 
         include/slam_dunk/node.hpp
+        src/node.cpp
 
         include/slam_dunk/frame_buffer.hpp
         src/frame_buffer.cpp
@@ -49,6 +50,9 @@ target_sources(
 
         include/slam_dunk/scene_object.hpp
         src/scene_object.cpp
+
+        include/slam_dunk/scene_objects/box.hpp
+        src/scene_objects/box.cpp
 )
 
 target_include_directories(
