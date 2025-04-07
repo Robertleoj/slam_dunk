@@ -16,11 +16,14 @@ class GridXYPlane : public SceneObject {
 
     ~GridXYPlane() override;
 
+    void set_arcball_zoom(float zoom);
+
    private:
     gl::GLuint vao_id;
     gl::GLuint vbo_id;
     int vertex_count;
     ShaderProgram shader;
+    float arcball_zoom;
 };
 
 }  // namespace sdunk

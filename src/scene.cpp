@@ -19,7 +19,9 @@ glm::vec3 make_background_color(
 Scene::Scene()
     : frame_buffer(500, 500),
       camera(45.0, 0.1f, 100000.0f),
-      xy_grid(1000.0, 1.0) {}
+      xy_grid(1000.0, 1.0) {
+    this->xy_grid.set_arcball_zoom(this->arcball.radius);
+}
 
 void Scene::render_to_imgui() {
     ImVec2 availSize = ImGui::GetContentRegionAvail();
@@ -156,6 +158,7 @@ void Scene::handle_input() {
         this->arcball.translate_relative(translation);
     }
     // arcball.rotate(Angle::deg(0.2), Angle::deg(0.05));
+    this->xy_grid.set_arcball_zoom(this->arcball.radius);
 }
 
 }  // namespace sdunk

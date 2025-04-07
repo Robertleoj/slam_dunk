@@ -62,6 +62,7 @@ void GridXYPlane::render(
     this->shader.setUniform(
         "uColor", glm::vec3(0.6f, 0.6f, 0.6f)
     );  // clean gray
+    this->shader.setUniform("uZoom", this->arcball_zoom);
 
     gl::glBindVertexArray(this->vao_id);
     gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);
@@ -71,6 +72,12 @@ void GridXYPlane::render(
 GridXYPlane::~GridXYPlane() {
     gl::glDeleteBuffers(1, &this->vbo_id);
     gl::glDeleteVertexArrays(1, &this->vao_id);
+}
+
+void GridXYPlane::set_arcball_zoom(
+    float zoom
+) {
+    this->arcball_zoom = zoom;
 }
 
 }  // namespace sdunk
