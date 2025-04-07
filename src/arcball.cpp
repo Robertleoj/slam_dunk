@@ -30,10 +30,25 @@ void Arcball::rotate(
             .clamp(Angle::rad(-vertical_range), Angle::rad(vertical_range));
 }
 
+void Arcball::translate(
+    glm::vec3 amount
+) {
+    glm::mat4 camera_in_center = this->camera_in_center();
+    glm::mat4 center_in_camera = glm::inverse(camera_in_center);
+
+    glm::mat4 camera_in_world = this->center * camera_in_center;
+
+    glm::mat4 moved_camera = camera_in_world * transl(amount);
+
+    glm::mat4 new_center_in_world = moved_camera * center_in_camera;
+
+    this->center = new_center_in_world;
+}
+
 glm::mat4 Arcball::camera_in_center() const {
     // start at x = 1
     glm::vec4 point_in_center_homo =
-        rz(this->theta) * ry(-this->phi) * glm::vec4(1.0, 0.0, 0.0, 1.0);
+        rz(this->theta) * ry(this->phi) * glm::vec4(1.0, 0.0, 0.0, 1.0);
 
     glm::vec3 z_axis = glm::vec3(point_in_center_homo);
 

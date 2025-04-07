@@ -14,6 +14,8 @@ class FrameBuffer {
     void bind() const;
     void unbind() const;
     double aspect() const;
+    size_t width() const;
+    size_t height() const;
 
    private:
     void render_to_frame_buffer();

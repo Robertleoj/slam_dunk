@@ -15,6 +15,7 @@ class Arcball {
    public:
     Arcball();
     void rotate(Angle x, Angle y);
+    void translate(glm::vec3 amount);
     glm::mat4 camera_in_center() const;
     glm::mat4 view_matrix() const;
 };

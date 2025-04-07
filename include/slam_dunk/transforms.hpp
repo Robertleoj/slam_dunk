@@ -11,8 +11,8 @@ glm::mat4 rx(const Angle& angle);
 
 glm::mat4 ry(const Angle& angle);
 
-glm::mat4 rz(
-    const Angle& angle
+glm::mat4 rz(const Angle& angle);
 
-);
+glm::mat4 transl(const glm::vec3& amount);
+
 }  // namespace sdunk

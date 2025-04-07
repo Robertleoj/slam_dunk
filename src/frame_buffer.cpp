@@ -142,4 +142,12 @@ double FrameBuffer::aspect() const {
            static_cast<double>(this->current_height);
 }
 
+size_t FrameBuffer::width() const {
+    return this->current_width;
+}
+
+size_t FrameBuffer::height() const {
+    return this->current_height;
+}
+
 }  // namespace sdunk

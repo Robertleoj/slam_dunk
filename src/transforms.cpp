@@ -27,4 +27,12 @@ glm::mat4 rz(
     return rot(angle, glm::vec3(0.0, 0.0, 1.0));
 }
 
+glm::mat4 transl(
+    const glm::vec3& amount
+) {
+    glm::mat4 mat(1.0);
+    mat[3] = glm::vec4(amount, 1.0);
+    return mat;
+}
+
 }  // namespace sdunk
