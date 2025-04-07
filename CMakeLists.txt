@@ -75,6 +75,9 @@ target_sources(
         include/slam_dunk/scene_objects/xy_grid.hpp
         src/scene_objects/xy_grid.cpp
 
+        include/slam_dunk/scene_objects/arcball_indicator.hpp
+        src/scene_objects/arcball_indicator.cpp
+
         include/slam_dunk/camera.hpp
         src/camera.cpp
 
