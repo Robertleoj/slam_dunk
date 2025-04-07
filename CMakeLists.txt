@@ -72,7 +72,8 @@ target_sources(
         include/slam_dunk/scene_objects/poly_line.hpp
         src/scene_objects/poly_line.cpp
 
-
+        include/slam_dunk/scene_objects/xy_grid.hpp
+        src/scene_objects/xy_grid.cpp
 
         include/slam_dunk/camera.hpp
         src/camera.cpp

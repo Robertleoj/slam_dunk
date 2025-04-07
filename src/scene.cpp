@@ -18,7 +18,8 @@ glm::vec3 make_background_color(
 
 Scene::Scene()
     : frame_buffer(500, 500),
-      camera(45.0, 0.1f, 100000.0f) {}
+      camera(45.0, 0.1f, 100000.0f),
+      xy_grid(1000.0, 1.0) {}
 
 void Scene::render_to_imgui() {
     ImVec2 availSize = ImGui::GetContentRegionAvail();
@@ -56,6 +57,8 @@ void Scene::render_to_frame_buffer() {
         this->camera.get_projection_matrix(this->frame_buffer.aspect());
 
     this->tree.render(view, projection);
+
+    this->xy_grid.render(glm::mat4(1.0), view, projection);
 
     this->frame_buffer.unbind();
 }
