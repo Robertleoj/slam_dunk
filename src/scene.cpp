@@ -119,6 +119,7 @@ void Scene::handle_input() {
                 }
 
                 this->arcball.zoom(zoom_factor);
+                this->xy_grid.set_arcball_zoom(this->arcball.radius);
             }
         }
 
@@ -130,7 +131,6 @@ void Scene::handle_input() {
         glm::vec3 up(0.0, movement_amount, 0.0);
 
         if (ImGui::IsKeyDown(ImGuiKey_W)) {
-            // move forward (negative z in camera space)
             translation += forwards;
         }
 
@@ -156,8 +156,6 @@ void Scene::handle_input() {
 
         this->arcball.translate_relative(translation);
     }
-    // arcball.rotate(Angle::deg(0.2), Angle::deg(0.05));
-    this->xy_grid.set_arcball_zoom(this->arcball.radius);
 }
 
 }  // namespace sdunk
