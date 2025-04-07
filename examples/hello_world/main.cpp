@@ -27,35 +27,43 @@ void seed_random() {
     std::srand(static_cast<unsigned int>(std::time(0)));
 }
 
+float rand_float() {
+    return static_cast<float>(std::rand()) / RAND_MAX;
+}
+
+float rand_float(
+    float min,
+    float max
+) {
+    return rand_float() * (max - min) + min;
+}
+
+glm::vec3 random_vector(
+    float min,
+    float max
+) {
+    return glm::vec3(
+        rand_float(min, max), rand_float(min, max), rand_float(min, max)
+    );
+}
+
 glm::mat4 random_transform(
     bool scale = false
 ) {
-    glm::vec3 position(
-        (std::rand() % 200 - 100) / 10.0f,  // -10.0 to 10.0
-        (std::rand() % 200 - 100) / 10.0f,
-        (std::rand() % 200 - 100) / 10.0f
-    );
+    glm::vec3 position = random_vector(-10.0, 10.0);
 
-    float angle = static_cast<float>(std::rand() % 360);  // 0 to 359 degrees
+    float angle = rand_float(0.0f, 359.0f);
 
-    glm::vec3 axis(
-        (std::rand() % 200 - 100) / 100.0f,
-        (std::rand() % 200 - 100) / 100.0f,
-        (std::rand() % 200 - 100) / 100.0f
-    );
+    glm::vec3 axis = random_vector(0.0, 10.0);
+
     axis = glm::normalize(axis);  // make sure it's a unit vector
 
     glm::mat4 transform =
         glm::translate(glm::mat4(1.0f), position) *
         glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis);
-    // ;
 
     if (scale) {
-        glm::vec3 random_scale(
-            (std::rand() % 200) / 100.0f + 0.1f,  // 0.1 to 2.0
-            (std::rand() % 200) / 100.0f + 0.1f,
-            (std::rand() % 200) / 100.0f + 0.1f
-        );
+        glm::vec3 random_scale = random_vector(0.1f, 2.0f);
 
         transform = transform * glm::scale(glm::mat4(1.0f), random_scale);
     }
@@ -64,43 +72,32 @@ glm::mat4 random_transform(
 }
 
 std::shared_ptr<sdunk::Sphere> random_sphere() {
-    float radius = static_cast<float>(std::rand()) / RAND_MAX * 1.0f +
-                   0.1f;  // 0.1 to 1.1 range
+    float radius = rand_float(0.1, 1.0);
 
-    glm::vec3 color = glm::vec3(
-        static_cast<float>(std::rand()) / RAND_MAX,
-        static_cast<float>(std::rand()) / RAND_MAX,
-        static_cast<float>(std::rand()) / RAND_MAX
-    );
+    glm::vec3 color = random_vector(0.0f, 1.0f);
     return std::make_shared<sdunk::Sphere>(radius, color);
 }
 
 std::shared_ptr<sdunk::PolyLine> random_poly_line(
-    int pointCount = 10,
-    float thickness = 0.05f
+    int pointCount = 10
 ) {
+    float thickness = rand_float(0.01, 0.5);
     std::vector<glm::vec3> points;
-    glm::vec3 pos(0.0f);              // Start at origin
-    glm::vec3 dir(1.0f, 0.0f, 0.0f);  // Initial direction
+
+    glm::vec3 pos = random_vector(-10.0f, 10.0f);  // Start at origin
+    glm::vec3 dir =
+        glm::normalize(random_vector(-1.0, 1.0f));  // Initial direction
 
     for (int i = 0; i < pointCount; ++i) {
         // Add some randomness to the direction, keep it smooth
-        dir += glm::vec3(
-            (rand() % 200 - 100) / 500.0f,  // -0.2 to 0.2
-            (rand() % 200 - 100) / 500.0f,
-            (rand() % 200 - 100) / 500.0f
-        );
+        dir += random_vector(-0.2, 0.2);
         dir = glm::normalize(dir);
         pos += dir * 0.5f;  // Step size
 
         points.push_back(pos);
     }
 
-    glm::vec3 color(
-        (rand() % 100) / 100.0f,
-        (rand() % 100) / 100.0f,
-        (rand() % 100) / 100.0f
-    );
+    glm::vec3 color = random_vector(0.0, 1.0);
 
     return std::make_shared<sdunk::PolyLine>(points, thickness, color);
 }
