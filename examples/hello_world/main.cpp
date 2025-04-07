@@ -75,6 +75,36 @@ std::shared_ptr<sdunk::Sphere> random_sphere() {
     return std::make_shared<sdunk::Sphere>(radius, color);
 }
 
+std::shared_ptr<sdunk::PolyLine> random_poly_line(
+    int pointCount = 10,
+    float thickness = 0.05f
+) {
+    std::vector<glm::vec3> points;
+    glm::vec3 pos(0.0f);              // Start at origin
+    glm::vec3 dir(1.0f, 0.0f, 0.0f);  // Initial direction
+
+    for (int i = 0; i < pointCount; ++i) {
+        // Add some randomness to the direction, keep it smooth
+        dir += glm::vec3(
+            (rand() % 200 - 100) / 500.0f,  // -0.2 to 0.2
+            (rand() % 200 - 100) / 500.0f,
+            (rand() % 200 - 100) / 500.0f
+        );
+        dir = glm::normalize(dir);
+        pos += dir * 0.5f;  // Step size
+
+        points.push_back(pos);
+    }
+
+    glm::vec3 color(
+        (rand() % 100) / 100.0f,
+        (rand() % 100) / 100.0f,
+        (rand() % 100) / 100.0f
+    );
+
+    return std::make_shared<sdunk::PolyLine>(points, thickness, color);
+}
+
 int main() {
     seed_random();
     spdlog::set_level(spdlog::level::debug);
@@ -97,6 +127,12 @@ int main() {
 
         scene.tree.set_object(sphere_path, random_sphere());
         scene.tree.set_transform(sphere_path, random_transform(false));
+    }
+
+    for (int i = 0; i < 20; i++) {
+        std::string poly_line_path = std::format("/poly_line{}", i);
+
+        scene.tree.set_object(poly_line_path, random_poly_line());
     }
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);

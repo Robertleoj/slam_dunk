@@ -63,6 +63,11 @@ target_sources(
         include/slam_dunk/scene_objects/mono_mesh.hpp
         src/scene_objects/mono_mesh.cpp
 
+        include/slam_dunk/scene_objects/poly_line.hpp
+        src/scene_objects/poly_line.cpp
+
+
+
         include/slam_dunk/camera.hpp
         src/camera.cpp
 
