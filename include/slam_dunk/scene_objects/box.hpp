@@ -8,7 +8,7 @@ namespace sdunk {
 
 class Box : public SceneObject {
    public:
-   Box();
+    Box();
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
    private:
