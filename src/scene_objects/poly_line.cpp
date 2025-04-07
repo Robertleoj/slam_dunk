@@ -2,7 +2,7 @@
 
 namespace sdunk {
 
-MonoMesh make_mesh(
+MonoMesh make_poly_line_mesh(
     const std::vector<glm::vec3>& points,
     float thickness,
     const glm::vec3& color
@@ -53,7 +53,7 @@ PolyLine::PolyLine(
     float thickness,
     const glm::vec3& color
 )
-    : mesh(make_mesh(points, thickness, color)) {}
+    : mesh(make_poly_line_mesh(points, thickness, color)) {}
 
 void PolyLine::render(
     glm::mat4 model,
