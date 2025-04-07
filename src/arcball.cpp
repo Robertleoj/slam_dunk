@@ -30,9 +30,10 @@ void Arcball::rotate(
             .clamp(Angle::rad(-vertical_range), Angle::rad(vertical_range));
 }
 
-void Arcball::translate(
-    glm::vec3 amount
+void Arcball::translate_relative(
+    glm::vec3 relative_amount
 ) {
+    glm::vec3 amount = relative_amount * this->radius;
     glm::mat4 camera_in_center = this->camera_in_center();
     glm::mat4 center_in_camera = glm::inverse(camera_in_center);
 
@@ -43,6 +44,12 @@ void Arcball::translate(
     glm::mat4 new_center_in_world = moved_camera * center_in_camera;
 
     this->center = new_center_in_world;
+}
+
+void Arcball::zoom(
+    float factor
+) {
+    this->radius = std::max(this->radius * factor, 0.1f);
 }
 
 glm::mat4 Arcball::camera_in_center() const {

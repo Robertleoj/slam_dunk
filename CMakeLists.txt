@@ -77,6 +77,9 @@ target_sources(
         include/slam_dunk/transforms.hpp
         src/transforms.cpp
 
+        include/slam_dunk/frame_timer.hpp
+        src/frame_timer.cpp
+
 )
 
 target_include_directories(

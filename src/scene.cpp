@@ -24,6 +24,7 @@ void Scene::render_to_imgui() {
         ImVec2(0, 1),
         ImVec2(1, 0)
     );
+    this->frame_timer.log_frame();
     this->handle_input();
 }
 
@@ -83,10 +84,25 @@ void Scene::handle_input() {
                     -Angle::rad(x_angle_diff), -Angle::rad(y_angle_diff)
                 );
             }
+
+            if (io.MouseWheel != 0.0f) {
+                auto scroll_input = static_cast<float>(io.MouseWheel);
+                spdlog::debug("Got scroll {}", scroll_input);
+
+                float zoom_factor;
+
+                if (scroll_input < 0.0) {
+                    zoom_factor = std::pow(1.1, std::abs(scroll_input));
+                } else {
+                    zoom_factor = std::pow(0.9, std::abs(scroll_input));
+                }
+
+                this->arcball.zoom(zoom_factor);
+            }
         }
 
         glm::vec3 translation(0.0, 0.0, 0.0);
-        float movement_amount = 0.1;
+        float movement_amount = this->frame_timer.timedelta();
 
         glm::vec3 forwards(0.0, 0.0, -movement_amount);
         glm::vec3 right(movement_amount, 0.0, 0.0);
@@ -117,7 +133,7 @@ void Scene::handle_input() {
             translation -= up;
         }
 
-        this->arcball.translate(translation);
+        this->arcball.translate_relative(translation);
     }
     // arcball.rotate(Angle::deg(0.2), Angle::deg(0.05));
 }

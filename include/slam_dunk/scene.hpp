@@ -2,6 +2,7 @@
 #include <slam_dunk/arcball.hpp>
 #include <slam_dunk/camera.hpp>
 #include <slam_dunk/frame_buffer.hpp>
+#include <slam_dunk/frame_timer.hpp>
 #include <slam_dunk/tree.hpp>
 #include <thread>
 
@@ -21,6 +22,7 @@ class Scene {
     FrameBuffer frame_buffer;
     Arcball arcball;
     Camera camera;
+    FrameTimer frame_timer;
 };
 
 }  // namespace sdunk
