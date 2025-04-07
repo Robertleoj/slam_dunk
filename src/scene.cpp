@@ -16,8 +16,6 @@ void Scene::render_to_imgui() {
     int height = static_cast<int>(availSize.y);
     this->frame_buffer.rescale(width, height);
 
-    this->handle_input();
-
     this->render_to_frame_buffer();
 
     ImGui::Image(
@@ -26,6 +24,7 @@ void Scene::render_to_imgui() {
         ImVec2(0, 1),
         ImVec2(1, 0)
     );
+    this->handle_input();
 }
 
 void Scene::render_to_frame_buffer() {
@@ -51,7 +50,7 @@ void Scene::handle_input() {
 
     if (ImGui::IsWindowFocused()) {
         // Mouse controls - only if the window is hovered
-        if (ImGui::IsWindowHovered()) {
+        if (ImGui::IsItemHovered()) {
             if (ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
                 // handle dragging
                 auto mouse_drag_delta =
