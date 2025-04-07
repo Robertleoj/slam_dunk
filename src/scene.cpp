@@ -21,6 +21,7 @@ Scene::Scene()
       camera(45.0, 0.1f, 100000.0f),
       xy_grid(1000.0) {
     this->xy_grid.set_arcball_zoom(this->arcball.radius);
+    this->arcball_indicator.set_arcball_zoom(this->arcball.radius);
 }
 
 void Scene::render_to_imgui() {
@@ -64,6 +65,7 @@ void Scene::render_to_frame_buffer() {
     this->tree.render(view, projection);
 
     this->xy_grid.render(glm::mat4(1.0), view, projection);
+    this->arcball_indicator.render(this->arcball.center, view, projection);
 
     this->frame_buffer.unbind();
 }
@@ -120,6 +122,7 @@ void Scene::handle_input() {
 
                 this->arcball.zoom(zoom_factor);
                 this->xy_grid.set_arcball_zoom(this->arcball.radius);
+                this->arcball_indicator.set_arcball_zoom(this->arcball.radius);
             }
         }
 

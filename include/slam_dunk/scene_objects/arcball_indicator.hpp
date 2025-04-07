@@ -13,6 +13,9 @@ class ArcballIndicator : public SceneObject {
     void set_arcball_zoom(float zoom);
 
    private:
+    static glm::mat4 get_scale_mat(float scale);
+
+   private:
     gl::GLuint vao_id;
     gl::GLuint vbo_id;
     uint vertex_count;
