@@ -1,14 +1,17 @@
 #include <imgui.h>
 #include <spdlog/spdlog.h>
+#include <slam_dunk/angle.hpp>
 #include <slam_dunk/scene.hpp>
 
 namespace sdunk {
 
 Scene::Scene()
     : frame_buffer(500, 500),
-      camera(45.0, 0.1f, 100.0f) {}
+      camera(45.0, 0.1f, 100000.0f) {}
 
 void Scene::render_to_imgui() {
+    arcball.rotate(Angle::deg(0.2), Angle::deg(0.05));
+
     ImVec2 availSize = ImGui::GetContentRegionAvail();
     int width = static_cast<int>(availSize.x);
     int height = static_cast<int>(availSize.y);
@@ -33,7 +36,7 @@ void Scene::render_to_frame_buffer() {
     gl::glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     gl::glClear(gl::GL_COLOR_BUFFER_BIT);
 
-    auto view = this->camera.get_view_matrix();
+    auto view = this->arcball.view_matrix();
     auto projection =
         this->camera.get_projection_matrix(this->frame_buffer.aspect());
 

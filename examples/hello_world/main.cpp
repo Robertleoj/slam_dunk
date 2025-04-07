@@ -69,7 +69,7 @@ int main() {
 
     sdunk::Scene scene{};
 
-    for (int i = 0; i < 500; i++) {
+    for (int i = 0; i < 100; i++) {
         std::string box_path = std::format("/box{}", i);
 
         scene.tree.set_object(box_path, std::make_shared<sdunk::Box>());

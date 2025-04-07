@@ -10,8 +10,7 @@ Camera::Camera(
 )
     : fov(fov),
       near_plane(near_plane),
-      far_plane(far_plane),
-      pose(1.0) {}
+      far_plane(far_plane) {}
 
 glm::mat4 Camera::get_projection_matrix(
     double aspect_ratio
@@ -19,10 +18,6 @@ glm::mat4 Camera::get_projection_matrix(
     return glm::perspective(
         glm::radians(this->fov), aspect_ratio, near_plane, far_plane
     );
-}
-
-glm::mat4 Camera::get_view_matrix() const {
-    return glm::inverse(this->pose);
 }
 
 }  // namespace sdunk

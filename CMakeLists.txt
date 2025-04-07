@@ -68,6 +68,15 @@ target_sources(
 
         include/slam_dunk/paths.hpp
 
+        include/slam_dunk/angle.hpp
+        src/angle.cpp
+
+        include/slam_dunk/arcball.hpp
+        src/arcball.cpp
+
+        include/slam_dunk/transforms.hpp
+        src/transforms.cpp
+
 )
 
 target_include_directories(
