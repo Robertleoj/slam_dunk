@@ -19,8 +19,7 @@ glm::mat4 get_scale_mat(
 }
 
 GridXYPlane::GridXYPlane(
-    float grid_size,
-    float spacing
+    float grid_size
 )
     : vao_id(0),
       vbo_id(0),
@@ -28,11 +27,11 @@ GridXYPlane::GridXYPlane(
       shader(vertex_shader_path, fragment_shader_path) {
     std::vector<float> verts;
 
-    for (float x = -grid_size; x <= grid_size; x += spacing) {
+    for (float x = -grid_size; x <= grid_size; x++) {
         verts.insert(verts.end(), {x, -grid_size, 0.0f, x, grid_size, 0.0f});
     }
 
-    for (float y = -grid_size; y <= grid_size; y += spacing) {
+    for (float y = -grid_size; y <= grid_size; y++) {
         verts.insert(verts.end(), {-grid_size, y, 0.0f, grid_size, y, 0.0f});
     }
 
