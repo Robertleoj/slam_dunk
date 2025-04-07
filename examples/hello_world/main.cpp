@@ -23,14 +23,13 @@ void framebuffer_size_callback(
     gl::glViewport(0, 0, width, height);
 }
 
-glm::mat4 random_transform() {
-    // Seed once (if not already seeded somewhere else)
-    static bool seeded = false;
-    if (!seeded) {
-        std::srand(static_cast<unsigned>(std::time(0)));
-        seeded = true;
-    }
+void seed_random() {
+    std::srand(static_cast<unsigned int>(std::time(0)));
+}
 
+glm::mat4 random_transform(
+    bool scale = false
+) {
     glm::vec3 position(
         (std::rand() % 200 - 100) / 10.0f,  // -10.0 to 10.0
         (std::rand() % 200 - 100) / 10.0f,
@@ -46,21 +45,38 @@ glm::mat4 random_transform() {
     );
     axis = glm::normalize(axis);  // make sure it's a unit vector
 
-    glm::vec3 scale(
-        (std::rand() % 200) / 100.0f + 0.1f,  // 0.1 to 2.0
-        (std::rand() % 200) / 100.0f + 0.1f,
-        (std::rand() % 200) / 100.0f + 0.1f
-    );
-
     glm::mat4 transform =
         glm::translate(glm::mat4(1.0f), position) *
-        glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis) *
-        glm::scale(glm::mat4(1.0f), scale);
+        glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis);
+    // ;
+
+    if (scale) {
+        glm::vec3 random_scale(
+            (std::rand() % 200) / 100.0f + 0.1f,  // 0.1 to 2.0
+            (std::rand() % 200) / 100.0f + 0.1f,
+            (std::rand() % 200) / 100.0f + 0.1f
+        );
+
+        transform = transform * glm::scale(glm::mat4(1.0f), random_scale);
+    }
 
     return transform;
 }
 
+std::shared_ptr<sdunk::Sphere> random_sphere() {
+    float radius = static_cast<float>(std::rand()) / RAND_MAX * 1.0f +
+                   0.1f;  // 0.1 to 1.1 range
+
+    glm::vec3 color = glm::vec3(
+        static_cast<float>(std::rand()) / RAND_MAX,
+        static_cast<float>(std::rand()) / RAND_MAX,
+        static_cast<float>(std::rand()) / RAND_MAX
+    );
+    return std::make_shared<sdunk::Sphere>(radius, color);
+}
+
 int main() {
+    seed_random();
     spdlog::set_level(spdlog::level::debug);
 
     const uint window_height = 1000, window_width = 1000;
@@ -73,7 +89,14 @@ int main() {
         std::string box_path = std::format("/box{}", i);
 
         scene.tree.set_object(box_path, std::make_shared<sdunk::Box>());
-        scene.tree.set_transform(box_path, random_transform());
+        scene.tree.set_transform(box_path, random_transform(true));
+    }
+
+    for (int i = 0; i < 50; i++) {
+        std::string sphere_path = std::format("/sphere{}", i);
+
+        scene.tree.set_object(sphere_path, random_sphere());
+        scene.tree.set_transform(sphere_path, random_transform(false));
     }
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);

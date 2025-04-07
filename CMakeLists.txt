@@ -57,6 +57,12 @@ target_sources(
         include/slam_dunk/scene_objects/simple_mesh.hpp
         src/scene_objects/simple_mesh.cpp
 
+        include/slam_dunk/scene_objects/sphere.hpp
+        src/scene_objects/sphere.cpp
+
+        include/slam_dunk/scene_objects/mono_mesh.hpp
+        src/scene_objects/mono_mesh.cpp
+
         include/slam_dunk/camera.hpp
         src/camera.cpp
 
