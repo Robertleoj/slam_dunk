@@ -14,8 +14,6 @@ glm::vec3 make_background_color(
     return glm::vec3(
         (dir.x + 1.0f) * 0.5f, (dir.y + 1.0f) * 0.5f, (dir.z + 1.0f) * 0.5f
     );
-
-    // Map direction to color ([-1, 1] → [0, 1])
 }
 
 Scene::Scene()
