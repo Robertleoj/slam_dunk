@@ -1,3 +1,5 @@
+#include <spdlog/spdlog.h>
+#include <glm/gtc/matrix_transform.hpp>
 #include <slam_dunk/paths.hpp>
 #include <slam_dunk/scene_objects/xy_grid.hpp>
 
@@ -7,6 +9,14 @@ const fs::path vertex_shader_path =
     shader_folder() / "xy_grid" / "vertex_shader.vert";
 const fs::path fragment_shader_path =
     shader_folder() / "xy_grid" / "fragment_shader.frag";
+
+glm::mat4 get_scale_mat(
+    float log_scale
+) {
+    float scale = pow(10.0f, log_scale);
+    spdlog::debug("Scaling by {}", scale);
+    return glm::scale(glm::mat4(1.0f), glm::vec3(scale, scale, 0.0));
+}
 
 GridXYPlane::GridXYPlane(
     float grid_size,
@@ -48,24 +58,78 @@ GridXYPlane::GridXYPlane(
     gl::glBindVertexArray(0);
 }
 
+float calculate_alpha(
+    float log_best,
+    float level
+) {
+    return glm::clamp(1.0f - std::fabs(log_best - level), 0.0f, 1.0f);
+}
+
 void GridXYPlane::render(
     glm::mat4 model,
     glm::mat4 view,
     glm::mat4 projection
 ) {
+    float desired_scale = this->arcball_zoom / 10.0;
+
+    float log_desired_scale = log10(desired_scale);
+
+    // render three grids - at least one with the closest scale
+    float best_log_scale = round(log_desired_scale);
+    float log_scale_below = best_log_scale - 1;
+    float log_scale_above = best_log_scale + 1;
+
+    float best_alpha = calculate_alpha(log_desired_scale, best_log_scale);
+    float below_alpha = calculate_alpha(log_desired_scale, log_scale_below);
+    float above_alpha = calculate_alpha(log_desired_scale, log_scale_above);
+
+    glm::mat4 best_scale_mat = get_scale_mat(best_log_scale);
+    glm::mat4 below_scale_mat = get_scale_mat(log_scale_below);
+    glm::mat4 above_scale_mat = get_scale_mat(log_scale_above);
+
     // Assuming your shader is already bound
     // And has these uniforms: uModel, uView, uProjection, uColor
     this->shader.use();
-    this->shader.setUniform("uModel", model);
     this->shader.setUniform("uView", view);
     this->shader.setUniform("uProjection", projection);
     this->shader.setUniform(
         "uColor", glm::vec3(0.6f, 0.6f, 0.6f)
     );  // clean gray
-    this->shader.setUniform("uZoom", this->arcball_zoom);
+
+    // render best scale
+    this->shader.setUniform("uModel", model * best_scale_mat);
+    this->shader.setUniform("uExtraAlpha", best_alpha);
+    this->shader.setUniform("uScale", desired_scale);
 
     gl::glBindVertexArray(this->vao_id);
     gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);
+
+    float draw_threshold = 0.01;
+
+    spdlog::debug(
+        "best: {} below: {} above: {}", best_alpha, below_alpha, above_alpha
+    );
+
+    // render below scale
+    if (below_alpha > draw_threshold) {
+        this->shader.setUniform("uModel", model * below_scale_mat);
+        this->shader.setUniform("uExtraAlpha", below_alpha);
+        this->shader.setUniform("uScale", desired_scale);
+
+        gl::glBindVertexArray(this->vao_id);
+        gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);
+    }
+
+    // render above scale
+    if (above_alpha > draw_threshold) {
+        this->shader.setUniform("uModel", model * above_scale_mat);
+        this->shader.setUniform("uExtraAlpha", above_alpha);
+        this->shader.setUniform("uScale", desired_scale);
+
+        gl::glBindVertexArray(this->vao_id);
+        gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);
+    }
+
     gl::glBindVertexArray(0);
 }
 

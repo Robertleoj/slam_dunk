@@ -109,7 +109,6 @@ void Scene::handle_input() {
 
             if (io.MouseWheel != 0.0f) {
                 auto scroll_input = static_cast<float>(io.MouseWheel);
-                spdlog::debug("Got scroll {}", scroll_input);
 
                 float zoom_factor;
 
