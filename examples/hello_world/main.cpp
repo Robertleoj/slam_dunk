@@ -102,6 +102,29 @@ std::shared_ptr<sdunk::PolyLine> random_poly_line(
     return std::make_shared<sdunk::PolyLine>(points, thickness, color);
 }
 
+std::shared_ptr<sdunk::Arrows> random_arrows(
+    int arrowCount = 10
+) {
+    float thickness = rand_float(0.01f, 0.5f);
+
+    std::vector<glm::vec3> starts;
+    std::vector<glm::vec3> ends;
+    std::vector<glm::vec3> colors;
+
+    for (int i = 0; i < arrowCount; ++i) {
+        glm::vec3 dir = glm::normalize(random_vector(-1.0f, 1.0f));
+        float length = rand_float(0.5f, 3.0f);
+        glm::vec3 origin = random_vector(-10.0, 10.0);
+        glm::vec3 end = origin + dir * length;
+
+        starts.push_back(origin);
+        ends.push_back(end);
+        colors.push_back(random_vector(0.0f, 1.0f));
+    }
+
+    return std::make_shared<sdunk::Arrows>(starts, ends, colors, thickness);
+}
+
 int main() {
     seed_random();
     spdlog::set_level(spdlog::level::debug);
@@ -111,6 +134,8 @@ int main() {
         sdunk::glutils::make_window("Slam Dunk", window_width, window_height);
 
     sdunk::Scene scene{};
+
+    scene.tree.set_object("/origin_triad", std::make_shared<sdunk::Triad>());
 
     for (int i = 0; i < 100; i++) {
         std::string box_path = std::format("/box{}", i);
@@ -131,6 +156,8 @@ int main() {
 
         scene.tree.set_object(poly_line_path, random_poly_line());
     }
+
+    scene.tree.set_object("/arrows", random_arrows(10));
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 

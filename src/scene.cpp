@@ -6,6 +6,18 @@
 
 namespace sdunk {
 
+glm::vec3 make_background_color(
+    const glm::mat4& view
+) {
+    glm::vec3 dir = -glm::vec3(view[2]);
+
+    return glm::vec3(
+        (dir.x + 1.0f) * 0.5f, (dir.y + 1.0f) * 0.5f, (dir.z + 1.0f) * 0.5f
+    );
+
+    // Map direction to color ([-1, 1] → [0, 1])
+}
+
 Scene::Scene()
     : frame_buffer(500, 500),
       camera(45.0, 0.1f, 100000.0f) {}
@@ -31,13 +43,17 @@ void Scene::render_to_imgui() {
 void Scene::render_to_frame_buffer() {
     this->frame_buffer.bind();
 
+    auto view = this->arcball.view_matrix();
+    auto background_color = make_background_color(view);
+
     gl::glClear(gl::GL_COLOR_BUFFER_BIT | gl::GL_DEPTH_BUFFER_BIT);
     gl::glEnable(gl::GL_DEPTH_TEST);
 
-    gl::glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    gl::glClearColor(
+        background_color.r, background_color.g, background_color.b, 1.0f
+    );
     gl::glClear(gl::GL_COLOR_BUFFER_BIT);
 
-    auto view = this->arcball.view_matrix();
     auto projection =
         this->camera.get_projection_matrix(this->frame_buffer.aspect());
 
