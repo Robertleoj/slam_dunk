@@ -1,4 +1,4 @@
-#include <slam_dunk/scene_objects/arrows.hpp>
+#include <slamd/scene_objects/arrows.hpp>
 
 namespace slamd {
 

@@ -10,8 +10,8 @@
 #include <format>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <slam_dunk/glfw.hpp>
-#include <slam_dunk/slam_dunk.hpp>
+#include <slamd/glfw.hpp>
+#include <slamd/slamd.hpp>
 #include <thread>
 
 void framebuffer_size_callback(

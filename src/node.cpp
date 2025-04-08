@@ -1,4 +1,4 @@
-#include <slam_dunk/node.hpp>
+#include <slamd/node.hpp>
 
 namespace slamd {
 std::optional<std::shared_ptr<SceneObject>> ObjectReference::get_object(

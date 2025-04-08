@@ -1,4 +1,4 @@
-#include <slam_dunk/scene_objects/poly_line.hpp>
+#include <slamd/scene_objects/poly_line.hpp>
 
 namespace slamd {
 

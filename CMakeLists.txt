@@ -23,88 +23,88 @@ find_package(glm CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 
 
-add_library(slam_dunk)
+add_library(slamd)
 target_sources(
-    slam_dunk
+    slamd
 
     PUBLIC
-        include/slam_dunk/slam_dunk.hpp
+        include/slamd/slamd.hpp
 
-        include/slam_dunk/scene.hpp
+        include/slamd/scene.hpp
         src/scene.cpp
 
-        include/slam_dunk/glfw.hpp
+        include/slamd/glfw.hpp
         src/glfw.cpp
 
-        include/slam_dunk/tree.hpp
+        include/slamd/tree.hpp
         src/tree.cpp
 
-        include/slam_dunk/node.hpp
+        include/slamd/node.hpp
         src/node.cpp
 
-        include/slam_dunk/frame_buffer.hpp
+        include/slamd/frame_buffer.hpp
         src/frame_buffer.cpp
 
-        include/slam_dunk/tree_path.hpp
+        include/slamd/tree_path.hpp
         src/tree_path.cpp
 
-        include/slam_dunk/scene_object.hpp
+        include/slamd/scene_object.hpp
         src/scene_object.cpp
 
-        include/slam_dunk/scene_objects/box.hpp
+        include/slamd/scene_objects/box.hpp
         src/scene_objects/box.cpp
 
-        include/slam_dunk/scene_objects/simple_mesh.hpp
+        include/slamd/scene_objects/simple_mesh.hpp
         src/scene_objects/simple_mesh.cpp
 
-        include/slam_dunk/scene_objects/arrows.hpp
+        include/slamd/scene_objects/arrows.hpp
         src/scene_objects/arrows.cpp
 
-        include/slam_dunk/scene_objects/sphere.hpp
+        include/slamd/scene_objects/sphere.hpp
         src/scene_objects/sphere.cpp
 
-        include/slam_dunk/scene_objects/triad.hpp
+        include/slamd/scene_objects/triad.hpp
         src/scene_objects/triad.cpp
 
-        include/slam_dunk/scene_objects/mono_mesh.hpp
+        include/slamd/scene_objects/mono_mesh.hpp
         src/scene_objects/mono_mesh.cpp
 
-        include/slam_dunk/scene_objects/poly_line.hpp
+        include/slamd/scene_objects/poly_line.hpp
         src/scene_objects/poly_line.cpp
 
-        include/slam_dunk/scene_objects/xy_grid.hpp
+        include/slamd/scene_objects/xy_grid.hpp
         src/scene_objects/xy_grid.cpp
 
-        include/slam_dunk/scene_objects/arcball_indicator.hpp
+        include/slamd/scene_objects/arcball_indicator.hpp
         src/scene_objects/arcball_indicator.cpp
 
-        include/slam_dunk/camera.hpp
+        include/slamd/camera.hpp
         src/camera.cpp
 
-        include/slam_dunk/io.hpp
+        include/slamd/io.hpp
         src/io.cpp
 
-        include/slam_dunk/shaders.hpp
+        include/slamd/shaders.hpp
         src/shaders.cpp
 
-        include/slam_dunk/paths.hpp
+        include/slamd/paths.hpp
 
-        include/slam_dunk/angle.hpp
+        include/slamd/angle.hpp
         src/angle.cpp
 
-        include/slam_dunk/arcball.hpp
+        include/slamd/arcball.hpp
         src/arcball.cpp
 
-        include/slam_dunk/transforms.hpp
+        include/slamd/transforms.hpp
         src/transforms.cpp
 
-        include/slam_dunk/frame_timer.hpp
+        include/slamd/frame_timer.hpp
         src/frame_timer.cpp
 
 )
 
 target_include_directories(
-    slam_dunk 
+    slamd 
 
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -112,7 +112,7 @@ target_include_directories(
 )
 
 target_link_libraries(
-    slam_dunk 
+    slamd 
     
     PUBLIC
 

@@ -1,6 +1,6 @@
 #include <format>
 #include <fstream>
-#include <slam_dunk/io.hpp>
+#include <slamd/io.hpp>
 
 namespace slamd {
 std::string read_file_text(

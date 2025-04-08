@@ -1,5 +1,5 @@
 #include <iostream>
-#include <slam_dunk/tree_path.hpp>
+#include <slamd/tree_path.hpp>
 #include <sstream>
 #include <stdexcept>
 

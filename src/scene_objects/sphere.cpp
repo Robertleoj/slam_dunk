@@ -1,6 +1,6 @@
 #include <glm/glm.hpp>
 #include <numbers>
-#include <slam_dunk/scene_objects/sphere.hpp>
+#include <slamd/scene_objects/sphere.hpp>
 #include <vector>
 
 namespace slamd {

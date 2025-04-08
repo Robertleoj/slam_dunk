@@ -2,8 +2,8 @@
 
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
-#include <slam_dunk/scene_object.hpp>
-#include <slam_dunk/shaders.hpp>
+#include <slamd/scene_object.hpp>
+#include <slamd/shaders.hpp>
 #include <vector>
 
 namespace slamd {

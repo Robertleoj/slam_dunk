@@ -1,7 +1,7 @@
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include <slam_dunk/paths.hpp>
-#include <slam_dunk/scene_objects/arcball_indicator.hpp>
+#include <slamd/paths.hpp>
+#include <slamd/scene_objects/arcball_indicator.hpp>
 
 namespace slamd {
 

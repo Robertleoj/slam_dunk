@@ -1,8 +1,8 @@
 #pragma once
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
-#include <slam_dunk/scene_object.hpp>
-#include <slam_dunk/scene_objects/simple_mesh.hpp>
+#include <slamd/scene_object.hpp>
+#include <slamd/scene_objects/simple_mesh.hpp>
 
 namespace slamd {
 

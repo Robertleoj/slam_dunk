@@ -1,4 +1,4 @@
-#include <slam_dunk/scene_objects/box.hpp>
+#include <slamd/scene_objects/box.hpp>
 
 namespace slamd {
 

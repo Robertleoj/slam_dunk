@@ -2,8 +2,8 @@
 #include <format>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <slam_dunk/io.hpp>
-#include <slam_dunk/shaders.hpp>
+#include <slamd/io.hpp>
+#include <slamd/shaders.hpp>
 #include <stdexcept>
 
 namespace slamd {

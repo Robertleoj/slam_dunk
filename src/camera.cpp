@@ -1,5 +1,5 @@
 #include <glm/gtc/matrix_transform.hpp>
-#include <slam_dunk/camera.hpp>
+#include <slamd/camera.hpp>
 
 namespace slamd {
 

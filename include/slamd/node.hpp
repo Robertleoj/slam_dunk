@@ -3,7 +3,7 @@
 #include <map>
 #include <memory>
 #include <optional>
-#include <slam_dunk/scene_object.hpp>
+#include <slamd/scene_object.hpp>
 #include <string>
 
 namespace slamd {

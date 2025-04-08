@@ -1,11 +1,11 @@
 #pragma once
-#include <slam_dunk/arcball.hpp>
-#include <slam_dunk/camera.hpp>
-#include <slam_dunk/frame_buffer.hpp>
-#include <slam_dunk/frame_timer.hpp>
-#include <slam_dunk/scene_objects/arcball_indicator.hpp>
-#include <slam_dunk/scene_objects/xy_grid.hpp>
-#include <slam_dunk/tree.hpp>
+#include <slamd/arcball.hpp>
+#include <slamd/camera.hpp>
+#include <slamd/frame_buffer.hpp>
+#include <slamd/frame_timer.hpp>
+#include <slamd/scene_objects/arcball_indicator.hpp>
+#include <slamd/scene_objects/xy_grid.hpp>
+#include <slamd/tree.hpp>
 #include <thread>
 
 namespace slamd {

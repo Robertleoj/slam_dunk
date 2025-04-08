@@ -1,8 +1,8 @@
 #pragma once
 
 #include <chrono>
-#include <slam_dunk/scene_object.hpp>
-#include <slam_dunk/shaders.hpp>
+#include <slamd/scene_object.hpp>
+#include <slamd/shaders.hpp>
 
 namespace slamd {
 

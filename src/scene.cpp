@@ -1,8 +1,8 @@
 #include <imgui.h>
 #include <spdlog/spdlog.h>
 #include <numbers>
-#include <slam_dunk/angle.hpp>
-#include <slam_dunk/scene.hpp>
+#include <slamd/angle.hpp>
+#include <slamd/scene.hpp>
 
 namespace slamd {
 

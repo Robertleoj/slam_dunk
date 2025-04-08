@@ -1,4 +1,4 @@
-#include <slam_dunk/frame_timer.hpp>
+#include <slamd/frame_timer.hpp>
 
 namespace slamd {
 

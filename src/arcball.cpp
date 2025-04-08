@@ -4,8 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <numbers>
-#include <slam_dunk/arcball.hpp>
-#include <slam_dunk/transforms.hpp>
+#include <slamd/arcball.hpp>
+#include <slamd/transforms.hpp>
 
 namespace slamd {
 

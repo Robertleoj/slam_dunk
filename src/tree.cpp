@@ -1,5 +1,5 @@
 #include <spdlog/spdlog.h>
-#include <slam_dunk/tree.hpp>
+#include <slamd/tree.hpp>
 #include <stack>
 
 namespace slamd {

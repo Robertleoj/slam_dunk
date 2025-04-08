@@ -1,7 +1,7 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <spdlog/spdlog.h>
-#include <slam_dunk/glfw.hpp>
+#include <slamd/glfw.hpp>
 #include <stdexcept>
 
 namespace slamd {

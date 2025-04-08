@@ -1,4 +1,4 @@
-#include <slam_dunk/scene_objects/triad.hpp>
+#include <slamd/scene_objects/triad.hpp>
 
 namespace slamd {
 

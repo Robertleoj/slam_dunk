@@ -1,5 +1,5 @@
 #include <glm/glm.hpp>
-#include <slam_dunk/angle.hpp>
+#include <slamd/angle.hpp>
 
 namespace slamd {
 

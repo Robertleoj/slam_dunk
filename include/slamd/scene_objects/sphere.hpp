@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <slam_dunk/scene_object.hpp>
-#include <slam_dunk/scene_objects/mono_mesh.hpp>
+#include <slamd/scene_object.hpp>
+#include <slamd/scene_objects/mono_mesh.hpp>
 
 namespace slamd {
 

@@ -1,4 +1,4 @@
-#include <slam_dunk/scene_object.hpp>
+#include <slamd/scene_object.hpp>
 
 namespace slamd {
 void SceneObject::render(

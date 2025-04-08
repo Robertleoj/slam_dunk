@@ -1,5 +1,5 @@
-#include <slam_dunk/paths.hpp>
-#include <slam_dunk/scene_objects/mono_mesh.hpp>
+#include <slamd/paths.hpp>
+#include <slamd/scene_objects/mono_mesh.hpp>
 
 namespace slamd {
 

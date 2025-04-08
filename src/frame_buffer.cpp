@@ -1,7 +1,7 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <spdlog/spdlog.h>
-#include <slam_dunk/frame_buffer.hpp>
+#include <slamd/frame_buffer.hpp>
 
 namespace slamd {
 FrameBuffer::FrameBuffer(

@@ -1,8 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <slam_dunk/node.hpp>
-#include <slam_dunk/scene_object.hpp>
-#include <slam_dunk/tree_path.hpp>
+#include <slamd/node.hpp>
+#include <slamd/scene_object.hpp>
+#include <slamd/tree_path.hpp>
 
 namespace slamd {
 
