@@ -2,6 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd/geometry/arcball_indicator.hpp>
 #include <slamd/paths.hpp>
+#include <slamd/render_thread_job_queue.hpp>
 
 namespace slamd {
 namespace geometry {
@@ -11,15 +12,11 @@ const fs::path vertex_shader_path =
 const fs::path fragment_shader_path =
     shader_folder() / "arcball_indicator" / "fragment_shader.frag";
 
-ArcballIndicator::ArcballIndicator()
-    : vao_id(0),
-      vbo_id(0),
-      vertex_count(0),
-      shader(vertex_shader_path, fragment_shader_path) {
+void ArcballIndicator::initialize() {
     // clang-format off
     std::vector<float> verts = {
         // x cross
-        -1.0f, 0.0f, 0.0f, 
+        -1.0f, 0.0f, 0.0f,
         1.0f, 0.0f, 0.0f,
 
         // y cross
@@ -34,11 +31,14 @@ ArcballIndicator::ArcballIndicator()
 
     this->vertex_count = verts.size() / 3;
 
-    gl::glGenVertexArrays(1, &this->vao_id);
-    gl::glGenBuffers(1, &this->vbo_id);
+    gl::GLuint vao_id;
+    gl::GLuint vbo_id;
 
-    gl::glBindVertexArray(this->vao_id);
-    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->vbo_id);
+    gl::glGenVertexArrays(1, &vao_id);
+    gl::glGenBuffers(1, &vbo_id);
+
+    gl::glBindVertexArray(vao_id);
+    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, vbo_id);
     gl::glBufferData(
         gl::GL_ARRAY_BUFFER,
         verts.size() * sizeof(float),
@@ -52,7 +52,15 @@ ArcballIndicator::ArcballIndicator()
     );
 
     gl::glBindVertexArray(0);
+
+    GLState gl_state = {
+        vao_id, vbo_id, ShaderProgram(vertex_shader_path, fragment_shader_path)
+    };
+
+    this->gl_state.emplace(gl_state);
 }
+
+ArcballIndicator::ArcballIndicator() {}
 
 float ArcballIndicator::get_alpha() {
     // smoothly decrease alpha until 0
@@ -89,6 +97,13 @@ void ArcballIndicator::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
+    if (!this->render_thread_id.has_value()) {
+        this->render_thread_id = std::this_thread::get_id();
+        this->initialize();
+    }
+
+    auto gl_state = this->gl_state.value().get();
+
     auto alpha = this->get_alpha();
     if (alpha < 1e-6) {
         // no need to draw
@@ -97,16 +112,16 @@ void ArcballIndicator::render(
 
     auto scale_mat =
         ArcballIndicator::get_scale_mat(this->arcball_zoom / 20.0f);
-    this->shader.use();
-    this->shader.setUniform("uModel", model * scale_mat);
-    this->shader.setUniform("uView", view);
-    this->shader.setUniform("uProjection", projection);
-    this->shader.setUniform(
+    gl_state->shader.use();
+    gl_state->shader.setUniform("uModel", model * scale_mat);
+    gl_state->shader.setUniform("uView", view);
+    gl_state->shader.setUniform("uProjection", projection);
+    gl_state->shader.setUniform(
         "uColor", glm::vec3(1.0f, 1.0f, 1.0f)
     );  // clean gray
-    this->shader.setUniform("uAlpha", alpha);
+    gl_state->shader.setUniform("uAlpha", alpha);
 
-    gl::glBindVertexArray(this->vao_id);
+    gl::glBindVertexArray(gl_state->vao_id);
     gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);
 
     gl::glBindVertexArray(0);
