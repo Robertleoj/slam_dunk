@@ -17,7 +17,7 @@ class Sphere : public Geometry {
 };
 
 std::shared_ptr<Sphere>
-sphere(float radius = 1.0f, glm::vec3 color = glm::vec3(1.0, 1.0, 1.0));
+sphere(float radius = 1.0f, glm::vec3 color = glm::vec3(0.8, 0.2, 0.0));
 
 }  // namespace geometry
 }  // namespace slamd
