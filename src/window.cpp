@@ -22,6 +22,15 @@ void framebuffer_size_callback(
     gl::glViewport(0, 0, width, height);
 }
 
+void Window::add_scene(
+    std::string name,
+    std::shared_ptr<Scene> scene
+) {
+    std::scoped_lock l(this->scene_map_mutex);
+
+    this->scene_map.insert({name, scene});
+}
+
 void Window::render_job(
     size_t height,
     size_t width
@@ -45,11 +54,15 @@ void Window::render_job(
         ImGui::NewFrame();
         ImGuiID main_dockspace_id = ImGui::DockSpaceOverViewport();
 
-        for (auto& [scene_name, scene] : this->scenes) {
-            ImGui::SetNextWindowDockID(main_dockspace_id, ImGuiCond_Once);
-            ImGui::Begin(scene_name.c_str());
-            scene->render_to_imgui();
-            ImGui::End();
+        {
+            std::scoped_lock l(this->scene_map_mutex);
+
+            for (auto& [scene_name, scene] : this->scene_map) {
+                ImGui::SetNextWindowDockID(main_dockspace_id, ImGuiCond_Once);
+                ImGui::Begin(scene_name.c_str());
+                scene->render_to_imgui();
+                ImGui::End();
+            }
         }
 
         ImGui::Render();
