@@ -2,10 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug C++ hello world",
+      "name": "Debug C++ hello world diy",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/examples/hello_world/hello_world",
+      "program": "${workspaceFolder}/build/examples/hello_world_diy/hello_world_diy",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
@@ -22,10 +22,10 @@
       ]
     },
     {
-      "name": "Debug C++ managed_window",
+      "name": "Debug C++ hello world managed",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/examples/managed_window/managed_window",
+      "program": "${workspaceFolder}/build/examples/hello_world_managed/hello_world_managed",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

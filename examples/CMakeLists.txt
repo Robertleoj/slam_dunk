@@ -1,2 +1,2 @@
-add_subdirectory(hello_world)
-add_subdirectory(managed_window)
+add_subdirectory(hello_world_diy)
+add_subdirectory(hello_world_managed)
