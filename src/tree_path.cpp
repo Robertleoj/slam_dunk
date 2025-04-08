@@ -3,7 +3,7 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace sdunk {
+namespace slamd {
 
 std::vector<std::string> split_path(
     const std::string& path
@@ -93,4 +93,4 @@ TreePath operator/(
     return TreePath(new_components);
 }
 
-}  // namespace sdunk
+}  // namespace slamd

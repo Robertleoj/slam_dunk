@@ -6,7 +6,7 @@
 #include <slam_dunk/shaders.hpp>
 #include <stdexcept>
 
-namespace sdunk {
+namespace slamd {
 
 const std::size_t info_buffer_size = 512;
 
@@ -220,4 +220,4 @@ void ShaderProgram::setUniform<glm::mat4>(
     );
 }
 
-}  // namespace sdunk
+}  // namespace slamd

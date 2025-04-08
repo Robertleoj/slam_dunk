@@ -3,7 +3,7 @@
 #include <slam_dunk/paths.hpp>
 #include <slam_dunk/scene_objects/arcball_indicator.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 const fs::path vertex_shader_path =
     shader_folder() / "arcball_indicator" / "vertex_shader.vert";
@@ -117,4 +117,4 @@ void ArcballIndicator::set_arcball_zoom(
     this->arcball_zoom = zoom;
 }
 
-}  // namespace sdunk
+}  // namespace slamd

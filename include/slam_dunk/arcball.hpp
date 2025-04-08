@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <slam_dunk/angle.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 class Arcball {
    public:
@@ -21,4 +21,4 @@ class Arcball {
     glm::mat4 view_matrix() const;
 };
 
-}  // namespace sdunk
+}  // namespace slamd

@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-namespace sdunk {
+namespace slamd {
 
 class TreePath {
    public:
@@ -13,12 +13,9 @@ class TreePath {
     TreePath parent() const;
     std::string string() const;
 
-public:
-
+   public:
     const std::vector<std::string> components;
-
-
 };
 
 TreePath operator/(const TreePath& path, const std::string& part);
-}  // namespace sdunk
+}  // namespace slamd

@@ -7,7 +7,7 @@
 #include <slam_dunk/arcball.hpp>
 #include <slam_dunk/transforms.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 Arcball::Arcball()
     : theta(Angle::deg(0.0)),
@@ -80,4 +80,4 @@ glm::mat4 Arcball::view_matrix() const {
     return glm::inverse(this->center * this->camera_in_center());
 }
 
-}  // namespace sdunk
+}  // namespace slamd

@@ -7,7 +7,7 @@
 #include <slam_dunk/shaders.hpp>
 #include <vector>
 
-namespace sdunk {
+namespace slamd {
 
 class MonoMesh : public SceneObject {
    public:
@@ -28,4 +28,4 @@ class MonoMesh : public SceneObject {
     size_t num_vertices;
     glm::vec3 color;
 };
-}  // namespace sdunk
+}  // namespace slamd

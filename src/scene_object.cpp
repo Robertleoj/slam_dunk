@@ -1,6 +1,6 @@
 #include <slam_dunk/scene_object.hpp>
 
-namespace sdunk {
+namespace slamd {
 void SceneObject::render(
     glm::mat4 model,
     glm::mat4 view,

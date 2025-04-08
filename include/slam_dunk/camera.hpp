@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 class Camera {
    public:
@@ -14,4 +14,4 @@ class Camera {
     double near_plane;
     double far_plane;
 };
-}  // namespace sdunk
+}  // namespace slamd

@@ -1,7 +1,8 @@
 #include <slam_dunk/node.hpp>
 
-namespace sdunk {
-std::optional<std::shared_ptr<SceneObject>> ObjectReference::get_object() const{
+namespace slamd {
+std::optional<std::shared_ptr<SceneObject>> ObjectReference::get_object(
+) const {
     switch (tag) {
         case WEAK: {
             return this->weak_obj.lock();
@@ -41,4 +42,4 @@ std::optional<std::shared_ptr<SceneObject>> Node::get_object() const {
     return this->object_reference.value().get_object();
 }
 
-}  // namespace sdunk
+}  // namespace slamd

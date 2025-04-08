@@ -2,7 +2,7 @@
 #include <fstream>
 #include <slam_dunk/io.hpp>
 
-namespace sdunk {
+namespace slamd {
 std::string read_file_text(
     const fs::path& path
 ) {
@@ -19,4 +19,4 @@ std::string read_file_text(
 
     return buffer.str();
 }
-}  // namespace sdunk
+}  // namespace slamd

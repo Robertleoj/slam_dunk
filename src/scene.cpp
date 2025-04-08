@@ -4,7 +4,7 @@
 #include <slam_dunk/angle.hpp>
 #include <slam_dunk/scene.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 glm::vec3 make_background_color(
     const glm::mat4& view
@@ -166,4 +166,4 @@ void Scene::handle_input() {
     }
 }
 
-}  // namespace sdunk
+}  // namespace slamd

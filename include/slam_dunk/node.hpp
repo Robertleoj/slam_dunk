@@ -6,7 +6,7 @@
 #include <slam_dunk/scene_object.hpp>
 #include <string>
 
-namespace sdunk {
+namespace slamd {
 
 class ObjectReference {
    public:
@@ -62,4 +62,4 @@ class Node {
     void set_transform(glm::mat4 transform);
 };
 
-}  // namespace sdunk
+}  // namespace slamd

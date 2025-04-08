@@ -6,7 +6,7 @@
 #include <slam_dunk/shaders.hpp>
 #include <vector>
 
-namespace sdunk {
+namespace slamd {
 
 class GridXYPlane : public SceneObject {
    public:
@@ -26,4 +26,4 @@ class GridXYPlane : public SceneObject {
     float arcball_zoom;
 };
 
-}  // namespace sdunk
+}  // namespace slamd

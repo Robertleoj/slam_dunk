@@ -1,7 +1,7 @@
 #pragma once
 #include <chrono>
 
-namespace sdunk {
+namespace slamd {
 
 class FrameTimer {
    public:
@@ -16,4 +16,4 @@ class FrameTimer {
     std::chrono::duration<float> delta{0.0f};
 };
 
-}  // namespace sdunk
+}  // namespace slamd

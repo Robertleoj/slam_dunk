@@ -1,7 +1,7 @@
 #include <slam_dunk/paths.hpp>
 #include <slam_dunk/scene_objects/simple_mesh.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 const fs::path vertex_shader_path =
     shader_folder() / "simple_mesh" / "vertex_shader.vert";
@@ -92,4 +92,4 @@ void SimpleMesh::render(
     );
     gl::glBindVertexArray(0);
 };
-}  // namespace sdunk
+}  // namespace slamd

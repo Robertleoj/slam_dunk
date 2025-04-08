@@ -1,6 +1,6 @@
 #include <slam_dunk/scene_objects/triad.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 Arrows make_arrows(
     float scale,
@@ -30,4 +30,4 @@ void Triad::render(
     this->arrows.render(model, view, projection);
 }
 
-}  // namespace sdunk
+}  // namespace slamd

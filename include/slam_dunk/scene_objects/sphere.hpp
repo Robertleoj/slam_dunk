@@ -3,7 +3,7 @@
 #include <slam_dunk/scene_object.hpp>
 #include <slam_dunk/scene_objects/mono_mesh.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 class Sphere : public SceneObject {
    public:
@@ -15,4 +15,4 @@ class Sphere : public SceneObject {
     MonoMesh mesh;
 };
 
-}  // namespace sdunk
+}  // namespace slamd

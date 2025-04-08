@@ -3,7 +3,7 @@
 #include <spdlog/spdlog.h>
 #include <slam_dunk/frame_buffer.hpp>
 
-namespace sdunk {
+namespace slamd {
 FrameBuffer::FrameBuffer(
     size_t width,
     size_t height
@@ -150,4 +150,4 @@ size_t FrameBuffer::height() const {
     return this->current_height;
 }
 
-}  // namespace sdunk
+}  // namespace slamd

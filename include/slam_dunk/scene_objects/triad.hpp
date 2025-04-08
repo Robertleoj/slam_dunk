@@ -4,7 +4,7 @@
 #include <slam_dunk/scene_object.hpp>
 #include <slam_dunk/scene_objects/arrows.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 class Triad : public SceneObject {
    public:
@@ -16,4 +16,4 @@ class Triad : public SceneObject {
     Arrows arrows;
 };
 
-}  // namespace sdunk
+}  // namespace slamd

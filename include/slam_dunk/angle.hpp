@@ -1,6 +1,6 @@
 #pragma once
 
-namespace sdunk {
+namespace slamd {
 class Angle {
    public:
     Angle(float radians);
@@ -19,4 +19,4 @@ class Angle {
     float radians;
 };
 
-}  // namespace sdunk
+}  // namespace slamd

@@ -4,7 +4,7 @@
 #include <slam_dunk/scene_object.hpp>
 #include <slam_dunk/scene_objects/simple_mesh.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 class Box : public SceneObject {
    public:
@@ -18,4 +18,4 @@ class Box : public SceneObject {
     SimpleMesh box_mesh;
 };
 
-}  // namespace sdunk
+}  // namespace slamd

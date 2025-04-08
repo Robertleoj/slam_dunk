@@ -1,7 +1,7 @@
 #include <slam_dunk/paths.hpp>
 #include <slam_dunk/scene_objects/mono_mesh.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 const fs::path vertex_shader_path =
     shader_folder() / "mono_mesh" / "vertex_shader.vert";
@@ -79,4 +79,4 @@ void MonoMesh::render(
     );
     gl::glBindVertexArray(0);
 };
-}  // namespace sdunk
+}  // namespace slamd

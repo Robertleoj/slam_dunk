@@ -5,7 +5,7 @@
 #include <slam_dunk/scene_objects/mono_mesh.hpp>
 #include <vector>
 
-namespace sdunk {
+namespace slamd {
 
 class PolyLine : public SceneObject {
    public:
@@ -21,4 +21,4 @@ class PolyLine : public SceneObject {
     MonoMesh mesh;
 };
 
-}  // namespace sdunk
+}  // namespace slamd

@@ -1,6 +1,6 @@
 #include <slam_dunk/scene_objects/box.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 // clang-format off
 // 6 faces * 4 vertices = 24 unique verts
@@ -73,4 +73,4 @@ void Box::render(
     this->box_mesh.render(model, view, projection);
 }
 
-}  // namespace sdunk
+}  // namespace slamd

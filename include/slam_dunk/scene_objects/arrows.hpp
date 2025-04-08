@@ -4,7 +4,7 @@
 #include <slam_dunk/scene_object.hpp>
 #include <slam_dunk/scene_objects/simple_mesh.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 class Arrows : public SceneObject {
    public:
@@ -21,4 +21,4 @@ class Arrows : public SceneObject {
     SimpleMesh mesh;
 };
 
-}  // namespace sdunk
+}  // namespace slamd

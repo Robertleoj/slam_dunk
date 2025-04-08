@@ -4,7 +4,7 @@
 #include <slam_dunk/scene_object.hpp>
 #include <slam_dunk/shaders.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 class ArcballIndicator : public SceneObject {
    public:
@@ -18,7 +18,6 @@ class ArcballIndicator : public SceneObject {
     static glm::mat4 get_scale_mat(float scale);
     float get_alpha();
 
-
    private:
     gl::GLuint vao_id;
     gl::GLuint vbo_id;
@@ -29,4 +28,4 @@ class ArcballIndicator : public SceneObject {
         last_interacted;
 };
 
-}  // namespace sdunk
+}  // namespace slamd

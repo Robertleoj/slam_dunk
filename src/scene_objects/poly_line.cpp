@@ -1,6 +1,6 @@
 #include <slam_dunk/scene_objects/poly_line.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 MonoMesh make_poly_line_mesh(
     const std::vector<glm::vec3>& points,
@@ -84,4 +84,4 @@ void PolyLine::render(
     mesh.render(model, view, projection);
 }
 
-}  // namespace sdunk
+}  // namespace slamd

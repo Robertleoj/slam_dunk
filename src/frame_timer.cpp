@@ -1,6 +1,6 @@
 #include <slam_dunk/frame_timer.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 FrameTimer::FrameTimer()
     : last_frame(std::chrono::high_resolution_clock::now()) {}
@@ -16,4 +16,4 @@ float FrameTimer::timedelta() const {
     return delta.count();
 }
 
-}  // namespace sdunk
+}  // namespace slamd

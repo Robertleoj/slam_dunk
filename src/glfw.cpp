@@ -4,7 +4,7 @@
 #include <slam_dunk/glfw.hpp>
 #include <stdexcept>
 
-namespace sdunk {
+namespace slamd {
 namespace glutils {
 
 GLFWwindow* make_window(
@@ -35,4 +35,4 @@ GLFWwindow* make_window(
     return window;
 }
 }  // namespace glutils
-}  // namespace sdunk
+}  // namespace slamd

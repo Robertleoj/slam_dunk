@@ -4,7 +4,7 @@
 #include <slam_dunk/scene_object.hpp>
 #include <slam_dunk/tree_path.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 class Tree {
    private:
@@ -31,4 +31,4 @@ class Tree {
 
     // std::optional<Node *> traverse_to(TreePath path, bool create_path);
 };
-}  // namespace sdunk
+}  // namespace slamd

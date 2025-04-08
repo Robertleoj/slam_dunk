@@ -7,7 +7,7 @@
 #include <slam_dunk/shaders.hpp>
 #include <vector>
 
-namespace sdunk {
+namespace slamd {
 struct Vertex {
     glm::vec3 position;
     glm::vec3 color;
@@ -30,4 +30,4 @@ class SimpleMesh : public SceneObject {
 
     size_t num_vertices;
 };
-}  // namespace sdunk
+}  // namespace slamd

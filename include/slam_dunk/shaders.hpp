@@ -4,7 +4,7 @@
 #include <filesystem>
 
 namespace fs = std::filesystem;
-namespace sdunk {
+namespace slamd {
 
 void ensure_shader_compiled(gl::GLuint shader_id);
 
@@ -41,4 +41,4 @@ class ShaderProgram {
     }
 };
 
-}  // namespace sdunk
+}  // namespace slamd

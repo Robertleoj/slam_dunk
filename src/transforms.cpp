@@ -1,6 +1,6 @@
 #include <slam_dunk/transforms.hpp>
 
-namespace sdunk {
+namespace slamd {
 glm::mat4 rot(
     const Angle& angle,
     glm::vec3 axis
@@ -35,4 +35,4 @@ glm::mat4 transl(
     return mat;
 }
 
-}  // namespace sdunk
+}  // namespace slamd

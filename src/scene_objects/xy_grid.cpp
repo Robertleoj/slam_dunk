@@ -3,7 +3,7 @@
 #include <slam_dunk/paths.hpp>
 #include <slam_dunk/scene_objects/xy_grid.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 const fs::path vertex_shader_path =
     shader_folder() / "xy_grid" / "vertex_shader.vert";
@@ -137,4 +137,4 @@ void GridXYPlane::set_arcball_zoom(
     this->arcball_zoom = zoom;
 }
 
-}  // namespace sdunk
+}  // namespace slamd

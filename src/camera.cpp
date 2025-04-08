@@ -1,7 +1,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <slam_dunk/camera.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 Camera::Camera(
     double fov,
@@ -20,4 +20,4 @@ glm::mat4 Camera::get_projection_matrix(
     );
 }
 
-}  // namespace sdunk
+}  // namespace slamd

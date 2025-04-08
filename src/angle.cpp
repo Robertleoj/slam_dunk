@@ -1,7 +1,7 @@
 #include <glm/glm.hpp>
 #include <slam_dunk/angle.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 Angle::Angle(
     float radians
@@ -43,6 +43,8 @@ Angle Angle::clamp(
 
     return rad(clipped_radians);
 }
-Angle Angle::operator-() const { return rad(-this->rad()); }
+Angle Angle::operator-() const {
+    return rad(-this->rad());
+}
 
-}  // namespace sdunk
+}  // namespace slamd

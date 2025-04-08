@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 class SceneObject {
    public:
@@ -9,4 +9,4 @@ class SceneObject {
 
     virtual ~SceneObject() = default;
 };
-}  // namespace sdunk
+}  // namespace slamd

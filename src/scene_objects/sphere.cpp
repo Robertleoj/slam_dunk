@@ -3,7 +3,7 @@
 #include <slam_dunk/scene_objects/sphere.hpp>
 #include <vector>
 
-namespace sdunk {
+namespace slamd {
 
 void generate_sphere(
     std::vector<glm::vec3>& vertices,
@@ -83,4 +83,4 @@ void Sphere::render(
     this->mesh.render(model, view, projection);
 };
 
-}  // namespace sdunk
+}  // namespace slamd

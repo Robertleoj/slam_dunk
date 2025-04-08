@@ -4,8 +4,8 @@
 
 namespace fs = std::filesystem;
 
-namespace sdunk {
+namespace slamd {
 
 std::string read_file_text(const fs::path& path);
 
-}  // namespace sdunk
+}  // namespace slamd

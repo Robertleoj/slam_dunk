@@ -3,7 +3,7 @@
 
 namespace fs = std::filesystem;
 
-namespace sdunk {
+namespace slamd {
 
 inline fs::path repo_root() {
     return fs::path(__FILE__)  // this file
@@ -16,4 +16,4 @@ inline fs::path shader_folder() {
     return repo_root() / "shaders";
 }
 
-}  // namespace sdunk
+}  // namespace slamd

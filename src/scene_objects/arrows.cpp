@@ -1,6 +1,6 @@
 #include <slam_dunk/scene_objects/arrows.hpp>
 
-namespace sdunk {
+namespace slamd {
 
 constexpr uint segments = 12;
 struct ArrowMesh {
@@ -164,4 +164,4 @@ void Arrows::render(
 ) {
     mesh.render(model, view, projection);
 }
-}  // namespace sdunk
+}  // namespace slamd

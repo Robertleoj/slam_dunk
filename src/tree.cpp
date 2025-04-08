@@ -2,7 +2,7 @@
 #include <slam_dunk/tree.hpp>
 #include <stack>
 
-namespace sdunk {
+namespace slamd {
 
 Node* Tree::make_path(
     TreePath path
@@ -112,4 +112,4 @@ void Tree::render_recursive(
     }
 }
 
-}  // namespace sdunk
+}  // namespace slamd

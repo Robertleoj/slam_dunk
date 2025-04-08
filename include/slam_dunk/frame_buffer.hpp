@@ -2,7 +2,7 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 
-namespace sdunk {
+namespace slamd {
 
 class FrameBuffer {
    public:
@@ -26,4 +26,4 @@ class FrameBuffer {
     size_t current_width;
 };
 
-}  // namespace sdunk
+}  // namespace slamd
