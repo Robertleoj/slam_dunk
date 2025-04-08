@@ -107,6 +107,9 @@ target_sources(
         include/slamd/render_thread_job_queue.hpp
 
         include/slamd/thread_box.hpp
+
+        include/slamd/window.hpp
+        src/window.cpp
 )
 
 target_include_directories(
