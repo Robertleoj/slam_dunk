@@ -1,7 +1,7 @@
 #include <slamd/node.hpp>
 
 namespace slamd {
-std::optional<std::shared_ptr<SceneObject>> ObjectReference::get_object(
+std::optional<std::shared_ptr<geometry::Geometry>> ObjectReference::get_object(
 ) const {
     switch (tag) {
         case WEAK: {
@@ -17,13 +17,13 @@ std::optional<std::shared_ptr<SceneObject>> ObjectReference::get_object(
 }
 
 void Node::set_object(
-    std::shared_ptr<SceneObject> object
+    std::shared_ptr<geometry::Geometry> object
 ) {
     this->object_reference.emplace(object);
 }
 
 void Node::set_object(
-    std::weak_ptr<SceneObject> object
+    std::weak_ptr<geometry::Geometry> object
 ) {
     this->object_reference.emplace(object);
 }
@@ -34,7 +34,7 @@ void Node::set_transform(
     this->transform = transform;
 }
 
-std::optional<std::shared_ptr<SceneObject>> Node::get_object() const {
+std::optional<std::shared_ptr<geometry::Geometry>> Node::get_object() const {
     if (!this->object_reference.has_value()) {
         return std::nullopt;
     }

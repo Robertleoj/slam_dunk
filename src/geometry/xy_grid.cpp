@@ -1,9 +1,10 @@
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <slamd/geometry/xy_grid.hpp>
 #include <slamd/paths.hpp>
-#include <slamd/scene_objects/xy_grid.hpp>
 
 namespace slamd {
+namespace geometry {
 
 const fs::path vertex_shader_path =
     shader_folder() / "xy_grid" / "vertex_shader.vert";
@@ -137,4 +138,5 @@ void GridXYPlane::set_arcball_zoom(
     this->arcball_zoom = zoom;
 }
 
+}  // namespace geometry
 }  // namespace slamd

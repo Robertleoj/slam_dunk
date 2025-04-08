@@ -2,11 +2,13 @@
 #include <glm/glm.hpp>
 
 namespace slamd {
+namespace geometry {
 
-class SceneObject {
+class Geometry {
    public:
     virtual void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection);
 
-    virtual ~SceneObject() = default;
+    virtual ~Geometry() = default;
 };
+}  // namespace geometry
 }  // namespace slamd

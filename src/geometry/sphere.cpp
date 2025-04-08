@@ -1,9 +1,10 @@
 #include <glm/glm.hpp>
 #include <numbers>
-#include <slamd/scene_objects/sphere.hpp>
+#include <slamd/geometry/sphere.hpp>
 #include <vector>
 
 namespace slamd {
+namespace geometry {
 
 void generate_sphere(
     std::vector<glm::vec3>& vertices,
@@ -83,4 +84,5 @@ void Sphere::render(
     this->mesh.render(model, view, projection);
 };
 
+}  // namespace geometry
 }  // namespace slamd

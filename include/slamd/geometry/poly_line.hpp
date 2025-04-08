@@ -1,13 +1,14 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <slamd/scene_object.hpp>
-#include <slamd/scene_objects/mono_mesh.hpp>
+#include <slamd/geometry/geometry.hpp>
+#include <slamd/geometry/mono_mesh.hpp>
 #include <vector>
 
 namespace slamd {
+namespace geometry {
 
-class PolyLine : public SceneObject {
+class PolyLine : public Geometry {
    public:
     PolyLine(
         const std::vector<glm::vec3>& points,
@@ -21,4 +22,5 @@ class PolyLine : public SceneObject {
     MonoMesh mesh;
 };
 
+}  // namespace geometry
 }  // namespace slamd

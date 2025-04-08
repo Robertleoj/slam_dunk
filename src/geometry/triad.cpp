@@ -1,6 +1,7 @@
-#include <slamd/scene_objects/triad.hpp>
+#include <slamd/geometry/triad.hpp>
 
 namespace slamd {
+namespace geometry {
 
 Arrows make_arrows(
     float scale,
@@ -30,4 +31,5 @@ void Triad::render(
     this->arrows.render(model, view, projection);
 }
 
+}  // namespace geometry
 }  // namespace slamd

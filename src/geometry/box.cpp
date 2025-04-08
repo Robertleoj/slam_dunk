@@ -1,6 +1,7 @@
-#include <slamd/scene_objects/box.hpp>
+#include <slamd/geometry/box.hpp>
 
 namespace slamd {
+namespace geometry {
 
 // clang-format off
 // 6 faces * 4 vertices = 24 unique verts
@@ -73,4 +74,5 @@ void Box::render(
     this->box_mesh.render(model, view, projection);
 }
 
+}  // namespace geometry
 }  // namespace slamd

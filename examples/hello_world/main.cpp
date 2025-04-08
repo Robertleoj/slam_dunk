@@ -71,14 +71,14 @@ glm::mat4 random_transform(
     return transform;
 }
 
-std::shared_ptr<slamd::Sphere> random_sphere() {
+std::shared_ptr<slamd::geometry::Sphere> random_sphere() {
     float radius = rand_float(0.1, 1.0);
 
     glm::vec3 color = random_vector(0.0f, 1.0f);
-    return std::make_shared<slamd::Sphere>(radius, color);
+    return std::make_shared<slamd::geometry::Sphere>(radius, color);
 }
 
-std::shared_ptr<slamd::PolyLine> random_poly_line(
+std::shared_ptr<slamd::geometry::PolyLine> random_poly_line(
     int pointCount = 10
 ) {
     float thickness = rand_float(0.01, 0.5);
@@ -99,10 +99,12 @@ std::shared_ptr<slamd::PolyLine> random_poly_line(
 
     glm::vec3 color = random_vector(0.0, 1.0);
 
-    return std::make_shared<slamd::PolyLine>(points, thickness, color);
+    return std::make_shared<slamd::geometry::PolyLine>(
+        points, thickness, color
+    );
 }
 
-std::shared_ptr<slamd::Arrows> random_arrows(
+std::shared_ptr<slamd::geometry::Arrows> random_arrows(
     int arrowCount = 10
 ) {
     float thickness = rand_float(0.01f, 0.5f);
@@ -122,7 +124,9 @@ std::shared_ptr<slamd::Arrows> random_arrows(
         colors.push_back(random_vector(0.0f, 1.0f));
     }
 
-    return std::make_shared<slamd::Arrows>(starts, ends, colors, thickness);
+    return std::make_shared<slamd::geometry::Arrows>(
+        starts, ends, colors, thickness
+    );
 }
 
 int main() {
@@ -135,12 +139,16 @@ int main() {
 
     slamd::Scene scene{};
 
-    scene.tree.set_object("/origin_triad", std::make_shared<slamd::Triad>());
+    scene.tree.set_object(
+        "/origin_triad", std::make_shared<slamd::geometry::Triad>()
+    );
 
     for (int i = 0; i < 100; i++) {
         std::string box_path = std::format("/box{}", i);
 
-        scene.tree.set_object(box_path, std::make_shared<slamd::Box>());
+        scene.tree.set_object(
+            box_path, std::make_shared<slamd::geometry::Box>()
+        );
         scene.tree.set_transform(box_path, random_transform(true));
     }
 

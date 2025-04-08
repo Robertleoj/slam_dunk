@@ -1,7 +1,8 @@
+#include <slamd/geometry/mono_mesh.hpp>
 #include <slamd/paths.hpp>
-#include <slamd/scene_objects/mono_mesh.hpp>
 
 namespace slamd {
+namespace geometry {
 
 const fs::path vertex_shader_path =
     shader_folder() / "mono_mesh" / "vertex_shader.vert";
@@ -79,4 +80,5 @@ void MonoMesh::render(
     );
     gl::glBindVertexArray(0);
 };
+}  // namespace geometry
 }  // namespace slamd

@@ -1,7 +1,8 @@
+#include <slamd/geometry/simple_mesh.hpp>
 #include <slamd/paths.hpp>
-#include <slamd/scene_objects/simple_mesh.hpp>
 
 namespace slamd {
+namespace geometry {
 
 const fs::path vertex_shader_path =
     shader_folder() / "simple_mesh" / "vertex_shader.vert";
@@ -92,4 +93,5 @@ void SimpleMesh::render(
     );
     gl::glBindVertexArray(0);
 };
+}  // namespace geometry
 }  // namespace slamd

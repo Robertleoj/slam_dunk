@@ -1,12 +1,13 @@
 #pragma once
 
 #include <chrono>
-#include <slamd/scene_object.hpp>
+#include <slamd/geometry/geometry.hpp>
 #include <slamd/shaders.hpp>
 
 namespace slamd {
+namespace geometry {
 
-class ArcballIndicator : public SceneObject {
+class ArcballIndicator : public Geometry {
    public:
     ArcballIndicator();
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
@@ -28,4 +29,5 @@ class ArcballIndicator : public SceneObject {
         last_interacted;
 };
 
+}  // namespace geometry
 }  // namespace slamd

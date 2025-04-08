@@ -3,18 +3,23 @@
 #include <glbinding/glbinding.h>
 #include <glm/glm.hpp>
 #include <optional>
-#include <slamd/scene_object.hpp>
+#include <slamd/geometry/geometry.hpp>
 #include <slamd/shaders.hpp>
 #include <vector>
 
 namespace slamd {
+namespace geometry {
 
-class MonoMesh : public SceneObject {
+struct Vertex {
+    glm::vec3 position;
+    glm::vec3 color;
+};
+
+class SimpleMesh : public Geometry {
    public:
-    MonoMesh(
-        std::vector<glm::vec3> vertices,
-        std::vector<uint32_t> triangle_indices,
-        glm::vec3 color
+    SimpleMesh(
+        std::vector<Vertex> vertices,
+        std::vector<uint32_t> triangle_indices
     );
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
@@ -26,6 +31,6 @@ class MonoMesh : public SceneObject {
     gl::GLuint eab_id;
 
     size_t num_vertices;
-    glm::vec3 color;
 };
+}  // namespace geometry
 }  // namespace slamd

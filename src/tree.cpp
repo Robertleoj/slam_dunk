@@ -46,7 +46,7 @@ void insert_node() {}
 
 void Tree::set_object(
     const TreePath& path,
-    std::shared_ptr<SceneObject> object
+    std::shared_ptr<geometry::Geometry> object
 ) {
     if (path.is_root()) {
         throw std::runtime_error("Setting root object is not allowed");
@@ -58,7 +58,7 @@ void Tree::set_object(
 
 void Tree::set_object_weak(
     const TreePath& path,
-    std::weak_ptr<SceneObject> object
+    std::weak_ptr<geometry::Geometry> object
 ) {
     if (path.is_root()) {
         throw std::runtime_error("Setting root object is not allowed");

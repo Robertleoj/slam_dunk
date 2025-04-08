@@ -1,6 +1,8 @@
-#include <slamd/scene_objects/poly_line.hpp>
+#include <numbers>
+#include <slamd/geometry/poly_line.hpp>
 
 namespace slamd {
+namespace geometry {
 
 MonoMesh make_poly_line_mesh(
     const std::vector<glm::vec3>& points,
@@ -84,4 +86,5 @@ void PolyLine::render(
     mesh.render(model, view, projection);
 }
 
+}  // namespace geometry
 }  // namespace slamd

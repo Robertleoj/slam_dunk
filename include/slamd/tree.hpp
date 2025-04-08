@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <slamd/geometry/geometry.hpp>
 #include <slamd/node.hpp>
-#include <slamd/scene_object.hpp>
 #include <slamd/tree_path.hpp>
 
 namespace slamd {
@@ -12,9 +12,14 @@ class Tree {
 
    public:
     Tree();
-    void set_object(const TreePath& path, std::shared_ptr<SceneObject> object);
-    void
-    set_object_weak(const TreePath& path, std::weak_ptr<SceneObject> object);
+    void set_object(
+        const TreePath& path,
+        std::shared_ptr<geometry::Geometry> object
+    );
+    void set_object_weak(
+        const TreePath& path,
+        std::weak_ptr<geometry::Geometry> object
+    );
     void set_transform(const TreePath& path, const glm::mat4& transform);
 
     void render(const glm::mat4 view, const glm::mat4 projection) const;

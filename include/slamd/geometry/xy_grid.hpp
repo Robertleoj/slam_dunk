@@ -2,13 +2,14 @@
 
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
-#include <slamd/scene_object.hpp>
+#include <slamd/geometry/geometry.hpp>
 #include <slamd/shaders.hpp>
 #include <vector>
 
 namespace slamd {
+namespace geometry {
 
-class GridXYPlane : public SceneObject {
+class GridXYPlane : public Geometry {
    public:
     GridXYPlane(float grid_size = 10.0f);
 
@@ -26,4 +27,5 @@ class GridXYPlane : public SceneObject {
     float arcball_zoom;
 };
 
+}  // namespace geometry
 }  // namespace slamd

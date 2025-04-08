@@ -1,12 +1,13 @@
 #pragma once
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
-#include <slamd/scene_object.hpp>
-#include <slamd/scene_objects/simple_mesh.hpp>
+#include <slamd/geometry/geometry.hpp>
+#include <slamd/geometry/simple_mesh.hpp>
 
 namespace slamd {
+namespace geometry {
 
-class Box : public SceneObject {
+class Box : public Geometry {
    public:
     Box();
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
@@ -18,4 +19,5 @@ class Box : public SceneObject {
     SimpleMesh box_mesh;
 };
 
+}  // namespace geometry
 }  // namespace slamd

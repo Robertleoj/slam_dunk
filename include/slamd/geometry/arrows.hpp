@@ -1,12 +1,13 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <slamd/scene_object.hpp>
-#include <slamd/scene_objects/simple_mesh.hpp>
+#include <slamd/geometry/geometry.hpp>
+#include <slamd/geometry/simple_mesh.hpp>
 
 namespace slamd {
+namespace geometry {
 
-class Arrows : public SceneObject {
+class Arrows : public Geometry {
    public:
     Arrows(
         const std::vector<glm::vec3>& starts,
@@ -21,4 +22,5 @@ class Arrows : public SceneObject {
     SimpleMesh mesh;
 };
 
+}  // namespace geometry
 }  // namespace slamd

@@ -1,6 +1,7 @@
-#include <slamd/scene_objects/arrows.hpp>
+#include <slamd/geometry/arrows.hpp>
 
 namespace slamd {
+namespace geometry {
 
 constexpr uint segments = 12;
 struct ArrowMesh {
@@ -164,4 +165,5 @@ void Arrows::render(
 ) {
     mesh.render(model, view, projection);
 }
+}  // namespace geometry
 }  // namespace slamd

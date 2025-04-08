@@ -3,7 +3,7 @@
 #include <map>
 #include <memory>
 #include <optional>
-#include <slamd/scene_object.hpp>
+#include <slamd/geometry/geometry.hpp>
 #include <string>
 
 namespace slamd {
@@ -11,13 +11,13 @@ namespace slamd {
 class ObjectReference {
    public:
     ObjectReference(
-        const std::shared_ptr<SceneObject>& obj
+        const std::shared_ptr<geometry::Geometry>& obj
     )
         : tag(STRONG),
           strong_obj(obj) {}
 
     ObjectReference(
-        const std::weak_ptr<SceneObject>& obj
+        const std::weak_ptr<geometry::Geometry>& obj
     )
         : tag(WEAK),
           weak_obj(obj) {}
@@ -25,15 +25,15 @@ class ObjectReference {
     ~ObjectReference() {
         switch (tag) {
             case WEAK: {
-                weak_obj.~weak_ptr<SceneObject>();
+                weak_obj.~weak_ptr<geometry::Geometry>();
             }
             case STRONG: {
-                strong_obj.~shared_ptr<SceneObject>();
+                strong_obj.~shared_ptr<geometry::Geometry>();
             }
         }
     }
 
-    std::optional<std::shared_ptr<SceneObject>> get_object() const;
+    std::optional<std::shared_ptr<geometry::Geometry>> get_object() const;
 
    private:
     enum {
@@ -42,8 +42,8 @@ class ObjectReference {
     } tag;
 
     union {
-        std::weak_ptr<SceneObject> weak_obj;
-        std::shared_ptr<SceneObject> strong_obj;
+        std::weak_ptr<geometry::Geometry> weak_obj;
+        std::shared_ptr<geometry::Geometry> strong_obj;
     };
 };
 
@@ -56,9 +56,9 @@ class Node {
     std::optional<ObjectReference> object_reference;
 
    public:
-    std::optional<std::shared_ptr<SceneObject>> get_object() const;
-    void set_object(std::shared_ptr<SceneObject> object);
-    void set_object(std::weak_ptr<SceneObject> object);
+    std::optional<std::shared_ptr<geometry::Geometry>> get_object() const;
+    void set_object(std::shared_ptr<geometry::Geometry> object);
+    void set_object(std::weak_ptr<geometry::Geometry> object);
     void set_transform(glm::mat4 transform);
 };
 

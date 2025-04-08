@@ -1,11 +1,12 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <slamd/scene_object.hpp>
-#include <slamd/scene_objects/mono_mesh.hpp>
+#include <slamd/geometry/geometry.hpp>
+#include <slamd/geometry/mono_mesh.hpp>
 
 namespace slamd {
+namespace geometry {
 
-class Sphere : public SceneObject {
+class Sphere : public Geometry {
    public:
     Sphere(float radius = 1.0f, glm::vec3 color = glm::vec3(1.0, 1.0, 1.0));
 
@@ -15,4 +16,5 @@ class Sphere : public SceneObject {
     MonoMesh mesh;
 };
 
+}  // namespace geometry
 }  // namespace slamd
