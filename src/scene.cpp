@@ -18,8 +18,8 @@ glm::vec3 make_background_color(
 
 Scene::Scene()
     : frame_buffer(500, 500),
-      camera(45.0, 0.1f, 100000.0f),
-      xy_grid(1000.0) {
+      camera(45.0, 0.1f, 10000.0f),
+      xy_grid(100.0) {
     this->xy_grid.set_arcball_zoom(this->arcball.radius);
     this->arcball_indicator.set_arcball_zoom(this->arcball.radius);
 }
