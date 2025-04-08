@@ -22,12 +22,12 @@ class ArcballIndicator : public Geometry {
     void initialize();
 
    private:
-    struct GLState {
+    struct GLData {
         gl::GLuint vao_id;
         gl::GLuint vbo_id;
         ShaderProgram shader;
     };
-    std::optional<ThreadBox<GLState>> gl_state;
+    std::optional<ThreadBox<GLData>> gl_state;
     std::optional<std::thread::id> render_thread_id;
 
     uint vertex_count;

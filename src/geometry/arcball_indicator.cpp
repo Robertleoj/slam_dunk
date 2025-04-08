@@ -53,7 +53,7 @@ void ArcballIndicator::initialize() {
 
     gl::glBindVertexArray(0);
 
-    GLState gl_state = {
+    GLData gl_state = {
         vao_id, vbo_id, ShaderProgram(vertex_shader_path, fragment_shader_path)
     };
 
