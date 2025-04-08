@@ -93,5 +93,13 @@ void SimpleMesh::render(
     );
     gl::glBindVertexArray(0);
 };
+
+std::shared_ptr<SimpleMesh> simple_mesh(
+    std::vector<Vertex> vertices,
+    std::vector<uint32_t> triangle_indices
+) {
+    return std::make_shared<SimpleMesh>(vertices, triangle_indices);
+}
+
 }  // namespace geometry
 }  // namespace slamd

@@ -74,5 +74,9 @@ void Box::render(
     this->box_mesh.render(model, view, projection);
 }
 
+std::shared_ptr<Box> box() {
+    return std::make_shared<Box>();
+}
+
 }  // namespace geometry
 }  // namespace slamd

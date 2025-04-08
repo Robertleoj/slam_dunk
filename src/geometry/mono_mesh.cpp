@@ -80,5 +80,14 @@ void MonoMesh::render(
     );
     gl::glBindVertexArray(0);
 };
+
+std::shared_ptr<MonoMesh> mono_mesh(
+    std::vector<glm::vec3> vertices,
+    std::vector<uint32_t> triangle_indices,
+    glm::vec3 color
+) {
+    return std::make_shared<MonoMesh>(vertices, triangle_indices, color);
+}
+
 }  // namespace geometry
 }  // namespace slamd

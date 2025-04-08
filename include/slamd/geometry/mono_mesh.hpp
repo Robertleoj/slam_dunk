@@ -29,5 +29,12 @@ class MonoMesh : public Geometry {
     size_t num_vertices;
     glm::vec3 color;
 };
+
+std::shared_ptr<MonoMesh> mono_mesh(
+    std::vector<glm::vec3> vertices,
+    std::vector<uint32_t> triangle_indices,
+    glm::vec3 color
+);
+
 }  // namespace geometry
 }  // namespace slamd

@@ -9,13 +9,15 @@ namespace geometry {
 
 class Triad : public Geometry {
    public:
-    Triad(float scale = 1.0, float thickness = 0.1);
+    Triad(float scale, float thickness);
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
    private:
     Arrows arrows;
 };
+
+std::shared_ptr<Triad> triad(float scale = 1.0, float thickness = 0.1);
 
 }  // namespace geometry
 }  // namespace slamd

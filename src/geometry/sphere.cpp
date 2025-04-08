@@ -84,5 +84,12 @@ void Sphere::render(
     this->mesh.render(model, view, projection);
 };
 
+std::shared_ptr<Sphere> sphere(
+    float radius,
+    glm::vec3 color
+) {
+    return std::make_shared<Sphere>(radius, color);
+}
+
 }  // namespace geometry
 }  // namespace slamd

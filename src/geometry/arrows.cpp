@@ -165,5 +165,15 @@ void Arrows::render(
 ) {
     mesh.render(model, view, projection);
 }
+
+std::shared_ptr<Arrows> arrows(
+    const std::vector<glm::vec3>& starts,
+    const std::vector<glm::vec3>& ends,
+    const std::vector<glm::vec3>& colors,
+    float thickness
+) {
+    return std::make_shared<Arrows>(starts, ends, colors, thickness);
+}
+
 }  // namespace geometry
 }  // namespace slamd

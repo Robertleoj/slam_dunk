@@ -8,13 +8,16 @@ namespace geometry {
 
 class Sphere : public Geometry {
    public:
-    Sphere(float radius = 1.0f, glm::vec3 color = glm::vec3(1.0, 1.0, 1.0));
+    Sphere(float radius, glm::vec3 color);
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
    private:
     MonoMesh mesh;
 };
+
+std::shared_ptr<Sphere>
+sphere(float radius = 1.0f, glm::vec3 color = glm::vec3(1.0, 1.0, 1.0));
 
 }  // namespace geometry
 }  // namespace slamd

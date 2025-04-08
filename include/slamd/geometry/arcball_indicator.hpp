@@ -29,5 +29,7 @@ class ArcballIndicator : public Geometry {
         last_interacted;
 };
 
+std::shared_ptr<ArcballIndicator> arcball_indicator();
+
 }  // namespace geometry
 }  // namespace slamd

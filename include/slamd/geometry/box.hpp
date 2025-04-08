@@ -19,5 +19,7 @@ class Box : public Geometry {
     SimpleMesh box_mesh;
 };
 
+std::shared_ptr<Box> box();
+
 }  // namespace geometry
 }  // namespace slamd

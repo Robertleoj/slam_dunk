@@ -86,5 +86,13 @@ void PolyLine::render(
     mesh.render(model, view, projection);
 }
 
+std::shared_ptr<PolyLine> poly_line(
+    const std::vector<glm::vec3>& points,
+    float thickness,
+    const glm::vec3& color
+) {
+    return std::make_shared<PolyLine>(points, thickness, color);
+}
+
 }  // namespace geometry
 }  // namespace slamd

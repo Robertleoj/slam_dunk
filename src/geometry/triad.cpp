@@ -31,5 +31,12 @@ void Triad::render(
     this->arrows.render(model, view, projection);
 }
 
+std::shared_ptr<Triad> triad(
+    float scale,
+    float thickness
+) {
+    return std::make_shared<Triad>(scale, thickness);
+}
+
 }  // namespace geometry
 }  // namespace slamd

@@ -32,5 +32,11 @@ class SimpleMesh : public Geometry {
 
     size_t num_vertices;
 };
+
+std::shared_ptr<SimpleMesh> simple_mesh(
+    std::vector<Vertex> vertices,
+    std::vector<uint32_t> triangle_indices
+);
+
 }  // namespace geometry
 }  // namespace slamd

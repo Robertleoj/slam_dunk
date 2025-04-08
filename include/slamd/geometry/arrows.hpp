@@ -22,5 +22,12 @@ class Arrows : public Geometry {
     SimpleMesh mesh;
 };
 
+std::shared_ptr<Arrows> arrows(
+    const std::vector<glm::vec3>& starts,
+    const std::vector<glm::vec3>& ends,
+    const std::vector<glm::vec3>& colors,
+    float thickness
+);
+
 }  // namespace geometry
 }  // namespace slamd

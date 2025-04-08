@@ -68,7 +68,7 @@ float ArcballIndicator::get_alpha() {
 
     spdlog::debug("{} seconds since last interaction", secs);
 
-    float start_fading = 0.5f;
+    float start_fading = 0.2f;
     float fade_speed = 0.2f;
 
     return glm::clamp(1.0f - ((secs - start_fading) / fade_speed), 0.0f, 1.0f);
@@ -116,6 +116,10 @@ void ArcballIndicator::set_arcball_zoom(
     float zoom
 ) {
     this->arcball_zoom = zoom;
+}
+
+std::shared_ptr<ArcballIndicator> arcball_indicator() {
+    return std::make_shared<ArcballIndicator>();
 }
 
 }  // namespace geometry
