@@ -1,3 +1,4 @@
+#include <slamd/assert.hpp>
 #include <slamd/geometry/mono_mesh.hpp>
 #include <slamd/paths.hpp>
 
@@ -12,6 +13,8 @@ const fs::path fragment_shader_path =
 thread_local std::optional<ShaderProgram> MonoMesh::shader;
 
 void MonoMesh::initialize() {
+    assert_thread(this->render_thread_id.value());
+
     if (!MonoMesh::shader.has_value()) {
         shader.emplace(vertex_shader_path, fragment_shader_path);
     }

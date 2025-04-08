@@ -101,6 +101,12 @@ target_sources(
         include/slamd/frame_timer.hpp
         src/frame_timer.cpp
 
+        include/slamd/assert.hpp
+        src/assert.cpp
+
+        include/slamd/render_thread_job_queue.hpp
+
+        include/slamd/thread_box.hpp
 )
 
 target_include_directories(

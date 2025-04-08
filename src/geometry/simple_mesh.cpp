@@ -1,3 +1,4 @@
+#include <slamd/assert.hpp>
 #include <slamd/geometry/simple_mesh.hpp>
 #include <slamd/paths.hpp>
 
@@ -9,24 +10,24 @@ const fs::path vertex_shader_path =
 const fs::path fragment_shader_path =
     shader_folder() / "simple_mesh" / "fragment_shader.frag";
 
-std::optional<ShaderProgram> SimpleMesh::shader;
+thread_local std::optional<ShaderProgram> SimpleMesh::shader;
 
-SimpleMesh::SimpleMesh(
-    std::vector<Vertex> vertices,
-    std::vector<uint32_t> triangle_indices
-)
-    : num_vertices(triangle_indices.size()) {
+void SimpleMesh::initialize() {
+    assert_thread(this->render_thread_id.value());
+
     if (!SimpleMesh::shader.has_value()) {
         shader.emplace(vertex_shader_path, fragment_shader_path);
     }
 
+    GLData gl_data;
+
     // create the vertex array object
-    gl::glGenVertexArrays(1, &this->vao_id);
-    gl::glBindVertexArray(this->vao_id);
+    gl::glGenVertexArrays(1, &gl_data.vao_id);
+    gl::glBindVertexArray(gl_data.vao_id);
 
     // make the vertex buffer object
-    gl::glGenBuffers(1, &this->vbo_id);
-    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->vbo_id);
+    gl::glGenBuffers(1, &gl_data.vbo_id);
+    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.vbo_id);
     gl::glBufferData(
         gl::GL_ARRAY_BUFFER,
         vertices.size() * sizeof(Vertex),
@@ -35,8 +36,8 @@ SimpleMesh::SimpleMesh(
     );
 
     // make the element array buffer
-    gl::glGenBuffers(1, &this->eab_id);
-    gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, this->eab_id);
+    gl::glGenBuffers(1, &gl_data.eab_id);
+    gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, gl_data.eab_id);
 
     gl::glBufferData(
         gl::GL_ELEMENT_ARRAY_BUFFER,
@@ -69,14 +70,30 @@ SimpleMesh::SimpleMesh(
 
     // unbind the vao
     gl::glBindVertexArray(0);
+
+    this->gl_data.emplace(gl_data);
 }
+
+SimpleMesh::SimpleMesh(
+    std::vector<Vertex> vertices,
+    std::vector<uint32_t> triangle_indices
+)
+    : vertices(vertices),
+      triangle_indices(triangle_indices) {}
 
 void SimpleMesh::render(
     glm::mat4 model,
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    gl::glBindVertexArray(this->vao_id);
+    if (!this->render_thread_id.has_value()) {
+        this->render_thread_id = std::this_thread::get_id();
+        this->initialize();
+    }
+
+    auto gl_data = this->gl_data.value().get();
+
+    gl::glBindVertexArray(gl_data->vao_id);
 
     if (!SimpleMesh::shader.has_value()) {
         throw std::runtime_error("Shader not initialized!");
@@ -89,7 +106,7 @@ void SimpleMesh::render(
     shader.setUniform("view", view);
     shader.setUniform("projection", projection);
     gl::glDrawElements(
-        gl::GL_TRIANGLES, this->num_vertices, gl::GL_UNSIGNED_INT, 0
+        gl::GL_TRIANGLES, this->triangle_indices.size(), gl::GL_UNSIGNED_INT, 0
     );
     gl::glBindVertexArray(0);
 };

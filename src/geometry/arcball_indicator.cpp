@@ -1,5 +1,6 @@
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <slamd/assert.hpp>
 #include <slamd/geometry/arcball_indicator.hpp>
 #include <slamd/paths.hpp>
 #include <slamd/render_thread_job_queue.hpp>
@@ -13,6 +14,7 @@ const fs::path fragment_shader_path =
     shader_folder() / "arcball_indicator" / "fragment_shader.frag";
 
 void ArcballIndicator::initialize() {
+    assert_thread(this->render_thread_id.value());
     // clang-format off
     std::vector<float> verts = {
         // x cross
