@@ -4,6 +4,7 @@
 #include <glbinding/glbinding.h>
 #include <slamd/geometry/geometry.hpp>
 #include <slamd/shaders.hpp>
+#include <slamd/thread_box.hpp>
 #include <vector>
 
 namespace slamd {
@@ -20,11 +21,21 @@ class GridXYPlane : public Geometry {
     void set_arcball_zoom(float zoom);
 
    private:
-    gl::GLuint vao_id;
-    gl::GLuint vbo_id;
-    int vertex_count;
-    ShaderProgram shader;
+    void initialize();
+
+   private:
+    struct GLData {
+        gl::GLuint vao_id;
+        gl::GLuint vbo_id;
+        ShaderProgram shader;
+        size_t vertex_count;
+    };
+
+    std::optional<ThreadBox<GLData>> gl_data;
+    std::optional<std::thread::id> render_thread_id;
+
     float arcball_zoom;
+    float grid_size;
 };
 
 }  // namespace geometry

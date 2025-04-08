@@ -52,6 +52,19 @@ class RenderQueueManager {
         queues[current_id] = std::make_shared<RenderJobQueue>();
     }
 
+    static void force_enqueue(
+        std::thread::id thread_id,
+        std::function<void()> job
+    ) {
+        auto render_queue = get_queue(thread_id);
+
+        if (!render_queue.has_value()) {
+            throw std::runtime_error("No render queue available!");
+        }
+
+        render_queue.value()->enqueue(job);
+    }
+
     static std::optional<std::shared_ptr<RenderJobQueue>> get_queue(
         std::thread::id id
     ) {
