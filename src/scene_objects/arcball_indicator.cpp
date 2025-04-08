@@ -1,3 +1,4 @@
+#include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <slam_dunk/paths.hpp>
 #include <slam_dunk/scene_objects/arcball_indicator.hpp>
@@ -52,6 +53,30 @@ ArcballIndicator::ArcballIndicator()
     gl::glBindVertexArray(0);
 }
 
+float ArcballIndicator::get_alpha() {
+    // smoothly decrease alpha until 0
+    // should take ~1sec to completely fade
+    if (!this->last_interacted.has_value()) {
+        return 0.0f;
+    }
+
+    auto now = std::chrono::high_resolution_clock::now();
+
+    std::chrono::duration<float> sec_duration = now - last_interacted.value();
+    float secs = sec_duration.count();
+
+    spdlog::debug("{} seconds since last interaction", secs);
+
+    float start_fading = 0.5f;
+    float fade_speed = 0.5f;
+
+    return glm::clamp(1.0f - ((secs - start_fading) / fade_speed), 0.0f, 1.0f);
+}
+
+void ArcballIndicator::interact() {
+    this->last_interacted = std::chrono::high_resolution_clock::now();
+}
+
 glm::mat4 ArcballIndicator::get_scale_mat(
     float scale
 ) {
@@ -63,6 +88,12 @@ void ArcballIndicator::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
+    auto alpha = this->get_alpha();
+    if (alpha < 1e-6) {
+        // no need to draw
+        return;
+    }
+
     auto scale_mat =
         ArcballIndicator::get_scale_mat(this->arcball_zoom / 20.0f);
     this->shader.use();
@@ -72,6 +103,7 @@ void ArcballIndicator::render(
     this->shader.setUniform(
         "uColor", glm::vec3(1.0f, 1.0f, 1.0f)
     );  // clean gray
+    this->shader.setUniform("uAlpha", alpha);
 
     gl::glBindVertexArray(this->vao_id);
     gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);

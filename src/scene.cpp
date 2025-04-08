@@ -19,7 +19,7 @@ glm::vec3 make_background_color(
 Scene::Scene()
     : frame_buffer(500, 500),
       camera(45.0, 0.1f, 10000.0f),
-      xy_grid(100.0) {
+      xy_grid(250.0) {
     this->xy_grid.set_arcball_zoom(this->arcball.radius);
     this->arcball_indicator.set_arcball_zoom(this->arcball.radius);
 }
@@ -107,6 +107,7 @@ void Scene::handle_input() {
                 this->arcball.rotate(
                     -Angle::rad(x_angle_diff), -Angle::rad(y_angle_diff)
                 );
+                this->arcball_indicator.interact();
             }
 
             if (io.MouseWheel != 0.0f) {
@@ -123,6 +124,7 @@ void Scene::handle_input() {
                 this->arcball.zoom(zoom_factor);
                 this->xy_grid.set_arcball_zoom(this->arcball.radius);
                 this->arcball_indicator.set_arcball_zoom(this->arcball.radius);
+                this->arcball_indicator.interact();
             }
         }
 
@@ -157,7 +159,10 @@ void Scene::handle_input() {
             translation -= up;
         }
 
-        this->arcball.translate_relative(translation);
+        if (glm::length(translation) > 1e-6f) {
+            this->arcball.translate_relative(translation);
+            this->arcball_indicator.interact();
+        }
     }
 }
 

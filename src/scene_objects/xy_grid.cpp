@@ -101,33 +101,27 @@ void GridXYPlane::render(
     this->shader.setUniform("uScale", desired_scale);
 
     gl::glBindVertexArray(this->vao_id);
+    gl::glDepthMask(gl::GL_FALSE);  // don't mess with z-buffer
+
     gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);
 
     float draw_threshold = 0.01;
 
-    spdlog::debug(
-        "best: {} below: {} above: {}", best_alpha, below_alpha, above_alpha
-    );
+    spdlog::debug("best: {} below: {}", best_alpha, below_alpha);
 
     if (below_alpha > draw_threshold) {
         this->shader.setUniform("uModel", model * below_scale_mat);
         this->shader.setUniform("uExtraAlpha", below_alpha);
-        this->shader.setUniform("uScale", desired_scale);
 
         gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);
     }
+    if (above_alpha > draw_threshold) {
+        this->shader.setUniform("uModel", model * above_scale_mat);
+        this->shader.setUniform("uExtraAlpha", above_alpha);
 
-    // render above scale
-    // of course, the bigger grid is included in the smaller ones
-    // so we don't need to draw it if it has a smaller alpha than the other
-    // grids if (above_alpha > below_alpha && b) {
-    //     this->shader.setUniform("uModel", model * above_scale_mat);
-    //     this->shader.setUniform("uExtraAlpha", above_alpha);
-    //     this->shader.setUniform("uScale", desired_scale);
-
-    //     gl::glBindVertexArray(this->vao_id);
-    //     gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);
-    // }
+        gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);
+    }
+    gl::glDepthMask(gl::GL_TRUE);
 
     gl::glBindVertexArray(0);
 }
