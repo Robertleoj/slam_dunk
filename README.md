@@ -12,7 +12,7 @@ For simple usage, you can allow SlamDunk to handle the render loop. In this scen
 
 For more advanced usage, you can create your own render loop, and instruct SlamDunk to render into ImGui windows.
 
-For easy integration into your SLAM system, we support using weak pointers to scene objects in our scene tree, allowing you to own the scene object. You can modify it deep in your program, and it updates correctly in the viewer. Then, if your owner is deleted, the object is seemlessly deleted from the scene.
+For easy integration into your SLAM system, we support using weak pointers to scene objects in our scene tree, allowing you to own the scene objects. You can modify it deep in your program, and it updates correctly in the viewer. Then, if the owner is deleted, the object is seemlessly deleted from the scene.
 
 ---
 
