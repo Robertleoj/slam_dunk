@@ -137,7 +137,7 @@ int main() {
 
     scene.tree.set_object("/origin_triad", slamd::geometry::triad());
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 50; i++) {
         std::string box_path = std::format("/box{}", i);
 
         scene.tree.set_object(box_path, slamd::geometry::box());
