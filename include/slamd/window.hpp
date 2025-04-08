@@ -11,13 +11,12 @@ namespace slamd {
 class Window {
    public:
     Window(size_t height, size_t width);
+    ~Window();
+    void wait_for_close();
+    void add_scene(std::string name, std::shared_ptr<Scene> scene);
 
    private:
     void render_job(size_t height, size_t width);
-
-    void add_scene(std::string name, std::shared_ptr<Scene> scene);
-
-    ~Window();
 
    private:
     std::thread render_thread;

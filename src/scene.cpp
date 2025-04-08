@@ -164,4 +164,8 @@ void Scene::handle_input() {
     }
 }
 
+std::shared_ptr<Scene> scene() {
+    return std::make_shared<Scene>();
+}
+
 }  // namespace slamd

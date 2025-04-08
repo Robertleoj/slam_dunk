@@ -29,4 +29,6 @@ class Scene {
     geometry::ArcballIndicator arcball_indicator;
 };
 
+std::shared_ptr<Scene> scene();
+
 }  // namespace slamd

@@ -79,6 +79,12 @@ void Window::render_job(
     glfwTerminate();
 }
 
+void Window::wait_for_close() {
+    if (this->render_thread.joinable()) {
+        this->render_thread.join();
+    }
+}
+
 Window::~Window() {
     should_stop = true;
     if (this->render_thread.joinable()) {

@@ -90,7 +90,14 @@ FrameBuffer::GLData* FrameBuffer::get_gl_data() {
 }
 
 FrameBuffer::~FrameBuffer() {
-    auto gl_data = this->get_gl_data();
+    if (!this->render_thread_id.has_value()) {
+        return;
+    }
+    if (!this->gl_data.has_value()) {
+        return;
+    }
+
+    auto gl_data = this->gl_data.value().circumvent();
 
     auto job = [fbo = gl_data->frame_buffer_object_id,
                 rbo = gl_data->render_buffer_object_id,

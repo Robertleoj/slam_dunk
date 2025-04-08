@@ -23,6 +23,12 @@ class ThreadBox {
         return &this->data;
     }
 
+    /**
+     * pretty much only used in destructors, so we can extract the data
+     * to put it in the render thread job
+     */
+    T* circumvent() { return &this->data; }
+
    private:
     T data;
     std::thread::id thread_id;

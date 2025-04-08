@@ -155,7 +155,7 @@ GridXYPlane::~GridXYPlane() {
         return;
     }
 
-    auto gl_data = this->gl_data.value().get();
+    auto gl_data = this->gl_data.value().circumvent();
 
     gl::GLuint vbo_id = gl_data->vbo_id;
     auto vao_id = gl_data->vao_id;
