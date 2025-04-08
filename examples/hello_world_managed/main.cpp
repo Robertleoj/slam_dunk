@@ -1,3 +1,4 @@
+#include <glm/glm.hpp>
 #include <slamd/slamd.hpp>
 
 int main() {
