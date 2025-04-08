@@ -76,8 +76,6 @@ void Tree::set_transform(
         throw std::runtime_error("Setting root transform is not allowed");
     }
 
-    spdlog::debug("Setting transform for {}", path.string());
-
     Node* node = this->make_path(path);
     node->set_transform(transform);
 }

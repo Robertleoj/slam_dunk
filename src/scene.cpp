@@ -88,11 +88,6 @@ void Scene::handle_input() {
                 auto mouse_drag_delta_y = static_cast<int>(mouse_drag_delta.y);
 
                 ImGui::ResetMouseDragDelta(ImGuiMouseButton_Left);
-                spdlog::debug(
-                    "Mouse dragged: x={} y={}",
-                    mouse_drag_delta_x,
-                    mouse_drag_delta_y
-                );
 
                 auto min_window_dim = std::min(
                     this->frame_buffer.width(), this->frame_buffer.height()

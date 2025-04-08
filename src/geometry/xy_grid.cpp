@@ -17,7 +17,6 @@ glm::mat4 get_scale_mat(
     float log_scale
 ) {
     float scale = pow(10.0f, log_scale);
-    spdlog::debug("Scaling by {}", scale);
     return glm::scale(glm::mat4(1.0f), glm::vec3(scale, scale, 0.0));
 }
 
@@ -133,8 +132,6 @@ void GridXYPlane::render(
     gl::glDrawArrays(gl::GL_LINES, 0, gl_data->vertex_count);
 
     float draw_threshold = 0.01;
-
-    spdlog::debug("best: {} below: {}", best_alpha, below_alpha);
 
     if (below_alpha > draw_threshold) {
         gl_data->shader.setUniform("uModel", model * below_scale_mat);

@@ -76,8 +76,6 @@ float ArcballIndicator::get_alpha() {
     std::chrono::duration<float> sec_duration = now - last_interacted.value();
     float secs = sec_duration.count();
 
-    spdlog::debug("{} seconds since last interaction", secs);
-
     float start_fading = 0.2f;
     float fade_speed = 0.2f;
 
