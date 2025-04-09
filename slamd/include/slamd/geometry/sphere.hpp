@@ -4,7 +4,7 @@
 #include <slamd/geometry/mono_mesh.hpp>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 class Sphere : public Geometry {
    public:
@@ -16,6 +16,11 @@ class Sphere : public Geometry {
     MonoMesh mesh;
 };
 
+}  // namespace _geometry
+
+namespace geometry {
+
+using _geometry::Sphere;
 std::shared_ptr<Sphere>
 sphere(float radius = 1.0f, glm::vec3 color = glm::vec3(0.8, 0.2, 0.0));
 

@@ -23,6 +23,7 @@ target_sources(
     slamd
 
     PRIVATE
+        src/image_texture.cpp
         src/data/image.cpp
         src/view/scene_view.cpp
         src/view/canvas_view.cpp
@@ -48,6 +49,7 @@ target_sources(
         src/assert.cpp
         src/window.cpp
         src/tree/tree.cpp
+        src/tree/node.cpp
 )
 
 target_include_directories(

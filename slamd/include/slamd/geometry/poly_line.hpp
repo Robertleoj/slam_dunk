@@ -6,7 +6,7 @@
 #include <vector>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 class PolyLine : public Geometry {
    public:
@@ -22,6 +22,11 @@ class PolyLine : public Geometry {
     MonoMesh mesh;
 };
 
+}  // namespace _geometry
+
+namespace geometry {
+
+using _geometry::PolyLine;
 std::shared_ptr<PolyLine> poly_line(
     const std::vector<glm::vec3>& points,
     float thickness,
@@ -29,4 +34,5 @@ std::shared_ptr<PolyLine> poly_line(
 );
 
 }  // namespace geometry
+
 }  // namespace slamd

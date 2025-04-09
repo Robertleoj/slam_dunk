@@ -5,7 +5,7 @@
 #include <slamd/geometry/simple_mesh.hpp>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 class Arrows : public Geometry {
    public:
@@ -21,6 +21,12 @@ class Arrows : public Geometry {
    private:
     SimpleMesh mesh;
 };
+
+}  // namespace _geometry
+
+namespace geometry {
+
+using _geometry::Arrows;
 
 std::shared_ptr<Arrows> arrows(
     const std::vector<glm::vec3>& starts,

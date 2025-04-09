@@ -5,6 +5,7 @@
 #include <format>
 #include <iostream>
 #include <slamd/slamd.hpp>
+#include <stdexcept>
 
 namespace fs = std::filesystem;
 
@@ -14,6 +15,12 @@ slamd::data::Image read_image() {
     int width, height, channels;
     unsigned char* data_ptr =
         stbi_load(image_path.string().c_str(), &width, &height, &channels, 0);
+
+    if (data_ptr == nullptr) {
+        throw std::runtime_error(
+            std::format("Failed to load image at", image_path.string())
+        );
+    }
 
     size_t num_bytes = sizeof(uint8_t) * height * width * channels;
 
@@ -28,6 +35,8 @@ slamd::data::Image read_image() {
     // clang-format on
 
     std::vector<uint8_t> data(data_ptr, data_ptr + num_bytes);
+
+    stbi_image_free(data_ptr);
 
     return slamd::data::Image(std::move(data), width, height, channels);
 }

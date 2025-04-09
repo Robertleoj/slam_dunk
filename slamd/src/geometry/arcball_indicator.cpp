@@ -6,7 +6,7 @@
 #include <slamd/render_thread_job_queue.hpp>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 const fs::path vertex_shader_path =
     shader_folder() / "arcball_indicator" / "vertex_shader.vert";
@@ -133,9 +133,5 @@ void ArcballIndicator::set_arcball_zoom(
     this->arcball_zoom = zoom;
 }
 
-std::shared_ptr<ArcballIndicator> arcball_indicator() {
-    return std::make_shared<ArcballIndicator>();
-}
-
-}  // namespace geometry
+}  // namespace _geometry
 }  // namespace slamd

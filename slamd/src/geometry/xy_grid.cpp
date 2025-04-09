@@ -6,7 +6,7 @@
 #include <slamd/render_thread_job_queue.hpp>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 const fs::path vertex_shader_path =
     shader_folder() / "xy_grid" / "vertex_shader.vert";
@@ -174,5 +174,6 @@ void GridXYPlane::set_arcball_zoom(
     this->arcball_zoom = zoom;
 }
 
-}  // namespace geometry
+}  // namespace _geometry
+
 }  // namespace slamd

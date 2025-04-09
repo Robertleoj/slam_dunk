@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 void generate_sphere(
     std::vector<glm::vec3>& vertices,
@@ -84,12 +84,15 @@ void Sphere::render(
     this->mesh.render(model, view, projection);
 };
 
+}  // namespace _geometry
+
+namespace geometry {
 std::shared_ptr<Sphere> sphere(
     float radius,
     glm::vec3 color
 ) {
     return std::make_shared<Sphere>(radius, color);
 }
-
 }  // namespace geometry
+
 }  // namespace slamd

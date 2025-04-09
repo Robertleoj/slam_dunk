@@ -19,8 +19,8 @@ class SceneView : public View {
     Arcball arcball;
     Camera camera;
     FrameTimer frame_timer;
-    geometry::GridXYPlane xy_grid;
-    geometry::ArcballIndicator arcball_indicator;
+    _geometry::GridXYPlane xy_grid;
+    _geometry::ArcballIndicator arcball_indicator;
 
    public:
     SceneView(std::shared_ptr<Scene> scene);

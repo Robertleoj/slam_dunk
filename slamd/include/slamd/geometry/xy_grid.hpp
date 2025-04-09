@@ -8,7 +8,7 @@
 #include <vector>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 class GridXYPlane : public Geometry {
    public:
@@ -38,5 +38,5 @@ class GridXYPlane : public Geometry {
     float grid_size;
 };
 
-}  // namespace geometry
+}  // namespace _geometry
 }  // namespace slamd

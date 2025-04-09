@@ -6,8 +6,7 @@
 #include <slamd/thread_box.hpp>
 
 namespace slamd {
-namespace geometry {
-
+namespace _geometry {
 class ArcballIndicator : public Geometry {
    public:
     ArcballIndicator();
@@ -35,8 +34,5 @@ class ArcballIndicator : public Geometry {
     std::optional<std::chrono::high_resolution_clock::time_point>
         last_interacted;
 };
-
-std::shared_ptr<ArcballIndicator> arcball_indicator();
-
-}  // namespace geometry
+}  // namespace _geometry
 }  // namespace slamd

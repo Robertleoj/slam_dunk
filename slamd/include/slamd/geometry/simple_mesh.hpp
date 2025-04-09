@@ -10,8 +10,9 @@
 #include <vector>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
+// TODO: move to data
 struct Vertex {
     glm::vec3 position;
     glm::vec3 color;
@@ -44,8 +45,13 @@ class SimpleMesh : public Geometry {
     std::vector<uint32_t> triangle_indices;
 };
 
+}  // namespace _geometry
+
+namespace geometry {
+
+using _geometry::SimpleMesh;
 std::shared_ptr<SimpleMesh> simple_mesh(
-    std::vector<Vertex> vertices,
+    std::vector<_geometry::Vertex> vertices,
     std::vector<uint32_t> triangle_indices
 );
 

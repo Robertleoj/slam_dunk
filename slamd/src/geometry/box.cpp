@@ -1,7 +1,7 @@
 #include <slamd/geometry/box.hpp>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 // clang-format off
 // 6 faces * 4 vertices = 24 unique verts
@@ -74,6 +74,9 @@ void Box::render(
     this->box_mesh.render(model, view, projection);
 }
 
+}  // namespace _geometry
+
+namespace geometry {
 std::shared_ptr<Box> box() {
     return std::make_shared<Box>();
 }

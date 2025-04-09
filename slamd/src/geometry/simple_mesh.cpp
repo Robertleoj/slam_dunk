@@ -3,7 +3,7 @@
 #include <slamd/paths.hpp>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 const fs::path vertex_shader_path =
     shader_folder() / "simple_mesh" / "vertex_shader.vert";
@@ -111,12 +111,17 @@ void SimpleMesh::render(
     gl::glBindVertexArray(0);
 };
 
+}  // namespace _geometry
+
+namespace geometry {
+
 std::shared_ptr<SimpleMesh> simple_mesh(
-    std::vector<Vertex> vertices,
+    std::vector<_geometry::Vertex> vertices,
     std::vector<uint32_t> triangle_indices
 ) {
     return std::make_shared<SimpleMesh>(vertices, triangle_indices);
 }
 
 }  // namespace geometry
+
 }  // namespace slamd

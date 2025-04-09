@@ -2,7 +2,7 @@
 #include <slamd/geometry/poly_line.hpp>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 MonoMesh make_poly_line_mesh(
     const std::vector<glm::vec3>& points,
@@ -86,6 +86,9 @@ void PolyLine::render(
     mesh.render(model, view, projection);
 }
 
+}  // namespace _geometry
+
+namespace geometry {
 std::shared_ptr<PolyLine> poly_line(
     const std::vector<glm::vec3>& points,
     float thickness,
@@ -93,6 +96,5 @@ std::shared_ptr<PolyLine> poly_line(
 ) {
     return std::make_shared<PolyLine>(points, thickness, color);
 }
-
 }  // namespace geometry
 }  // namespace slamd

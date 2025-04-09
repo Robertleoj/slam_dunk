@@ -6,7 +6,7 @@
 #include <slamd/thread_box.hpp>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 class Box : public Geometry {
    public:
@@ -17,7 +17,13 @@ class Box : public Geometry {
     SimpleMesh box_mesh;
 };
 
-std::shared_ptr<Box> box();
+}  // namespace _geometry
 
+namespace geometry {
+    
+using _geometry::Box;
+
+std::shared_ptr<Box> box();
 }  // namespace geometry
+
 }  // namespace slamd

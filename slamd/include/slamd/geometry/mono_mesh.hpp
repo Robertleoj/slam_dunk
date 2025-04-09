@@ -9,7 +9,7 @@
 #include <vector>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 class MonoMesh : public Geometry {
    public:
@@ -39,8 +39,13 @@ class MonoMesh : public Geometry {
     glm::vec3 color;
     std::vector<glm::vec3> vertices;
     std::vector<uint32_t> triangle_indices;
-
 };
+
+}  // namespace _geometry
+
+namespace geometry {
+
+using _geometry::MonoMesh;
 
 std::shared_ptr<MonoMesh> mono_mesh(
     std::vector<glm::vec3> vertices,

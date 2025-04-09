@@ -3,7 +3,7 @@
 #include <slamd/paths.hpp>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 const fs::path vertex_shader_path =
     shader_folder() / "mono_mesh" / "vertex_shader.vert";
@@ -97,6 +97,10 @@ void MonoMesh::render(
     );
     gl::glBindVertexArray(0);
 };
+
+}  // namespace _geometry
+
+namespace geometry {
 
 std::shared_ptr<MonoMesh> mono_mesh(
     std::vector<glm::vec3> vertices,

@@ -5,7 +5,7 @@
 #include <slamd/geometry/geometry.hpp>
 
 namespace slamd {
-namespace geometry {
+namespace _geometry {
 
 class Triad : public Geometry {
    public:
@@ -17,7 +17,14 @@ class Triad : public Geometry {
     Arrows arrows;
 };
 
+}  // namespace _geometry
+
+namespace geometry {
+
+using _geometry::Triad;
+
 std::shared_ptr<Triad> triad(float scale = 1.0, float thickness = 0.1);
 
 }  // namespace geometry
+
 }  // namespace slamd
