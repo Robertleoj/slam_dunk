@@ -5,11 +5,10 @@
 #include <slamd/frame_timer.hpp>
 #include <slamd/geometry/arcball_indicator.hpp>
 #include <slamd/geometry/xy_grid.hpp>
-#include <slamd/scene.hpp>
+#include <slamd/tree/tree.hpp>
 #include <thread>
 
 namespace slamd {
-
 class SceneView {
    public:
     std::shared_ptr<Scene> scene;

@@ -25,8 +25,6 @@ target_sources(
     PRIVATE
         src/scene_view.cpp
         src/glfw.cpp
-        src/scene.cpp
-        src/scene_node.cpp
         src/frame_buffer.cpp
         src/tree_path.cpp
         src/geometry/geometry.cpp
@@ -48,6 +46,7 @@ target_sources(
         src/frame_timer.cpp
         src/assert.cpp
         src/window.cpp
+        src/tree/tree.cpp
 )
 
 target_include_directories(
