@@ -18,6 +18,18 @@ class Scene {
     Scene();
     void render_to_imgui();
 
+    void set_object(
+        const TreePath& path,
+        std::shared_ptr<geometry::Geometry> object
+    );
+    void set_object_weak(
+        const TreePath& path,
+        std::weak_ptr<geometry::Geometry> object
+    );
+
+    void set_transform(const TreePath& path, const glm::mat4& transform);
+
+
    private:
     void handle_input();
     void handle_translation_input();

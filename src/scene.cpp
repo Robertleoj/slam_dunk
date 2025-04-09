@@ -183,4 +183,25 @@ std::shared_ptr<Scene> scene() {
     return std::make_shared<Scene>();
 }
 
+void Scene::set_object(
+    const TreePath& path,
+    std::shared_ptr<geometry::Geometry> object
+) {
+    this->tree.set_object(path, object);
+}
+
+void Scene::set_object_weak(
+    const TreePath& path,
+    std::weak_ptr<geometry::Geometry> object
+) {
+    this->tree.set_object_weak(path, object);
+}
+
+void Scene::set_transform(
+    const TreePath& path,
+    const glm::mat4& transform
+) {
+    this->tree.set_transform(path, transform);
+}
+
 }  // namespace slamd
