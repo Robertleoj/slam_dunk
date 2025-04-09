@@ -66,18 +66,19 @@ target_include_directories(
 target_link_libraries(
     slamd 
     
+    PRIVATE
+
+        glbinding::glbinding
+        glbinding::glbinding-aux
+
+        spdlog::spdlog
+
+        glfw
+
+        imgui::imgui
+
     PUBLIC
-
-    glbinding::glbinding
-    glbinding::glbinding-aux
-
-    spdlog::spdlog
-
-    glm::glm
-
-    glfw
-
-    imgui::imgui
+        glm::glm
 )
 
 install(TARGETS slamd

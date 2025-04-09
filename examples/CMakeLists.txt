@@ -16,10 +16,12 @@ set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-linux")
 
 set(VCPKG_TARGET_TRIPLET "x64-linux" CACHE STRING "")
 
-add_subdirectory(
-  ${CMAKE_CURRENT_SOURCE_DIR}/../slamd         # source dir (your lib)
-  ${CMAKE_BINARY_DIR}/_external/slamd           # binary dir (anywhere in your build tree)
-)
+# add_subdirectory(
+#   ${CMAKE_CURRENT_SOURCE_DIR}/../slamd         # source dir (your lib)
+#   ${CMAKE_BINARY_DIR}/_external/slamd           # binary dir (anywhere in your build tree)
+# )
+
+find_package(slamd CONFIG REQUIRED)
 
 add_subdirectory(do_it_yourself)
 add_subdirectory(hello_world)
