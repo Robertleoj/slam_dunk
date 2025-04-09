@@ -1,0 +1,6 @@
+To use this package, add the following to your CMakeLists.txt:
+
+    find_package(slamd CONFIG REQUIRED)
+    target_link_libraries(your_app PRIVATE slamd::slamd)
+
+This package provides a compiled library. Headers are in <slamd/*.hpp>.

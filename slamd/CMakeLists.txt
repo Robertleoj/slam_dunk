@@ -7,7 +7,7 @@ set(CMAKE_C_COMPILER /usr/bin/gcc-13)
 set(CMAKE_CXX_COMPILER /usr/bin/g++-13)
 set(CMAKE_LINKER /usr/bin/ldd)
 
-project(slam_dunk)
+project(slam_dunk VERSION 0.1.0)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -27,97 +27,40 @@ add_library(slamd)
 target_sources(
     slamd
 
-    PUBLIC
-        include/slamd/slamd.hpp
-
-        include/slamd/scene_view.hpp
+    PRIVATE
         src/scene_view.cpp
-
-        include/slamd/glfw.hpp
         src/glfw.cpp
-
-        include/slamd/scene.hpp
         src/scene.cpp
-
-        include/slamd/scene_node.hpp
         src/scene_node.cpp
-
-        include/slamd/frame_buffer.hpp
         src/frame_buffer.cpp
-
-        include/slamd/tree_path.hpp
         src/tree_path.cpp
-
-        include/slamd/geometry/geometry.hpp
         src/geometry/geometry.cpp
-
-        include/slamd/geometry/box.hpp
         src/geometry/box.cpp
-
-        include/slamd/geometry/simple_mesh.hpp
         src/geometry/simple_mesh.cpp
-
-        include/slamd/geometry/arrows.hpp
         src/geometry/arrows.cpp
-
-        include/slamd/geometry/sphere.hpp
         src/geometry/sphere.cpp
-
-        include/slamd/geometry/triad.hpp
         src/geometry/triad.cpp
-
-        include/slamd/geometry/mono_mesh.hpp
         src/geometry/mono_mesh.cpp
-
-        include/slamd/geometry/poly_line.hpp
         src/geometry/poly_line.cpp
-
-        include/slamd/geometry/xy_grid.hpp
         src/geometry/xy_grid.cpp
-
-        include/slamd/geometry/arcball_indicator.hpp
         src/geometry/arcball_indicator.cpp
-
-        include/slamd/camera.hpp
         src/camera.cpp
-
-        include/slamd/io.hpp
         src/io.cpp
-
-        include/slamd/shaders.hpp
         src/shaders.cpp
-
-        include/slamd/paths.hpp
-
-        include/slamd/angle.hpp
         src/angle.cpp
-
-        include/slamd/arcball.hpp
         src/arcball.cpp
-
-        include/slamd/transforms.hpp
         src/transforms.cpp
-
-        include/slamd/frame_timer.hpp
         src/frame_timer.cpp
-
-        include/slamd/assert.hpp
         src/assert.cpp
-
-        include/slamd/render_thread_job_queue.hpp
-
-        include/slamd/thread_box.hpp
-
-        include/slamd/window.hpp
         src/window.cpp
 )
 
 target_include_directories(
-    slamd 
+    slamd
 
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-    
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(
@@ -137,4 +80,39 @@ target_link_libraries(
     imgui::imgui
 )
 
-add_subdirectory(examples)
+install(TARGETS slamd
+    EXPORT slamdTargets
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    INCLUDES DESTINATION include
+)
+
+install(DIRECTORY include/ DESTINATION include)
+
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/slamdConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/slamdConfig.cmake"
+    INSTALL_DESTINATION share/slamd
+)
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/slamdConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/slamdConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/slamdConfigVersion.cmake"
+    DESTINATION share/slamd
+)
+
+install(EXPORT slamdTargets
+    FILE slamdTargets.cmake
+    NAMESPACE slamd::
+    DESTINATION share/slamd
+)
+

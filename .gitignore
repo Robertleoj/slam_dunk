@@ -1,4 +1,2 @@
+**/imgui.ini
 .venv/
-build/
-vcpkg_installed/
-imgui.ini

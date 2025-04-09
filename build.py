@@ -4,6 +4,7 @@
 
 import shutil
 import subprocess
+import os
 from functools import partial
 from pathlib import Path
 
@@ -12,14 +13,8 @@ from fire import Fire
 BUILD_DIR = "build"
 
 
-def check_in_repo() -> None:
-    """Check that we are executing this from repo root."""
-    assert Path(".git").exists(), "This command should run in repo root."
-
-
 def build(debug: bool) -> None:
     """(Re)build the C++ backend."""
-    check_in_repo()
 
     build_path = Path("build")
     build_path.mkdir(exist_ok=True)
@@ -51,7 +46,6 @@ def build(debug: bool) -> None:
 
 def clean() -> None:
     """Clean the build folder and remove the symlink, if any."""
-    check_in_repo()
     shutil.rmtree(BUILD_DIR, ignore_errors=True)
 
 
@@ -70,7 +64,15 @@ def clean_debug_build():
     build(True)
 
 
+def check_in_repo() -> None:
+    """Check that we are executing this from repo root."""
+    assert Path(".git").exists(), "This command should run in repo root."
+
+
 if __name__ == "__main__":
+    check_in_repo()
+    os.chdir(Path("./examples"))
+
     Fire(
         {
             "build": partial(build, False),
