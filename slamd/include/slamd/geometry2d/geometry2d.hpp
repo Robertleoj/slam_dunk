@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 
 namespace slamd {
-namespace geometry {
+namespace geometry2d {
 
 class Geometry2D {
    public:
@@ -10,5 +10,5 @@ class Geometry2D {
 
     virtual ~Geometry2D() = default;
 };
-}  // namespace geometry
+}  // namespace geometry2d
 }  // namespace slamd

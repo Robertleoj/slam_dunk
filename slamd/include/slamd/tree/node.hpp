@@ -62,13 +62,13 @@ class ObjectReference {
     };
 };
 
-template <typename D, typename T>
+template <typename D>
 class Node {
    public:
     std::map<std::string, std::unique_ptr<Node>> children;
 
    private:
-    std::optional<T> transform;
+    std::optional<glm::mat4> transform;
     std::optional<ObjectReference<D>> object_reference;
 
     mutable std::mutex transform_mutex;
@@ -84,7 +84,7 @@ class Node {
         return this->object_reference.value().get_object();
     }
 
-    std::optional<T> get_transform() const {
+    std::optional<glm::mat4> get_transform() const {
         std::scoped_lock l(this->transform_mutex);
         return this->transform;
     }
@@ -104,7 +104,7 @@ class Node {
     }
 
     void set_transform(
-        T transform
+        glm::mat4 transform
     ) {
         std::scoped_lock l(this->transform_mutex);
         this->transform = transform;

@@ -1,21 +1,20 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <slamd/geometry/geometry.hpp>
+#include <slamd/geometry2d/geometry2d.hpp>
 #include <slamd/tree/node.hpp>
 #include <slamd/tree_path.hpp>
 
 namespace slamd {
 namespace _tree {
 
-template <typename D, typename T>
+template <typename D>
 class Tree {
-    using NodeT = Node<D, T>;
-
    private:
-    std::unique_ptr<NodeT> root;
+    std::unique_ptr<Node<D>> root;
 
    public:
-    Tree() { this->root = std::make_unique<NodeT>(); }
+    Tree() { this->root = std::make_unique<Node<D>>(); }
 
     void set_object(
         const TreePath& path,
@@ -25,8 +24,17 @@ class Tree {
             throw std::runtime_error("Setting root object is not allowed");
         }
 
-        NodeT* node = this->make_path(path);
+        Node<D>* node = this->make_path(path);
         node->set_object(object);
+    }
+
+    void render(
+        const glm::mat4& view,
+        const glm::mat4& projection
+    ) const {
+        this->render_recursive(
+            this->root.get(), glm::mat4(1.0), view, projection
+        );
     }
 
     void set_object_weak(
@@ -37,37 +45,31 @@ class Tree {
             throw std::runtime_error("Setting root object is not allowed");
         }
 
-        NodeT* node = this->make_path(path);
+        Node<D>* node = this->make_path(path);
         node->set_object(object);
     }
 
-    void set_transform(
+   protected:
+    void set_transform_mat4(
         const TreePath& path,
-        const T& transform
+        const glm::mat4& transform
     ) {
         if (path.is_root()) {
             throw std::runtime_error("Setting root transform is not allowed");
         }
 
-        NodeT* node = this->make_path(path);
+        Node<D>* node = this->make_path(path);
         node->set_transform(transform);
-    }
-
-    void render(
-        const T& view,
-        const T& projection
-    ) const {
-        this->render_recursive(this->root.get(), T(1.0), view, projection);
     }
 
    private:
     void render_recursive(
-        const NodeT* node,
-        const T current_transform,
-        const T& view,
-        const T& projection
+        const Node<D>* node,
+        const glm::mat4 current_transform,
+        const glm::mat4& view,
+        const glm::mat4& projection
     ) const {
-        T next_transform = current_transform;
+        glm::mat4 next_transform = current_transform;
         auto node_transform = node->get_transform();
 
         if (node_transform.has_value()) {
@@ -87,14 +89,14 @@ class Tree {
         }
     }
 
-    NodeT* make_path(
+    Node<D>* make_path(
         TreePath path
     ) {
         if (path.components.size() == 0) {
             return this->root.get();
         }
 
-        NodeT* current_node = root.get();
+        Node<D>* current_node = root.get();
 
         for (size_t i = 0; i < path.components.size(); i++) {
             auto& component = path.components[i];
@@ -104,8 +106,8 @@ class Tree {
             if (child_iterator == current_node->children.end()) {
                 // in this case, we want to create the path down to the target
                 // node
-                std::unique_ptr<NodeT> new_node = std::make_unique<NodeT>();
-                NodeT* new_node_ptr = new_node.get();
+                std::unique_ptr<Node<D>> new_node = std::make_unique<Node<D>>();
+                Node<D>* new_node_ptr = new_node.get();
 
                 // insert the new child
                 current_node->children.emplace(component, std::move(new_node));
@@ -124,9 +126,24 @@ class Tree {
 
 }  // namespace _tree
 
-using SceneNode = _tree::Node<geometry::Geometry, glm::mat4>;
-using Scene = _tree::Tree<geometry::Geometry, glm::mat4>;
+/**
+ * 3D version
+ */
+class Scene : public _tree::Tree<geometry::Geometry> {
+   public:
+    void set_transform(const TreePath& path, glm::mat4 transform);
+};
 
 std::shared_ptr<Scene> scene();
+
+/**
+ * 2D version
+ */
+class Canvas : public _tree::Tree<geometry2d::Geometry2D> {
+   public:
+    void set_transform(const TreePath& path, glm::mat3 transform);
+};
+
+std::shared_ptr<Canvas> canvas();
 
 }  // namespace slamd

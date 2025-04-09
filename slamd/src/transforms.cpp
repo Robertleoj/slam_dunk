@@ -35,4 +35,17 @@ glm::mat4 transl(
     return mat;
 }
 
+glm::mat4 xy_to_3d(
+    const glm::mat3& mat2d
+) {
+    glm::mat4 mat3d(1.0f);  // identity mat4
+    mat3d[0][0] = mat2d[0][0];
+    mat3d[0][1] = mat2d[0][1];
+    mat3d[1][0] = mat2d[1][0];
+    mat3d[1][1] = mat2d[1][1];
+    mat3d[3][0] = mat2d[2][0];
+    mat3d[3][1] = mat2d[2][1];
+    return mat3d;
+}
+
 }  // namespace slamd

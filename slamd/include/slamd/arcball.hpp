@@ -22,7 +22,7 @@ class Arcball {
     glm::mat4 view_matrix() const;
 
     inline static const Angle default_theta = Angle::deg(45.0);
-    inline static const Angle default_phi = Angle::deg(-45.0);
+    inline static const Angle default_phi = Angle::deg(-20.0);
 
     inline static const glm::mat4 default_center = glm::mat4(1.0);
     inline static const float default_radius = 10.0f;

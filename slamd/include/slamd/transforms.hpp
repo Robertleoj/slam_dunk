@@ -15,4 +15,5 @@ glm::mat4 rz(const Angle& angle);
 
 glm::mat4 transl(const glm::vec3& amount);
 
+glm::mat4 xy_to_3d(const glm::mat3& mat2d);
 }  // namespace slamd
