@@ -10,11 +10,10 @@
 namespace slamd {
 
 Arcball::Arcball()
-    : theta(Angle::deg(0.0)),
-      phi(Angle::deg(0.0)),
-      radius(10.0),
-
-      center(1.0) {}
+    : theta(Arcball::default_theta),
+      phi(Arcball::default_phi),
+      radius(Arcball::default_radius),
+      center(Arcball::default_center) {}
 
 void Arcball::rotate(
     Angle delta_theta,
@@ -78,6 +77,13 @@ glm::mat4 Arcball::camera_in_center() const {
 
 glm::mat4 Arcball::view_matrix() const {
     return glm::inverse(this->center * this->camera_in_center());
+}
+
+void Arcball::reset() {
+    this->center = Arcball::default_center;
+    this->radius = Arcball::default_radius;
+    this->theta = Arcball::default_theta;
+    this->phi = Arcball::default_phi;
 }
 
 }  // namespace slamd

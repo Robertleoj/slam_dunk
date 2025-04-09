@@ -77,93 +77,105 @@ void Scene::render_to_frame_buffer() {
 }
 
 void Scene::handle_input() {
-    ImGuiIO& io = ImGui::GetIO();
-
     if (ImGui::IsWindowFocused()) {
-        // Mouse controls - only if the window is hovered
-        if (ImGui::IsItemHovered()) {
-            if (ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
-                // handle dragging
-                auto mouse_drag_delta =
-                    ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
-
-                auto mouse_drag_delta_x = static_cast<int>(mouse_drag_delta.x);
-                auto mouse_drag_delta_y = static_cast<int>(mouse_drag_delta.y);
-
-                ImGui::ResetMouseDragDelta(ImGuiMouseButton_Left);
-
-                auto min_window_dim = std::min(
-                    this->frame_buffer.width(), this->frame_buffer.height()
-                );
-
-                // pi per window size
-                auto scale_factor =
-                    std::numbers::pi / static_cast<float>(min_window_dim);
-
-                auto x_angle_diff =
-                    static_cast<float>(mouse_drag_delta_x) * scale_factor;
-                auto y_angle_diff =
-                    static_cast<float>(mouse_drag_delta_y) * scale_factor;
-
-                this->arcball.rotate(
-                    -Angle::rad(x_angle_diff), -Angle::rad(y_angle_diff)
-                );
-                this->arcball_indicator.interact();
-            }
-
-            if (io.MouseWheel != 0.0f) {
-                auto scroll_input = static_cast<float>(io.MouseWheel);
-
-                float zoom_factor;
-
-                if (scroll_input < 0.0) {
-                    zoom_factor = std::pow(1.1, std::abs(scroll_input));
-                } else {
-                    zoom_factor = std::pow(0.9, std::abs(scroll_input));
-                }
-
-                this->arcball.zoom(zoom_factor);
-                this->xy_grid.set_arcball_zoom(this->arcball.radius);
-                this->arcball_indicator.set_arcball_zoom(this->arcball.radius);
-                this->arcball_indicator.interact();
-            }
-        }
-
-        glm::vec3 translation(0.0, 0.0, 0.0);
-        float movement_amount = this->frame_timer.timedelta();
-
-        glm::vec3 forwards(0.0, 0.0, -movement_amount);
-        glm::vec3 right(movement_amount, 0.0, 0.0);
-        glm::vec3 up(0.0, movement_amount, 0.0);
-
-        if (ImGui::IsKeyDown(ImGuiKey_W)) {
-            translation += forwards;
-        }
-
-        if (ImGui::IsKeyDown(ImGuiKey_S)) {
-            translation -= forwards;
-        }
-
-        if (ImGui::IsKeyDown(ImGuiKey_D)) {
-            translation += right;
-        }
-
-        if (ImGui::IsKeyDown(ImGuiKey_A)) {
-            translation -= right;
-        }
-
-        if (ImGui::IsKeyDown(ImGuiKey_E)) {
-            translation += up;
-        }
-
-        if (ImGui::IsKeyDown(ImGuiKey_Q)) {
-            translation -= up;
-        }
-
-        if (glm::length(translation) > 1e-6f) {
-            this->arcball.translate_relative(translation);
+        this->handle_mouse_input();
+        this->handle_translation_input();
+        if (ImGui::IsKeyPressed(ImGuiKey_Period)) {
+            this->arcball.reset();
+            this->xy_grid.set_arcball_zoom(this->arcball.radius);
+            this->arcball_indicator.set_arcball_zoom(this->arcball.radius);
             this->arcball_indicator.interact();
         }
+    }
+}
+
+void Scene::handle_mouse_input() {
+    // Mouse controls - only if the window is hovered
+    ImGuiIO& io = ImGui::GetIO();
+    if (ImGui::IsItemHovered()) {
+        if (ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
+            // handle dragging
+            auto mouse_drag_delta =
+                ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
+
+            auto mouse_drag_delta_x = static_cast<int>(mouse_drag_delta.x);
+            auto mouse_drag_delta_y = static_cast<int>(mouse_drag_delta.y);
+
+            ImGui::ResetMouseDragDelta(ImGuiMouseButton_Left);
+
+            auto min_window_dim = std::min(
+                this->frame_buffer.width(), this->frame_buffer.height()
+            );
+
+            // pi per window size
+            auto scale_factor =
+                std::numbers::pi / static_cast<float>(min_window_dim);
+
+            auto x_angle_diff =
+                static_cast<float>(mouse_drag_delta_x) * scale_factor;
+            auto y_angle_diff =
+                static_cast<float>(mouse_drag_delta_y) * scale_factor;
+
+            this->arcball.rotate(
+                -Angle::rad(x_angle_diff), -Angle::rad(y_angle_diff)
+            );
+            this->arcball_indicator.interact();
+        }
+
+        if (io.MouseWheel != 0.0f) {
+            auto scroll_input = static_cast<float>(io.MouseWheel);
+
+            float zoom_factor;
+
+            if (scroll_input < 0.0) {
+                zoom_factor = std::pow(1.1, std::abs(scroll_input));
+            } else {
+                zoom_factor = std::pow(0.9, std::abs(scroll_input));
+            }
+
+            this->arcball.zoom(zoom_factor);
+            this->xy_grid.set_arcball_zoom(this->arcball.radius);
+            this->arcball_indicator.set_arcball_zoom(this->arcball.radius);
+            this->arcball_indicator.interact();
+        }
+    }
+}
+
+void Scene::handle_translation_input() {
+    glm::vec3 translation(0.0, 0.0, 0.0);
+    float movement_amount = this->frame_timer.timedelta();
+
+    glm::vec3 forwards(0.0, 0.0, -movement_amount);
+    glm::vec3 right(movement_amount, 0.0, 0.0);
+    glm::vec3 up(0.0, movement_amount, 0.0);
+
+    if (ImGui::IsKeyDown(ImGuiKey_W)) {
+        translation += forwards;
+    }
+
+    if (ImGui::IsKeyDown(ImGuiKey_S)) {
+        translation -= forwards;
+    }
+
+    if (ImGui::IsKeyDown(ImGuiKey_D)) {
+        translation += right;
+    }
+
+    if (ImGui::IsKeyDown(ImGuiKey_A)) {
+        translation -= right;
+    }
+
+    if (ImGui::IsKeyDown(ImGuiKey_E)) {
+        translation += up;
+    }
+
+    if (ImGui::IsKeyDown(ImGuiKey_Q)) {
+        translation -= up;
+    }
+
+    if (glm::length(translation) > 1e-6f) {
+        this->arcball.translate_relative(translation);
+        this->arcball_indicator.interact();
     }
 }
 

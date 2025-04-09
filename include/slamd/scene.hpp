@@ -20,6 +20,9 @@ class Scene {
 
    private:
     void handle_input();
+    void handle_translation_input();
+    void handle_mouse_input();
+
     void render_to_frame_buffer();
     FrameBuffer frame_buffer;
     Arcball arcball;
