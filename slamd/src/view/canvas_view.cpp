@@ -8,7 +8,8 @@ CanvasView::CanvasView(
     std::shared_ptr<Canvas> canvas
 )
     : canvas(canvas),
-      frame_buffer(500, 500) {}
+      frame_buffer(500, 500),
+      camera({0.0, 1.0}, {-1.0, 0.0}) {}
 
 void CanvasView::render_to_imgui() {
     ImVec2 availSize = ImGui::GetContentRegionAvail();
@@ -43,7 +44,10 @@ void CanvasView::render_to_frame_buffer() {
     gl::glClearColor(0.5686f, 0.0980f, 0.4196f, 1.0f);
     gl::glClear(gl::GL_COLOR_BUFFER_BIT);
 
+    glm::mat4 projection_matrix = this->camera.get_projection_matrix();
+
     // TODO: render calls here
+    this->canvas->render(glm::mat4(1.0), projection_matrix);
 
     this->frame_buffer.unbind();
 }

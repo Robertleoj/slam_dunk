@@ -23,6 +23,7 @@ target_sources(
     slamd
 
     PRIVATE
+        src/camera_2d.cpp
         src/image_texture.cpp
         src/data/image.cpp
         src/view/scene_view.cpp
@@ -39,6 +40,7 @@ target_sources(
         src/geometry/poly_line.cpp
         src/geometry/xy_grid.cpp
         src/geometry/arcball_indicator.cpp
+        src/geometry/image.cpp
         src/camera.cpp
         src/io.cpp
         src/shaders.cpp

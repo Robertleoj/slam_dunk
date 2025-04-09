@@ -1,6 +1,7 @@
 #include <slamd/data/image.hpp>
 #include <slamd/geometry/arrows.hpp>
 #include <slamd/geometry/box.hpp>
+#include <slamd/geometry/image.hpp>
 #include <slamd/geometry/poly_line.hpp>
 #include <slamd/geometry/sphere.hpp>
 #include <slamd/geometry/triad.hpp>

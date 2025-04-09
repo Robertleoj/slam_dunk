@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <slamd/camera_2d.hpp>
 #include <slamd/frame_buffer.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd/view/view.hpp>
@@ -13,6 +14,7 @@ class CanvasView : public View {
 
    private:
     FrameBuffer frame_buffer;
+    Camera2D camera;
 
    public:
     CanvasView(std::shared_ptr<Canvas> canvas);
