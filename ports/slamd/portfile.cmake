@@ -1,7 +1,7 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH REPO_ROOT
-    REPO Robertleoj/slamd
-    REF v0.1.0
+    REPO Robertleoj/slam_dunk
+    REF bundle_with_vcpkg
     SHA512 0
 )
 
