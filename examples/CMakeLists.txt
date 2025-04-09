@@ -1,2 +1,2 @@
-add_subdirectory(hello_world_diy)
-add_subdirectory(hello_world_managed)
+add_subdirectory(do_it_yourself)
+add_subdirectory(hello_world)
