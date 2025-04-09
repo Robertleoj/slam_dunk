@@ -45,4 +45,8 @@ std::optional<std::shared_ptr<geometry::Geometry>> SceneNode::get_object(
     return this->object_reference.value().get_object();
 }
 
+std::optional<glm::mat4> SceneNode::get_transform() const {
+    return this->transform;
+}
+
 }  // namespace slamd

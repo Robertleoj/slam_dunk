@@ -94,8 +94,9 @@ void Scene::render_recursive(
     const glm::mat4& projection
 ) const {
     glm::mat4 next_transform = current_transform;
-    if (node->transform.has_value()) {
-        next_transform = current_transform * node->transform.value();
+    auto node_transform = node->get_transform();
+    if (node_transform.has_value()) {
+        next_transform = current_transform * node_transform.value();
     }
 
     const auto node_object = node->get_object();

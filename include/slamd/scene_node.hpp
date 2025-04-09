@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <optional>
 #include <slamd/geometry/geometry.hpp>
 #include <string>
@@ -50,13 +51,14 @@ class ObjectReference {
 class SceneNode {
    public:
     std::map<std::string, std::unique_ptr<SceneNode>> children;
-    std::optional<glm::mat4> transform;
 
    private:
+    std::optional<glm::mat4> transform;
     std::optional<ObjectReference> object_reference;
 
    public:
     std::optional<std::shared_ptr<geometry::Geometry>> get_object() const;
+    std::optional<glm::mat4> get_transform() const;
     void set_object(std::shared_ptr<geometry::Geometry> object);
     void set_object(std::weak_ptr<geometry::Geometry> object);
     void set_transform(glm::mat4 transform);
