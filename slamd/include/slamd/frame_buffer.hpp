@@ -1,6 +1,7 @@
 #pragma once
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
+#include <optional>
 #include <slamd/thread_box.hpp>
 #include <thread>
 

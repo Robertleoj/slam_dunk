@@ -24,6 +24,7 @@ target_sources(
 
     PRIVATE
         src/scene_view.cpp
+        src/canvas_view.cpp
         src/glfw.cpp
         src/frame_buffer.cpp
         src/tree_path.cpp

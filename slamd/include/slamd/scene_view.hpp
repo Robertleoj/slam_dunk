@@ -13,6 +13,14 @@ class SceneView {
    public:
     std::shared_ptr<Scene> scene;
 
+    private:
+    FrameBuffer frame_buffer;
+    Arcball arcball;
+    Camera camera;
+    FrameTimer frame_timer;
+    geometry::GridXYPlane xy_grid;
+    geometry::ArcballIndicator arcball_indicator;
+
    public:
     SceneView(std::shared_ptr<Scene> scene);
     void render_to_imgui();
@@ -23,12 +31,7 @@ class SceneView {
     void handle_mouse_input();
 
     void render_to_frame_buffer();
-    FrameBuffer frame_buffer;
-    Arcball arcball;
-    Camera camera;
-    FrameTimer frame_timer;
-    geometry::GridXYPlane xy_grid;
-    geometry::ArcballIndicator arcball_indicator;
+
 };
 
 }  // namespace slamd
