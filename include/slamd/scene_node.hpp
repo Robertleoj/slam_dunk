@@ -56,6 +56,9 @@ class SceneNode {
     std::optional<glm::mat4> transform;
     std::optional<ObjectReference> object_reference;
 
+    mutable std::mutex transform_mutex;
+    mutable std::mutex object_mutex;
+
    public:
     std::optional<std::shared_ptr<geometry::Geometry>> get_object() const;
     std::optional<glm::mat4> get_transform() const;
