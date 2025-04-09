@@ -71,7 +71,7 @@ def check_in_repo() -> None:
 
 if __name__ == "__main__":
     check_in_repo()
-    os.chdir(Path("./examples"))
+    # os.chdir(Path("./examples"))
 
     Fire(
         {

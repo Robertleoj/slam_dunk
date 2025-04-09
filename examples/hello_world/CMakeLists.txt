@@ -6,4 +6,3 @@ target_link_libraries(
     slamd::slamd
 )
 
-
