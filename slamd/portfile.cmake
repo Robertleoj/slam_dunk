@@ -4,7 +4,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH REPO_ROOT
     REPO Robertleoj/slam_dunk
     REF bundle_with_vcpkg
-    SHA512 71b6bf6f7cf49337a5026933447a2a290e654589ec2e697d113b58c258ca5d7d6777427d37279ecac57732b51d3fd996c8aa9fbbbb9d3c8aaf8ccaabc2441570
+    SHA512 b3c656c18f354ba24dde47e6268e33b330df52db5a6d47ee787178de42af22d7bc6006909fcc732a27e04bba859dc4c60330a789f406754603a121abae109582
     HEAD_REF bundle_with_vcpkg
 )
 
