@@ -3,7 +3,7 @@
 #include <memory>
 #include <mutex>
 #include <slamd/glfw.hpp>
-#include <slamd/scene.hpp>
+#include <slamd/scene_view.hpp>
 #include <thread>
 #include <vector>
 
@@ -21,9 +21,9 @@ class Window {
    private:
     std::thread render_thread;
     GLFWwindow* window = nullptr;
-    std::map<std::string, std::shared_ptr<Scene>> scene_map;
+    std::map<std::string, SceneView> scene_view_map;
     bool should_stop = false;
-    std::mutex scene_map_mutex;
+    std::mutex scene_view_map_mutex;
 };
 
 }  // namespace slamd

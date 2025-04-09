@@ -133,31 +133,31 @@ int main() {
     auto window =
         slamd::glutils::make_window("Slam Dunk", window_width, window_height);
 
-    slamd::Scene scene{};
+    auto scene = slamd::scene();
 
-    scene.tree.set_object("/origin_triad", slamd::geometry::triad());
+    scene->set_object("/origin_triad", slamd::geometry::triad());
 
     for (int i = 0; i < 50; i++) {
         std::string box_path = std::format("/box{}", i);
 
-        scene.tree.set_object(box_path, slamd::geometry::box());
-        scene.tree.set_transform(box_path, random_transform(true));
+        scene->set_object(box_path, slamd::geometry::box());
+        scene->set_transform(box_path, random_transform(true));
     }
 
     for (int i = 0; i < 50; i++) {
         std::string sphere_path = std::format("/sphere{}", i);
 
-        scene.tree.set_object(sphere_path, random_sphere());
-        scene.tree.set_transform(sphere_path, random_transform(false));
+        scene->set_object(sphere_path, random_sphere());
+        scene->set_transform(sphere_path, random_transform(false));
     }
 
     for (int i = 0; i < 20; i++) {
         std::string poly_line_path = std::format("/poly_line{}", i);
 
-        scene.tree.set_object(poly_line_path, random_poly_line());
+        scene->set_object(poly_line_path, random_poly_line());
     }
 
-    scene.tree.set_object("/arrows", random_arrows(10));
+    scene->set_object("/arrows", random_arrows(10));
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
@@ -171,6 +171,8 @@ int main() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 130");
 
+    slamd::SceneView scene_view(scene);
+
     while (!glfwWindowShouldClose(window)) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -179,7 +181,7 @@ int main() {
 
         ImGui::SetNextWindowDockID(main_dockspace_id, ImGuiCond_Once);
         ImGui::Begin("Scene");
-        scene.render_to_imgui();
+        scene_view.render_to_imgui();
         ImGui::End();
 
         ImGui::Render();

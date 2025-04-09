@@ -30,17 +30,17 @@ target_sources(
     PUBLIC
         include/slamd/slamd.hpp
 
-        include/slamd/scene.hpp
-        src/scene.cpp
+        include/slamd/scene_view.hpp
+        src/scene_view.cpp
 
         include/slamd/glfw.hpp
         src/glfw.cpp
 
-        include/slamd/tree.hpp
-        src/tree.cpp
+        include/slamd/scene.hpp
+        src/scene.cpp
 
-        include/slamd/node.hpp
-        src/node.cpp
+        include/slamd/scene_node.hpp
+        src/scene_node.cpp
 
         include/slamd/frame_buffer.hpp
         src/frame_buffer.cpp

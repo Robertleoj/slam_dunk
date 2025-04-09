@@ -26,9 +26,9 @@ void Window::add_scene(
     std::string name,
     std::shared_ptr<Scene> scene
 ) {
-    std::scoped_lock l(this->scene_map_mutex);
+    std::scoped_lock l(this->scene_view_map_mutex);
 
-    this->scene_map.insert({name, scene});
+    this->scene_view_map.emplace(name, scene);
 }
 
 void Window::render_job(
@@ -55,12 +55,12 @@ void Window::render_job(
         ImGuiID main_dockspace_id = ImGui::DockSpaceOverViewport();
 
         {
-            std::scoped_lock l(this->scene_map_mutex);
+            std::scoped_lock l(this->scene_view_map_mutex);
 
-            for (auto& [scene_name, scene] : this->scene_map) {
+            for (auto& [scene_name, scene] : this->scene_view_map) {
                 ImGui::SetNextWindowDockID(main_dockspace_id, ImGuiCond_Once);
                 ImGui::Begin(scene_name.c_str());
-                scene->render_to_imgui();
+                scene.render_to_imgui();
                 ImGui::End();
             }
         }

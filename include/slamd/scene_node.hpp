@@ -47,9 +47,9 @@ class ObjectReference {
     };
 };
 
-class Node {
+class SceneNode {
    public:
-    std::map<std::string, std::unique_ptr<Node>> children;
+    std::map<std::string, std::unique_ptr<SceneNode>> children;
     std::optional<glm::mat4> transform;
 
    private:

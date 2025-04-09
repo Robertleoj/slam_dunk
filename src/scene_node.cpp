@@ -1,6 +1,8 @@
-#include <slamd/node.hpp>
+#include <slamd/scene_node.hpp>
+#include <stdexcept>
 
 namespace slamd {
+
 std::optional<std::shared_ptr<geometry::Geometry>> ObjectReference::get_object(
 ) const {
     switch (tag) {
@@ -16,25 +18,26 @@ std::optional<std::shared_ptr<geometry::Geometry>> ObjectReference::get_object(
     }
 }
 
-void Node::set_object(
+void SceneNode::set_object(
     std::shared_ptr<geometry::Geometry> object
 ) {
     this->object_reference.emplace(object);
 }
 
-void Node::set_object(
+void SceneNode::set_object(
     std::weak_ptr<geometry::Geometry> object
 ) {
     this->object_reference.emplace(object);
 }
 
-void Node::set_transform(
+void SceneNode::set_transform(
     glm::mat4 transform
 ) {
     this->transform = transform;
 }
 
-std::optional<std::shared_ptr<geometry::Geometry>> Node::get_object() const {
+std::optional<std::shared_ptr<geometry::Geometry>> SceneNode::get_object(
+) const {
     if (!this->object_reference.has_value()) {
         return std::nullopt;
     }

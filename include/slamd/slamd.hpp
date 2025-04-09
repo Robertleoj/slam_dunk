@@ -4,4 +4,5 @@
 #include <slamd/geometry/sphere.hpp>
 #include <slamd/geometry/triad.hpp>
 #include <slamd/scene.hpp>
+#include <slamd/scene_view.hpp>
 #include <slamd/window.hpp>
