@@ -1,6 +1,6 @@
 
 #include <imgui.h>
-#include <slamd/canvas_view.hpp>
+#include <slamd/view/canvas_view.hpp>
 
 namespace slamd {
 

@@ -1,16 +1,17 @@
 {
-    "dependencies": [
-        "spdlog",
-        "glbinding",
-        "glfw3",
-        "glm",
-        {
-            "name": "imgui",
-            "features": [
-                "glfw-binding",
-                "opengl3-binding",
-                "docking-experimental"
-            ]
-        }
-    ]
+  "dependencies": [
+    "glbinding",
+    "glfw3",
+    "glm",
+    {
+      "name": "imgui",
+      "features": [
+        "docking-experimental",
+        "glfw-binding",
+        "opengl3-binding"
+      ]
+    },
+    "spdlog",
+    "stb"
+  ]
 }

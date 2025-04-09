@@ -23,12 +23,12 @@ target_sources(
     slamd
 
     PRIVATE
-        src/scene_view.cpp
-        src/canvas_view.cpp
+        src/data/image.cpp
+        src/view/scene_view.cpp
+        src/view/canvas_view.cpp
         src/glfw.cpp
         src/frame_buffer.cpp
         src/tree_path.cpp
-        src/geometry/geometry.cpp
         src/geometry/box.cpp
         src/geometry/simple_mesh.cpp
         src/geometry/arrows.cpp

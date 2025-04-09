@@ -16,5 +16,6 @@ set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-linux")
 
 add_subdirectory(slamd)
 
+
 add_subdirectory(examples)
 

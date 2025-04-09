@@ -2,6 +2,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <spdlog/spdlog.h>
+#include <slamd/render_thread_job_queue.hpp>
 #include <slamd/window.hpp>
 
 namespace slamd {
@@ -26,15 +27,28 @@ void Window::add_scene(
     std::string name,
     std::shared_ptr<Scene> scene
 ) {
-    std::scoped_lock l(this->scene_view_map_mutex);
+    std::scoped_lock l(this->view_map_mutex);
 
-    this->scene_view_map.emplace(name, scene);
+    this->view_map.emplace(name, std::make_shared<SceneView>(scene));
+}
+
+void Window::add_canvas(
+    std::string name,
+    std::shared_ptr<Canvas> canvas
+) {
+    std::scoped_lock l(this->view_map_mutex);
+
+    this->view_map.emplace(name, std::make_shared<CanvasView>(canvas));
 }
 
 void Window::render_job(
     size_t height,
     size_t width
 ) {
+    RenderQueueManager::ensure_current_thread_queue();
+
+    auto render_queue = RenderQueueManager::get_current_thread_queue().value();
+
     this->window = slamd::glutils::make_window("Slam Dunk", width, height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
@@ -49,18 +63,20 @@ void Window::render_job(
     ImGui_ImplOpenGL3_Init("#version 130");
 
     while (!glfwWindowShouldClose(window) && !should_stop) {
+        render_queue->execute_all();
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGuiID main_dockspace_id = ImGui::DockSpaceOverViewport();
 
         {
-            std::scoped_lock l(this->scene_view_map_mutex);
+            std::scoped_lock l(this->view_map_mutex);
 
-            for (auto& [scene_name, scene] : this->scene_view_map) {
+            for (auto& [scene_name, scene] : this->view_map) {
                 ImGui::SetNextWindowDockID(main_dockspace_id, ImGuiCond_Once);
                 ImGui::Begin(scene_name.c_str());
-                scene.render_to_imgui();
+                scene->render_to_imgui();
                 ImGui::End();
             }
         }

@@ -6,14 +6,15 @@
 #include <slamd/geometry/arcball_indicator.hpp>
 #include <slamd/geometry/xy_grid.hpp>
 #include <slamd/tree/tree.hpp>
+#include <slamd/view/view.hpp>
 #include <thread>
 
 namespace slamd {
-class SceneView {
+class SceneView : public View {
    public:
     std::shared_ptr<Scene> scene;
 
-    private:
+   private:
     FrameBuffer frame_buffer;
     Arcball arcball;
     Camera camera;
@@ -23,7 +24,7 @@ class SceneView {
 
    public:
     SceneView(std::shared_ptr<Scene> scene);
-    void render_to_imgui();
+    void render_to_imgui() override;
 
    private:
     void handle_input();
@@ -31,7 +32,6 @@ class SceneView {
     void handle_mouse_input();
 
     void render_to_frame_buffer();
-
 };
 
 }  // namespace slamd

@@ -3,7 +3,7 @@
 #include <numbers>
 #include <slamd/angle.hpp>
 #include <slamd/render_thread_job_queue.hpp>
-#include <slamd/scene_view.hpp>
+#include <slamd/view/scene_view.hpp>
 
 namespace slamd {
 
