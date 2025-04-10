@@ -31,7 +31,14 @@ SimpleMesh PointCloud::make_mesh(
 
     for (const auto& [pos, col, rad] :
          std::views::zip(positions, colors, radii)) {
-        size_t num_added = generate_sphere(vertices, indices, rad, 5, 5);
+        size_t num_added = generate_sphere(vertices, indices, rad, 10, 10);
+
+        for (size_t i = 0; i < num_added; i++) {
+            size_t idx = vertices.size() - i - 1;
+            vertices[idx] += pos;
+            // auto& vertex = vertices[idx];
+            // vertices[idx] = vertex + pos;
+        }
 
         vertex_colors.insert(vertex_colors.end(), num_added, col);
     }
