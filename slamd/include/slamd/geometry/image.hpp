@@ -1,6 +1,7 @@
 #pragma once
 #include <optional>
 #include <slamd/data/image.hpp>
+#include <slamd/geom/aabb.hpp>
 #include <slamd/geometry/geometry.hpp>
 #include <slamd/image_texture.hpp>
 #include <slamd/shaders.hpp>
@@ -24,11 +25,14 @@ class Image : public Geometry {
 
    private:
     data::Image image;
+    glm::vec2 scale;
 
    public:
-    Image(data::Image&& image);
+    Image(data::Image&& image, bool normalized = true);
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
+
+    std::optional<_geom::AABB> bounds() override;
 
    private:
     void initialize();

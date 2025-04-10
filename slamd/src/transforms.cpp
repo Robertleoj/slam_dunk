@@ -48,4 +48,10 @@ glm::mat4 xy_to_3d(
     return mat3d;
 }
 
+glm::mat4 scale_xy(
+    const glm::vec2& scale
+) {
+    return glm::scale(glm::mat4(1.0f), glm::vec3(scale, 1.0));
+}
+
 }  // namespace slamd

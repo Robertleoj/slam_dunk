@@ -25,12 +25,30 @@ target_sources(
     PRIVATE
         src/camera_2d.cpp
         src/image_texture.cpp
-        src/data/image.cpp
-        src/view/scene_view.cpp
-        src/view/canvas_view.cpp
         src/glfw.cpp
         src/frame_buffer.cpp
         src/tree_path.cpp
+        src/camera.cpp
+        src/io.cpp
+        src/shaders.cpp
+        src/angle.cpp
+        src/arcball.cpp
+        src/transforms.cpp
+        src/frame_timer.cpp
+        src/assert.cpp
+        src/window.cpp
+
+        src/data/image.cpp
+
+        src/tree/tree.cpp
+        src/tree/node.cpp
+
+        src/view/scene_view.cpp
+        src/view/canvas_view.cpp
+
+        src/geom/aabb.cpp
+
+        src/geometry/geometry.cpp
         src/geometry/box.cpp
         src/geometry/simple_mesh.cpp
         src/geometry/arrows.cpp
@@ -41,17 +59,6 @@ target_sources(
         src/geometry/xy_grid.cpp
         src/geometry/arcball_indicator.cpp
         src/geometry/image.cpp
-        src/camera.cpp
-        src/io.cpp
-        src/shaders.cpp
-        src/angle.cpp
-        src/arcball.cpp
-        src/transforms.cpp
-        src/frame_timer.cpp
-        src/assert.cpp
-        src/window.cpp
-        src/tree/tree.cpp
-        src/tree/node.cpp
 )
 
 target_include_directories(

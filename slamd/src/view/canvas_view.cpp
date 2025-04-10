@@ -1,5 +1,6 @@
 
 #include <imgui.h>
+#include <spdlog/spdlog.h>
 #include <slamd/view/canvas_view.hpp>
 
 namespace slamd {
@@ -9,13 +10,20 @@ CanvasView::CanvasView(
 )
     : canvas(canvas),
       frame_buffer(500, 500),
-      camera({0.0, 1.0}, {-1.0, 0.0}) {}
+      camera({0.0, 1.0}, {-1.0, 0.0}),
+      manually_moved(false) {}
 
 void CanvasView::render_to_imgui() {
     ImVec2 availSize = ImGui::GetContentRegionAvail();
     int width = static_cast<int>(availSize.x);
     int height = static_cast<int>(availSize.y);
     this->frame_buffer.rescale(width, height);
+
+    spdlog::debug("Manually moved");
+    if (!this->manually_moved) {
+        spdlog::debug("Setting default pos");
+        this->set_default_pos();
+    }
 
     this->render_to_frame_buffer();
 
@@ -32,7 +40,10 @@ void CanvasView::render_to_imgui() {
 void CanvasView::render_to_frame_buffer() {
     this->frame_buffer.bind();
     gl::glViewport(
-        0, 0, this->frame_buffer.width(), this->frame_buffer.height()
+        0,
+        0,
+        this->frame_buffer.width(),
+        this->frame_buffer.height()
     );
 
     gl::glEnable(gl::GL_BLEND);
@@ -54,6 +65,30 @@ void CanvasView::render_to_frame_buffer() {
 
 void CanvasView::handle_input() {
     // TODO: handle input
+}
+
+void CanvasView::set_default_pos() {
+    auto maybe_bounds = this->canvas->bounds();
+
+    if (!maybe_bounds.has_value()) {
+        this->camera.set_bounds({0.0, 1.0}, {-1.0, 0.0});
+        return;
+    }
+
+    auto bounds = maybe_bounds.value();
+
+    spdlog::debug(
+        "Setting bounds to x({}-{}) y({}-{})",
+        bounds.min.x,
+        bounds.max.x,
+        bounds.min.y,
+        bounds.max.y
+    );
+
+    this->camera.set_bounds(
+        {bounds.min.x, bounds.max.x},
+        {bounds.min.y, bounds.max.y}
+    );
 }
 
 }  // namespace slamd

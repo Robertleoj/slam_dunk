@@ -13,6 +13,8 @@ class Camera2D {
    public:
     Camera2D(Bounds x_bounds, Bounds y_bounds);
 
+    void set_bounds(Bounds min, Bounds max);
+
     glm::mat4 get_projection_matrix() const;
 
     Bounds x_bounds;

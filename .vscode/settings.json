@@ -106,5 +106,9 @@
   "python.analysis.inlayHints.callArgumentNames": "all",
   "python.analysis.typeCheckingMode": "standard",
   "C_Cpp.intelliSenseCacheSize": 0,
-  "clang-format.executable": "/usr/bin/clang-format-19"
+  "clang-format.executable": "/usr/bin/clang-format-19",
+  "C_Cpp.inlayHints.autoDeclarationTypes.enabled": false,
+  "C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": false,
+  "C_Cpp.inlayHints.parameterNames.enabled": true,
+  "C_Cpp.inlayHints.referenceOperator.enabled": true
 }

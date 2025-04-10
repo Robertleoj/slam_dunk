@@ -8,6 +8,8 @@ AllowShortIfStatementsOnASingleLine: false
 AllowShortLambdasOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
 BreakFunctionDefinitionParameters: true
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
 
 BinPackArguments: false
 BinPackParameters: false

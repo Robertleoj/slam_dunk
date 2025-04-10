@@ -1,3 +1,5 @@
+find_package(spdlog CONFIG REQUIRED)
+
 add_subdirectory(do_it_yourself)
 add_subdirectory(hello_world)
 add_subdirectory(one_scene_two_views)

@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <slamd/geom/aabb.hpp>
 #include <slamd/geometry/geometry.hpp>
 #include <slamd/tree/node.hpp>
 #include <slamd/tree_path.hpp>
@@ -26,16 +27,21 @@ class Tree {
         std::weak_ptr<_geometry::Geometry> object
     );
 
+    std::optional<_geom::AABB> bounds();
+
    protected:
     void set_transform_mat4(const TreePath& path, const glm::mat4& transform);
 
    private:
     void render_recursive(
         const Node* node,
-        const glm::mat4 current_transform,
+        const glm::mat4& current_transform,
         const glm::mat4& view,
         const glm::mat4& projection
     ) const;
+
+    std::optional<_geom::AABB>
+    bounds_recursive(const Node* node, const glm::mat4& prev_transform);
 
     Node* make_path(TreePath path);
 };

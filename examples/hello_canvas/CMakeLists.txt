@@ -3,6 +3,7 @@ target_link_libraries(
     hello_canvas PRIVATE
 
     slamd::slamd
+    spdlog::spdlog
 )
 
 target_include_directories(

@@ -2,6 +2,7 @@
 #include <slamd/assert.hpp>
 #include <slamd/geometry/image.hpp>
 #include <slamd/paths.hpp>
+#include <slamd/transforms.hpp>
 
 namespace fs = std::filesystem;
 
@@ -107,9 +108,21 @@ void Image::initialize() {
 }
 
 Image::Image(
-    data::Image&& image
+    data::Image&& image,
+    bool normalized
 )
-    : image(image) {}
+    : image(image) {
+    float x_size = static_cast<float>(this->image.width);
+    float y_size = static_cast<float>(this->image.height);
+
+    if (normalized) {
+        const float bigger = std::fmax(x_size, y_size);
+        x_size /= bigger;
+        y_size /= bigger;
+    }
+
+    this->scale = glm::vec2(x_size, y_size);
+}
 
 void Image::render(
     glm::mat4 model,
@@ -126,7 +139,7 @@ void Image::render(
     gl::glBindVertexArray(gl_data->vao_id);
 
     gl_data->shader.use();
-    gl_data->shader.setUniform("model", model);
+    gl_data->shader.setUniform("model", model * scale_xy(this->scale));
     gl_data->shader.setUniform("view", view);
     gl_data->shader.setUniform("projection", projection);
 
@@ -137,6 +150,19 @@ void Image::render(
     gl::glBindVertexArray(0);
 };
 
+std::optional<_geom::AABB> Image::bounds() {
+    float x_min = 0.0f;
+    float x_max = this->scale.x;
+
+    float y_min = -this->scale.y;
+    float y_max = 0.0f;
+
+    return _geom::AABB(
+        glm::vec3(x_min, y_min, 0.0),
+        glm::vec3(x_max, y_max, 0.0f)
+    );
+}
+
 }  // namespace _geometry
 
 namespace geometry {
@@ -144,7 +170,7 @@ namespace geometry {
 std::shared_ptr<Image> image(
     data::Image&& image
 ) {
-    return std::make_shared<Image>(std::move(image));
+    return std::make_shared<Image>(std::move(image), true);
 }
 }  // namespace geometry
 
@@ -153,7 +179,7 @@ namespace geometry2d {
 std::shared_ptr<Image> image(
     data::Image&& image
 ) {
-    return std::make_shared<Image>(std::move(image));
+    return std::make_shared<Image>(std::move(image), false);
 }
 
 }  // namespace geometry2d

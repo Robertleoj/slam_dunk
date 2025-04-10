@@ -55,7 +55,7 @@ void Tree::set_transform_mat4(
 
 void Tree::render_recursive(
     const Node* node,
-    const glm::mat4 current_transform,
+    const glm::mat4& current_transform,
     const glm::mat4& view,
     const glm::mat4& projection
 ) const {
@@ -110,6 +110,49 @@ Node* Tree::make_path(
 
     return current_node;
 }
+
+std::optional<_geom::AABB> Tree::bounds_recursive(
+    const Node* node,
+    const glm::mat4& prev_transform
+) {
+    glm::mat4 current_transform = prev_transform;
+    auto node_transform = node->get_transform();
+
+    if (node_transform.has_value()) {
+        current_transform = prev_transform * node_transform.value();
+    }
+
+    const auto node_object = node->get_object();
+
+    std::vector<_geom::AABB> bounds;
+
+    if (node_object.has_value()) {
+        auto object_bounds = node_object.value()->bounds();
+        if (object_bounds.has_value()) {
+            bounds.push_back(object_bounds.value().transform(current_transform)
+            );
+        }
+    }
+
+    for (auto& [_, child] : node->children) {
+        // this->render_recursive(child.get(), next_transform, view,
+        // projection);
+
+        auto child_transform =
+            this->bounds_recursive(child.get(), current_transform);
+
+        if (child_transform.has_value()) {
+            bounds.push_back(child_transform.value());
+        }
+    }
+
+    return _geom::AABB::combine(bounds);
+}
+
+std::optional<_geom::AABB> Tree::bounds() {
+    return this->bounds_recursive(this->root.get(), glm::mat4(1.0f));
+}
+
 }  // namespace _tree
 
 void Scene::set_transform(

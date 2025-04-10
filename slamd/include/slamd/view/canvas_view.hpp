@@ -15,6 +15,7 @@ class CanvasView : public View {
    private:
     FrameBuffer frame_buffer;
     Camera2D camera;
+    bool manually_moved;
 
    public:
     CanvasView(std::shared_ptr<Canvas> canvas);
@@ -23,6 +24,7 @@ class CanvasView : public View {
    private:
     void render_to_frame_buffer();
     void handle_input();
+    void set_default_pos();
 };
 
 }  // namespace slamd
