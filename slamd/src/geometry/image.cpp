@@ -28,11 +28,11 @@ void Image::initialize() {
         1.0f, 0.0f,
 
         // bottom right
-        1.0f, -1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,
         1.0f, 1.0f,
 
         // bottom left
-        0.0f, -1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
         0.0f, 1.0f
     };
 
@@ -154,8 +154,8 @@ std::optional<_geom::AABB> Image::bounds() {
     float x_min = 0.0f;
     float x_max = this->scale.x;
 
-    float y_min = -this->scale.y;
-    float y_max = 0.0f;
+    float y_min = 0.0;
+    float y_max = this->scale.y;
 
     return _geom::AABB(
         glm::vec3(x_min, y_min, 0.0),

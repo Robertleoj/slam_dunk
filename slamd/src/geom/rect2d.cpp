@@ -14,9 +14,9 @@ Rect2D::Rect2D(
 Rect2D Rect2D::from_aabb3d(
     const AABB& aabb3d
 ) {
-    glm::vec2 top_left(aabb3d.min.x, aabb3d.max.y);
+    glm::vec2 top_left(aabb3d.min.x, aabb3d.min.y);
+    glm::vec2 bottom_right(aabb3d.max.x, aabb3d.max.y);
 
-    glm::vec2 bottom_right(aabb3d.max.x, aabb3d.min.y);
     return Rect2D(top_left, bottom_right);
 }
 
@@ -49,10 +49,7 @@ Rect2D::Rect2D(
       bottom_right(other.bottom_right) {}
 
 glm::vec2 Rect2D::size() const {
-    return glm::vec2(
-        this->bottom_right.x - this->top_left.x,
-        this->top_left.y - this->bottom_right.y
-    );
+    return this->bottom_right - this->top_left;
 }
 
 Rect2D Rect2D::translate(
@@ -70,9 +67,8 @@ Rect2D Rect2D::from_center_size(
     const glm::vec2& center,
     const glm::vec2& size
 ) {
-    glm::vec2 top_left(center.x - size.x / 2.0f, center.y + size.y / 2.0f);
-
-    glm::vec2 bottom_right(center.x + size.x / 2.0f, center.y - size.y / 2.0f);
+    glm::vec2 top_left = center - size / 2.0f;
+    glm::vec2 bottom_right = center + size / 2.0f;
 
     return Rect2D(top_left, bottom_right);
 }
@@ -85,7 +81,6 @@ glm::vec2 Rect2D::unnormalize(
 
     return center;
 }
-
 
 }  // namespace _geom
 }  // namespace slamd

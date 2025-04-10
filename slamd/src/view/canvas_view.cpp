@@ -11,7 +11,7 @@ CanvasView::CanvasView(
 )
     : canvas(canvas),
       frame_buffer(500, 500),
-      camera(_geom::Rect2D({0.0, 0.0}, {1.0, -1.0})),
+      camera(_geom::Rect2D({0.0, 0.0}, {1.0, 1.0})),
       manually_moved(false) {}
 
 void CanvasView::render_to_imgui() {
@@ -116,8 +116,9 @@ void CanvasView::handle_mouse_input() {
                 static_cast<float>(mouse_pos_global.x - viewport_loc.x) /
                 static_cast<float>(this->frame_buffer.width());
             float mouse_pos_y =
-                static_cast<float>(mouse_pos_global.y - viewport_loc.y) /
-                static_cast<float>(this->frame_buffer.height());
+                1.0f -
+                (static_cast<float>(mouse_pos_global.y - viewport_loc.y) /
+                 static_cast<float>(this->frame_buffer.height()));
 
             spdlog::info(
                 "Mouse pos when zooming: {} {}",
@@ -127,7 +128,7 @@ void CanvasView::handle_mouse_input() {
 
             this->camera.zoom_relative(
                 zoom_amount,
-                glm::vec2(mouse_pos_x, -mouse_pos_y)
+                glm::vec2(mouse_pos_x, mouse_pos_y)
             );
 
             this->manually_moved = true;
@@ -185,8 +186,8 @@ void CanvasView::set_default_pos() {
     _geom::AABB bounds = maybe_bounds.has_value()
                              ? maybe_bounds.value()
                              : _geom::AABB(
-                                   glm::vec3(0.0f, -1.0f, 0.0f),
-                                   glm::vec3(1.0f, 0.0f, 0.0f)
+                                   glm::vec3(0.0f, 0.0f, 0.0f),
+                                   glm::vec3(1.0f, 1.0f, 0.0f)
                                );
 
     float window_aspect = this->frame_buffer.aspect();
