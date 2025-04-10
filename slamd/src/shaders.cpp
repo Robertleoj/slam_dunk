@@ -20,11 +20,15 @@ void ensure_shader_compiled(
 
     if (!success) {
         gl::glGetShaderInfoLog(
-            shader_id, info_buffer_size, nullptr, info_log_buf
+            shader_id,
+            info_buffer_size,
+            nullptr,
+            info_log_buf
         );
         throw std::runtime_error(
             std::format(
-                "Couldn't compile shader: {}", std::string(info_log_buf)
+                "Couldn't compile shader: {}",
+                std::string(info_log_buf)
             )
         );
     }
@@ -40,7 +44,10 @@ void ensure_shader_program_linked(
 
     if (!success) {
         gl::glGetProgramInfoLog(
-            program_id, info_buffer_size, nullptr, info_log_buf
+            program_id,
+            info_buffer_size,
+            nullptr,
+            info_log_buf
         );
         throw std::runtime_error(
             std::format("Couldn't link program: {}", std::string(info_log_buf))
@@ -58,23 +65,11 @@ gl::GLuint compile_vertex_shader(
     const char* shader_source_cstr = source.c_str();
 
     // set the shader's source
-    gl::glShaderSource(
-        // the shader whose source we are specifying
-        shader_id,
-        // the number of source files we are providing
-        1,
-        // the actual pointer to the source
-        // probably a pointer pointer because we might specify multiple files
-        &shader_source_cstr,
-        // we don't need to specify the length, as they are null-terminated
-        nullptr
-    );
+    gl::glShaderSource(shader_id, 1, &shader_source_cstr, nullptr);
 
     gl::glCompileShader(shader_id);
 
     ensure_shader_compiled(shader_id);
-
-    spdlog::info("Vertex shader compiled: id={}", shader_id);
 
     return shader_id;
 }
@@ -216,7 +211,10 @@ void ShaderProgram::setUniform<glm::mat4>(
     const glm::mat4 value
 ) const {
     gl::glUniformMatrix4fv(
-        getUniformLocation(name), 1, gl::GL_FALSE, glm::value_ptr(value)
+        getUniformLocation(name),
+        1,
+        gl::GL_FALSE,
+        glm::value_ptr(value)
     );
 }
 
