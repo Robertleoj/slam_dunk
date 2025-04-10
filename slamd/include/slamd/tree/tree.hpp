@@ -15,6 +15,8 @@ class Tree {
    public:
     Tree();
 
+    void clear(const std::string& path);
+
     void set_object(
         const std::string& path,
         std::shared_ptr<_geometry::Geometry> object

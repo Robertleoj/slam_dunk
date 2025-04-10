@@ -10,6 +10,39 @@ Tree::Tree() {
     this->root = std::make_unique<Node>();
 }
 
+void Tree::clear(
+    const std::string& path
+) {
+    TreePath treepath(path);
+
+    if (treepath.is_root()) {
+        // clear all the children of the root
+        this->root->children.clear();
+        return;
+    }
+
+    Node* current_node = this->root.get();
+
+    for (size_t i = 0; i < treepath.components.size(); i++) {
+        const std::string& component = treepath.components[i];
+
+        if (i == treepath.components.size() - 1) {
+            // we are at the last node - this is the one we want to delete
+            current_node->children.erase(component);
+            return;
+        }
+
+        auto child_it = current_node->children.find(component);
+
+        if (child_it == current_node->children.end()) {
+            // did not find the node, so nothing to do
+            return;
+        }
+
+        current_node = child_it->second.get();
+    }
+}
+
 void Tree::set_object(
     const std::string& path,
     std::shared_ptr<_geometry::Geometry> object
