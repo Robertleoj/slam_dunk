@@ -7,7 +7,7 @@ int main() {
 
     scene->set_object("/origin", slamd::geometry::triad());
 
-    window.add_scene("/scene", scene);
+    window.add_scene("scene", scene);
 
     window.wait_for_close();
 }
