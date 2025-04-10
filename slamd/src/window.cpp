@@ -8,10 +8,17 @@
 namespace slamd {
 
 Window::Window(
+    std::string name,
     size_t height,
     size_t width
-) {
+)
+    : name(name),
+      loaded_layout(false) {
     this->render_thread = std::thread(&Window::render_job, this, height, width);
+}
+
+fs::path Window::layout_path() {
+    return fs::current_path() / std::format("{}.ini", this->name);
 }
 
 void framebuffer_size_callback(
@@ -61,19 +68,30 @@ void Window::render_job(
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 130");
 
+    if (fs::exists(this->layout_path())) {
+        ImGui::LoadIniSettingsFromDisk(this->layout_path().string().c_str());
+        this->loaded_layout = true;
+    }
+
     while (!glfwWindowShouldClose(window) && !should_stop) {
         render_queue->execute_all();
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        ImGuiID main_dockspace_id = ImGui::DockSpaceOverViewport();
+        ImGuiID main_dockspace_id;
+        main_dockspace_id = ImGui::DockSpaceOverViewport();
 
         {
             std::scoped_lock l(this->view_map_mutex);
 
             for (auto& [scene_name, scene] : this->view_map) {
-                ImGui::SetNextWindowDockID(main_dockspace_id, ImGuiCond_Once);
+                if (!this->loaded_layout) {
+                    ImGui::SetNextWindowDockID(
+                        main_dockspace_id,
+                        ImGuiCond_Once
+                    );
+                }
                 ImGui::Begin(scene_name.c_str());
                 scene->render_to_imgui();
                 ImGui::End();
@@ -90,6 +108,8 @@ void Window::render_job(
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    ImGui::SaveIniSettingsToDisk(this->layout_path().string().c_str());
 
     glfwTerminate();
 }

@@ -1,4 +1,4 @@
-**/imgui.ini
+**/*.ini
 .venv/
 vcpkg_installed/
 build/

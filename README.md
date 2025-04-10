@@ -18,7 +18,7 @@ Here is a simple "hello world" program for a SlamDunk visualization.
 #include <slamd/slamd.hpp>
 
 int main() {
-    slamd::Window window(1000, 1000);
+    slamd::Window window("Hello world", 1000, 1000);
 
     auto scene = slamd::scene();
 
@@ -49,7 +49,7 @@ We use ImGui to allow multiple sub-windows with floating and docking support ins
 #include <slamd/slamd.hpp>
 
 int main() {
-    slamd::Window window(1000, 1000);
+    slamd::Window window("two windows", 1000, 1000);
 
     auto scene1 = slamd::scene();
     auto scene2 = slamd::scene();

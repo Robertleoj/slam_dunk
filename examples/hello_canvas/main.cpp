@@ -48,7 +48,7 @@ slamd::data::Image read_image() {
 
 int main() {
     spdlog::set_level(spdlog::level::debug);
-    slamd::Window window(1000, 1000);
+    slamd::Window window("hello_canvas", 1000, 1000);
 
     auto canvas = slamd::canvas();
 

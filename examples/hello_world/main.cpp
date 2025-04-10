@@ -1,7 +1,7 @@
 #include <slamd/slamd.hpp>
 
 int main() {
-    slamd::Window window(1000, 1000);
+    slamd::Window window("hello_world", 1000, 1000);
 
     auto scene = slamd::scene();
 

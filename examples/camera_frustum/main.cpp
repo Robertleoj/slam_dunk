@@ -52,7 +52,7 @@ glm::mat4 random_transform(
     return transform;
 }
 
-auto get_frustum() {
+std::shared_ptr<slamd::geometry::CameraFrustum> get_frustum() {
     float fx = 525.0f;
     float fy = 525.0f;
     float cx = 320.0f;
@@ -71,7 +71,7 @@ auto get_frustum() {
 }
 
 int main() {
-    slamd::Window window(1000, 1000);
+    slamd::Window window("camera_frustum", 1000, 1000);
 
     auto scene = slamd::scene();
 

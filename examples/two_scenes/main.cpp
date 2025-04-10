@@ -2,7 +2,7 @@
 #include <slamd/slamd.hpp>
 
 int main() {
-    slamd::Window window(1000, 1000);
+    slamd::Window window("two_scenes", 1000, 1000);
 
     auto scene1 = slamd::scene();
     auto scene2 = slamd::scene();
