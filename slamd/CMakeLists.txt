@@ -34,6 +34,7 @@ target_sources(
         src/frame_timer.cpp
         src/assert.cpp
         src/window.cpp
+        src/render_thread_job_queue.cpp
 
         src/data/image.cpp
 

@@ -13,26 +13,9 @@ namespace slamd {
 
 class RenderJobQueue {
    public:
-    void enqueue(
-        const std::function<void()>& job
-    ) {
-        std::scoped_lock lock(job_queue_mutex);
+    void enqueue(const std::function<void()>& job);
 
-        jobs.push_back(job);
-    }
-
-    void execute_all() {
-        std::vector<std::function<void()>> to_run;
-
-        {
-            std::scoped_lock lock(job_queue_mutex);
-            to_run.swap(jobs);
-        }
-
-        for (auto& job : to_run) {
-            job();
-        }
-    }
+    void execute_all();
 
    private:
     std::vector<std::function<void()>> jobs;
@@ -41,48 +24,17 @@ class RenderJobQueue {
 
 class RenderQueueManager {
    public:
-    static void ensure_current_thread_queue() {
-        std::scoped_lock lock(map_mutex);
+    static void ensure_current_thread_queue();
 
-        auto current_id = std::this_thread::get_id();
-
-        if (queues.find(current_id) != queues.end()) {
-            return;
-        }
-        queues[current_id] = std::make_shared<RenderJobQueue>();
-    }
-
-    static void force_enqueue(
-        std::thread::id thread_id,
-        std::function<void()> job
-    ) {
-        auto render_queue = get_queue(thread_id);
-
-        if (!render_queue.has_value()) {
-            throw std::runtime_error("No render queue available!");
-        }
-
-        render_queue.value()->enqueue(job);
-    }
+    static void
+    force_enqueue(std::thread::id thread_id, std::function<void()> job);
 
     static std::optional<std::shared_ptr<RenderJobQueue>> get_queue(
         std::thread::id id
-    ) {
-        std::scoped_lock lock(map_mutex);
-
-        auto it = queues.find(id);
-
-        if (it != queues.end()) {
-            return it->second;
-        }
-
-        return std::nullopt;
-    }
+    );
 
     static std::optional<std::shared_ptr<RenderJobQueue>>
-    get_current_thread_queue() {
-        return get_queue(std::this_thread::get_id());
-    }
+    get_current_thread_queue();
 
    private:
     static inline std::map<std::thread::id, std::shared_ptr<RenderJobQueue>>
