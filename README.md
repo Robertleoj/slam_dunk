@@ -2,7 +2,9 @@
 
 ---
 
-SlamDunk is a simple and user-friendly library for making live 3D and 2D visualizations.
+SlamDunk is a simple and user-friendly C++ library for making live 3D and 2D visualizations for prototyping, data exploration, and algorithm development.
+
+It is very lightweight, built using OpenGL and ImGui.
 
 # Examples
 
