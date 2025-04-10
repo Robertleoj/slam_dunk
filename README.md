@@ -2,18 +2,116 @@
 
 ---
 
-SlamDunk is a lightweight 3D visualization library targeting SLAM applications.
+SlamDunk is a simple and user-friendly library for making live 3D and 2D visualizations.
 
-You provide an object tree where you can insert objects and transforms, and SlamDunk then renders them in a beautiful scene with intuitive controls.
+# Examples
 
-We use ImGui to allow panel layouts for multiple scenes and visualizations.
+## Hello world
 
-For simple usage, you can allow SlamDunk to handle the render loop. In this scenario, you can create basic panel layouts for different visualizers.
+Here is a simple "hello world" program for a SlamDunk visualization.
 
-For more advanced usage, you can create your own render loop, and instruct SlamDunk to render into ImGui windows.
+```c++
+#include <slamd/slamd.hpp>
 
-For easy integration into your SLAM system, we support using weak pointers to scene objects in our scene tree, allowing you to own the scene objects. You can modify it deep in your program, and it updates correctly in the viewer. Then, if the owner is deleted, the object is seemlessly deleted from the scene.
+int main() {
+    slamd::Window window(1000, 1000);
 
----
+    auto scene = slamd::scene();
 
-SlamDunk is in very early development - demos, documentation, and usage examples are coming soon.
+    scene->set_object("/origin", slamd::geometry::triad());
+
+    window.add_scene("scene", scene);
+
+    window.wait_for_close();
+}
+```
+
+This example highlights the main components of SlamDunk.
+
+1. The `Window` object handles the actual display window.
+2. A `Scene` object represents and contains a tree of 3D objects.
+3. `Geometry` objects can be added to `Scene`s with a path in the tree.
+4. To display a scene, we must add it to the window - this creates a _view_ of the scene.
+
+Running this program results in the following interactive visualization:
+![](./images/hello_world.png)
+
+## Multiple scenes
+
+We use ImGui to allow multiple sub-windows with floating and docking support inside the SlamDunk viewer. The following example illustrates creating two windows, each showing its own scene.
+
+```c++
+#include <glm/glm.hpp>
+#include <slamd/slamd.hpp>
+
+int main() {
+    slamd::Window window(1000, 1000);
+
+    auto scene1 = slamd::scene();
+    auto scene2 = slamd::scene();
+
+    window.add_scene("scene 1", scene1);
+    scene1->set_object("/box", slamd::geometry::box());
+
+    window.add_scene("scene 2", scene2);
+    scene2->set_object("/origin", slamd::geometry::triad());
+    scene2->set_object("/ball", slamd::geometry::sphere(2.0f));
+
+    glm::mat4 sphere_transform(1.0);
+    sphere_transform[3] += glm::vec4(5.0, 1.0, 2.0, 1.0);
+    scene2->set_transform("/ball", sphere_transform);
+
+    window.wait_for_close();
+
+```
+
+The resulting window looks like this:
+
+![](./images/two_scenes.png)
+
+The windows are fully controllable - you can drag then around, make tabs, use them in floating mode, dock them to the sides like you see in the screenshot. All of this is supported by [ImGui](https://github.com/ocornut/imgui).
+
+## Further reading
+
+The examples in the `/examples` folder showcase some more features of SlamDunk, like
+
+- Canvases for 2D visualizations
+- Multiple views of the same scene
+- Moving objects around.
+- Taking control of the render loop to create fully-fletced GUIs around SlamDunk using the power of ImGui.
+
+# Installation
+
+## With git submodules
+
+If you want to use SlamDunk as a submodule, you need the following dependencies to be available in your build environment:
+
+- [`spdlog`](https://github.com/gabime/spdlog)
+- [`glbinding`](https://github.com/cginternals/glbinding)
+- [`glfw3`](https://github.com/glfw/glfw)
+- [`glm`](https://github.com/g-truc/glm)
+
+When you have these ready, you can add SlamDunk as a subdiretory in your project with
+
+```cmakelists
+add_subdirectory(path/to/slam_dunk/slamd)
+
+```
+
+You can then link it to your executable or library with
+
+```cmake
+target_link_libraries(
+    your_target PRIVATE
+
+    slamd::slamd
+)
+```
+
+## With `vcpkg`
+
+We are currently working on a `vcpkg` port for SlamDunk, stay tuned!
+
+# Contributions
+
+All contributions are welcome! SlamDunk is in very early development, so there is enough work to do, and multiple things to improve.
