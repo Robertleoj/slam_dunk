@@ -2,8 +2,10 @@
 
 include("${CMAKE_CURRENT_LIST_DIR}/slamdTargets.cmake")
 
-find_package(glbinding REQUIRED)
-find_package(glfw3 REQUIRED)
-find_package(spdlog REQUIRED)
-find_package(glm REQUIRED)
-find_package(imgui REQUIRED)
+include(CMakeFindDependencyMacro)
+
+find_dependency(glbinding REQUIRED)
+find_dependency(glfw3 REQUIRED)
+find_dependency(spdlog REQUIRED)
+find_dependency(glm REQUIRED)
+find_dependency(imgui REQUIRED)
