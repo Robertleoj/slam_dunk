@@ -16,11 +16,12 @@ class Camera2D {
     _geom::Rect2D viewport;
 
     void translate_relative(glm::vec2 relative_translation);
-    void
-    zoom_relative(float amount, std::optional<glm::vec2> loc = std::nullopt);
+    void zoom_relative(
+        float amount,
+        std::optional<glm::vec2> normalized_mouse_loc = std::nullopt
+    );
 
     void translate_normalized(glm::vec2 normalized_translation);
-
 };
 
 }  // namespace slamd
