@@ -10,35 +10,13 @@
 namespace slamd {
 namespace _tree {
 
-class ObjectReference {
-   public:
-    ObjectReference(const std::shared_ptr<_geometry::Geometry>& obj);
-
-    ObjectReference(const std::weak_ptr<_geometry::Geometry>& obj);
-
-    ~ObjectReference();
-
-    std::optional<std::shared_ptr<_geometry::Geometry>> get_object() const;
-
-   private:
-    enum {
-        STRONG,
-        WEAK
-    } tag;
-
-    union {
-        std::weak_ptr<_geometry::Geometry> weak_obj;
-        std::shared_ptr<_geometry::Geometry> strong_obj;
-    };
-};
-
 class Node {
    public:
     std::map<std::string, std::unique_ptr<Node>> children;
 
    private:
     std::optional<glm::mat4> transform;
-    std::optional<ObjectReference> object_reference;
+    std::optional<std::shared_ptr<_geometry::Geometry>> object;
 
     mutable std::mutex transform_mutex;
     mutable std::mutex object_mutex;
@@ -49,8 +27,6 @@ class Node {
     std::optional<glm::mat4> get_transform() const;
 
     void set_object(std::shared_ptr<_geometry::Geometry> object);
-
-    void set_object(std::weak_ptr<_geometry::Geometry> object);
 
     void set_transform(glm::mat4 transform);
 };

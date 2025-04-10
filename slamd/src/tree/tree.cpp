@@ -31,20 +31,6 @@ void Tree::render(
     this->render_recursive(this->root.get(), glm::mat4(1.0), view, projection);
 }
 
-void Tree::set_object_weak(
-    const std::string& path,
-    std::weak_ptr<_geometry::Geometry> object
-) {
-    TreePath treepath(path);
-
-    if (treepath.is_root()) {
-        throw std::runtime_error("Setting root object is not allowed");
-    }
-
-    Node* node = this->make_path(treepath);
-    node->set_object(object);
-}
-
 void Tree::set_transform_mat4(
     const std::string& path,
     const glm::mat4& transform

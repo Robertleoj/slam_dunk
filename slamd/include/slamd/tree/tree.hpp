@@ -22,11 +22,6 @@ class Tree {
 
     void render(const glm::mat4& view, const glm::mat4& projection) const;
 
-    void set_object_weak(
-        const std::string& path,
-        std::weak_ptr<_geometry::Geometry> object
-    );
-
     std::optional<gmath::AABB> bounds();
 
    protected:
