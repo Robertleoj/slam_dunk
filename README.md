@@ -64,6 +64,7 @@ int main() {
     scene2->set_transform("/ball", sphere_transform);
 
     window.wait_for_close();
+}
 
 ```
 
