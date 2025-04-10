@@ -3,6 +3,7 @@
 #include <glbinding/glbinding.h>
 #include <glm/glm.hpp>
 #include <optional>
+#include <slamd/data/colored_vertex.hpp>
 #include <slamd/geometry/geometry.hpp>
 #include <slamd/shaders.hpp>
 #include <slamd/thread_box.hpp>
@@ -13,16 +14,18 @@ namespace slamd {
 namespace _geometry {
 
 // TODO: move to data
-struct Vertex {
-    glm::vec3 position;
-    glm::vec3 color;
-};
 
 class SimpleMesh : public Geometry {
    public:
     SimpleMesh(
-        std::vector<Vertex> vertices,
-        std::vector<uint32_t> triangle_indices
+        const std::vector<data::ColoredVertex>& vertices,
+        const std::vector<uint32_t>& triangle_indices
+    );
+
+    SimpleMesh(
+        const std::vector<glm::vec3>& vertices,
+        const std::vector<glm::vec3>& vertex_colors,
+        const std::vector<uint32_t>& triangle_indices
     );
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
@@ -41,7 +44,7 @@ class SimpleMesh : public Geometry {
     std::optional<ThreadBox<GLData>> gl_data;
     std::optional<std::thread::id> render_thread_id;
 
-    std::vector<Vertex> vertices;
+    std::vector<data::ColoredVertex> vertices;
     std::vector<uint32_t> triangle_indices;
 };
 
@@ -51,8 +54,14 @@ namespace geometry {
 
 using _geometry::SimpleMesh;
 std::shared_ptr<SimpleMesh> simple_mesh(
-    std::vector<_geometry::Vertex> vertices,
-    std::vector<uint32_t> triangle_indices
+    const std::vector<glm::vec3>& vertices,
+    const std::vector<glm::vec3>& vertex_colors,
+    const std::vector<uint32_t>& triangle_indices
+);
+
+std::shared_ptr<SimpleMesh> simple_mesh(
+    const std::vector<data::ColoredVertex>& vertices,
+    const std::vector<uint32_t>& triangle_indices
 );
 
 }  // namespace geometry

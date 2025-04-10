@@ -5,7 +5,7 @@ namespace _geometry {
 
 constexpr uint segments = 12;
 struct ArrowMesh {
-    std::vector<Vertex> vertices;
+    std::vector<data::ColoredVertex> vertices;
     std::vector<uint32_t> indices;
 };
 
@@ -34,7 +34,7 @@ ArrowMesh generate_cone(
 }
 
 void transform_geometry(
-    std::vector<Vertex>& verts,
+    std::vector<data::ColoredVertex>& verts,
     const glm::mat4& xform
 ) {
     for (auto& v : verts) {
@@ -130,7 +130,7 @@ SimpleMesh make_arrows_mesh(
     const std::vector<glm::vec3>& colors,
     float thickness
 ) {
-    std::vector<Vertex> verts;
+    std::vector<data::ColoredVertex> verts;
     std::vector<uint32_t> inds;
 
     uint32_t index_offset = 0;

@@ -52,12 +52,12 @@ const std::vector<uint32_t> box_indices = {{
 
 // clang-format on
 
-std::vector<Vertex> make_box_vertices() {
-    std::vector<Vertex> vertices;
+std::vector<data::ColoredVertex> make_box_vertices() {
+    std::vector<data::ColoredVertex> vertices;
     vertices.reserve(8);
 
     for (int i = 0; i < 24; i++) {
-        vertices.push_back({box_corners[i], vertex_colors[i]});
+        vertices.emplace_back(box_corners[i], vertex_colors[i]);
     }
 
     return vertices;
