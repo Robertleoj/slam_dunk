@@ -3,6 +3,7 @@
 #include <vector>
 
 namespace slamd {
+namespace _tree {
 
 class TreePath {
    public:
@@ -18,4 +19,6 @@ class TreePath {
 };
 
 TreePath operator/(const TreePath& path, const std::string& part);
+
+}  // namespace _tree
 }  // namespace slamd

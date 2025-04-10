@@ -27,7 +27,6 @@ target_sources(
         src/image_texture.cpp
         src/glfw.cpp
         src/frame_buffer.cpp
-        src/tree_path.cpp
         src/camera.cpp
         src/io.cpp
         src/shaders.cpp
@@ -40,6 +39,7 @@ target_sources(
 
         src/tree/tree.cpp
         src/tree/node.cpp
+        src/tree/tree_path.cpp
 
         src/view/scene_view.cpp
         src/view/canvas_view.cpp

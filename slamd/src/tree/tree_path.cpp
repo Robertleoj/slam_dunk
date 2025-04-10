@@ -1,9 +1,10 @@
 #include <iostream>
-#include <slamd/tree_path.hpp>
+#include <slamd/tree/tree_path.hpp>
 #include <sstream>
 #include <stdexcept>
 
 namespace slamd {
+namespace _tree {
 
 std::vector<std::string> split_path(
     const std::string& path
@@ -92,5 +93,7 @@ TreePath operator/(
     new_components.push_back(part);
     return TreePath(new_components);
 }
+
+}  // namespace _tree
 
 }  // namespace slamd

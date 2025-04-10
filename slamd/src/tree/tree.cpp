@@ -11,14 +11,16 @@ Tree::Tree() {
 }
 
 void Tree::set_object(
-    const TreePath& path,
+    const std::string& path,
     std::shared_ptr<_geometry::Geometry> object
 ) {
-    if (path.is_root()) {
+    TreePath treepath(path);
+
+    if (treepath.is_root()) {
         throw std::runtime_error("Setting root object is not allowed");
     }
 
-    Node* node = this->make_path(path);
+    Node* node = this->make_path(treepath);
     node->set_object(object);
 }
 
@@ -30,26 +32,29 @@ void Tree::render(
 }
 
 void Tree::set_object_weak(
-    const TreePath& path,
+    const std::string& path,
     std::weak_ptr<_geometry::Geometry> object
 ) {
-    if (path.is_root()) {
+    TreePath treepath(path);
+
+    if (treepath.is_root()) {
         throw std::runtime_error("Setting root object is not allowed");
     }
 
-    Node* node = this->make_path(path);
+    Node* node = this->make_path(treepath);
     node->set_object(object);
 }
 
 void Tree::set_transform_mat4(
-    const TreePath& path,
+    const std::string& path,
     const glm::mat4& transform
 ) {
-    if (path.is_root()) {
+    TreePath treepath(path);
+    if (treepath.is_root()) {
         throw std::runtime_error("Setting root transform is not allowed");
     }
 
-    Node* node = this->make_path(path);
+    Node* node = this->make_path(treepath);
     node->set_transform(transform);
 }
 
@@ -156,7 +161,7 @@ std::optional<gmath::AABB> Tree::bounds() {
 }  // namespace _tree
 
 void Scene::set_transform(
-    const TreePath& path,
+    const std::string& path,
     glm::mat4 transform
 ) {
     this->set_transform_mat4(path, transform);
@@ -167,7 +172,7 @@ std::shared_ptr<Scene> scene() {
 }
 
 void Canvas::set_transform(
-    const TreePath& path,
+    const std::string& path,
     glm::mat3 transform
 ) {
     this->set_transform_mat4(path, gmath::xy_to_3d(transform));

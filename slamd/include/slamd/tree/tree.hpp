@@ -3,7 +3,7 @@
 #include <slamd/geometry/geometry.hpp>
 #include <slamd/gmath/aabb.hpp>
 #include <slamd/tree/node.hpp>
-#include <slamd/tree_path.hpp>
+#include <slamd/tree/tree_path.hpp>
 
 namespace slamd {
 namespace _tree {
@@ -16,21 +16,22 @@ class Tree {
     Tree();
 
     void set_object(
-        const TreePath& path,
+        const std::string& path,
         std::shared_ptr<_geometry::Geometry> object
     );
 
     void render(const glm::mat4& view, const glm::mat4& projection) const;
 
     void set_object_weak(
-        const TreePath& path,
+        const std::string& path,
         std::weak_ptr<_geometry::Geometry> object
     );
 
     std::optional<gmath::AABB> bounds();
 
    protected:
-    void set_transform_mat4(const TreePath& path, const glm::mat4& transform);
+    void
+    set_transform_mat4(const std::string& path, const glm::mat4& transform);
 
    private:
     void render_recursive(
@@ -53,7 +54,7 @@ class Tree {
  */
 class Scene : public _tree::Tree {
    public:
-    void set_transform(const TreePath& path, glm::mat4 transform);
+    void set_transform(const std::string& path, glm::mat4 transform);
 };
 
 std::shared_ptr<Scene> scene();
@@ -63,7 +64,7 @@ std::shared_ptr<Scene> scene();
  */
 class Canvas : public _tree::Tree {
    public:
-    void set_transform(const TreePath& path, glm::mat3 transform);
+    void set_transform(const std::string& path, glm::mat3 transform);
 };
 
 std::shared_ptr<Canvas> canvas();
