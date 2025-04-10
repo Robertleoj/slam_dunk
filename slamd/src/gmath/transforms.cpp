@@ -2,38 +2,57 @@
 
 namespace slamd {
 namespace gmath {
-glm::mat4 rot(
+
+glm::mat4 rot3D(
     const Angle& angle,
     glm::vec3 axis
 ) {
     return glm::rotate(glm::mat4(1.0), angle.rad(), axis);
 }
 
-glm::mat4 rx(
+glm::mat4 rx3D(
     const Angle& angle
 ) {
-    return rot(angle, glm::vec3(1.0, 0.0, 0.0));
+    return rot3D(angle, glm::vec3(1.0, 0.0, 0.0));
 }
 
-glm::mat4 ry(
+glm::mat4 ry3D(
     const Angle& angle
 ) {
-    return rot(angle, glm::vec3(0.0, 1.0, 0.0));
+    return rot3D(angle, glm::vec3(0.0, 1.0, 0.0));
 }
 
-glm::mat4 rz(
+glm::mat4 rz3D(
     const Angle& angle
 
 ) {
-    return rot(angle, glm::vec3(0.0, 0.0, 1.0));
+    return rot3D(angle, glm::vec3(0.0, 0.0, 1.0));
 }
 
-glm::mat4 transl(
+glm::mat4 t3D(
     const glm::vec3& amount
 ) {
     glm::mat4 mat(1.0);
     mat[3] = glm::vec4(amount, 1.0);
     return mat;
+}
+
+glm::mat4 tx3D(
+    float amount
+) {
+    return t3D(glm::vec3(amount, 0.0f, 0.0f));
+}
+
+glm::mat4 ty3D(
+    float amount
+) {
+    return t3D(glm::vec3(0.0f, amount, 0.0f));
+}
+
+glm::mat4 tz3D(
+    float amount
+) {
+    return t3D(glm::vec3(0.0f, 0.0f, amount));
 }
 
 glm::mat4 xy_to_3d(

@@ -6,15 +6,19 @@
 namespace slamd {
 namespace gmath {
 
-glm::mat4 rot(const Angle& angle, glm::vec3 axis);
+glm::mat4 rot3D(const Angle& angle, glm::vec3 axis);
 
-glm::mat4 rx(const Angle& angle);
+glm::mat4 rx3D(const Angle& angle);
 
-glm::mat4 ry(const Angle& angle);
+glm::mat4 ry3D(const Angle& angle);
 
-glm::mat4 rz(const Angle& angle);
+glm::mat4 rz3D(const Angle& angle);
 
-glm::mat4 transl(const glm::vec3& amount);
+glm::mat4 tx3D(float amount);
+glm::mat4 ty3D(float amount);
+glm::mat4 tz3D(float amount);
+
+glm::mat4 t3D(const glm::vec3& amount);
 
 glm::mat4 xy_to_3d(const glm::mat3& mat2d);
 

@@ -24,9 +24,11 @@ void Arcball::rotate(
 
     double vertical_range = (std::numbers::pi / 2) - (std::numbers::pi / 20);
 
-    this->phi =
-        (this->phi + delta_phi)
-            .clamp(gmath::Angle::rad(-vertical_range), gmath::Angle::rad(vertical_range));
+    this->phi = (this->phi + delta_phi)
+                    .clamp(
+                        gmath::Angle::rad(-vertical_range),
+                        gmath::Angle::rad(vertical_range)
+                    );
 }
 
 void Arcball::translate_relative(
@@ -38,7 +40,7 @@ void Arcball::translate_relative(
 
     glm::mat4 camera_in_world = this->center * camera_in_center;
 
-    glm::mat4 moved_camera = camera_in_world * gmath::transl(amount);
+    glm::mat4 moved_camera = camera_in_world * gmath::t3D(amount);
 
     glm::mat4 new_center_in_world = moved_camera * center_in_camera;
 
@@ -53,8 +55,9 @@ void Arcball::zoom(
 
 glm::mat4 Arcball::camera_in_center() const {
     // start at x = 1
-    glm::vec4 point_in_center_homo =
-        rz(this->theta) * ry(this->phi) * glm::vec4(1.0, 0.0, 0.0, 1.0);
+    glm::vec4 point_in_center_homo = gmath::rz3D(this->theta) *
+                                     gmath::ry3D(this->phi) *
+                                     glm::vec4(1.0, 0.0, 0.0, 1.0);
 
     glm::vec3 z_axis = glm::vec3(point_in_center_homo);
 
