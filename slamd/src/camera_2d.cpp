@@ -40,13 +40,16 @@ void Camera2D::translate_relative(
 
 void Camera2D::zoom_relative(
     float amount,
-    std::optional<glm::vec2> maybe_center
+    std::optional<glm::vec2> maybe_normalized_center
 ) {
     glm::vec2 viewport_size = this->viewport.size();
 
     float smaller = glm::min(viewport_size.x, viewport_size.y);
 
-    glm::vec2 center = maybe_center.value_or(this->viewport.center());
+    glm::vec2 normalized_center =
+        maybe_normalized_center.value_or(glm::vec2(0.5f, -0.5f));
+
+    glm::vec2 center = this->viewport.unnormalize(normalized_center);
 
     float zoom_factor = 1.0f - amount;
     glm::vec2 new_size = viewport_size * zoom_factor;

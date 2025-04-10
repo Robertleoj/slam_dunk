@@ -75,5 +75,13 @@ Rect2D Rect2D::from_center_size(
     return Rect2D(top_left, bottom_right);
 }
 
+glm::vec2 Rect2D::unnormalize(
+    const glm::vec2& normalized_center
+) const {
+    glm::vec2 center = (normalized_center * this->size()) + this->top_left;
+
+    return center;
+}
+
 }  // namespace _geom
 }  // namespace slamd

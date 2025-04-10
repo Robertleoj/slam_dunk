@@ -69,6 +69,7 @@ void CanvasView::handle_input() {
     // TODO: handle input
     if (ImGui::IsWindowFocused()) {
         this->handle_translation_input();
+        this->handle_mouse_input();
 
         if (ImGui::IsKeyPressed(ImGuiKey_Period, false)) {
             this->set_default_pos();
@@ -76,6 +77,9 @@ void CanvasView::handle_input() {
         }
     }
 }
+
+void CanvasView::handle_mouse_input() {}
+
 void CanvasView::handle_translation_input() {
     glm::vec2 translation(0.0f, 0.0f);
     float movement_amount = this->frame_timer.timedelta();

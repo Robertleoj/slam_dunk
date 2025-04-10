@@ -25,10 +25,12 @@ class CanvasView : public View {
 
    private:
     void render_to_frame_buffer();
-    void handle_input();
     void set_default_pos();
     void fix_view_aspect();
+
+    void handle_input();
     void handle_translation_input();
+    void handle_mouse_input();
 };
 
 }  // namespace slamd

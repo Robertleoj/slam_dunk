@@ -21,6 +21,8 @@ class Rect2D {
     from_center_size(const glm::vec2& center, const glm::vec2& size);
     static Rect2D center_cover(const Rect2D& to_cover, float required_aspect);
 
+    glm::vec2 unnormalize(const glm::vec2& normalized_center) const;
+
     glm::vec2 size() const;
 
     glm::vec2 center() const;
