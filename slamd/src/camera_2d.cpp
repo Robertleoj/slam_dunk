@@ -60,23 +60,6 @@ void Camera2D::zoom_relative(
         mouse_world * (1.0f - zoom_factor) + current_top_left * zoom_factor;
 
     this->viewport = _geom::Rect2D(new_top_left, new_top_left + new_size);
-
-    // float smaller = glm::min(viewport_size.x, viewport_size.y);
-
-    // spdlog::debug(
-    //     "Normalized center {} {}",
-    //     normalized_center.x,
-    //     normalized_center.y
-    // );
-
-    // glm::vec2 center = this->viewport.unnormalize(normalized_center);
-
-    // spdlog::debug("unnormalized center {} {}", center.x, center.y);
-
-    // float zoom_factor = 1.0f - amount;
-    // glm::vec2 new_size = viewport_size * zoom_factor;
-
-    // this->viewport = _geom::Rect2D::from_center_size(center, new_size);
 }
 
 void Camera2D::translate_normalized(
