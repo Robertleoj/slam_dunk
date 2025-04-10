@@ -54,12 +54,6 @@ void SceneView::render_to_frame_buffer() {
 
     auto view = this->arcball.view_matrix();
     auto background_color = make_background_color(view);
-    gl::glViewport(
-        0,
-        0,
-        this->frame_buffer.width(),
-        this->frame_buffer.height()
-    );
 
     gl::glEnable(gl::GL_BLEND);
     gl::glBlendFunc(gl::GL_SRC_ALPHA, gl::GL_ONE_MINUS_SRC_ALPHA);

@@ -41,12 +41,6 @@ void CanvasView::render_to_imgui() {
 
 void CanvasView::render_to_frame_buffer() {
     this->frame_buffer.bind();
-    gl::glViewport(
-        0,
-        0,
-        this->frame_buffer.width(),
-        this->frame_buffer.height()
-    );
 
     gl::glEnable(gl::GL_BLEND);
     gl::glBlendFunc(gl::GL_SRC_ALPHA, gl::GL_ONE_MINUS_SRC_ALPHA);
