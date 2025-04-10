@@ -10,7 +10,11 @@
 
 namespace fs = std::filesystem;
 
-const fs::path image_path = fs::path(__FILE__).parent_path() / "image.png";
+const fs::path image_path = fs::path(__FILE__)
+                                .parent_path()  // hello canvas
+                                .parent_path()  // examples
+                                .parent_path()  // repo root
+                            / "images" / "logo.png";
 
 slamd::data::Image read_image() {
     int width, height, channels;
