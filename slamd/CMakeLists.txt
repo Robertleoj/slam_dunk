@@ -47,6 +47,7 @@ target_sources(
         src/gmath/angle.cpp
         src/gmath/transforms.cpp
 
+        src/geometry/utils.cpp
         src/geometry/geometry.cpp
         src/geometry/box.cpp
         src/geometry/simple_mesh.cpp
@@ -58,6 +59,7 @@ target_sources(
         src/geometry/xy_grid.cpp
         src/geometry/arcball_indicator.cpp
         src/geometry/image.cpp
+        src/geometry/point_cloud.cpp
 )
 
 target_include_directories(
