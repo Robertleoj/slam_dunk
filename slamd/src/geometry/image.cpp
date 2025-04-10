@@ -21,19 +21,19 @@ void Image::initialize() {
     std::vector<float> verts = {
         // top left
         0.0f, 0.0f, 0.0f,
-        0.0f, 0.0f,
+        0.0f, 1.0f,
 
         // top right
         1.0f, 0.0f, 0.0f,
-        1.0f, 0.0f,
+        1.0f, 1.0f,
 
         // bottom right
         1.0f, 1.0f, 0.0f,
-        1.0f, 1.0f,
+        1.0f, 0.0f,
 
         // bottom left
         0.0f, 1.0f, 0.0f,
-        0.0f, 1.0f
+        0.0f, 0.0f
     };
 
     std::vector<uint32_t> indices = {
