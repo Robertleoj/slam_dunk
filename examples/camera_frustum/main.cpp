@@ -1,0 +1,91 @@
+#include <format>
+#include <glm/glm.hpp>
+#include <slamd/slamd.hpp>
+
+void seed_random() {
+    std::srand(static_cast<unsigned int>(std::time(0)));
+}
+
+float rand_float() {
+    return static_cast<float>(std::rand()) / RAND_MAX;
+}
+
+float rand_float(
+    float min,
+    float max
+) {
+    return rand_float() * (max - min) + min;
+}
+
+glm::vec3 random_vector(
+    float min,
+    float max
+) {
+    return glm::vec3(
+        rand_float(min, max),
+        rand_float(min, max),
+        rand_float(min, max)
+    );
+}
+
+glm::mat4 random_transform(
+    bool scale = false
+) {
+    glm::vec3 position = random_vector(-10.0, 10.0);
+
+    float angle = rand_float(0.0f, 359.0f);
+
+    glm::vec3 axis = random_vector(0.0, 10.0);
+
+    axis = glm::normalize(axis);  // make sure it's a unit vector
+
+    glm::mat4 transform =
+        glm::translate(glm::mat4(1.0f), position) *
+        glm::rotate(glm::mat4(1.0f), glm::radians(angle), axis);
+
+    if (scale) {
+        glm::vec3 random_scale = random_vector(0.1f, 2.0f);
+
+        transform = transform * glm::scale(glm::mat4(1.0f), random_scale);
+    }
+
+    return transform;
+}
+
+auto get_frustum() {
+    float fx = 525.0f;
+    float fy = 525.0f;
+    float cx = 320.0f;
+    float cy = 240.0f;
+
+    glm::mat3 K(
+        glm::vec3(fx, 0.0f, 0.0f),
+        glm::vec3(0.0f, fy, 0.0f),
+        glm::vec3(cx, cy, 1.0f)
+    );
+
+    size_t width = 640;
+    size_t height = 480;
+
+    return slamd::geometry::camera_frustum(K, width, height, 1.0);
+}
+
+int main() {
+    slamd::Window window(1000, 1000);
+
+    auto scene = slamd::scene();
+
+    auto frustum = get_frustum();
+
+    for (size_t i = 0; i < 100; i++) {
+        std::string key = std::format("/{}/frustum", i);
+
+        scene->set_object(key, frustum);
+
+        scene->set_transform(key, random_transform());
+    }
+
+    window.add_scene("scene", scene);
+
+    window.wait_for_close();
+}

@@ -6,5 +6,6 @@
 #include <slamd/geometry/poly_line.hpp>
 #include <slamd/geometry/sphere.hpp>
 #include <slamd/geometry/triad.hpp>
+#include <slamd/geometry/camera_frustum.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd/window.hpp>

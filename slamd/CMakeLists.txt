@@ -60,6 +60,7 @@ target_sources(
         src/geometry/arcball_indicator.cpp
         src/geometry/image.cpp
         src/geometry/point_cloud.cpp
+        src/geometry/camera_frustum.cpp
 )
 
 target_include_directories(
