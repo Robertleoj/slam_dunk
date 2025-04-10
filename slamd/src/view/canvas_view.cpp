@@ -19,9 +19,7 @@ void CanvasView::render_to_imgui() {
     int height = static_cast<int>(availSize.y);
     this->frame_buffer.rescale(width, height);
 
-    spdlog::debug("Manually moved");
     if (!this->manually_moved) {
-        spdlog::debug("Setting default pos");
         this->set_default_pos();
     }
 
@@ -70,25 +68,37 @@ void CanvasView::handle_input() {
 void CanvasView::set_default_pos() {
     auto maybe_bounds = this->canvas->bounds();
 
-    if (!maybe_bounds.has_value()) {
-        this->camera.set_bounds({0.0, 1.0}, {-1.0, 0.0});
-        return;
+    _geom::AABB bounds = maybe_bounds.has_value()
+                             ? maybe_bounds.value()
+                             : _geom::AABB(
+                                   glm::vec3(0.0f, -1.0f, 0.0f),
+                                   glm::vec3(1.0f, 0.0f, 0.0f)
+                               );
+
+    float window_aspect = this->frame_buffer.aspect();
+
+    float bounds_width = bounds.max.x - bounds.min.x;
+    float bounds_height = bounds.max.y - bounds.min.y;
+    float bounds_aspect = bounds_width / bounds_height;
+
+    glm::vec2 center = 0.5f * (bounds.min + bounds.max);
+
+    float half_width, half_height;
+
+    if (window_aspect > bounds_aspect) {
+        // Window is wider than content – pad width
+        half_height = 0.5f * bounds_height;
+        half_width = half_height * window_aspect;
+    } else {
+        // Window is taller than content – pad height
+        half_width = 0.5f * bounds_width;
+        half_height = half_width / window_aspect;
     }
 
-    auto bounds = maybe_bounds.value();
+    glm::vec2 min_view = center - glm::vec2(half_width, half_height);
+    glm::vec2 max_view = center + glm::vec2(half_width, half_height);
 
-    spdlog::debug(
-        "Setting bounds to x({}-{}) y({}-{})",
-        bounds.min.x,
-        bounds.max.x,
-        bounds.min.y,
-        bounds.max.y
-    );
-
-    this->camera.set_bounds(
-        {bounds.min.x, bounds.max.x},
-        {bounds.min.y, bounds.max.y}
-    );
+    this->camera.set_bounds({min_view.x, max_view.x}, {min_view.y, max_view.y});
 }
 
 }  // namespace slamd
