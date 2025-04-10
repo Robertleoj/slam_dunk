@@ -87,18 +87,45 @@ The examples in the `/examples` folder showcase some more features of SlamDunk, 
 
 # Installation
 
-## With git submodules
-
-If you want to use SlamDunk as a submodule, you need the following dependencies to be available in your build environment:
+If you are not using a package manager, the SlamDunk requires the following dependencies available in your build system:
 
 - [`spdlog`](https://github.com/gabime/spdlog)
 - [`glbinding`](https://github.com/cginternals/glbinding)
 - [`glfw3`](https://github.com/glfw/glfw)
 - [`glm`](https://github.com/g-truc/glm)
 
-When you have these ready, you can add SlamDunk as a subdiretory in your project with
+## With FetchContent
 
-```cmakelists
+You can use CMake's `FetchContent`. Add this to your `CMakeLists.txt`:
+
+```c++
+include(FetchContent)
+
+FetchContent_Declare(
+  MyCoolLib
+  GIT_REPOSITORY https://github.com/you/yourproject.git
+  GIT_TAG main
+  SOURCE_SUBDIR mylib
+)
+
+FetchContent_MakeAvailable(MyCoolLib)
+```
+
+Linking to it then looks like:
+
+```cmake
+target_link_libraries(
+    your_target PRIVATE
+
+    slamd::slamd
+)
+```
+
+## With git submodules
+
+If you add the repo as a submodule in your project, you can add it as a subdirectory with
+
+```cmake
 add_subdirectory(path/to/slam_dunk/slamd)
 
 ```

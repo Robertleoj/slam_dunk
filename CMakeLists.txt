@@ -16,6 +16,16 @@ set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-linux")
 
 add_subdirectory(slamd)
 
+# include(FetchContent)
+
+# FetchContent_Declare(
+#   slamd
+#   GIT_REPOSITORY git@github.com:Robertleoj/slam_dunk.git
+#   GIT_TAG main
+#   SOURCE_SUBDIR slamd
+# )
+
+# FetchContent_MakeAvailable(slamd)
 
 add_subdirectory(examples)
 
