@@ -18,6 +18,9 @@ class Camera2D {
     void translate_relative(glm::vec2 relative_translation);
     void
     zoom_relative(float amount, std::optional<glm::vec2> loc = std::nullopt);
+
+    void translate_normalized(glm::vec2 normalized_translation);
+
 };
 
 }  // namespace slamd

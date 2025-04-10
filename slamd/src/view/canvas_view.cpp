@@ -78,7 +78,62 @@ void CanvasView::handle_input() {
     }
 }
 
-void CanvasView::handle_mouse_input() {}
+void CanvasView::handle_mouse_input() {
+    ImGuiIO& io = ImGui::GetIO();
+
+    if (ImGui::IsItemHovered()) {
+        if (ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
+            // handle dragging
+            auto mouse_drag_delta =
+                ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
+
+            float mouse_drag_delta_x =
+                static_cast<float>(mouse_drag_delta.x) /
+                static_cast<float>(this->frame_buffer.width());
+
+            float mouse_drag_delta_y =
+                static_cast<float>(mouse_drag_delta.y) /
+                static_cast<float>(this->frame_buffer.height());
+            ;
+
+            ImGui::ResetMouseDragDelta(ImGuiMouseButton_Left);
+
+            this->camera.translate_normalized(
+                {-mouse_drag_delta_x, mouse_drag_delta_y}
+            );
+            this->manually_moved = true;
+        }
+
+        if (io.MouseWheel != 0.0f) {
+            auto scroll_input = static_cast<float>(io.MouseWheel);
+
+            float zoom_amount = static_cast<float>(scroll_input) * 0.1f;
+
+            ImVec2 mouse_pos_global = ImGui::GetMousePos();
+            ImVec2 viewport_loc = ImGui::GetItemRectMin();
+
+            float mouse_pos_x =
+                static_cast<float>(mouse_pos_global.x - viewport_loc.x) /
+                static_cast<float>(this->frame_buffer.width());
+            float mouse_pos_y =
+                static_cast<float>(mouse_pos_global.y - viewport_loc.y) /
+                static_cast<float>(this->frame_buffer.height());
+
+            spdlog::info(
+                "Mouse pos when zooming: {} {}",
+                mouse_pos_x,
+                mouse_pos_y
+            );
+
+            this->camera.zoom_relative(
+                zoom_amount,
+                glm::vec2(mouse_pos_x, -mouse_pos_y)
+            );
+
+            this->manually_moved = true;
+        }
+    }
+}
 
 void CanvasView::handle_translation_input() {
     glm::vec2 translation(0.0f, 0.0f);

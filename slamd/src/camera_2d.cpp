@@ -1,3 +1,4 @@
+#include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd/camera_2d.hpp>
 
@@ -49,12 +50,29 @@ void Camera2D::zoom_relative(
     glm::vec2 normalized_center =
         maybe_normalized_center.value_or(glm::vec2(0.5f, -0.5f));
 
+    spdlog::debug(
+        "Normalized center {} {}",
+        normalized_center.x,
+        normalized_center.y
+    );
+
     glm::vec2 center = this->viewport.unnormalize(normalized_center);
+
+    spdlog::debug("unnormalized center {} {}", center.x, center.y);
 
     float zoom_factor = 1.0f - amount;
     glm::vec2 new_size = viewport_size * zoom_factor;
 
     this->viewport = _geom::Rect2D::from_center_size(center, new_size);
+}
+
+
+void Camera2D::translate_normalized(
+    glm::vec2 normalized_translation
+) {
+    glm::vec2 unnormalized = this->viewport.size() * normalized_translation;
+    spdlog::debug("unnormalized {} {}", unnormalized.x, unnormalized.y);
+    this->viewport = this->viewport.translate(unnormalized);
 }
 
 }  // namespace slamd
