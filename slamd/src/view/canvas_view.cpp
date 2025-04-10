@@ -1,6 +1,7 @@
 
 #include <imgui.h>
 #include <spdlog/spdlog.h>
+#include <slamd/geom/rect2d.hpp>
 #include <slamd/view/canvas_view.hpp>
 
 namespace slamd {
@@ -10,7 +11,7 @@ CanvasView::CanvasView(
 )
     : canvas(canvas),
       frame_buffer(500, 500),
-      camera(_geom::AABB2D({0.0, 1.0}, {-1.0, 0.0})),
+      camera(_geom::Rect2D({0.0, 0.0}, {1.0, -1.0})),
       manually_moved(false) {}
 
 void CanvasView::render_to_imgui() {
@@ -79,6 +80,8 @@ void CanvasView::handle_translation_input() {
     glm::vec2 translation(0.0f, 0.0f);
     float movement_amount = this->frame_timer.timedelta();
 
+    float zoom = 0.0f;
+
     glm::vec2 right(movement_amount, 0.0f);
     glm::vec2 up(0.0, movement_amount);
 
@@ -90,17 +93,30 @@ void CanvasView::handle_translation_input() {
         translation -= right;
     }
 
-    if (ImGui::IsKeyDown(ImGuiKey_E) || ImGui::IsKeyDown(ImGuiKey_W)) {
+    if (ImGui::IsKeyDown(ImGuiKey_E)) {
         translation += up;
     }
 
-    if (ImGui::IsKeyDown(ImGuiKey_Q) || ImGui::IsKeyDown(ImGuiKey_S)) {
+    if (ImGui::IsKeyDown(ImGuiKey_Q)) {
         translation -= up;
+    }
+
+    if (ImGui::IsKeyDown(ImGuiKey_W)) {
+        zoom += movement_amount;
+    }
+
+    if (ImGui::IsKeyDown(ImGuiKey_S)) {
+        zoom -= movement_amount;
     }
 
     if (glm::length(translation) > 1e-6f) {
         this->manually_moved = true;
         this->camera.translate_relative(translation);
+    }
+
+    if (glm::abs(zoom) > 1e-6f) {
+        this->manually_moved = true;
+        this->camera.zoom_relative(zoom);
     }
 }
 
@@ -117,8 +133,8 @@ void CanvasView::set_default_pos() {
     float window_aspect = this->frame_buffer.aspect();
 
     this->camera.set_viewport(
-        _geom::AABB2D::center_cover(
-            _geom::AABB2D::from_3d(bounds),
+        _geom::Rect2D::center_cover(
+            _geom::Rect2D::from_aabb3d(bounds),
             window_aspect
         )
     );
@@ -127,7 +143,7 @@ void CanvasView::set_default_pos() {
 void CanvasView::fix_view_aspect() {
     float window_aspect = this->frame_buffer.aspect();
     this->camera.set_viewport(
-        _geom::AABB2D::center_cover(this->camera.viewport, window_aspect)
+        _geom::Rect2D::center_cover(this->camera.viewport, window_aspect)
     );
 }
 

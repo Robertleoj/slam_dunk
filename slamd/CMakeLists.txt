@@ -47,6 +47,7 @@ target_sources(
         src/view/canvas_view.cpp
 
         src/geom/aabb.cpp
+        src/geom/rect2d.cpp
 
         src/geometry/geometry.cpp
         src/geometry/box.cpp
