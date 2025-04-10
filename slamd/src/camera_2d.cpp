@@ -5,7 +5,7 @@
 namespace slamd {
 
 Camera2D::Camera2D(
-    const _geom::Rect2D& viewport
+    const gmath::Rect2D& viewport
 )
     : viewport(viewport) {}
 
@@ -22,9 +22,9 @@ glm::mat4 Camera2D::get_projection_matrix() const {
 }
 
 void Camera2D::set_viewport(
-    const _geom::Rect2D& viewport
+    const gmath::Rect2D& viewport
 ) {
-    this->viewport = _geom::Rect2D(viewport);
+    this->viewport = gmath::Rect2D(viewport);
 }
 
 void Camera2D::translate_relative(
@@ -58,7 +58,7 @@ void Camera2D::zoom_relative(
     glm::vec2 new_top_left =
         mouse_world * (1.0f - zoom_factor) + current_top_left * zoom_factor;
 
-    this->viewport = _geom::Rect2D(new_top_left, new_top_left + new_size);
+    this->viewport = gmath::Rect2D(new_top_left, new_top_left + new_size);
 }
 
 void Camera2D::translate_normalized(

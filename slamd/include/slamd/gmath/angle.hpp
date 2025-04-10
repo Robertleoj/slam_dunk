@@ -1,6 +1,7 @@
 #pragma once
 
 namespace slamd {
+namespace gmath {
 class Angle {
    public:
     Angle(float radians);
@@ -19,4 +20,5 @@ class Angle {
     float radians;
 };
 
+}  // namespace gmath
 }  // namespace slamd

@@ -1,8 +1,8 @@
 #include <spdlog/spdlog.h>
-#include <slamd/geom/rect2d.hpp>
+#include <slamd/gmath/rect2d.hpp>
 
 namespace slamd {
-namespace _geom {
+namespace gmath {
 
 Rect2D::Rect2D(
     const glm::vec2& top_left,
@@ -80,5 +80,5 @@ glm::vec2 Rect2D::unnormalize(
     return center;
 }
 
-}  // namespace _geom
+}  // namespace gmath
 }  // namespace slamd

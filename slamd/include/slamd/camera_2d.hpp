@@ -1,19 +1,19 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <slamd/geom/rect2d.hpp>
+#include <slamd/gmath/rect2d.hpp>
 
 namespace slamd {
 
 class Camera2D {
    public:
-    Camera2D(const _geom::Rect2D& viewport);
+    Camera2D(const gmath::Rect2D& viewport);
 
-    void set_viewport(const _geom::Rect2D& viewport);
+    void set_viewport(const gmath::Rect2D& viewport);
 
     glm::mat4 get_projection_matrix() const;
 
-    _geom::Rect2D viewport;
+    gmath::Rect2D viewport;
 
     void translate_relative(glm::vec2 relative_translation);
     void zoom_relative(

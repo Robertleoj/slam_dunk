@@ -1,8 +1,8 @@
 #include <filesystem>
 #include <slamd/assert.hpp>
 #include <slamd/geometry/image.hpp>
+#include <slamd/gmath/transforms.hpp>
 #include <slamd/paths.hpp>
-#include <slamd/transforms.hpp>
 
 namespace fs = std::filesystem;
 
@@ -139,7 +139,7 @@ void Image::render(
     gl::glBindVertexArray(gl_data->vao_id);
 
     gl_data->shader.use();
-    gl_data->shader.setUniform("model", model * scale_xy(this->scale));
+    gl_data->shader.setUniform("model", model * gmath::scale_xy(this->scale));
     gl_data->shader.setUniform("view", view);
     gl_data->shader.setUniform("projection", projection);
 
@@ -150,14 +150,14 @@ void Image::render(
     gl::glBindVertexArray(0);
 };
 
-std::optional<_geom::AABB> Image::bounds() {
+std::optional<gmath::AABB> Image::bounds() {
     float x_min = 0.0f;
     float x_max = this->scale.x;
 
     float y_min = 0.0;
     float y_max = this->scale.y;
 
-    return _geom::AABB(
+    return gmath::AABB(
         glm::vec3(x_min, y_min, 0.0),
         glm::vec3(x_max, y_max, 0.0f)
     );

@@ -1,7 +1,7 @@
 #include <imgui.h>
 #include <spdlog/spdlog.h>
 #include <numbers>
-#include <slamd/angle.hpp>
+#include <slamd/gmath/angle.hpp>
 #include <slamd/render_thread_job_queue.hpp>
 #include <slamd/view/scene_view.hpp>
 
@@ -128,8 +128,8 @@ void SceneView::handle_mouse_input() {
                 static_cast<float>(mouse_drag_delta_y) * scale_factor;
 
             this->arcball.rotate(
-                -Angle::rad(x_angle_diff),
-                -Angle::rad(y_angle_diff)
+                -gmath::Angle::rad(x_angle_diff),
+                -gmath::Angle::rad(y_angle_diff)
             );
             this->arcball_indicator.interact();
         }

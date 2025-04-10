@@ -1,6 +1,7 @@
-#include <slamd/transforms.hpp>
+#include <slamd/gmath/transforms.hpp>
 
 namespace slamd {
+namespace gmath {
 glm::mat4 rot(
     const Angle& angle,
     glm::vec3 axis
@@ -54,4 +55,5 @@ glm::mat4 scale_xy(
     return glm::scale(glm::mat4(1.0f), glm::vec3(scale, 1.0));
 }
 
+}  // namespace gmath
 }  // namespace slamd

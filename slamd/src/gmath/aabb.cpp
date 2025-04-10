@@ -1,7 +1,7 @@
-#include <slamd/geom/aabb.hpp>
+#include <slamd/gmath/aabb.hpp>
 
 namespace slamd {
-namespace _geom {
+namespace gmath {
 
 AABB::AABB(
     const glm::vec3& min,
@@ -56,6 +56,5 @@ std::optional<AABB> AABB::combine(
     return AABB(combined_min, combined_max);
 }
 
-
-}  // namespace _geom
+}  // namespace gmath
 }  // namespace slamd

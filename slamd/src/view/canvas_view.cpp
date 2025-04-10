@@ -1,7 +1,7 @@
 
 #include <imgui.h>
 #include <spdlog/spdlog.h>
-#include <slamd/geom/rect2d.hpp>
+#include <slamd/gmath/rect2d.hpp>
 #include <slamd/view/canvas_view.hpp>
 
 namespace slamd {
@@ -11,7 +11,7 @@ CanvasView::CanvasView(
 )
     : canvas(canvas),
       frame_buffer(500, 500),
-      camera(_geom::Rect2D({0.0, 0.0}, {1.0, 1.0})),
+      camera(gmath::Rect2D({0.0, 0.0}, {1.0, 1.0})),
       manually_moved(false) {}
 
 void CanvasView::render_to_imgui() {
@@ -177,9 +177,9 @@ void CanvasView::handle_translation_input() {
 void CanvasView::set_default_pos() {
     auto maybe_bounds = this->canvas->bounds();
 
-    _geom::AABB bounds = maybe_bounds.has_value()
+    gmath::AABB bounds = maybe_bounds.has_value()
                              ? maybe_bounds.value()
-                             : _geom::AABB(
+                             : gmath::AABB(
                                    glm::vec3(0.0f, 0.0f, 0.0f),
                                    glm::vec3(1.0f, 1.0f, 0.0f)
                                );
@@ -187,8 +187,8 @@ void CanvasView::set_default_pos() {
     float window_aspect = this->frame_buffer.aspect();
 
     this->camera.set_viewport(
-        _geom::Rect2D::center_cover(
-            _geom::Rect2D::from_aabb3d(bounds),
+        gmath::Rect2D::center_cover(
+            gmath::Rect2D::from_aabb3d(bounds),
             window_aspect
         )
     );
@@ -197,7 +197,7 @@ void CanvasView::set_default_pos() {
 void CanvasView::fix_view_aspect() {
     float window_aspect = this->frame_buffer.aspect();
     this->camera.set_viewport(
-        _geom::Rect2D::center_cover(this->camera.viewport, window_aspect)
+        gmath::Rect2D::center_cover(this->camera.viewport, window_aspect)
     );
 }
 

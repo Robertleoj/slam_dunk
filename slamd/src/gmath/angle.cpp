@@ -1,7 +1,8 @@
 #include <glm/glm.hpp>
-#include <slamd/angle.hpp>
+#include <slamd/gmath/angle.hpp>
 
 namespace slamd {
+namespace gmath {
 
 Angle::Angle(
     float radians
@@ -47,4 +48,5 @@ Angle Angle::operator-() const {
     return rad(-this->rad());
 }
 
+}  // namespace gmath
 }  // namespace slamd

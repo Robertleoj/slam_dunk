@@ -1,9 +1,9 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <slamd/geom/aabb.hpp>
+#include <slamd/gmath/aabb.hpp>
 
 namespace slamd {
-namespace _geom {
+namespace gmath {
 
 class Rect2D {
    public:
@@ -28,6 +28,6 @@ class Rect2D {
     glm::vec2 center() const;
 };
 
-}  // namespace _geom
+}  // namespace gmath
 
 }  // namespace slamd

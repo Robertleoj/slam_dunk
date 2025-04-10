@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace slamd {
-namespace _geom {
+namespace gmath {
 
 class AABB {
    public:
@@ -19,5 +19,5 @@ class AABB {
     static std::optional<AABB> combine(const std::vector<AABB>& bounds);
 };
 
-}  // namespace _geom
+}  // namespace gmath
 }  // namespace slamd

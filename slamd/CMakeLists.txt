@@ -31,9 +31,7 @@ target_sources(
         src/camera.cpp
         src/io.cpp
         src/shaders.cpp
-        src/angle.cpp
         src/arcball.cpp
-        src/transforms.cpp
         src/frame_timer.cpp
         src/assert.cpp
         src/window.cpp
@@ -46,8 +44,10 @@ target_sources(
         src/view/scene_view.cpp
         src/view/canvas_view.cpp
 
-        src/geom/aabb.cpp
-        src/geom/rect2d.cpp
+        src/gmath/aabb.cpp
+        src/gmath/rect2d.cpp
+        src/gmath/angle.cpp
+        src/gmath/transforms.cpp
 
         src/geometry/geometry.cpp
         src/geometry/box.cpp

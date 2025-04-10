@@ -1,5 +1,5 @@
 #include <spdlog/spdlog.h>
-#include <slamd/transforms.hpp>
+#include <slamd/gmath/transforms.hpp>
 #include <slamd/tree/tree.hpp>
 
 namespace slamd {
@@ -111,7 +111,7 @@ Node* Tree::make_path(
     return current_node;
 }
 
-std::optional<_geom::AABB> Tree::bounds_recursive(
+std::optional<gmath::AABB> Tree::bounds_recursive(
     const Node* node,
     const glm::mat4& prev_transform
 ) {
@@ -124,7 +124,7 @@ std::optional<_geom::AABB> Tree::bounds_recursive(
 
     const auto node_object = node->get_object();
 
-    std::vector<_geom::AABB> bounds;
+    std::vector<gmath::AABB> bounds;
 
     if (node_object.has_value()) {
         auto object_bounds = node_object.value()->bounds();
@@ -146,10 +146,10 @@ std::optional<_geom::AABB> Tree::bounds_recursive(
         }
     }
 
-    return _geom::AABB::combine(bounds);
+    return gmath::AABB::combine(bounds);
 }
 
-std::optional<_geom::AABB> Tree::bounds() {
+std::optional<gmath::AABB> Tree::bounds() {
     return this->bounds_recursive(this->root.get(), glm::mat4(1.0f));
 }
 
@@ -170,7 +170,7 @@ void Canvas::set_transform(
     const TreePath& path,
     glm::mat3 transform
 ) {
-    this->set_transform_mat4(path, xy_to_3d(transform));
+    this->set_transform_mat4(path, gmath::xy_to_3d(transform));
 }
 
 std::shared_ptr<Canvas> canvas() {

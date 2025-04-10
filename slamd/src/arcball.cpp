@@ -5,7 +5,7 @@
 #include <glm/gtx/string_cast.hpp>
 #include <numbers>
 #include <slamd/arcball.hpp>
-#include <slamd/transforms.hpp>
+#include <slamd/gmath/transforms.hpp>
 
 namespace slamd {
 
@@ -16,8 +16,8 @@ Arcball::Arcball()
       center(Arcball::default_center) {}
 
 void Arcball::rotate(
-    Angle delta_theta,
-    Angle delta_phi
+    gmath::Angle delta_theta,
+    gmath::Angle delta_phi
 ) {
     // we rotate x angles around the z axis of
     this->theta = (this->theta + delta_theta);
@@ -26,7 +26,7 @@ void Arcball::rotate(
 
     this->phi =
         (this->phi + delta_phi)
-            .clamp(Angle::rad(-vertical_range), Angle::rad(vertical_range));
+            .clamp(gmath::Angle::rad(-vertical_range), gmath::Angle::rad(vertical_range));
 }
 
 void Arcball::translate_relative(
@@ -38,7 +38,7 @@ void Arcball::translate_relative(
 
     glm::mat4 camera_in_world = this->center * camera_in_center;
 
-    glm::mat4 moved_camera = camera_in_world * transl(amount);
+    glm::mat4 moved_camera = camera_in_world * gmath::transl(amount);
 
     glm::mat4 new_center_in_world = moved_camera * center_in_camera;
 
