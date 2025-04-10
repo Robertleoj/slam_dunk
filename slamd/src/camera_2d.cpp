@@ -65,7 +65,6 @@ void Camera2D::translate_normalized(
     glm::vec2 normalized_translation
 ) {
     glm::vec2 unnormalized = this->viewport.size() * normalized_translation;
-    spdlog::debug("unnormalized {} {}", unnormalized.x, unnormalized.y);
     this->viewport = this->viewport.translate(unnormalized);
 }
 

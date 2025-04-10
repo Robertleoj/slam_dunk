@@ -19,7 +19,6 @@ void framebuffer_size_callback(
     int width,
     int height
 ) {
-    spdlog::debug("Window resized");
     gl::glViewport(0, 0, width, height);
 }
 

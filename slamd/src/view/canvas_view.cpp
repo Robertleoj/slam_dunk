@@ -120,12 +120,6 @@ void CanvasView::handle_mouse_input() {
                 (static_cast<float>(mouse_pos_global.y - viewport_loc.y) /
                  static_cast<float>(this->frame_buffer.height()));
 
-            spdlog::info(
-                "Mouse pos when zooming: {} {}",
-                mouse_pos_x,
-                mouse_pos_y
-            );
-
             this->camera.zoom_relative(
                 zoom_amount,
                 glm::vec2(mouse_pos_x, mouse_pos_y)

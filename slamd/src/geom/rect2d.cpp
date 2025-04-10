@@ -55,7 +55,6 @@ glm::vec2 Rect2D::size() const {
 Rect2D Rect2D::translate(
     glm::vec2 amount
 ) const {
-    spdlog::debug("Translating by {} {}", amount.x, amount.y);
     return Rect2D(this->top_left + amount, this->bottom_right + amount);
 }
 
@@ -76,7 +75,6 @@ Rect2D Rect2D::from_center_size(
 glm::vec2 Rect2D::unnormalize(
     const glm::vec2& normalized_center
 ) const {
-    spdlog::debug("Rect size: {} {}", this->size().x, this->size().y);
     glm::vec2 center = (normalized_center * this->size()) + this->top_left;
 
     return center;

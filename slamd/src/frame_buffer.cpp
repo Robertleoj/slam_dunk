@@ -10,7 +10,6 @@ namespace slamd {
 void FrameBuffer::initialize() {
     assert_thread(this->render_thread_id.value());
     assert_nil(this->gl_data);
-    spdlog::debug("Calling initialize");
 
     GLData gl_data;
 
@@ -31,10 +30,14 @@ void FrameBuffer::initialize() {
         nullptr
     );
     gl::glTexParameteri(
-        gl::GL_TEXTURE_2D, gl::GL_TEXTURE_MIN_FILTER, gl::GL_LINEAR
+        gl::GL_TEXTURE_2D,
+        gl::GL_TEXTURE_MIN_FILTER,
+        gl::GL_LINEAR
     );
     gl::glTexParameteri(
-        gl::GL_TEXTURE_2D, gl::GL_TEXTURE_MAG_FILTER, gl::GL_LINEAR
+        gl::GL_TEXTURE_2D,
+        gl::GL_TEXTURE_MAG_FILTER,
+        gl::GL_LINEAR
     );
 
     gl::glFramebufferTexture2D(
@@ -47,7 +50,8 @@ void FrameBuffer::initialize() {
 
     gl::glGenRenderbuffers(1, &gl_data.render_buffer_object_id);
     gl::glBindRenderbuffer(
-        gl::GL_RENDERBUFFER, gl_data.render_buffer_object_id
+        gl::GL_RENDERBUFFER,
+        gl_data.render_buffer_object_id
     );
     gl::glRenderbufferStorage(
         gl::GL_RENDERBUFFER,
@@ -125,7 +129,6 @@ void FrameBuffer::rescale(
 
     auto gl_data = this->get_gl_data();
 
-    spdlog::debug("Resizing to {} {}", width, height);
     gl::glViewport(0, 0, width, height);
 
     gl::glBindTexture(gl::GL_TEXTURE_2D, gl_data->texture_id);
@@ -141,11 +144,15 @@ void FrameBuffer::rescale(
         nullptr
     );
     gl::glTexParameteri(
-        gl::GL_TEXTURE_2D, gl::GL_TEXTURE_MIN_FILTER, gl::GL_LINEAR
+        gl::GL_TEXTURE_2D,
+        gl::GL_TEXTURE_MIN_FILTER,
+        gl::GL_LINEAR
     );
 
     gl::glTexParameteri(
-        gl::GL_TEXTURE_2D, gl::GL_TEXTURE_MAG_FILTER, gl::GL_LINEAR
+        gl::GL_TEXTURE_2D,
+        gl::GL_TEXTURE_MAG_FILTER,
+        gl::GL_LINEAR
     );
     gl::glFramebufferTexture2D(
         gl::GL_FRAMEBUFFER,
@@ -156,10 +163,14 @@ void FrameBuffer::rescale(
     );
 
     gl::glBindRenderbuffer(
-        gl::GL_RENDERBUFFER, gl_data->render_buffer_object_id
+        gl::GL_RENDERBUFFER,
+        gl_data->render_buffer_object_id
     );
     gl::glRenderbufferStorage(
-        gl::GL_RENDERBUFFER, gl::GL_DEPTH24_STENCIL8, width, height
+        gl::GL_RENDERBUFFER,
+        gl::GL_DEPTH24_STENCIL8,
+        width,
+        height
     );
     gl::glFramebufferRenderbuffer(
         gl::GL_FRAMEBUFFER,
