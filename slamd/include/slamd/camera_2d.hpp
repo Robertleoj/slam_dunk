@@ -1,24 +1,21 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <slamd/geom/aabb.hpp>
 
 namespace slamd {
 
-struct Bounds {
-    float min;
-    float max;
-};
-
 class Camera2D {
    public:
-    Camera2D(Bounds x_bounds, Bounds y_bounds);
+    Camera2D(const _geom::AABB2D& viewport);
 
-    void set_bounds(Bounds min, Bounds max);
+    void set_viewport(const _geom::AABB2D& viewport);
 
     glm::mat4 get_projection_matrix() const;
 
-    Bounds x_bounds;
-    Bounds y_bounds;
+    _geom::AABB2D viewport;
+
+    void translate_relative(glm::vec2 relative_translation);
 };
 
 }  // namespace slamd

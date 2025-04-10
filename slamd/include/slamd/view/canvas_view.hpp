@@ -3,6 +3,7 @@
 #include <memory>
 #include <slamd/camera_2d.hpp>
 #include <slamd/frame_buffer.hpp>
+#include <slamd/frame_timer.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd/view/view.hpp>
 
@@ -15,6 +16,7 @@ class CanvasView : public View {
    private:
     FrameBuffer frame_buffer;
     Camera2D camera;
+    FrameTimer frame_timer;
     bool manually_moved;
 
    public:
@@ -25,6 +27,8 @@ class CanvasView : public View {
     void render_to_frame_buffer();
     void handle_input();
     void set_default_pos();
+    void fix_view_aspect();
+    void handle_translation_input();
 };
 
 }  // namespace slamd

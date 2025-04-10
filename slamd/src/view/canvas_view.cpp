@@ -10,7 +10,7 @@ CanvasView::CanvasView(
 )
     : canvas(canvas),
       frame_buffer(500, 500),
-      camera({0.0, 1.0}, {-1.0, 0.0}),
+      camera(_geom::AABB2D({0.0, 1.0}, {-1.0, 0.0})),
       manually_moved(false) {}
 
 void CanvasView::render_to_imgui() {
@@ -21,6 +21,8 @@ void CanvasView::render_to_imgui() {
 
     if (!this->manually_moved) {
         this->set_default_pos();
+    } else {
+        this->fix_view_aspect();
     }
 
     this->render_to_frame_buffer();
@@ -32,6 +34,7 @@ void CanvasView::render_to_imgui() {
         ImVec2(1, 0)
     );
 
+    this->frame_timer.log_frame();
     this->handle_input();
 }
 
@@ -63,6 +66,42 @@ void CanvasView::render_to_frame_buffer() {
 
 void CanvasView::handle_input() {
     // TODO: handle input
+    if (ImGui::IsWindowFocused()) {
+        this->handle_translation_input();
+
+        if (ImGui::IsKeyPressed(ImGuiKey_Period, false)) {
+            this->set_default_pos();
+            this->manually_moved = false;
+        }
+    }
+}
+void CanvasView::handle_translation_input() {
+    glm::vec2 translation(0.0f, 0.0f);
+    float movement_amount = this->frame_timer.timedelta();
+
+    glm::vec2 right(movement_amount, 0.0f);
+    glm::vec2 up(0.0, movement_amount);
+
+    if (ImGui::IsKeyDown(ImGuiKey_D)) {
+        translation += right;
+    }
+
+    if (ImGui::IsKeyDown(ImGuiKey_A)) {
+        translation -= right;
+    }
+
+    if (ImGui::IsKeyDown(ImGuiKey_E) || ImGui::IsKeyDown(ImGuiKey_W)) {
+        translation += up;
+    }
+
+    if (ImGui::IsKeyDown(ImGuiKey_Q) || ImGui::IsKeyDown(ImGuiKey_S)) {
+        translation -= up;
+    }
+
+    if (glm::length(translation) > 1e-6f) {
+        this->manually_moved = true;
+        this->camera.translate_relative(translation);
+    }
 }
 
 void CanvasView::set_default_pos() {
@@ -77,28 +116,19 @@ void CanvasView::set_default_pos() {
 
     float window_aspect = this->frame_buffer.aspect();
 
-    float bounds_width = bounds.max.x - bounds.min.x;
-    float bounds_height = bounds.max.y - bounds.min.y;
-    float bounds_aspect = bounds_width / bounds_height;
+    this->camera.set_viewport(
+        _geom::AABB2D::center_cover(
+            _geom::AABB2D::from_3d(bounds),
+            window_aspect
+        )
+    );
+}
 
-    glm::vec2 center = 0.5f * (bounds.min + bounds.max);
-
-    float half_width, half_height;
-
-    if (window_aspect > bounds_aspect) {
-        // Window is wider than content – pad width
-        half_height = 0.5f * bounds_height;
-        half_width = half_height * window_aspect;
-    } else {
-        // Window is taller than content – pad height
-        half_width = 0.5f * bounds_width;
-        half_height = half_width / window_aspect;
-    }
-
-    glm::vec2 min_view = center - glm::vec2(half_width, half_height);
-    glm::vec2 max_view = center + glm::vec2(half_width, half_height);
-
-    this->camera.set_bounds({min_view.x, max_view.x}, {min_view.y, max_view.y});
+void CanvasView::fix_view_aspect() {
+    float window_aspect = this->frame_buffer.aspect();
+    this->camera.set_viewport(
+        _geom::AABB2D::center_cover(this->camera.viewport, window_aspect)
+    );
 }
 
 }  // namespace slamd

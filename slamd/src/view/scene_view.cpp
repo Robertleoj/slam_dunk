@@ -12,7 +12,9 @@ glm::vec3 make_background_color(
 ) {
     glm::vec3 dir = -glm::vec3(view[2]);
     return glm::vec3(
-        (dir.x + 1.0f) * 0.5f, (dir.y + 1.0f) * 0.5f, (dir.z + 1.0f) * 0.5f
+        (dir.x + 1.0f) * 0.5f,
+        (dir.y + 1.0f) * 0.5f,
+        (dir.z + 1.0f) * 0.5f
     );
 }
 
@@ -53,7 +55,10 @@ void SceneView::render_to_frame_buffer() {
     auto view = this->arcball.view_matrix();
     auto background_color = make_background_color(view);
     gl::glViewport(
-        0, 0, this->frame_buffer.width(), this->frame_buffer.height()
+        0,
+        0,
+        this->frame_buffer.width(),
+        this->frame_buffer.height()
     );
 
     gl::glEnable(gl::GL_BLEND);
@@ -63,7 +68,10 @@ void SceneView::render_to_frame_buffer() {
     gl::glEnable(gl::GL_DEPTH_TEST);
 
     gl::glClearColor(
-        background_color.r, background_color.g, background_color.b, 1.0f
+        background_color.r,
+        background_color.g,
+        background_color.b,
+        1.0f
     );
     gl::glClear(gl::GL_COLOR_BUFFER_BIT);
 
@@ -82,7 +90,7 @@ void SceneView::handle_input() {
     if (ImGui::IsWindowFocused()) {
         this->handle_mouse_input();
         this->handle_translation_input();
-        if (ImGui::IsKeyPressed(ImGuiKey_Period)) {
+        if (ImGui::IsKeyPressed(ImGuiKey_Period, false)) {
             this->arcball.reset();
             this->xy_grid.set_arcball_zoom(this->arcball.radius);
             this->arcball_indicator.set_arcball_zoom(this->arcball.radius);
@@ -106,7 +114,8 @@ void SceneView::handle_mouse_input() {
             ImGui::ResetMouseDragDelta(ImGuiMouseButton_Left);
 
             auto min_window_dim = std::min(
-                this->frame_buffer.width(), this->frame_buffer.height()
+                this->frame_buffer.width(),
+                this->frame_buffer.height()
             );
 
             // pi per window size
@@ -119,7 +128,8 @@ void SceneView::handle_mouse_input() {
                 static_cast<float>(mouse_drag_delta_y) * scale_factor;
 
             this->arcball.rotate(
-                -Angle::rad(x_angle_diff), -Angle::rad(y_angle_diff)
+                -Angle::rad(x_angle_diff),
+                -Angle::rad(y_angle_diff)
             );
             this->arcball_indicator.interact();
         }
