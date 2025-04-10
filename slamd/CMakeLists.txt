@@ -3,9 +3,6 @@ cmake_minimum_required(VERSION 3.22)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_C_COMPILER /usr/bin/gcc-13)
-set(CMAKE_CXX_COMPILER /usr/bin/g++-13)
-set(CMAKE_LINKER /usr/bin/ldd)
 
 project(slam_dunk VERSION 0.1.0)
 
