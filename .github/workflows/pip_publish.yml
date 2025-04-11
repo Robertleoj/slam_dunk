@@ -22,6 +22,26 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libglfw3-dev \
+            libx11-dev \
+            libxcursor-dev \
+            libxrandr-dev \
+            libxinerama-dev \
+            libxi-dev \
+            libwayland-dev \
+            wayland-protocols \
+            wayland-scanner++ \
+            libegl1-mesa-dev \
+            libgles2-mesa-dev \
+            libsdl2-dev \
+            qtbase5-dev \
+            libgtk-3-dev \
+            libgtk-4-dev
+
       - name: Copy stuff
         run: |
           rm -rf python_bindings/vendored_deps
