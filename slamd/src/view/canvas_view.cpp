@@ -14,10 +14,50 @@ CanvasView::CanvasView(
       camera(gmath::Rect2D({0.0, 0.0}, {1.0, 1.0})),
       manually_moved(false) {}
 
+void CanvasView::draw_overlay(
+    ImVec2 available_size
+) {
+    glm::vec2 world_mouse_pos =
+        this->camera.get_world_coords(this->get_normalized_mouse_pos());
+
+    // 🧠 Proper overlay using ImGui window primitives
+    ImGuiWindowFlags overlay_flags =
+        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize |
+        ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
+        ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoInputs;  // optional: make it click-through
+
+    ImVec2 window_pos = ImGui::GetWindowPos();
+
+    ImVec2 overlay_pos = ImVec2(
+        window_pos.x + available_size.x - 10.0f,
+        window_pos.y + available_size.y - 10.0f
+    );
+    ImGui::SetNextWindowBgAlpha(0.85f);  // translucent dark bg
+    ImGui::SetNextWindowPos(
+        overlay_pos,
+        ImGuiCond_Always,
+        ImVec2(1.0f, 1.0f)
+    );  // bottom-right
+
+    if (ImGui::Begin("MousePosOverlay", nullptr, overlay_flags)) {
+        ImGui::PushFont(
+            ImGui::GetFont()
+        );  // optional: use bigger font if you loaded one
+        ImGui::Text(
+            "Mouse: (%.1f, %.1f)",
+            world_mouse_pos.x,
+            world_mouse_pos.y
+        );
+        ImGui::PopFont();
+    }
+    ImGui::End();
+}
+
 void CanvasView::render_to_imgui() {
-    ImVec2 availSize = ImGui::GetContentRegionAvail();
-    int width = static_cast<int>(availSize.x);
-    int height = static_cast<int>(availSize.y);
+    ImVec2 available_size = ImGui::GetContentRegionAvail();
+    int width = static_cast<int>(available_size.x);
+    int height = static_cast<int>(available_size.y);
     this->frame_buffer.rescale(width, height);
 
     if (!this->manually_moved) {
@@ -34,6 +74,8 @@ void CanvasView::render_to_imgui() {
         ImVec2(0, 1),
         ImVec2(1, 0)
     );
+
+    this->draw_overlay(available_size);
 
     this->frame_timer.log_frame();
     this->handle_input();
@@ -93,7 +135,7 @@ void CanvasView::handle_mouse_input() {
             ImGui::ResetMouseDragDelta(ImGuiMouseButton_Left);
 
             this->camera.translate_normalized(
-                {-mouse_drag_delta_x, mouse_drag_delta_y}
+                {-mouse_drag_delta_x, -mouse_drag_delta_y}
             );
             this->manually_moved = true;
         }
@@ -103,25 +145,28 @@ void CanvasView::handle_mouse_input() {
 
             float zoom_amount = static_cast<float>(scroll_input) * 0.1f;
 
-            ImVec2 mouse_pos_global = ImGui::GetMousePos();
-            ImVec2 viewport_loc = ImGui::GetItemRectMin();
-
-            float mouse_pos_x =
-                static_cast<float>(mouse_pos_global.x - viewport_loc.x) /
-                static_cast<float>(this->frame_buffer.width());
-            float mouse_pos_y =
-                1.0f -
-                (static_cast<float>(mouse_pos_global.y - viewport_loc.y) /
-                 static_cast<float>(this->frame_buffer.height()));
-
             this->camera.zoom_relative(
                 zoom_amount,
-                glm::vec2(mouse_pos_x, mouse_pos_y)
+                this->get_normalized_mouse_pos()
             );
 
             this->manually_moved = true;
         }
     }
+}
+
+glm::vec2 CanvasView::get_normalized_mouse_pos() {
+    ImVec2 mouse_pos_global = ImGui::GetMousePos();
+    ImVec2 viewport_loc = ImGui::GetItemRectMin();
+
+    float mouse_pos_x =
+        static_cast<float>(mouse_pos_global.x - viewport_loc.x) /
+        static_cast<float>(this->frame_buffer.width());
+    float mouse_pos_y =
+        (static_cast<float>(mouse_pos_global.y - viewport_loc.y) /
+         static_cast<float>(this->frame_buffer.height()));
+
+    return glm::vec2(mouse_pos_x, mouse_pos_y);
 }
 
 void CanvasView::handle_translation_input() {
@@ -131,7 +176,7 @@ void CanvasView::handle_translation_input() {
     float zoom = 0.0f;
 
     glm::vec2 right(movement_amount, 0.0f);
-    glm::vec2 up(0.0, movement_amount);
+    glm::vec2 up(0.0, -movement_amount);
 
     if (ImGui::IsKeyDown(ImGuiKey_D)) {
         translation += right;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <imgui.h>
 #include <memory>
 #include <slamd/camera_2d.hpp>
 #include <slamd/frame_buffer.hpp>
@@ -24,6 +25,7 @@ class CanvasView : public View {
     void render_to_imgui() override;
 
    private:
+    void draw_overlay(ImVec2 available_size);
     void render_to_frame_buffer();
     void set_default_pos();
     void fix_view_aspect();
@@ -31,6 +33,7 @@ class CanvasView : public View {
     void handle_input();
     void handle_translation_input();
     void handle_mouse_input();
+    glm::vec2 get_normalized_mouse_pos();
 };
 
 }  // namespace slamd

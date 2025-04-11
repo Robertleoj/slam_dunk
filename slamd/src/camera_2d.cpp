@@ -14,10 +14,10 @@ glm::mat4 Camera2D::get_projection_matrix() const {
     return glm::ortho(
         this->viewport.top_left.x,
         this->viewport.bottom_right.x,
-        this->viewport.top_left.y,
         this->viewport.bottom_right.y,
-        -1.0f,
-        1.0f
+        this->viewport.top_left.y,
+        -100.0f,
+        10000.0f
     );
 }
 
@@ -66,6 +66,12 @@ void Camera2D::translate_normalized(
 ) {
     glm::vec2 unnormalized = this->viewport.size() * normalized_translation;
     this->viewport = this->viewport.translate(unnormalized);
+}
+
+glm::vec2 Camera2D::get_world_coords(
+    glm::vec2 normalized_mouse_pos
+) {
+    return this->viewport.unnormalize(normalized_mouse_pos);
 }
 
 }  // namespace slamd

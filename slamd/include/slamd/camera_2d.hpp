@@ -22,6 +22,8 @@ class Camera2D {
     );
 
     void translate_normalized(glm::vec2 normalized_translation);
+
+    glm::vec2 get_world_coords(glm::vec2 normalized_window_coords);
 };
 
 }  // namespace slamd

@@ -46,6 +46,37 @@ slamd::data::Image read_image() {
     return slamd::data::Image(std::move(data), width, height, channels);
 }
 
+float random_float(
+    float start,
+    float end
+) {
+    float norm = static_cast<float>(rand()) / RAND_MAX;
+    return norm * (end - start) + start;
+}
+
+auto random_points() {
+    std::vector<glm::vec2> pos;
+    std::vector<float> rad;
+    std::vector<glm::vec3> col;
+
+    for (size_t i = 0; i < 500; i++) {
+        pos.emplace_back(
+            random_float(0.0f, 1024.0f),
+            random_float(0.0f, 630.0f)
+        );
+
+        rad.push_back(random_float(5.0f, 10.0f));
+
+        col.emplace_back(
+            random_float(0.0f, 1.0f),
+            random_float(0.0f, 1.0f),
+            random_float(0.0f, 1.0f)
+        );
+    }
+
+    return slamd::geom2d::points_2d(pos, col, rad);
+}
+
 int main() {
     spdlog::set_level(spdlog::level::debug);
     slamd::Window window("hello_canvas", 1000, 1000);
@@ -57,6 +88,8 @@ int main() {
     slamd::data::Image image = read_image();
 
     canvas->set_object("/image", slamd::geom2d::image(std::move(image)));
+
+    canvas->set_object("/points", random_points());
 
     window.wait_for_close();
 }

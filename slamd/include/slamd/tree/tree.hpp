@@ -15,7 +15,7 @@ class Tree {
    public:
     Tree();
 
-    void set_object(
+    virtual void set_object(
         const std::string& path,
         std::shared_ptr<_geom::Geometry> object
     );
@@ -28,6 +28,9 @@ class Tree {
     void
     set_transform_mat4(const std::string& path, const glm::mat4& transform);
 
+    std::optional<Node*> traverse(const TreePath& path);
+    Node* make_path(TreePath path);
+
    private:
     void render_recursive(
         const Node* node,
@@ -37,9 +40,9 @@ class Tree {
     ) const;
 
     std::optional<gmath::AABB>
+
     bounds_recursive(const Node* node, const glm::mat4& prev_transform);
 
-    Node* make_path(TreePath path);
 };
 
 }  // namespace _tree
@@ -60,6 +63,14 @@ std::shared_ptr<Scene> scene();
 class Canvas : public _tree::Tree {
    public:
     void set_transform(const std::string& path, glm::mat3 transform);
+    void set_object(
+        const std::string& path,
+        std::shared_ptr<_geom::Geometry> object
+    ) override;
+
+   private:
+    uint64_t insertion_order_counter;
+    float new_depth();
 };
 
 std::shared_ptr<Canvas> canvas();

@@ -44,6 +44,26 @@ void Tree::set_transform_mat4(
     node->set_transform(transform);
 }
 
+std::optional<Node*> Tree::traverse(
+    const TreePath& path
+) {
+    Node* current_node = root.get();
+
+    for (size_t i = 0; i < path.components.size(); i++) {
+        auto& component = path.components[i];
+
+        auto child_iterator = current_node->children.find(component);
+
+        if (child_iterator == current_node->children.end()) {
+            return std::nullopt;
+        }
+
+        current_node = child_iterator->second.get();
+    }
+
+    return current_node;
+}
+
 void Tree::render_recursive(
     const Node* node,
     const glm::mat4& current_transform,
@@ -161,7 +181,40 @@ void Canvas::set_transform(
     const std::string& path,
     glm::mat3 transform
 ) {
-    this->set_transform_mat4(path, gmath::xy_to_3d(transform));
+    auto new_transform = gmath::xy_to_3d(transform);
+    auto node = this->make_path(path);
+
+    auto node_transform = node->get_transform().value_or(glm::mat4(1.0));
+
+    new_transform[3][2] = node_transform[3][2];
+
+    node->set_transform(new_transform);
+}
+
+void Canvas::set_object(
+    const std::string& path,
+    std::shared_ptr<_geom::Geometry> object
+) {
+    auto node = this->make_path(path);
+
+    bool is_first_insert = !node->get_object().has_value();
+
+    node->set_object(object);
+
+    if (is_first_insert) {
+        auto node_transform = node->get_transform().value_or(glm::mat4(1.0));
+
+        node_transform[3][2] = this->new_depth();
+
+        node->set_transform(node_transform);
+    }
+}
+
+float Canvas::new_depth() {
+    float new_depth =
+        static_cast<float>(this->insertion_order_counter) / 100.0f;
+    this->insertion_order_counter += 1;
+    return new_depth;
 }
 
 std::shared_ptr<Canvas> canvas() {

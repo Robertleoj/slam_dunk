@@ -48,6 +48,7 @@ target_sources(
         src/gmath/transforms.cpp
 
         src/geom/utils.cpp
+        src/geom/points_2d.cpp
         src/geom/geometry.cpp
         src/geom/box.cpp
         src/geom/simple_mesh.cpp

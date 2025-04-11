@@ -15,5 +15,6 @@ class Geometry {
 
     virtual std::optional<gmath::AABB> bounds();
 };
+
 }  // namespace _geom
 }  // namespace slamd
