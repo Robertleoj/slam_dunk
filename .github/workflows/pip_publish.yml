@@ -1,8 +1,12 @@
 name: Upload Python Package to PyPI when a Release is Created
 
+# on:
+# release:
+#   types: [created]
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main # or whatever branch you're pushing to
 
 jobs:
   pypi-publish:
@@ -21,7 +25,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
       - name: Install build deps
         run: |
