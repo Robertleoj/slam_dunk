@@ -216,6 +216,45 @@ struct type_caster<std::vector<glm::vec2>> {
     }
 };
 
+template <>
+struct type_caster<slamd::data::Image> {
+    PYBIND11_TYPE_CASTER(
+        slamd::data::Image,
+        _("numpy.ndarray[uint8[H][W][C]]")
+    );
+
+    bool load(
+        handle src,
+        bool
+    ) {
+        // Ensure it's a 3D numpy array of uint8
+        auto buf =
+            py::array_t<uint8_t, py::array::c_style | py::array::forcecast>::
+                ensure(src);
+        if (!buf || buf.ndim() != 3) {
+            return false;
+        }
+
+        size_t height = buf.shape(0);
+        size_t width = buf.shape(1);
+        size_t channels = buf.shape(2);
+
+        std::vector<uint8_t> data(buf.size());
+        std::memcpy(data.data(), buf.data(), buf.size());
+
+        value = slamd::data::Image{std::move(data), width, height, channels};
+        return true;
+    }
+
+    static handle cast(
+        const slamd::data::Image&,
+        return_value_policy,
+        handle
+    ) {
+        throw std::runtime_error("Casting data::Image → numpy not supported");
+    }
+};
+
 }  // namespace pybind11::detail
 
 int add_numbers(
@@ -292,6 +331,11 @@ void define_private_geom(
         slamd::geom::Triad,
         slamd::_geom::Geometry,
         std::shared_ptr<slamd::geom::Triad>>(m, "Triad");
+
+    py::class_<
+        slamd::geom::Image,
+        slamd::_geom::Geometry,
+        std::shared_ptr<slamd::geom::Image>>(m, "Image");
 }
 
 void define_geom(
@@ -425,6 +469,15 @@ void define_geom2d(
         py::arg("colors"),
         py::arg("radii"),
         "Create 2D points with per-point color and radius"
+    );
+
+    m.def(
+        "image",
+        [](slamd::data::Image img) {
+            return slamd::geom2d::image(std::move(img));
+        },
+        py::arg("image"),
+        "Create an Image geometry from a NumPy uint8 array (H, W, C)"
     );
 }
 

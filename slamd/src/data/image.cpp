@@ -3,6 +3,7 @@
 namespace slamd {
 namespace data {
 
+Image::Image() {}
 Image::Image(
     const std::vector<uint8_t>& data,
     size_t width,

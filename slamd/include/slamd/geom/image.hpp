@@ -50,6 +50,8 @@ namespace geom2d {
 using _geom::Image;
 
 std::shared_ptr<Image> image(data::Image&& image);
+
+
 }  // namespace geom2d
 
 }  // namespace slamd

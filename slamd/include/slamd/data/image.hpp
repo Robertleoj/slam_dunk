@@ -7,6 +7,7 @@ namespace data {
 
 class Image {
    public:
+    Image();
     Image(
         const std::vector<uint8_t>& data,
         size_t width,
@@ -14,17 +15,17 @@ class Image {
         size_t channels
     );
 
-    Image (
-        std::vector<uint8_t> &&data,
+    Image(
+        std::vector<uint8_t>&& data,
         size_t width,
         size_t height,
         size_t channels
     );
 
-    const std::vector<uint8_t> data;
-    const size_t width;
-    const size_t height;
-    const size_t channels;
+    std::vector<uint8_t> data;
+    size_t width;
+    size_t height;
+    size_t channels;
 };
 
 }  // namespace data
