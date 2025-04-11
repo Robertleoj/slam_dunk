@@ -12,3 +12,7 @@ requires-python = ">=3.11"
 
 [tool.scikit-build]
 minimum-version = "build-system.requires"
+
+[tool.cibuildwheel]
+build = "cp311-manylinux_x86_64"
+skip = ["*musllinux*", "*win*", "*macos*", "pp*"]
