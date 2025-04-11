@@ -1,0 +1,18 @@
+[submodule "vendored_deps/spdlog"]
+	path = vendored_deps/spdlog
+	url = git@github.com:gabime/spdlog.git
+[submodule "vendored_deps/glm"]
+	path = vendored_deps/glm
+	url = git@github.com:g-truc/glm.git
+[submodule "vendored_deps/glbinding"]
+	path = vendored_deps/glbinding
+	url = https://github.com/cginternals/glbinding
+[submodule "vendored_deps/imgui"]
+	path = vendored_deps/imgui
+	url = git@github.com:ocornut/imgui.git
+[submodule "vendored_deps/pybind11"]
+	path = vendored_deps/pybind11
+	url = git@github.com:pybind/pybind11.git
+[submodule "vendored_deps/glfw"]
+	path = vendored_deps/glfw
+	url = git@github.com:glfw/glfw.git
