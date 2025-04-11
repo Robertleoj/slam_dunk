@@ -25,7 +25,6 @@ class CanvasView : public View {
     void render_to_imgui() override;
 
    private:
-    void draw_overlay(ImVec2 available_size);
     void render_to_frame_buffer();
     void set_default_pos();
     void fix_view_aspect();

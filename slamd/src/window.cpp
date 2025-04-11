@@ -92,9 +92,17 @@ void Window::render_job(
                         ImGuiCond_Once
                     );
                 }
-                ImGui::Begin(scene_name.c_str());
+                ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+
+                ImGui::Begin(
+                    scene_name.c_str(),
+                    nullptr,
+                    ImGuiWindowFlags_NoScrollbar |
+                        ImGuiWindowFlags_NoScrollWithMouse
+                );
                 scene->render_to_imgui();
                 ImGui::End();
+                ImGui::PopStyleVar();
             }
         }
 

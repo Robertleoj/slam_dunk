@@ -14,95 +14,13 @@ CanvasView::CanvasView(
       camera(gmath::Rect2D({0.0, 0.0}, {1.0, 1.0})),
       manually_moved(false) {}
 
-// void CanvasView::draw_overlay(
-//     ImVec2 available_size
-// ) {
-//     glm::vec2 world_mouse_pos =
-//         this->camera.get_world_coords(this->get_normalized_mouse_pos());
-
-//     // 🧠 Proper overlay using ImGui window primitives
-//     ImGuiWindowFlags overlay_flags =
-//         ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize |
-//         ImGuiWindowFlags_NoSavedSettings |
-//         ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav |
-//         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoInputs;  // optional:
-
-//     ImVec2 window_pos = ImGui::GetWindowPos();
-
-//     ImVec2 overlay_pos = ImVec2(
-//         window_pos.x + available_size.x - 10.0f,
-//         window_pos.y + available_size.y - 10.0f
-//     );
-//     ImGui::SetNextWindowBgAlpha(0.85f);  // translucent dark bg
-//     ImGui::SetNextWindowPos(
-//         overlay_pos,
-//         ImGuiCond_Always,
-//         ImVec2(1.0f, 1.0f)
-//     );  // bottom-right
-
-//     if (ImGui::Begin("MousePosOverlay", nullptr, overlay_flags)) {
-//         ImGui::PushFont(
-//             ImGui::GetFont()
-//         );  // optional: use bigger font if you loaded one
-//         ImGui::Text(
-//             "Mouse: (%.1f, %.1f)",
-//             world_mouse_pos.x,
-//             world_mouse_pos.y
-//         );
-//         ImGui::PopFont();
-//     }
-//     ImGui::End();
-// }
-
-void CanvasView::draw_overlay(
-    ImVec2 available_size
-) {
-    glm::vec2 world_mouse_pos =
-        this->camera.get_world_coords(this->get_normalized_mouse_pos());
-
-    ImVec2 overlay_size = ImVec2(200.0f, 20.0f);
-    ImVec2 overlay_pos = ImVec2(
-        available_size.x - 10.0f - overlay_size.x,
-        available_size.y - 10.0f - overlay_size.y
-    );
-
-    ImGui::SetCursorPos(overlay_pos);  // relative to parent window
-    ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
-    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0, 0, 0, 0.85f));
-
-    if (ImGui::BeginChild(
-            "MouseOverlayChild",
-            overlay_size,
-            true,
-            ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs
-        )) {
-        // Center the text horizontally and vertically
-        ImVec2 text_size = ImGui::CalcTextSize("Mouse: (0000.0, 0000.0)");
-        ImVec2 child_size = ImGui::GetWindowSize();
-
-        ImVec2 text_pos = ImVec2(
-            (child_size.x - text_size.x) * 0.5f,
-            (child_size.y - text_size.y) * 0.5f
-        );
-
-        ImGui::SetCursorPos(text_pos);
-        ImGui::Text(
-            "Mouse: (%.1f, %.1f)",
-            world_mouse_pos.x,
-            world_mouse_pos.y
-        );
-    }
-
-    ImGui::EndChild();
-
-    ImGui::PopStyleColor();
-    ImGui::PopStyleVar();
-}
-
 void CanvasView::render_to_imgui() {
-    ImVec2 available_size = ImGui::GetContentRegionAvail();
-    int width = static_cast<int>(available_size.x);
-    int height = static_cast<int>(available_size.y);
+    ImVec2 full_size = ImGui::GetContentRegionAvail();
+    float overlay_height = 24.0f;
+    ImVec2 image_size = ImVec2(full_size.x, full_size.y - overlay_height);
+
+    int width = static_cast<int>(image_size.x);
+    int height = static_cast<int>(image_size.y);
     this->frame_buffer.rescale(width, height);
 
     if (!this->manually_moved) {
@@ -115,15 +33,40 @@ void CanvasView::render_to_imgui() {
 
     ImGui::Image(
         (ImTextureID)this->frame_buffer.frame_texture(),
-        ImGui::GetContentRegionAvail(),
+        image_size,
         ImVec2(0, 1),
         ImVec2(1, 0)
     );
 
-    this->draw_overlay(available_size);
+    this->handle_input();
+
+    glm::vec2 world_mouse_pos =
+        this->camera.get_world_coords(this->get_normalized_mouse_pos());
+
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.0f);
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0, 0, 0, 0.85f));
+    if (ImGui::BeginChild(
+            "MouseInfoStrip",
+            ImVec2(full_size.x, overlay_height),
+            false
+        )) {
+        ImVec2 text_size = ImGui::CalcTextSize("Mouse: (0000.0, 0000.0)");
+        ImVec2 win_size = ImGui::GetWindowSize();
+        ImGui::SetCursorPos(ImVec2(
+            (win_size.x - text_size.x) * 0.5f,
+            (win_size.y - text_size.y) * 0.5f
+        ));
+        ImGui::Text(
+            "Mouse: (%.1f, %.1f)",
+            world_mouse_pos.x,
+            world_mouse_pos.y
+        );
+    }
+    ImGui::EndChild();
+    ImGui::PopStyleColor();
+    ImGui::PopStyleVar();
 
     this->frame_timer.log_frame();
-    this->handle_input();
 }
 
 void CanvasView::render_to_frame_buffer() {
