@@ -4,17 +4,37 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+option(SLAMD_ENABLE_INSTALL "Enable install targets" OFF)
+
 project(slam_dunk VERSION 0.1.0)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-find_package(glbinding CONFIG REQUIRED)
-find_package(glfw3 CONFIG REQUIRED)
-find_package(spdlog CONFIG REQUIRED)
-find_package(glm CONFIG REQUIRED)
-find_package(imgui CONFIG REQUIRED)
+# find_package(glbinding CONFIG REQUIRED)
+# find_package(glfw3 CONFIG REQUIRED)
+# find_package(spdlog CONFIG REQUIRED)
+# find_package(glm CONFIG REQUIRED)
+# find_package(imgui CONFIG REQUIRED)
 
-add_library(slamd)
+function(find_required_package pkg_name target_name found_var)
+    # Only run find_package() if the target isn’t already present.
+    if (NOT TARGET ${target_name})
+        find_package(${pkg_name} CONFIG QUIET)
+        if (NOT ${found_var})
+            message(FATAL_ERROR "${pkg_name} not found, bro! Build can't continue without it.")
+        endif()
+    endif()
+endfunction()
+
+# Slam those deps in with confidence:
+find_required_package(glbinding glbinding::glbinding glbinding_FOUND)
+find_required_package(glfw3 glfw3::glfw3 glfw3_FOUND)  # or "glfw" if that’s the real target
+find_required_package(spdlog spdlog::spdlog spdlog_FOUND)
+find_required_package(glm glm::glm glm_FOUND)
+find_required_package(imgui imgui::imgui imgui_FOUND)
+
+
+add_library(slamd STATIC)
 add_library(slamd::slamd ALIAS slamd)
 target_sources(
     slamd
@@ -90,39 +110,41 @@ target_link_libraries(
         glm::glm
 )
 
-install(TARGETS slamd
-    EXPORT slamdTargets
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    INCLUDES DESTINATION include
-)
 
-install(DIRECTORY include/ DESTINATION include)
+if(SLAMD_ENABLE_INSTALL)
+    install(TARGETS slamd
+        EXPORT slamdTargets
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        INCLUDES DESTINATION include
+    )
 
-include(CMakePackageConfigHelpers)
+    install(DIRECTORY include/ DESTINATION include)
 
-configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/slamdConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/slamdConfig.cmake"
-    INSTALL_DESTINATION share/slamd
-)
+    include(CMakePackageConfigHelpers)
 
-write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/slamdConfigVersion.cmake"
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY SameMajorVersion
-)
+    configure_package_config_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/slamdConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/slamdConfig.cmake"
+        INSTALL_DESTINATION share/slamd
+    )
 
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/slamdConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/slamdConfigVersion.cmake"
-    DESTINATION share/slamd
-)
+    write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/slamdConfigVersion.cmake"
+        VERSION ${PROJECT_VERSION}
+        COMPATIBILITY SameMajorVersion
+    )
 
-install(EXPORT slamdTargets
-    FILE slamdTargets.cmake
-    NAMESPACE slamd::
-    DESTINATION share/slamd
-)
+    install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/slamdConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/slamdConfigVersion.cmake"
+        DESTINATION share/slamd
+    )
 
+    install(EXPORT slamdTargets
+        FILE slamdTargets.cmake
+        NAMESPACE slamd::
+        DESTINATION share/slamd
+    )
+endif()

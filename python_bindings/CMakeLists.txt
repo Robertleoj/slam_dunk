@@ -30,7 +30,6 @@ target_include_directories(
 
     PRIVATE
 
-
     ${LIB_DIR}/glm
     ${LIB_DIR}/glbinding/include
     ${LIB_DIR}/glfw/include
