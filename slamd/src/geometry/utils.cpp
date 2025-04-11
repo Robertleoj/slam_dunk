@@ -1,4 +1,5 @@
 #include <numbers>
+#include <ranges>
 #include <slamd/geometry/utils.hpp>
 
 namespace slamd {
@@ -61,6 +62,74 @@ size_t generate_sphere(
     }
 
     return num_added;
+}
+
+std::vector<glm::vec3> compute_vertex_normals(
+    const std::vector<glm::vec3>& vertices,
+    const std::vector<uint32_t>& triangle_indices
+) {
+    std::vector<glm::vec3> normals;
+
+    // compute normals
+    normals.resize(vertices.size(), glm::vec3(0.0f));
+
+    for (size_t i = 0; i < triangle_indices.size(); i += 3) {
+        uint32_t i0 = triangle_indices[i];
+        uint32_t i1 = triangle_indices[i + 1];
+        uint32_t i2 = triangle_indices[i + 2];
+
+        glm::vec3 v0 = vertices[i0];
+        glm::vec3 v1 = vertices[i1];
+        glm::vec3 v2 = vertices[i2];
+
+        glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
+
+        normals[i0] += normal;
+        normals[i1] += normal;
+        normals[i2] += normal;
+    }
+
+    for (auto& n : normals) {
+        n = glm::normalize(n);
+    }
+    return normals;
+}
+
+data::ColoredMesh make_colored_mesh(
+    const std::vector<glm::vec3>& vertex_positions,
+    const std::vector<glm::vec3>& vertex_colors,
+    const std::vector<uint32_t>& triangle_indices
+) {
+    auto normals = compute_vertex_normals(vertex_positions, triangle_indices);
+
+    data::ColoredMesh mesh;
+
+    for (const auto& [vert, col, norm] :
+         std::views::zip(vertex_positions, vertex_colors, normals)) {
+        mesh.vertices.emplace_back(vert, col, norm);
+    }
+
+    mesh.triangle_indices = std::move(triangle_indices);
+
+    return mesh;
+}
+
+data::Mesh make_mesh(
+    const std::vector<glm::vec3>& vertex_positions,
+    const std::vector<uint32_t>& triangle_indices
+) {
+    auto normals = compute_vertex_normals(vertex_positions, triangle_indices);
+
+    data::Mesh mesh;
+
+    for (const auto& [vert, norm] :
+         std::views::zip(vertex_positions, normals)) {
+        mesh.vertices.emplace_back(vert, norm);
+    }
+
+    mesh.triangle_indices = std::move(triangle_indices);
+
+    return mesh;
 }
 
 }  // namespace _geometry

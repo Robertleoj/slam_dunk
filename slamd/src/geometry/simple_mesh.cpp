@@ -1,6 +1,8 @@
 #include <ranges>
 #include <slamd/assert.hpp>
+#include <slamd/constants.hpp>
 #include <slamd/geometry/simple_mesh.hpp>
+#include <slamd/geometry/utils.hpp>
 #include <slamd/paths.hpp>
 
 namespace slamd {
@@ -31,8 +33,8 @@ void SimpleMesh::initialize() {
     gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.vbo_id);
     gl::glBufferData(
         gl::GL_ARRAY_BUFFER,
-        vertices.size() * sizeof(data::ColoredVertex),
-        vertices.data(),
+        this->mesh_data.vertices.size() * sizeof(data::ColoredVertex),
+        this->mesh_data.vertices.data(),
         gl::GL_STATIC_DRAW
     );
 
@@ -42,8 +44,8 @@ void SimpleMesh::initialize() {
 
     gl::glBufferData(
         gl::GL_ELEMENT_ARRAY_BUFFER,
-        triangle_indices.size() * sizeof(uint32_t),
-        triangle_indices.data(),
+        this->mesh_data.triangle_indices.size() * sizeof(uint32_t),
+        this->mesh_data.triangle_indices.data(),
         gl::GL_STATIC_DRAW
     );
 
@@ -69,6 +71,17 @@ void SimpleMesh::initialize() {
     );
     gl::glEnableVertexAttribArray(1);
 
+    // Normals
+    gl::glVertexAttribPointer(
+        2,
+        3,
+        gl::GL_FLOAT,
+        gl::GL_FALSE,
+        sizeof(data::ColoredVertex),
+        (void*)offsetof(data::ColoredVertex, normal)
+    );
+    gl::glEnableVertexAttribArray(2);
+
     // unbind the vao
     gl::glBindVertexArray(0);
 
@@ -76,33 +89,23 @@ void SimpleMesh::initialize() {
 }
 
 SimpleMesh::SimpleMesh(
-    const std::vector<data::ColoredVertex>& vertices,
-    const std::vector<uint32_t>& triangle_indices
+    const data::ColoredMesh& mesh_data
 )
-    : vertices(vertices),
-      triangle_indices(triangle_indices) {}
+    : mesh_data(mesh_data) {}
 
 SimpleMesh::SimpleMesh(
     const std::vector<glm::vec3>& vertices,
     const std::vector<glm::vec3>& vertex_colors,
     const std::vector<uint32_t>& triangle_indices
-)
-    : triangle_indices(triangle_indices) {
+) {
     if (vertices.size() != vertex_colors.size()) {
         throw std::invalid_argument(
             "number of vertices must equal number of vertex colors"
         );
     }
 
-    std::vector<data::ColoredVertex> colored_vertices;
-    colored_vertices.reserve(vertices.size());
-
-    for (const auto& [vertex, vertex_color] :
-         std::views::zip(vertices, vertex_colors)) {
-        colored_vertices.emplace_back(vertex, vertex_color);
-    }
-
-    this->vertices = std::move(colored_vertices);
+    this->mesh_data =
+        make_colored_mesh(vertices, vertex_colors, triangle_indices);
 }
 
 void SimpleMesh::render(
@@ -129,9 +132,10 @@ void SimpleMesh::render(
     shader.setUniform("model", model);
     shader.setUniform("view", view);
     shader.setUniform("projection", projection);
+    shader.setUniform("light_dir", slamd::_const::light_dir);
     gl::glDrawElements(
         gl::GL_TRIANGLES,
-        this->triangle_indices.size(),
+        this->mesh_data.triangle_indices.size(),
         gl::GL_UNSIGNED_INT,
         0
     );
@@ -143,10 +147,9 @@ void SimpleMesh::render(
 namespace geometry {
 
 std::shared_ptr<SimpleMesh> simple_mesh(
-    const std::vector<data::ColoredVertex>& vertices,
-    const std::vector<uint32_t>& triangle_indices
+    const data::ColoredMesh& mesh_data
 ) {
-    return std::make_shared<SimpleMesh>(vertices, triangle_indices);
+    return std::make_shared<SimpleMesh>(mesh_data);
 }
 
 std::shared_ptr<SimpleMesh> simple_mesh(

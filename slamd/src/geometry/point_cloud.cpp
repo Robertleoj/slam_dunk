@@ -43,13 +43,7 @@ SimpleMesh PointCloud::make_mesh(
         vertex_colors.insert(vertex_colors.end(), num_added, col);
     }
 
-    std::vector<data::ColoredVertex> colored_vertices;
-    colored_vertices.reserve(vertices.size());
-    for (const auto& [vert, col] : std::views::zip(vertices, vertex_colors)) {
-        colored_vertices.emplace_back(vert, col);
-    }
-
-    return SimpleMesh(colored_vertices, indices);
+    return SimpleMesh(vertices, vertex_colors, indices);
 }
 
 }  // namespace _geometry

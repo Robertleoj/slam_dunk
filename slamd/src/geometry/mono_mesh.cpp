@@ -1,5 +1,7 @@
 #include <slamd/assert.hpp>
+#include <slamd/constants.hpp>
 #include <slamd/geometry/mono_mesh.hpp>
+#include <slamd/geometry/utils.hpp>
 #include <slamd/paths.hpp>
 
 namespace slamd {
@@ -21,38 +23,48 @@ void MonoMesh::initialize() {
 
     GLData gl_data;
 
-    // create the vertex array object
     gl::glGenVertexArrays(1, &gl_data.vao_id);
     gl::glBindVertexArray(gl_data.vao_id);
 
-    // make the vertex buffer object
+    // Vertex positions
     gl::glGenBuffers(1, &gl_data.vbo_id);
     gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.vbo_id);
     gl::glBufferData(
         gl::GL_ARRAY_BUFFER,
-        vertices.size() * sizeof(glm::vec3),
-        vertices.data(),
+        mesh_data.vertices.size() * sizeof(data::Vertex),
+        mesh_data.vertices.data(),
         gl::GL_STATIC_DRAW
     );
-
-    // make the element array buffer
-    gl::glGenBuffers(1, &gl_data.eab_id);
-    gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, gl_data.eab_id);
-
-    gl::glBufferData(
-        gl::GL_ELEMENT_ARRAY_BUFFER,
-        triangle_indices.size() * sizeof(uint32_t),
-        triangle_indices.data(),
-        gl::GL_STATIC_DRAW
-    );
-
-    // Position attribute (location = 0)
     gl::glVertexAttribPointer(
-        0, 3, gl::GL_FLOAT, gl::GL_FALSE, sizeof(glm::vec3), (void*)0
+        0,
+        3,
+        gl::GL_FLOAT,
+        gl::GL_FALSE,
+        sizeof(data::Vertex),
+        (void*)0
     );
     gl::glEnableVertexAttribArray(0);
 
-    // unbind the vao
+    gl::glVertexAttribPointer(
+        1,
+        3,
+        gl::GL_FLOAT,
+        gl::GL_FALSE,
+        sizeof(data::Vertex),
+        (void*)offsetof(data::Vertex, normal)
+    );
+    gl::glEnableVertexAttribArray(1);
+
+    // Indices
+    gl::glGenBuffers(1, &gl_data.eab_id);
+    gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, gl_data.eab_id);
+    gl::glBufferData(
+        gl::GL_ELEMENT_ARRAY_BUFFER,
+        mesh_data.triangle_indices.size() * sizeof(uint32_t),
+        mesh_data.triangle_indices.data(),
+        gl::GL_STATIC_DRAW
+    );
+
     gl::glBindVertexArray(0);
 
     this->gl_data.emplace(gl_data);
@@ -63,9 +75,8 @@ MonoMesh::MonoMesh(
     std::vector<uint32_t> triangle_indices,
     glm::vec3 color
 )
-    : vertices(vertices),
-      triangle_indices(triangle_indices),
-      color(color) {}
+    : color(color),
+      mesh_data(make_mesh(vertices, triangle_indices)) {}
 
 void MonoMesh::render(
     glm::mat4 model,
@@ -92,8 +103,13 @@ void MonoMesh::render(
     shader.setUniform("view", view);
     shader.setUniform("projection", projection);
     shader.setUniform("color", this->color);
+    shader.setUniform("light_dir", slamd::_const::light_dir);
+
     gl::glDrawElements(
-        gl::GL_TRIANGLES, this->triangle_indices.size(), gl::GL_UNSIGNED_INT, 0
+        gl::GL_TRIANGLES,
+        this->mesh_data.triangle_indices.size(),
+        gl::GL_UNSIGNED_INT,
+        0
     );
     gl::glBindVertexArray(0);
 };

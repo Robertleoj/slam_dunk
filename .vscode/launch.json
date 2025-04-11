@@ -2,30 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug C++ hello world diy",
+      "name": "Debug C++",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/examples/do_it_yourself/diy",
-      "args": [],
-      "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": false,
-      "MIMode": "gdb",
-      "miDebuggerPath": "/usr/bin/gdb", // or wherever gdb is
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
-      ]
-    },
-    {
-      "name": "Debug C++ hello world managed",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/build/examples/hello_world/hello_world",
+      "program": "${workspaceFolder}/build/examples/point_cloud/point_cloud",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

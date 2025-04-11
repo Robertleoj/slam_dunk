@@ -1,11 +1,13 @@
+#include <ranges>
 #include <slamd/geometry/box.hpp>
+#include <slamd/geometry/utils.hpp>
 
 namespace slamd {
 namespace _geometry {
 
 // clang-format off
 // 6 faces * 4 vertices = 24 unique verts
-constexpr std::array<glm::vec3, 24> box_corners = {{
+const std::vector<glm::vec3> box_corners = {{
     // Back face
     {-0.5f, -0.5f, -0.5f}, {0.5f, -0.5f, -0.5f}, {0.5f, 0.5f, -0.5f}, {-0.5f, 0.5f, -0.5f},
     // Front face
@@ -20,7 +22,8 @@ constexpr std::array<glm::vec3, 24> box_corners = {{
     {-0.5f, -0.5f,  0.5f}, {0.5f, -0.5f,  0.5f}, {0.5f, -0.5f, -0.5f}, {-0.5f, -0.5f, -0.5f},
 }};
 
-constexpr std::array<glm::vec3, 24> vertex_colors = {{
+
+const std::vector<glm::vec3> vertex_colors = {{
     // Back face - red
     {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},
     // Front face - green
@@ -36,35 +39,53 @@ constexpr std::array<glm::vec3, 24> vertex_colors = {{
 }};
 
 const std::vector<uint32_t> box_indices = {{
-    // Back face
-    0, 1, 2, 2, 3, 0,
-    // Front face
-    4, 5, 6, 6, 7, 4,
-    // Left face
-    8, 9, 10, 10, 11, 8,
-    // Right face
-    12, 13, 14, 14, 15, 12,
-    // Top face
-    16, 17, 18, 18, 19, 16,
-    // Bottom face
-    20, 21, 22, 22, 23, 20
+    // Back face (Z-)
+    0, 2, 1, 0, 3, 2,
+    // Front face (Z+)
+    4, 5, 6, 4, 6, 7,
+    // Left face (X-)
+    8, 10, 9, 8, 11, 10,
+    // Right face (X+)
+    12, 13, 14, 12, 14, 15,
+    // Top face (Y+)
+    16, 18, 17, 16, 19, 18,
+    // Bottom face (Y-)
+    20, 21, 22, 20, 22, 23
 }};
+
+const std::vector<glm::vec3> vertex_normals = {{
+    // Back face (-Z)
+    {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f, -1.0f},
+    // Front face (+Z)
+    {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f},
+    // Left face (-X)
+    {-1.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f}, {-1.0f, 0.0f, 0.0f},
+    // Right face (+X)
+    {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f},
+    // Top face (+Y)
+    {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f, 0.0f},
+    // Bottom face (-Y)
+    {0.0f, -1.0f, 0.0f}, {0.0f, -1.0f, 0.0f}, {0.0f, -1.0f, 0.0f}, {0.0f, -1.0f, 0.0f},
+}};
+
+auto get_mesh_data() {
+
+
+    data::ColoredMesh mesh;
+
+    for (const auto&[vert, col, norm]: std::views::zip(box_corners, vertex_colors, vertex_normals)) {
+        mesh.vertices.emplace_back(vert, col, norm);
+    }
+
+    mesh.triangle_indices = box_indices;
+
+    return mesh;
+}
 
 // clang-format on
 
-std::vector<data::ColoredVertex> make_box_vertices() {
-    std::vector<data::ColoredVertex> vertices;
-    vertices.reserve(8);
-
-    for (int i = 0; i < 24; i++) {
-        vertices.emplace_back(box_corners[i], vertex_colors[i]);
-    }
-
-    return vertices;
-}
-
 Box::Box()
-    : box_mesh(make_box_vertices(), std::vector(box_indices)) {}
+    : box_mesh(get_mesh_data()) {}
 
 void Box::render(
     glm::mat4 model,

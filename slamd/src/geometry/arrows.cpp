@@ -1,11 +1,13 @@
 #include <slamd/geometry/arrows.hpp>
+#include <slamd/geometry/utils.hpp>
 
 namespace slamd {
 namespace _geometry {
 
 constexpr uint segments = 12;
 struct ArrowMesh {
-    std::vector<data::ColoredVertex> vertices;
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec3> colors;
     std::vector<uint32_t> indices;
 };
 
@@ -20,9 +22,11 @@ ArrowMesh generate_cone(
         float angle = glm::two_pi<float>() * i / segments;
         float x = std::cos(angle) * radius;
         float y = std::sin(angle) * radius;
-        mesh.vertices.push_back({glm::vec3(x, y, 0), color});
+        mesh.vertices.push_back(glm::vec3(x, y, 0));
+        mesh.colors.push_back(color);
     }
-    mesh.vertices.push_back({tip, color});  // tip
+    mesh.vertices.push_back(tip);  // tip
+    mesh.colors.push_back(color);
     uint32_t tip_idx = mesh.vertices.size() - 1;
     for (int i = 0; i < segments; ++i) {
         mesh.indices.insert(
@@ -34,11 +38,11 @@ ArrowMesh generate_cone(
 }
 
 void transform_geometry(
-    std::vector<data::ColoredVertex>& verts,
+    std::vector<glm::vec3>& verts,
     const glm::mat4& xform
 ) {
     for (auto& v : verts) {
-        v.position = glm::vec3(xform * glm::vec4(v.position, 1.0f));
+        v = glm::vec3(xform * glm::vec4(v, 1.0f));
     }
 }
 
@@ -52,8 +56,10 @@ ArrowMesh generate_cylinder(
         float angle = glm::two_pi<float>() * i / segments;
         float x = std::cos(angle) * radius;
         float y = std::sin(angle) * radius;
-        mesh.vertices.push_back({glm::vec3(x, y, 0), color});
-        mesh.vertices.push_back({glm::vec3(x, y, height), color});
+        mesh.vertices.push_back(glm::vec3(x, y, 0));
+        mesh.colors.push_back(color);
+        mesh.vertices.push_back(glm::vec3(x, y, height));
+        mesh.colors.push_back(color);
     }
     for (int i = 0; i < segments; ++i) {
         uint32_t a = i * 2;
@@ -97,11 +103,12 @@ ArrowMesh generate_arrow(
     auto shaft = generate_cylinder(thickness * 0.5f, shaft_len, color);
     transform_geometry(shaft.vertices, transform);
     mesh.vertices.insert(
-        mesh.vertices.end(), shaft.vertices.begin(), shaft.vertices.end()
+        mesh.vertices.end(),
+        shaft.vertices.begin(),
+        shaft.vertices.end()
     );
-    mesh.indices.insert(
-        mesh.indices.end(), shaft.indices.begin(), shaft.indices.end()
-    );
+    mesh.indices
+        .insert(mesh.indices.end(), shaft.indices.begin(), shaft.indices.end());
 
     glm::mat4 tip_xform =
         glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, shaft_len));
@@ -115,11 +122,12 @@ ArrowMesh generate_arrow(
     }
 
     mesh.vertices.insert(
-        mesh.vertices.end(), head.vertices.begin(), head.vertices.end()
+        mesh.vertices.end(),
+        head.vertices.begin(),
+        head.vertices.end()
     );
-    mesh.indices.insert(
-        mesh.indices.end(), head.indices.begin(), head.indices.end()
-    );
+    mesh.indices
+        .insert(mesh.indices.end(), head.indices.begin(), head.indices.end());
 
     return mesh;
 }
@@ -130,7 +138,7 @@ SimpleMesh make_arrows_mesh(
     const std::vector<glm::vec3>& colors,
     float thickness
 ) {
-    std::vector<data::ColoredVertex> verts;
+    std::vector<glm::vec3> vertices;
     std::vector<uint32_t> inds;
 
     uint32_t index_offset = 0;
@@ -138,7 +146,8 @@ SimpleMesh make_arrows_mesh(
         ArrowMesh mesh =
             generate_arrow(starts[i], ends[i], colors[i], thickness);
 
-        verts.insert(verts.end(), mesh.vertices.begin(), mesh.vertices.end());
+        vertices
+            .insert(vertices.end(), mesh.vertices.begin(), mesh.vertices.end());
 
         for (auto idx : mesh.indices) {
             inds.push_back(idx + index_offset);
@@ -147,7 +156,7 @@ SimpleMesh make_arrows_mesh(
         index_offset += mesh.vertices.size();
     }
 
-    return SimpleMesh(verts, inds);
+    return SimpleMesh(make_colored_mesh(vertices, colors, inds));
 }
 
 Arrows::Arrows(

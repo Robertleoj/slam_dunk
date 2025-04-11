@@ -3,6 +3,7 @@
 #include <glbinding/glbinding.h>
 #include <glm/glm.hpp>
 #include <optional>
+#include <slamd/data/colored_vertex.hpp>
 #include <slamd/geometry/geometry.hpp>
 #include <slamd/shaders.hpp>
 #include <slamd/thread_box.hpp>
@@ -37,8 +38,7 @@ class MonoMesh : public Geometry {
     std::optional<std::thread::id> render_thread_id;
 
     glm::vec3 color;
-    std::vector<glm::vec3> vertices;
-    std::vector<uint32_t> triangle_indices;
+    data::Mesh mesh_data;
 };
 
 }  // namespace _geometry

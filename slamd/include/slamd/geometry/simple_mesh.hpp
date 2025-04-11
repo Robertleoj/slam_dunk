@@ -17,10 +17,7 @@ namespace _geometry {
 
 class SimpleMesh : public Geometry {
    public:
-    SimpleMesh(
-        const std::vector<data::ColoredVertex>& vertices,
-        const std::vector<uint32_t>& triangle_indices
-    );
+    SimpleMesh(const data::ColoredMesh& mesh_data);
 
     SimpleMesh(
         const std::vector<glm::vec3>& vertices,
@@ -44,8 +41,7 @@ class SimpleMesh : public Geometry {
     std::optional<ThreadBox<GLData>> gl_data;
     std::optional<std::thread::id> render_thread_id;
 
-    std::vector<data::ColoredVertex> vertices;
-    std::vector<uint32_t> triangle_indices;
+    data::ColoredMesh mesh_data;
 };
 
 }  // namespace _geometry
@@ -59,10 +55,7 @@ std::shared_ptr<SimpleMesh> simple_mesh(
     const std::vector<uint32_t>& triangle_indices
 );
 
-std::shared_ptr<SimpleMesh> simple_mesh(
-    const std::vector<data::ColoredVertex>& vertices,
-    const std::vector<uint32_t>& triangle_indices
-);
+std::shared_ptr<SimpleMesh> simple_mesh(const data::ColoredMesh& mesh_data);
 
 }  // namespace geometry
 }  // namespace slamd
