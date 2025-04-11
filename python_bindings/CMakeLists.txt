@@ -8,15 +8,40 @@ set(LIB_DIR ../vendored_deps)
 set(LIB_BIN_DIR ${CMAKE_BINARY_DIR}/_deps)
 
 
-add_subdirectory(${LIB_DIR}/spdlog ${LIB_BIN_DIR}/spdlog)
-add_subdirectory(${LIB_DIR}/glbinding ${LIB_BIN_DIR}/glbinding)
+if(NOT TARGET spdlog::spdlog)
+    message(STATUS "Adding spdlog...")
+    add_subdirectory(${LIB_DIR}/spdlog ${LIB_BIN_DIR}/spdlog)
+endif()
 
-add_subdirectory(${LIB_DIR}/glfw ${LIB_BIN_DIR}/glfw)
-add_subdirectory(${LIB_DIR}/imgui ${LIB_BIN_DIR}/imgui)
-add_library(imgui::imgui ALIAS imgui)
+if(NOT TARGET glbinding::glbinding)
+    message(STATUS "Adding glbinding...")
+    add_subdirectory(${LIB_DIR}/glbinding ${LIB_BIN_DIR}/glbinding)
+    install(TARGETS glbinding DESTINATION slamd OPTIONAL)
+    install(TARGETS glbinding-aux DESTINATION slamd OPTIONAL)
+endif()
 
-add_subdirectory(${LIB_DIR}/glm ${LIB_BIN_DIR}/glm)
-add_subdirectory(../slamd ${CMAKE_BINARY_DIR}/slamd)
+if(NOT TARGET glfw)
+    message(STATUS "Adding glfw...")
+    add_subdirectory(${LIB_DIR}/glfw ${LIB_BIN_DIR}/glfw)
+endif()
+
+if(NOT TARGET imgui::imgui)
+    message(STATUS "Adding imgui...")
+    add_subdirectory(${LIB_DIR}/imgui ${LIB_BIN_DIR}/imgui)
+    add_library(imgui::imgui ALIAS imgui)
+endif()
+
+if(NOT TARGET glm::glm)
+    message(STATUS "Adding glm...")
+    add_subdirectory(${LIB_DIR}/glm ${LIB_BIN_DIR}/glm)
+endif()
+
+if(NOT TARGET slamd)
+    message(STATUS "Adding slamd...")
+    add_subdirectory(../slamd ${CMAKE_BINARY_DIR}/slamd)
+endif()
+
+
 
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG REQUIRED)
@@ -59,5 +84,3 @@ install(TARGETS _core DESTINATION slamd)
 # === Install your shared libraries ===
 
 # Example: install slamd if it's a shared lib
-install(TARGETS glbinding DESTINATION slamd OPTIONAL)
-install(TARGETS glbinding-aux DESTINATION slamd OPTIONAL)
