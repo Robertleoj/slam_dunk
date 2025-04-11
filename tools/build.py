@@ -47,7 +47,7 @@ def build(debug: bool) -> None:
         [
             "pybind11-stubgen",
             "slamd.bindings",
-            "--numpy-array-remove-parameters",
+            # "--numpy-array-remove-parameters",
             "-o",
             "python_bindings/src",
         ],

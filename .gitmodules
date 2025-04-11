@@ -10,3 +10,6 @@
 [submodule "vendored_deps/glfw"]
 	path = vendored_deps/glfw
 	url = git@github.com:glfw/glfw.git
+[submodule "vendored_deps/imgui_wrapper/imgui"]
+	path = vendored_deps/imgui_wrapper/imgui
+	url = git@github.com:ocornut/imgui.git

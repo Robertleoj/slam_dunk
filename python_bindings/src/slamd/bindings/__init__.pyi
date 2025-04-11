@@ -16,7 +16,7 @@ class Canvas:
 class Scene:
     def set_object(self, path: str, object: ...) -> None:
         ...
-    def set_transform(self, path: str, transform: numpy.ndarray) -> None:
+    def set_transform(self, path: str, transform: numpy.ndarray[float32[4][4]]) -> None:
         ...
 class Window:
     def __init__(self, name: str, height: int, width: int) -> None:

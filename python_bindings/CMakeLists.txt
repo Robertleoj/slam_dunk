@@ -27,7 +27,7 @@ endif()
 
 if(NOT TARGET imgui::imgui)
     message(STATUS "Adding imgui...")
-    add_subdirectory(${LIB_DIR}/imgui ${LIB_BIN_DIR}/imgui)
+    add_subdirectory(${LIB_DIR}/imgui_wrapper ${LIB_BIN_DIR}/imgui)
     add_library(imgui::imgui ALIAS imgui)
 endif()
 
