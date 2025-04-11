@@ -27,23 +27,31 @@ SimpleMesh PointCloud::make_mesh(
 ) {
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec3> vertex_colors;
+    std::vector<glm::vec3> normals;
     std::vector<uint32_t> indices;
 
     for (const auto& [pos, col, rad] :
          std::views::zip(positions, colors, radii)) {
-        size_t num_added = generate_sphere(vertices, indices, rad, 10, 10);
+        size_t num_added =
+            generate_sphere(vertices, indices, normals, rad, 10, 10);
 
         for (size_t i = 0; i < num_added; i++) {
             size_t idx = vertices.size() - i - 1;
             vertices[idx] += pos;
-            // auto& vertex = vertices[idx];
-            // vertices[idx] = vertex + pos;
         }
 
         vertex_colors.insert(vertex_colors.end(), num_added, col);
     }
 
-    return SimpleMesh(vertices, vertex_colors, indices);
+    data::ColoredMesh mesh_data;
+
+    mesh_data.triangle_indices = std::move(indices);
+    for (const auto& [vert, col, norm] :
+         std::views::zip(vertices, vertex_colors, normals)) {
+        mesh_data.vertices.emplace_back(vert, col, norm);
+    }
+
+    return SimpleMesh(mesh_data);
 }
 
 }  // namespace _geometry

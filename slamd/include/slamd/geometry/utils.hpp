@@ -10,6 +10,7 @@ namespace _geometry {
 size_t generate_sphere(
     std::vector<glm::vec3>& vertices,
     std::vector<uint32_t>& indices,
+    std::vector<glm::vec3>& normals,
     float radius,
     uint sectorCount,
     uint stackCount

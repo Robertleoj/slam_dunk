@@ -1,5 +1,6 @@
 #include <glm/glm.hpp>
 #include <numbers>
+#include <ranges>
 #include <slamd/geometry/sphere.hpp>
 #include <slamd/geometry/utils.hpp>
 #include <vector>
@@ -12,11 +13,19 @@ MonoMesh make_sphere_mesh(
     glm::vec3 color
 ) {
     std::vector<glm::vec3> vertices;
+    std::vector<glm::vec3> normals;
     std::vector<uint32_t> indices;
 
-    generate_sphere(vertices, indices, radius, 20, 20);
+    generate_sphere(vertices, indices, normals, radius, 20, 20);
 
-    return MonoMesh(vertices, indices, color);
+    data::Mesh mesh_data;
+
+    mesh_data.triangle_indices = std::move(indices);
+    for (const auto& [vert, norm] : std::views::zip(vertices, normals)) {
+        mesh_data.vertices.emplace_back(vert, norm);
+    }
+
+    return MonoMesh(mesh_data, color);
 }
 
 Sphere::Sphere(

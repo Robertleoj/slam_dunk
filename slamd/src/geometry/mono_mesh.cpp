@@ -78,6 +78,13 @@ MonoMesh::MonoMesh(
     : color(color),
       mesh_data(make_mesh(vertices, triangle_indices)) {}
 
+MonoMesh::MonoMesh(
+    const data::Mesh& mesh_data,
+    glm::vec3 color
+)
+    : color(color),
+      mesh_data(mesh_data) {}
+
 void MonoMesh::render(
     glm::mat4 model,
     glm::mat4 view,

@@ -31,7 +31,7 @@ ArrowMesh generate_cone(
     for (int i = 0; i < segments; ++i) {
         mesh.indices.insert(
             mesh.indices.end(),
-            {static_cast<uint32_t>(i), static_cast<uint32_t>(i + 1), tip_idx}
+            {tip_idx, static_cast<uint32_t>(i + 1), static_cast<uint32_t>(i)}
         );
     }
     return mesh;
@@ -107,6 +107,9 @@ ArrowMesh generate_arrow(
         shaft.vertices.begin(),
         shaft.vertices.end()
     );
+    mesh.colors
+        .insert(mesh.colors.end(), shaft.colors.begin(), shaft.colors.end());
+
     mesh.indices
         .insert(mesh.indices.end(), shaft.indices.begin(), shaft.indices.end());
 
@@ -126,6 +129,9 @@ ArrowMesh generate_arrow(
         head.vertices.begin(),
         head.vertices.end()
     );
+    mesh.colors
+        .insert(mesh.colors.end(), head.colors.begin(), head.colors.end());
+
     mesh.indices
         .insert(mesh.indices.end(), head.indices.begin(), head.indices.end());
 
@@ -139,6 +145,7 @@ SimpleMesh make_arrows_mesh(
     float thickness
 ) {
     std::vector<glm::vec3> vertices;
+    std::vector<glm::vec3> out_colors;
     std::vector<uint32_t> inds;
 
     uint32_t index_offset = 0;
@@ -149,6 +156,9 @@ SimpleMesh make_arrows_mesh(
         vertices
             .insert(vertices.end(), mesh.vertices.begin(), mesh.vertices.end());
 
+        out_colors
+            .insert(out_colors.end(), mesh.colors.begin(), mesh.colors.end());
+
         for (auto idx : mesh.indices) {
             inds.push_back(idx + index_offset);
         }
@@ -156,7 +166,7 @@ SimpleMesh make_arrows_mesh(
         index_offset += mesh.vertices.size();
     }
 
-    return SimpleMesh(make_colored_mesh(vertices, colors, inds));
+    return SimpleMesh(make_colored_mesh(vertices, out_colors, inds));
 }
 
 Arrows::Arrows(

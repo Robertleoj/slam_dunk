@@ -8,55 +8,56 @@ namespace _geometry {
 size_t generate_sphere(
     std::vector<glm::vec3>& vertices,
     std::vector<uint32_t>& indices,
+    std::vector<glm::vec3>& normals,  // ⬅️ Add this
     float radius,
     uint sectorCount,
     uint stackCount
 ) {
     float x, y, z, xy;
-    float nx, ny, nz, lengthInv = 1.0f / radius;
-    float s, t;
-
-    size_t start_idx = vertices.size();
-
     float pi = std::numbers::pi;
     float sectorStep = 2 * pi / sectorCount;
     float stackStep = pi / stackCount;
     float sectorAngle, stackAngle;
 
+    size_t start_idx = vertices.size();
     size_t num_added = 0;
 
-    for (unsigned int i = 0; i <= stackCount; ++i) {
-        stackAngle = pi / 2 - i * stackStep;
-        xy = radius * cosf(stackAngle);
-        z = radius * sinf(stackAngle);
+    for (uint i = 0; i <= stackCount; ++i) {
+        stackAngle = pi / 2 - i * stackStep;  // from pi/2 to -pi/2
+        xy = radius * cosf(stackAngle);       // r * cos(u)
+        z = radius * sinf(stackAngle);        // r * sin(u)
 
-        for (unsigned int j = 0; j <= sectorCount; ++j) {
+        for (uint j = 0; j <= sectorCount; ++j) {
             sectorAngle = j * sectorStep;
 
-            x = xy * cosf(sectorAngle);
-            y = xy * sinf(sectorAngle);
+            x = xy * cosf(sectorAngle);  // r * cos(u) * cos(v)
+            y = xy * sinf(sectorAngle);  // r * cos(u) * sin(v)
 
-            vertices.emplace_back(x, y, z);
-            num_added++;
+            glm::vec3 pos(x, y, z);
+            vertices.push_back(pos);
+            normals.push_back(
+                glm::normalize(pos)
+            );  // 💪 Normals = normalized pos
+
+            ++num_added;
         }
     }
 
-    unsigned int k1, k2;
-    for (unsigned int i = 0; i < stackCount; ++i) {
+    uint k1, k2;
+    for (uint i = 0; i < stackCount; ++i) {
         k1 = i * (sectorCount + 1);
         k2 = k1 + sectorCount + 1;
 
-        for (unsigned int j = 0; j < sectorCount; ++j, ++k1, ++k2) {
+        for (uint j = 0; j < sectorCount; ++j, ++k1, ++k2) {
             if (i != 0) {
-                indices.push_back(k1 + start_idx);
-                indices.push_back(k2 + start_idx);
-                indices.push_back(k1 + 1 + start_idx);
+                indices.push_back(start_idx + k1);
+                indices.push_back(start_idx + k2);
+                indices.push_back(start_idx + k1 + 1);
             }
-
             if (i != (stackCount - 1)) {
-                indices.push_back(k1 + 1 + start_idx);
-                indices.push_back(k2 + start_idx);
-                indices.push_back(k2 + 1 + start_idx);
+                indices.push_back(start_idx + k1 + 1);
+                indices.push_back(start_idx + k2);
+                indices.push_back(start_idx + k2 + 1);
             }
         }
     }

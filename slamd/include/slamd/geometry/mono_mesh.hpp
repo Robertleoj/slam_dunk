@@ -20,6 +20,8 @@ class MonoMesh : public Geometry {
         glm::vec3 color
     );
 
+    MonoMesh(const data::Mesh& mesh_data, glm::vec3 color);
+
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
    private:

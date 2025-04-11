@@ -58,12 +58,12 @@ MonoMesh make_poly_line_mesh(
                 uint32_t d = base + curr;
 
                 indices.push_back(a);
-                indices.push_back(b);
                 indices.push_back(c);
+                indices.push_back(b);
 
                 indices.push_back(a);
-                indices.push_back(c);
                 indices.push_back(d);
+                indices.push_back(c);
             }
         }
     }
