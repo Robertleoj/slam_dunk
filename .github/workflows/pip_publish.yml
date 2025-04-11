@@ -22,6 +22,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Copy stuff
+        run: |
+          cp -r vendored_deps python_bindings/vendored_deps
+          cp -r slamd python_bindings/slamd_src
+          cp README.md python_bindings/README.md
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
