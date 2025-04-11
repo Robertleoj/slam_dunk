@@ -16,15 +16,15 @@ namespace _geometry {
 class MonoMesh : public Geometry {
    public:
     MonoMesh(
-        std::vector<glm::vec3> vertices,
-        std::vector<uint32_t> triangle_indices,
-        glm::vec3 color,
+        const std::vector<glm::vec3>& vertices,
+        const std::vector<uint32_t>& triangle_indices,
+        const glm::vec3& color,
         float min_brightness = _const::default_min_brightness
     );
 
     MonoMesh(
         const data::Mesh& mesh_data,
-        glm::vec3 color,
+        const glm::vec3& color,
         float min_brightness = _const::default_min_brightness
     );
 

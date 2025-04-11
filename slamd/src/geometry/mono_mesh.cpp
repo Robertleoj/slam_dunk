@@ -71,9 +71,9 @@ void MonoMesh::initialize() {
 }
 
 MonoMesh::MonoMesh(
-    std::vector<glm::vec3> vertices,
-    std::vector<uint32_t> triangle_indices,
-    glm::vec3 color,
+    const std::vector<glm::vec3>& vertices,
+    const std::vector<uint32_t>& triangle_indices,
+    const glm::vec3& color,
     float min_brightness
 )
     : min_brightness(min_brightness),
@@ -82,7 +82,7 @@ MonoMesh::MonoMesh(
 
 MonoMesh::MonoMesh(
     const data::Mesh& mesh_data,
-    glm::vec3 color,
+    const glm::vec3& color,
     float min_brightness
 )
     : color(color),
