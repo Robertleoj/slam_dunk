@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <slamd/data/colored_vertex.hpp>
+#include <slamd/data/mesh.hpp>
 #include <vector>
 
 namespace slamd {
