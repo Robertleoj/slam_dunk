@@ -47,7 +47,6 @@ CameraFrustum::CameraFrustum(
         {bl, tl}
     };
 
-    // Notch triangle pointing "up" in camera space (-Y direction)
     glm::vec3 top_center = (tl + tr) * 0.5f;
 
     float notch_height = scale * 0.15f;
@@ -56,8 +55,7 @@ CameraFrustum::CameraFrustum(
     glm::vec3 float_transl(0.0f, -float_dist, 0.0f);
 
     glm::vec3 notch_tip =
-        top_center + float_transl +
-        glm::vec3(0.0f, -notch_height, 0.0f);  // -Y = up in camera space
+        top_center + float_transl + glm::vec3(0.0f, -notch_height, 0.0f);
     glm::vec3 notch_left =
         top_center + float_transl + glm::vec3(-notch_width * 0.5f, 0.0f, 0.0f);
     glm::vec3 notch_right =
