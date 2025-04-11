@@ -27,13 +27,15 @@ void GridXYPlane::initialize() {
 
     for (float x = -this->grid_size; x <= this->grid_size; x++) {
         verts.insert(
-            verts.end(), {x, -this->grid_size, 0.0f, x, this->grid_size, 0.0f}
+            verts.end(),
+            {x, -this->grid_size, 0.0f, x, this->grid_size, 0.0f}
         );
     }
 
     for (float y = -this->grid_size; y <= this->grid_size; y++) {
         verts.insert(
-            verts.end(), {-this->grid_size, y, 0.0f, this->grid_size, y, 0.0f}
+            verts.end(),
+            {-this->grid_size, y, 0.0f, this->grid_size, y, 0.0f}
         );
     }
 
@@ -56,7 +58,12 @@ void GridXYPlane::initialize() {
 
     gl::glEnableVertexAttribArray(0);
     gl::glVertexAttribPointer(
-        0, 3, gl::GL_FLOAT, gl::GL_FALSE, 3 * sizeof(float), (void*)0
+        0,
+        3,
+        gl::GL_FLOAT,
+        gl::GL_FALSE,
+        3 * sizeof(float),
+        (void*)0
     );
 
     gl::glBindVertexArray(0);
@@ -115,16 +122,17 @@ void GridXYPlane::render(
     // Assuming your shader is already bound
     // And has these uniforms: uModel, uView, uProjection, uColor
     gl_data->shader.use();
-    gl_data->shader.setUniform("uView", view);
-    gl_data->shader.setUniform("uProjection", projection);
-    gl_data->shader.setUniform(
-        "uColor", glm::vec3(0.6f, 0.6f, 0.6f)
+    gl_data->shader.set_uniform("uView", view);
+    gl_data->shader.set_uniform("uProjection", projection);
+    gl_data->shader.set_uniform(
+        "uColor",
+        glm::vec3(0.6f, 0.6f, 0.6f)
     );  // clean gray
 
     // render best scale
-    gl_data->shader.setUniform("uModel", model * best_scale_mat);
-    gl_data->shader.setUniform("uExtraAlpha", best_alpha);
-    gl_data->shader.setUniform("uScale", desired_scale);
+    gl_data->shader.set_uniform("uModel", model * best_scale_mat);
+    gl_data->shader.set_uniform("uExtraAlpha", best_alpha);
+    gl_data->shader.set_uniform("uScale", desired_scale);
 
     gl::glBindVertexArray(gl_data->vao_id);
     gl::glDepthMask(gl::GL_FALSE);  // don't mess with z-buffer
@@ -134,14 +142,14 @@ void GridXYPlane::render(
     float draw_threshold = 0.01;
 
     if (below_alpha > draw_threshold) {
-        gl_data->shader.setUniform("uModel", model * below_scale_mat);
-        gl_data->shader.setUniform("uExtraAlpha", below_alpha);
+        gl_data->shader.set_uniform("uModel", model * below_scale_mat);
+        gl_data->shader.set_uniform("uExtraAlpha", below_alpha);
 
         gl::glDrawArrays(gl::GL_LINES, 0, gl_data->vertex_count);
     }
     if (above_alpha > draw_threshold) {
-        gl_data->shader.setUniform("uModel", model * above_scale_mat);
-        gl_data->shader.setUniform("uExtraAlpha", above_alpha);
+        gl_data->shader.set_uniform("uModel", model * above_scale_mat);
+        gl_data->shader.set_uniform("uExtraAlpha", above_alpha);
 
         gl::glDrawArrays(gl::GL_LINES, 0, gl_data->vertex_count);
     }

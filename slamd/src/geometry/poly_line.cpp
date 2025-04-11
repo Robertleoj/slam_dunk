@@ -7,7 +7,8 @@ namespace _geometry {
 MonoMesh make_poly_line_mesh(
     const std::vector<glm::vec3>& points,
     float thickness,
-    const glm::vec3& color
+    const glm::vec3& color,
+    float min_brightness
 ) {
     std::vector<glm::vec3> verts;
     std::vector<uint32_t> indices;
@@ -68,15 +69,16 @@ MonoMesh make_poly_line_mesh(
         }
     }
 
-    return MonoMesh(verts, indices, color);
+    return MonoMesh(verts, indices, color, min_brightness);
 }
 
 PolyLine::PolyLine(
     const std::vector<glm::vec3>& points,
     float thickness,
-    const glm::vec3& color
+    const glm::vec3& color,
+    float min_brightness
 )
-    : mesh(make_poly_line_mesh(points, thickness, color)) {}
+    : mesh(make_poly_line_mesh(points, thickness, color, min_brightness)) {}
 
 void PolyLine::render(
     glm::mat4 model,

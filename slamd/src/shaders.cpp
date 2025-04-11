@@ -153,7 +153,7 @@ void ShaderProgram::use() {
 }
 
 template <>
-void ShaderProgram::setUniform<bool>(
+void ShaderProgram::set_uniform<bool>(
     const std::string& name,
     const bool value
 ) const {
@@ -161,7 +161,7 @@ void ShaderProgram::setUniform<bool>(
 }
 
 template <>
-void ShaderProgram::setUniform<int>(
+void ShaderProgram::set_uniform<int>(
     const std::string& name,
     const int value
 ) const {
@@ -171,7 +171,7 @@ void ShaderProgram::setUniform<int>(
 }
 
 template <>
-void ShaderProgram::setUniform<float>(
+void ShaderProgram::set_uniform<float>(
     const std::string& name,
     const float value
 ) const {
@@ -181,7 +181,7 @@ void ShaderProgram::setUniform<float>(
 }
 
 template <>
-void ShaderProgram::setUniform<glm::vec2>(
+void ShaderProgram::set_uniform<glm::vec2>(
     const std::string& name,
     const glm::vec2 value
 ) const {
@@ -189,7 +189,7 @@ void ShaderProgram::setUniform<glm::vec2>(
 }
 
 template <>
-void ShaderProgram::setUniform<glm::vec3>(
+void ShaderProgram::set_uniform<glm::vec3>(
     const std::string& name,
     const glm::vec3 value
 ) const {
@@ -197,7 +197,7 @@ void ShaderProgram::setUniform<glm::vec3>(
 }
 
 template <>
-void ShaderProgram::setUniform<glm::vec4>(
+void ShaderProgram::set_uniform<glm::vec4>(
     const std::string& name,
     const glm::vec4 value
 ) const {
@@ -206,7 +206,7 @@ void ShaderProgram::setUniform<glm::vec4>(
 
 // Matrices? Why not!
 template <>
-void ShaderProgram::setUniform<glm::mat4>(
+void ShaderProgram::set_uniform<glm::mat4>(
     const std::string& name,
     const glm::mat4 value
 ) const {

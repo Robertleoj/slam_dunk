@@ -89,15 +89,19 @@ void SimpleMesh::initialize() {
 }
 
 SimpleMesh::SimpleMesh(
-    const data::ColoredMesh& mesh_data
+    const data::ColoredMesh& mesh_data,
+    float min_brightness
 )
-    : mesh_data(mesh_data) {}
+    : mesh_data(mesh_data),
+      min_brightness(min_brightness) {}
 
 SimpleMesh::SimpleMesh(
     const std::vector<glm::vec3>& vertices,
     const std::vector<glm::vec3>& vertex_colors,
-    const std::vector<uint32_t>& triangle_indices
-) {
+    const std::vector<uint32_t>& triangle_indices,
+    float min_brightness
+)
+    : min_brightness(min_brightness) {
     if (vertices.size() != vertex_colors.size()) {
         throw std::invalid_argument(
             "number of vertices must equal number of vertex colors"
@@ -129,10 +133,11 @@ void SimpleMesh::render(
     auto& shader = SimpleMesh::shader.value();
 
     shader.use();
-    shader.setUniform("model", model);
-    shader.setUniform("view", view);
-    shader.setUniform("projection", projection);
-    shader.setUniform("light_dir", slamd::_const::light_dir);
+    shader.set_uniform("model", model);
+    shader.set_uniform("view", view);
+    shader.set_uniform("projection", projection);
+    shader.set_uniform("light_dir", slamd::_const::light_dir);
+    shader.set_uniform("min_brightness", this->min_brightness);
     gl::glDrawElements(
         gl::GL_TRIANGLES,
         this->mesh_data.triangle_indices.size(),

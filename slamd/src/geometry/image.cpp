@@ -139,9 +139,9 @@ void Image::render(
     gl::glBindVertexArray(gl_data->vao_id);
 
     gl_data->shader.use();
-    gl_data->shader.setUniform("model", model * gmath::scale_xy(this->scale));
-    gl_data->shader.setUniform("view", view);
-    gl_data->shader.setUniform("projection", projection);
+    gl_data->shader.set_uniform("model", model * gmath::scale_xy(this->scale));
+    gl_data->shader.set_uniform("view", view);
+    gl_data->shader.set_uniform("projection", projection);
 
     gl_data->texture.bind();
 

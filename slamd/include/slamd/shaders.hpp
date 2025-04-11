@@ -31,7 +31,7 @@ class ShaderProgram {
     ShaderProgram(gl::GLuint vertex_shader_id, gl::GLuint fragment_shader_id);
 
     template <typename T>
-    void setUniform(const std::string& name, const T value) const;
+    void set_uniform(const std::string& name, const T value) const;
 
    private:
     gl::GLint getUniformLocation(

@@ -73,16 +73,20 @@ void MonoMesh::initialize() {
 MonoMesh::MonoMesh(
     std::vector<glm::vec3> vertices,
     std::vector<uint32_t> triangle_indices,
-    glm::vec3 color
+    glm::vec3 color,
+    float min_brightness
 )
-    : color(color),
+    : min_brightness(min_brightness),
+      color(color),
       mesh_data(make_mesh(vertices, triangle_indices)) {}
 
 MonoMesh::MonoMesh(
     const data::Mesh& mesh_data,
-    glm::vec3 color
+    glm::vec3 color,
+    float min_brightness
 )
     : color(color),
+      min_brightness(min_brightness),
       mesh_data(mesh_data) {}
 
 void MonoMesh::render(
@@ -106,11 +110,12 @@ void MonoMesh::render(
     auto& shader = MonoMesh::shader.value();
 
     shader.use();
-    shader.setUniform("model", model);
-    shader.setUniform("view", view);
-    shader.setUniform("projection", projection);
-    shader.setUniform("color", this->color);
-    shader.setUniform("light_dir", slamd::_const::light_dir);
+    shader.set_uniform("model", model);
+    shader.set_uniform("view", view);
+    shader.set_uniform("projection", projection);
+    shader.set_uniform("color", this->color);
+    shader.set_uniform("light_dir", slamd::_const::light_dir);
+    shader.set_uniform("min_brightness", this->min_brightness);
 
     gl::glDrawElements(
         gl::GL_TRIANGLES,

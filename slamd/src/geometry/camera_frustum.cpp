@@ -34,31 +34,47 @@ CameraFrustum::CameraFrustum(
     float thickness = 0.01f;
     glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
-    // Lines from camera to image corners
-    this->poly_lines
-        .emplace_back(std::vector<glm::vec3>{cam_origin, tl}, thickness, color);
+    float min_brightness = 0.9f;
 
-    this->poly_lines
-        .emplace_back(std::vector<glm::vec3>{cam_origin, tr}, thickness, color);
+    std::vector<std::pair<glm::vec3, glm::vec3>> segments = {
+        {cam_origin, tl},
+        {cam_origin, tr},
+        {cam_origin, br},
+        {cam_origin, bl},
+        {tl, tr},
+        {tr, br},
+        {br, bl},
+        {bl, tl}
+    };
 
-    this->poly_lines
-        .emplace_back(std::vector<glm::vec3>{cam_origin, br}, thickness, color);
+    // Notch triangle pointing "up" in camera space (-Y direction)
+    glm::vec3 top_center = (tl + tr) * 0.5f;
 
-    this->poly_lines
-        .emplace_back(std::vector<glm::vec3>{cam_origin, bl}, thickness, color);
+    float notch_height = scale * 0.15f;
+    float notch_width = scale * 0.3f;
+    float float_dist = scale * 0.02;
+    glm::vec3 float_transl(0.0f, -float_dist, 0.0f);
 
-    // Rectangle around image plane
-    this->poly_lines
-        .emplace_back(std::vector<glm::vec3>{tl, tr}, thickness, color);
+    glm::vec3 notch_tip =
+        top_center + float_transl +
+        glm::vec3(0.0f, -notch_height, 0.0f);  // -Y = up in camera space
+    glm::vec3 notch_left =
+        top_center + float_transl + glm::vec3(-notch_width * 0.5f, 0.0f, 0.0f);
+    glm::vec3 notch_right =
+        top_center + float_transl + glm::vec3(notch_width * 0.5f, 0.0f, 0.0f);
 
-    this->poly_lines
-        .emplace_back(std::vector<glm::vec3>{tr, br}, thickness, color);
+    segments.push_back({notch_left, notch_tip});
+    segments.push_back({notch_tip, notch_right});
+    segments.push_back({notch_right, notch_left});
 
-    this->poly_lines
-        .emplace_back(std::vector<glm::vec3>{br, bl}, thickness, color);
-
-    this->poly_lines
-        .emplace_back(std::vector<glm::vec3>{bl, tl}, thickness, color);
+    for (const auto& [start, end] : segments) {
+        this->poly_lines.emplace_back(
+            std::vector<glm::vec3>{start, end},
+            thickness,
+            color,
+            min_brightness
+        );
+    }
 }
 
 void CameraFrustum::render(

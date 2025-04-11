@@ -3,6 +3,7 @@
 #include <glbinding/glbinding.h>
 #include <glm/glm.hpp>
 #include <optional>
+#include <slamd/constants.hpp>
 #include <slamd/data/mesh.hpp>
 #include <slamd/geometry/geometry.hpp>
 #include <slamd/shaders.hpp>
@@ -17,10 +18,15 @@ class MonoMesh : public Geometry {
     MonoMesh(
         std::vector<glm::vec3> vertices,
         std::vector<uint32_t> triangle_indices,
-        glm::vec3 color
+        glm::vec3 color,
+        float min_brightness = _const::default_min_brightness
     );
 
-    MonoMesh(const data::Mesh& mesh_data, glm::vec3 color);
+    MonoMesh(
+        const data::Mesh& mesh_data,
+        glm::vec3 color,
+        float min_brightness = _const::default_min_brightness
+    );
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
@@ -41,6 +47,8 @@ class MonoMesh : public Geometry {
 
     glm::vec3 color;
     data::Mesh mesh_data;
+
+    float min_brightness;
 };
 
 }  // namespace _geometry

@@ -3,6 +3,7 @@
 #include <glbinding/glbinding.h>
 #include <glm/glm.hpp>
 #include <optional>
+#include <slamd/constants.hpp>
 #include <slamd/data/mesh.hpp>
 #include <slamd/geometry/geometry.hpp>
 #include <slamd/shaders.hpp>
@@ -17,12 +18,16 @@ namespace _geometry {
 
 class SimpleMesh : public Geometry {
    public:
-    SimpleMesh(const data::ColoredMesh& mesh_data);
+    SimpleMesh(
+        const data::ColoredMesh& mesh_data,
+        float min_brightness = _const::default_min_brightness
+    );
 
     SimpleMesh(
         const std::vector<glm::vec3>& vertices,
         const std::vector<glm::vec3>& vertex_colors,
-        const std::vector<uint32_t>& triangle_indices
+        const std::vector<uint32_t>& triangle_indices,
+        float min_brightness = _const::default_min_brightness
     );
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
@@ -42,6 +47,8 @@ class SimpleMesh : public Geometry {
     std::optional<std::thread::id> render_thread_id;
 
     data::ColoredMesh mesh_data;
+
+    float min_brightness;
 };
 
 }  // namespace _geometry

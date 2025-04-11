@@ -50,13 +50,20 @@ void ArcballIndicator::initialize() {
 
     gl::glEnableVertexAttribArray(0);
     gl::glVertexAttribPointer(
-        0, 3, gl::GL_FLOAT, gl::GL_FALSE, 3 * sizeof(float), (void*)0
+        0,
+        3,
+        gl::GL_FLOAT,
+        gl::GL_FALSE,
+        3 * sizeof(float),
+        (void*)0
     );
 
     gl::glBindVertexArray(0);
 
     GLData gl_state = {
-        vao_id, vbo_id, ShaderProgram(vertex_shader_path, fragment_shader_path)
+        vao_id,
+        vbo_id,
+        ShaderProgram(vertex_shader_path, fragment_shader_path)
     };
 
     this->gl_state.emplace(gl_state);
@@ -113,13 +120,14 @@ void ArcballIndicator::render(
     auto scale_mat =
         ArcballIndicator::get_scale_mat(this->arcball_zoom / 20.0f);
     gl_state->shader.use();
-    gl_state->shader.setUniform("uModel", model * scale_mat);
-    gl_state->shader.setUniform("uView", view);
-    gl_state->shader.setUniform("uProjection", projection);
-    gl_state->shader.setUniform(
-        "uColor", glm::vec3(1.0f, 1.0f, 1.0f)
+    gl_state->shader.set_uniform("uModel", model * scale_mat);
+    gl_state->shader.set_uniform("uView", view);
+    gl_state->shader.set_uniform("uProjection", projection);
+    gl_state->shader.set_uniform(
+        "uColor",
+        glm::vec3(1.0f, 1.0f, 1.0f)
     );  // clean gray
-    gl_state->shader.setUniform("uAlpha", alpha);
+    gl_state->shader.set_uniform("uAlpha", alpha);
 
     gl::glBindVertexArray(gl_state->vao_id);
     gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);
