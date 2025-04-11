@@ -24,6 +24,10 @@ jobs:
 
       - name: Copy stuff
         run: |
+          rm -rf python_bindings/vendored_deps
+          rm -rf python_bindings/slamd_src
+          rm -rf python_bindings/README.md
+
           cp -r vendored_deps python_bindings/vendored_deps
           cp -r slamd python_bindings/slamd_src
           cp README.md python_bindings/README.md
