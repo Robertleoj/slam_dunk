@@ -257,23 +257,6 @@ struct type_caster<slamd::data::Image> {
 
 }  // namespace pybind11::detail
 
-int add_numbers(
-    int a,
-    int b
-) {
-    return a + b;
-}
-
-void basic_window() {
-    slamd::Window window("hello python", 1000, 1000);
-
-    auto scene = slamd::scene();
-
-    window.add_scene("scene", scene);
-
-    window.wait_for_close();
-}
-
 void define_private_geom(
     py::module_& m
 ) {
@@ -482,24 +465,41 @@ void define_geom2d(
 }
 
 PYBIND11_MODULE(
-    _core,
+    bindings,
     m
 ) {
     m.doc() = "SlamDunk visualization library";
 
-    m.def("add", &add_numbers, "Add two numbers");
-    m.def("hello_python", &basic_window, "SlamDunk window");
-
     py::class_<slamd::Scene, std::shared_ptr<slamd::Scene>>(m, "Scene")
-        .def("set_transform", &slamd::Scene::set_transform)
-        .def("set_object", &slamd::_tree::Tree::set_object);
+        .def(
+            "set_transform",
+            &slamd::Scene::set_transform,
+            py::arg("path"),
+            py::arg("transform")
+        )
+        .def(
+            "set_object",
+            &slamd::_tree::Tree::set_object,
+            py::arg("path"),
+            py::arg("object")
+        );
 
     m.def("scene", &slamd::scene);
 
     // Canvas bindings
     py::class_<slamd::Canvas, std::shared_ptr<slamd::Canvas>>(m, "Canvas")
-        .def("set_transform", &slamd::Canvas::set_transform)
-        .def("set_object", &slamd::Canvas::set_object);
+        .def(
+            "set_transform",
+            &slamd::Canvas::set_transform,
+            py::arg("path"),
+            py::arg("transform")
+        )
+        .def(
+            "set_object",
+            &slamd::Canvas::set_object,
+            py::arg("path"),
+            py::arg("object")
+        );
 
     m.def("canvas", &slamd::canvas);
 
@@ -511,8 +511,18 @@ PYBIND11_MODULE(
             py::arg("width")
         )
         .def("wait_for_close", &slamd::Window::wait_for_close)
-        .def("add_scene", &slamd::Window::add_scene)
-        .def("add_canvas", &slamd::Window::add_canvas);
+        .def(
+            "add_scene",
+            &slamd::Window::add_scene,
+            py::arg("name"),
+            py::arg("scene")
+        )
+        .def(
+            "add_canvas",
+            &slamd::Window::add_canvas,
+            py::arg("name"),
+            py::arg("canvas")
+        );
 
     auto _geom = m.def_submodule("_geom");
     define_private_geom(_geom);

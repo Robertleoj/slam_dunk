@@ -8,5 +8,6 @@ dependencies = [
     "fire>=0.7.0",
     "imageio>=2.37.0",
     "numpy>=2.2.4",
+    "pybind11-stubgen>=2.5.3",
     "slamd @ file:///${PROJECT_ROOT}/python_bindings",
 ]

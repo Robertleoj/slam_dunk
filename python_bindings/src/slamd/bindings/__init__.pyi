@@ -1,0 +1,33 @@
+"""
+SlamDunk visualization library
+"""
+from __future__ import annotations
+import numpy
+from . import _geom
+from . import geom
+from . import geom2d
+__all__ = ['Canvas', 'Scene', 'Window', 'canvas', 'geom', 'geom2d', 'scene']
+class Canvas:
+    @staticmethod
+    def set_transform(*args, **kwargs) -> None:
+        ...
+    def set_object(self, path: str, object: ...) -> None:
+        ...
+class Scene:
+    def set_object(self, path: str, object: ...) -> None:
+        ...
+    def set_transform(self, path: str, transform: numpy.ndarray) -> None:
+        ...
+class Window:
+    def __init__(self, name: str, height: int, width: int) -> None:
+        ...
+    def add_canvas(self, name: str, canvas: Canvas) -> None:
+        ...
+    def add_scene(self, name: str, scene: Scene) -> None:
+        ...
+    def wait_for_close(self) -> None:
+        ...
+def canvas() -> Canvas:
+    ...
+def scene() -> Scene:
+    ...

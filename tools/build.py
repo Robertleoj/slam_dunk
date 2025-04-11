@@ -3,6 +3,7 @@
 """A script to build the C++ backend and install the bindings into the source tree."""
 
 import shutil
+import os
 import subprocess
 from functools import partial
 from pathlib import Path
@@ -41,6 +42,18 @@ def build(debug: bool) -> None:
     )
 
     subprocess.run(["ninja", "-C", str(build_path)])
+
+    subprocess.run(
+        [
+            "pybind11-stubgen",
+            "slamd.bindings",
+            "--numpy-array-remove-parameters",
+            "-o",
+            "python_bindings/src",
+        ],
+        env={**os.environ, "PYTHONPATH": "./build/python_bindings"},
+        check=True,
+    )
 
 
 def clean() -> None:

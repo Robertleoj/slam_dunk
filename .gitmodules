@@ -7,9 +7,6 @@
 [submodule "vendored_deps/glbinding"]
 	path = vendored_deps/glbinding
 	url = https://github.com/cginternals/glbinding
-[submodule "vendored_deps/imgui"]
-	path = vendored_deps/imgui
-	url = git@github.com:ocornut/imgui.git
 [submodule "vendored_deps/glfw"]
 	path = vendored_deps/glfw
 	url = git@github.com:glfw/glfw.git

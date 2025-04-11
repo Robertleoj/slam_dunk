@@ -47,11 +47,11 @@ find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG REQUIRED)
 
 # === pybind11 module ===
-pybind11_add_module(_core src/main.cpp)
+pybind11_add_module(bindings src/main.cpp)
 
 
 target_include_directories(
-    _core
+    bindings
 
     PRIVATE
 
@@ -60,7 +60,7 @@ target_include_directories(
     ${LIB_DIR}/glfw/include
 )
 
-target_link_libraries(_core PRIVATE
+target_link_libraries(bindings PRIVATE
 
     slamd::slamd
     glbinding::glbinding
@@ -74,12 +74,12 @@ target_link_libraries(_core PRIVATE
     glm::glm
 )
 
-set_target_properties(_core PROPERTIES
+set_target_properties(bindings PROPERTIES
     INSTALL_RPATH "$ORIGIN"
 )
 
 # === Install the pybind11 module ===
-install(TARGETS _core DESTINATION slamd)
+install(TARGETS bindings DESTINATION slamd)
 
 # === Install your shared libraries ===
 
