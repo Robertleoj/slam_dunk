@@ -1,8 +1,8 @@
 #include <glm/glm.hpp>
-#include <slamd/geometry/camera_frustum.hpp>
+#include <slamd/geom/camera_frustum.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 CameraFrustum::CameraFrustum(
     glm::mat3 intrinsics_matrix,
@@ -84,9 +84,9 @@ void CameraFrustum::render(
         polyline.render(model, view, projection);
     }
 }
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 std::shared_ptr<CameraFrustum> camera_frustum(
     glm::mat3 intrinsics_matrix,
     size_t image_width,
@@ -101,5 +101,5 @@ std::shared_ptr<CameraFrustum> camera_frustum(
     );
 }
 
-}  // namespace geometry
+}  // namespace geom
 }  // namespace slamd

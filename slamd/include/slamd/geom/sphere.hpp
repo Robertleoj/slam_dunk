@@ -1,10 +1,10 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <slamd/geometry/geometry.hpp>
-#include <slamd/geometry/mono_mesh.hpp>
+#include <slamd/geom/geometry.hpp>
+#include <slamd/geom/mono_mesh.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 class Sphere : public Geometry {
    public:
@@ -16,13 +16,13 @@ class Sphere : public Geometry {
     MonoMesh mesh;
 };
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 
-using _geometry::Sphere;
+using _geom::Sphere;
 std::shared_ptr<Sphere>
 sphere(float radius = 1.0f, glm::vec3 color = glm::vec3(0.8, 0.2, 0.0));
 
-}  // namespace geometry
+}  // namespace geom
 }  // namespace slamd

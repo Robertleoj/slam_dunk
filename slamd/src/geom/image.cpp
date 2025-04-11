@@ -1,13 +1,13 @@
 #include <filesystem>
 #include <slamd/assert.hpp>
-#include <slamd/geometry/image.hpp>
+#include <slamd/geom/image.hpp>
 #include <slamd/gmath/transforms.hpp>
 #include <slamd/paths.hpp>
 
 namespace fs = std::filesystem;
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 const fs::path vertex_shader_path =
     shader_folder() / "image" / "vertex_shader.vert";
@@ -163,18 +163,18 @@ std::optional<gmath::AABB> Image::bounds() {
     );
 }
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 
 std::shared_ptr<Image> image(
     data::Image&& image
 ) {
     return std::make_shared<Image>(std::move(image), true);
 }
-}  // namespace geometry
+}  // namespace geom
 
-namespace geometry2d {
+namespace geom2d {
 
 std::shared_ptr<Image> image(
     data::Image&& image
@@ -182,6 +182,6 @@ std::shared_ptr<Image> image(
     return std::make_shared<Image>(std::move(image), false);
 }
 
-}  // namespace geometry2d
+}  // namespace geom2d
 
 }  // namespace slamd

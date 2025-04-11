@@ -4,7 +4,7 @@
 #include <memory>
 #include <mutex>
 #include <optional>
-#include <slamd/geometry/geometry.hpp>
+#include <slamd/geom/geometry.hpp>
 #include <string>
 
 namespace slamd {
@@ -16,17 +16,17 @@ class Node {
 
    private:
     std::optional<glm::mat4> transform;
-    std::optional<std::shared_ptr<_geometry::Geometry>> object;
+    std::optional<std::shared_ptr<_geom::Geometry>> object;
 
     mutable std::mutex transform_mutex;
     mutable std::mutex object_mutex;
 
    public:
-    std::optional<std::shared_ptr<_geometry::Geometry>> get_object() const;
+    std::optional<std::shared_ptr<_geom::Geometry>> get_object() const;
 
     std::optional<glm::mat4> get_transform() const;
 
-    void set_object(std::shared_ptr<_geometry::Geometry> object);
+    void set_object(std::shared_ptr<_geom::Geometry> object);
 
     void set_transform(glm::mat4 transform);
 };

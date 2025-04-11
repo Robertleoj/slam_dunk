@@ -1,13 +1,13 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <slamd/geometry/geometry.hpp>
-#include <slamd/geometry/mono_mesh.hpp>
 #include <slamd/constants.hpp>
+#include <slamd/geom/geometry.hpp>
+#include <slamd/geom/mono_mesh.hpp>
 #include <vector>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 class PolyLine : public Geometry {
    public:
@@ -24,17 +24,17 @@ class PolyLine : public Geometry {
     MonoMesh mesh;
 };
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 
-using _geometry::PolyLine;
+using _geom::PolyLine;
 std::shared_ptr<PolyLine> poly_line(
     const std::vector<glm::vec3>& points,
     float thickness,
     const glm::vec3& color
 );
 
-}  // namespace geometry
+}  // namespace geom
 
 }  // namespace slamd

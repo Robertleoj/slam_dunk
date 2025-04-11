@@ -4,7 +4,7 @@
 #include <slamd/gmath/aabb.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 class Geometry {
    public:
@@ -15,5 +15,5 @@ class Geometry {
 
     virtual std::optional<gmath::AABB> bounds();
 };
-}  // namespace _geometry
+}  // namespace _geom
 }  // namespace slamd

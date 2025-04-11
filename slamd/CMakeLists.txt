@@ -47,20 +47,20 @@ target_sources(
         src/gmath/angle.cpp
         src/gmath/transforms.cpp
 
-        src/geometry/utils.cpp
-        src/geometry/geometry.cpp
-        src/geometry/box.cpp
-        src/geometry/simple_mesh.cpp
-        src/geometry/arrows.cpp
-        src/geometry/sphere.cpp
-        src/geometry/triad.cpp
-        src/geometry/mono_mesh.cpp
-        src/geometry/poly_line.cpp
-        src/geometry/xy_grid.cpp
-        src/geometry/arcball_indicator.cpp
-        src/geometry/image.cpp
-        src/geometry/point_cloud.cpp
-        src/geometry/camera_frustum.cpp
+        src/geom/utils.cpp
+        src/geom/geometry.cpp
+        src/geom/box.cpp
+        src/geom/simple_mesh.cpp
+        src/geom/arrows.cpp
+        src/geom/sphere.cpp
+        src/geom/triad.cpp
+        src/geom/mono_mesh.cpp
+        src/geom/poly_line.cpp
+        src/geom/xy_grid.cpp
+        src/geom/arcball_indicator.cpp
+        src/geom/image.cpp
+        src/geom/point_cloud.cpp
+        src/geom/camera_frustum.cpp
 )
 
 target_include_directories(

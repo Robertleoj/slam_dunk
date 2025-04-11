@@ -52,7 +52,7 @@ glm::mat4 random_transform(
     return transform;
 }
 
-std::shared_ptr<slamd::geometry::CameraFrustum> get_frustum() {
+std::shared_ptr<slamd::geom::CameraFrustum> get_frustum() {
     float fx = 525.0f;
     float fy = 525.0f;
     float cx = 320.0f;
@@ -67,7 +67,7 @@ std::shared_ptr<slamd::geometry::CameraFrustum> get_frustum() {
     size_t width = 640;
     size_t height = 480;
 
-    return slamd::geometry::camera_frustum(K, width, height, 1.0);
+    return slamd::geom::camera_frustum(K, width, height, 1.0);
 }
 
 int main() {

@@ -3,8 +3,8 @@
 #include <slamd/camera.hpp>
 #include <slamd/frame_buffer.hpp>
 #include <slamd/frame_timer.hpp>
-#include <slamd/geometry/arcball_indicator.hpp>
-#include <slamd/geometry/xy_grid.hpp>
+#include <slamd/geom/arcball_indicator.hpp>
+#include <slamd/geom/xy_grid.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd/view/view.hpp>
 #include <thread>
@@ -19,8 +19,8 @@ class SceneView : public View {
     Arcball arcball;
     Camera camera;
     FrameTimer frame_timer;
-    _geometry::GridXYPlane xy_grid;
-    _geometry::ArcballIndicator arcball_indicator;
+    _geom::GridXYPlane xy_grid;
+    _geom::ArcballIndicator arcball_indicator;
 
    public:
     SceneView(std::shared_ptr<Scene> scene);

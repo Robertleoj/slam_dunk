@@ -1,8 +1,8 @@
-#include <slamd/geometry/arrows.hpp>
-#include <slamd/geometry/utils.hpp>
+#include <slamd/geom/arrows.hpp>
+#include <slamd/geom/utils.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 constexpr uint segments = 12;
 struct ArrowMesh {
@@ -185,9 +185,9 @@ void Arrows::render(
     mesh.render(model, view, projection);
 }
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 std::shared_ptr<Arrows> arrows(
     const std::vector<glm::vec3>& starts,
     const std::vector<glm::vec3>& ends,
@@ -196,5 +196,5 @@ std::shared_ptr<Arrows> arrows(
 ) {
     return std::make_shared<Arrows>(starts, ends, colors, thickness);
 }
-}  // namespace geometry
+}  // namespace geom
 }  // namespace slamd

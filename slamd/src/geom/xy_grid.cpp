@@ -1,12 +1,12 @@
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd/assert.hpp>
-#include <slamd/geometry/xy_grid.hpp>
+#include <slamd/geom/xy_grid.hpp>
 #include <slamd/paths.hpp>
 #include <slamd/render_thread_job_queue.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 const fs::path vertex_shader_path =
     shader_folder() / "xy_grid" / "vertex_shader.vert";
@@ -182,6 +182,6 @@ void GridXYPlane::set_arcball_zoom(
     this->arcball_zoom = zoom;
 }
 
-}  // namespace _geometry
+}  // namespace _geom
 
 }  // namespace slamd

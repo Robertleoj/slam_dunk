@@ -1,11 +1,11 @@
 #include <slamd/assert.hpp>
 #include <slamd/constants.hpp>
-#include <slamd/geometry/mono_mesh.hpp>
-#include <slamd/geometry/utils.hpp>
+#include <slamd/geom/mono_mesh.hpp>
+#include <slamd/geom/utils.hpp>
 #include <slamd/paths.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 const fs::path vertex_shader_path =
     shader_folder() / "mono_mesh" / "vertex_shader.vert";
@@ -126,9 +126,9 @@ void MonoMesh::render(
     gl::glBindVertexArray(0);
 };
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 
 std::shared_ptr<MonoMesh> mono_mesh(
     std::vector<glm::vec3> vertices,
@@ -138,5 +138,5 @@ std::shared_ptr<MonoMesh> mono_mesh(
     return std::make_shared<MonoMesh>(vertices, triangle_indices, color);
 }
 
-}  // namespace geometry
+}  // namespace geom
 }  // namespace slamd

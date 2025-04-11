@@ -1,6 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <slamd/geometry/geometry.hpp>
+#include <slamd/geom/geometry.hpp>
 #include <slamd/gmath/aabb.hpp>
 #include <slamd/tree/node.hpp>
 #include <slamd/tree/tree_path.hpp>
@@ -17,7 +17,7 @@ class Tree {
 
     void set_object(
         const std::string& path,
-        std::shared_ptr<_geometry::Geometry> object
+        std::shared_ptr<_geom::Geometry> object
     );
 
     void render(const glm::mat4& view, const glm::mat4& projection) const;

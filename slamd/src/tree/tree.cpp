@@ -12,7 +12,7 @@ Tree::Tree() {
 
 void Tree::set_object(
     const std::string& path,
-    std::shared_ptr<_geometry::Geometry> object
+    std::shared_ptr<_geom::Geometry> object
 ) {
     TreePath treepath(path);
 

@@ -1,14 +1,14 @@
 #pragma once
 #include <optional>
 #include <slamd/data/image.hpp>
-#include <slamd/geometry/geometry.hpp>
+#include <slamd/geom/geometry.hpp>
 #include <slamd/gmath/aabb.hpp>
 #include <slamd/image_texture.hpp>
 #include <slamd/shaders.hpp>
 #include <slamd/thread_box.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 class Image : public Geometry {
    public:
@@ -38,18 +38,18 @@ class Image : public Geometry {
     void initialize();
 };
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
-using _geometry::Image;
-
-std::shared_ptr<Image> image(data::Image&& image);
-}  // namespace geometry
-
-namespace geometry2d {
-using _geometry::Image;
+namespace geom {
+using _geom::Image;
 
 std::shared_ptr<Image> image(data::Image&& image);
-}  // namespace geometry2d
+}  // namespace geom
+
+namespace geom2d {
+using _geom::Image;
+
+std::shared_ptr<Image> image(data::Image&& image);
+}  // namespace geom2d
 
 }  // namespace slamd

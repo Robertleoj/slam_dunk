@@ -1,23 +1,26 @@
 #pragma once
 
-#include <chrono>
-#include <slamd/geometry/geometry.hpp>
+#include <glbinding/gl/gl.h>
+#include <glbinding/glbinding.h>
+#include <slamd/geom/geometry.hpp>
 #include <slamd/shaders.hpp>
 #include <slamd/thread_box.hpp>
+#include <vector>
 
 namespace slamd {
-namespace _geometry {
-class ArcballIndicator : public Geometry {
+namespace _geom {
+
+class GridXYPlane : public Geometry {
    public:
-    ArcballIndicator();
+    GridXYPlane(float grid_size = 10.0f);
+
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
+    ~GridXYPlane() override;
+
     void set_arcball_zoom(float zoom);
-    void interact();
 
    private:
-    static glm::mat4 get_scale_mat(float scale);
-    float get_alpha();
     void initialize();
 
    private:
@@ -25,14 +28,15 @@ class ArcballIndicator : public Geometry {
         gl::GLuint vao_id;
         gl::GLuint vbo_id;
         ShaderProgram shader;
+        size_t vertex_count;
     };
-    std::optional<ThreadBox<GLData>> gl_state;
+
+    std::optional<ThreadBox<GLData>> gl_data;
     std::optional<std::thread::id> render_thread_id;
 
-    uint vertex_count;
     float arcball_zoom;
-    std::optional<std::chrono::high_resolution_clock::time_point>
-        last_interacted;
+    float grid_size;
 };
-}  // namespace _geometry
+
+}  // namespace _geom
 }  // namespace slamd

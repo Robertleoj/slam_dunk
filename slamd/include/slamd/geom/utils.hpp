@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 size_t generate_sphere(
     std::vector<glm::vec3>& vertices,
@@ -32,5 +32,5 @@ data::Mesh make_mesh(
     const std::vector<uint32_t>& triangle_indices
 );
 
-}  // namespace _geometry
+}  // namespace _geom
 }  // namespace slamd

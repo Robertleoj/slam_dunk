@@ -19,7 +19,7 @@ float surface(
     return 3.0f * glm::cos(x) * glm::sin(y) + 0.1f * x * y + 0.2f * y;
 }
 
-std::shared_ptr<slamd::geometry::PointCloud> cool_point_cloud() {
+std::shared_ptr<slamd::geom::PointCloud> cool_point_cloud() {
     std::vector<glm::vec3> positions;
     std::vector<glm::vec3> colors;
     std::vector<float> radii;
@@ -58,7 +58,7 @@ std::shared_ptr<slamd::geometry::PointCloud> cool_point_cloud() {
         radii.push_back(random_float(0.01f, 0.1f));  // min 0.1, max 0.6
     }
 
-    return slamd::geometry::point_cloud(positions, colors, radii);
+    return slamd::geom::point_cloud(positions, colors, radii);
 }
 
 int main() {

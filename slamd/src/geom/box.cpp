@@ -1,9 +1,9 @@
 #include <ranges>
-#include <slamd/geometry/box.hpp>
-#include <slamd/geometry/utils.hpp>
+#include <slamd/geom/box.hpp>
+#include <slamd/geom/utils.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 // clang-format off
 // 6 faces * 4 vertices = 24 unique verts
@@ -95,12 +95,12 @@ void Box::render(
     this->box_mesh.render(model, view, projection);
 }
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 std::shared_ptr<Box> box() {
     return std::make_shared<Box>();
 }
 
-}  // namespace geometry
+}  // namespace geom
 }  // namespace slamd

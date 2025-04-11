@@ -1,10 +1,10 @@
 #pragma once
 
-#include <slamd/geometry/geometry.hpp>
-#include <slamd/geometry/simple_mesh.hpp>
+#include <slamd/geom/geometry.hpp>
+#include <slamd/geom/simple_mesh.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 class PointCloud : public Geometry {
    public:
@@ -26,10 +26,10 @@ class PointCloud : public Geometry {
     );
 };
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
-using _geometry::PointCloud;
+namespace geom {
+using _geom::PointCloud;
 
 template <typename ColorType, typename RadiiType>
 std::shared_ptr<PointCloud> point_cloud(
@@ -61,5 +61,5 @@ std::shared_ptr<PointCloud> point_cloud(
     );
 }
 
-}  // namespace geometry
+}  // namespace geom
 }  // namespace slamd

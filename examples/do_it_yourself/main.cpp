@@ -43,7 +43,9 @@ glm::vec3 random_vector(
     float max
 ) {
     return glm::vec3(
-        rand_float(min, max), rand_float(min, max), rand_float(min, max)
+        rand_float(min, max),
+        rand_float(min, max),
+        rand_float(min, max)
     );
 }
 
@@ -71,14 +73,14 @@ glm::mat4 random_transform(
     return transform;
 }
 
-std::shared_ptr<slamd::geometry::Sphere> random_sphere() {
+std::shared_ptr<slamd::geom::Sphere> random_sphere() {
     float radius = rand_float(0.1, 1.0);
 
     glm::vec3 color = random_vector(0.0f, 1.0f);
-    return slamd::geometry::sphere(radius, color);
+    return slamd::geom::sphere(radius, color);
 }
 
-std::shared_ptr<slamd::geometry::PolyLine> random_poly_line(
+std::shared_ptr<slamd::geom::PolyLine> random_poly_line(
     int pointCount = 10
 ) {
     float thickness = rand_float(0.01, 0.5);
@@ -99,10 +101,10 @@ std::shared_ptr<slamd::geometry::PolyLine> random_poly_line(
 
     glm::vec3 color = random_vector(0.0, 1.0);
 
-    return slamd::geometry::poly_line(points, thickness, color);
+    return slamd::geom::poly_line(points, thickness, color);
 }
 
-std::shared_ptr<slamd::geometry::Arrows> random_arrows(
+std::shared_ptr<slamd::geom::Arrows> random_arrows(
     int arrowCount = 10
 ) {
     float thickness = rand_float(0.01f, 0.5f);
@@ -122,7 +124,7 @@ std::shared_ptr<slamd::geometry::Arrows> random_arrows(
         colors.push_back(random_vector(0.0f, 1.0f));
     }
 
-    return slamd::geometry::arrows(starts, ends, colors, thickness);
+    return slamd::geom::arrows(starts, ends, colors, thickness);
 }
 
 int main() {
@@ -135,12 +137,12 @@ int main() {
 
     auto scene = slamd::scene();
 
-    scene->set_object("/origin_triad", slamd::geometry::triad());
+    scene->set_object("/origin_triad", slamd::geom::triad());
 
     for (int i = 0; i < 50; i++) {
         std::string box_path = std::format("/box{}", i);
 
-        scene->set_object(box_path, slamd::geometry::box());
+        scene->set_object(box_path, slamd::geom::box());
         scene->set_transform(box_path, random_transform(true));
     }
 

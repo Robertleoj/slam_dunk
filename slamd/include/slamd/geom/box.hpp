@@ -1,12 +1,12 @@
 #pragma once
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
-#include <slamd/geometry/geometry.hpp>
-#include <slamd/geometry/simple_mesh.hpp>
+#include <slamd/geom/geometry.hpp>
+#include <slamd/geom/simple_mesh.hpp>
 #include <slamd/thread_box.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 class Box : public Geometry {
    public:
@@ -17,13 +17,13 @@ class Box : public Geometry {
     SimpleMesh box_mesh;
 };
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
-    
-using _geometry::Box;
+namespace geom {
+
+using _geom::Box;
 
 std::shared_ptr<Box> box();
-}  // namespace geometry
+}  // namespace geom
 
 }  // namespace slamd

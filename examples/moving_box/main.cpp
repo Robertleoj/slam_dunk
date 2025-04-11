@@ -10,7 +10,7 @@ int main() {
 
     auto scene = slamd::scene();
 
-    scene->set_object("/rot/trans/box", slamd::geometry::box());
+    scene->set_object("/rot/trans/box", slamd::geom::box());
 
     scene->set_transform("/rot/trans", slamd::gmath::tx3D(10.0f));
 

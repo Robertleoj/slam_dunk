@@ -4,7 +4,7 @@
 namespace slamd {
 namespace _tree {
 
-std::optional<std::shared_ptr<_geometry::Geometry>> Node::get_object() const {
+std::optional<std::shared_ptr<_geom::Geometry>> Node::get_object() const {
     std::scoped_lock l(this->object_mutex);
     if (!this->object.has_value()) {
         return std::nullopt;
@@ -19,7 +19,7 @@ std::optional<glm::mat4> Node::get_transform() const {
 }
 
 void Node::set_object(
-    std::shared_ptr<_geometry::Geometry> object
+    std::shared_ptr<_geom::Geometry> object
 ) {
     std::scoped_lock l(this->object_mutex);
     this->object.emplace(object);

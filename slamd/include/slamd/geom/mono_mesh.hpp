@@ -5,13 +5,13 @@
 #include <optional>
 #include <slamd/constants.hpp>
 #include <slamd/data/mesh.hpp>
-#include <slamd/geometry/geometry.hpp>
+#include <slamd/geom/geometry.hpp>
 #include <slamd/shaders.hpp>
 #include <slamd/thread_box.hpp>
 #include <vector>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 class MonoMesh : public Geometry {
    public:
@@ -51,11 +51,11 @@ class MonoMesh : public Geometry {
     float min_brightness;
 };
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 
-using _geometry::MonoMesh;
+using _geom::MonoMesh;
 
 std::shared_ptr<MonoMesh> mono_mesh(
     std::vector<glm::vec3> vertices,
@@ -63,5 +63,5 @@ std::shared_ptr<MonoMesh> mono_mesh(
     glm::vec3 color
 );
 
-}  // namespace geometry
+}  // namespace geom
 }  // namespace slamd

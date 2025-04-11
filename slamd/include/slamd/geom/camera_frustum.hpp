@@ -1,9 +1,9 @@
 #pragma once
-#include <slamd/geometry/geometry.hpp>
-#include <slamd/geometry/poly_line.hpp>
+#include <slamd/geom/geometry.hpp>
+#include <slamd/geom/poly_line.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 class CameraFrustum : public Geometry {
    public:
@@ -19,11 +19,11 @@ class CameraFrustum : public Geometry {
    private:
     std::vector<PolyLine> poly_lines;
 };
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 
-using _geometry::CameraFrustum;
+using _geom::CameraFrustum;
 
 std::shared_ptr<CameraFrustum> camera_frustum(
     glm::mat3 intrinsics_matrix,
@@ -32,5 +32,5 @@ std::shared_ptr<CameraFrustum> camera_frustum(
     float scale = 1.0
 );
 
-}  // namespace geometry
+}  // namespace geom
 }  // namespace slamd

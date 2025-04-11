@@ -1,9 +1,9 @@
 #include <ranges>
-#include <slamd/geometry/point_cloud.hpp>
-#include <slamd/geometry/utils.hpp>
+#include <slamd/geom/point_cloud.hpp>
+#include <slamd/geom/utils.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 PointCloud::PointCloud(
     const std::vector<glm::vec3>& positions,
@@ -54,5 +54,5 @@ SimpleMesh PointCloud::make_mesh(
     return SimpleMesh(mesh_data);
 }
 
-}  // namespace _geometry
+}  // namespace _geom
 }  // namespace slamd

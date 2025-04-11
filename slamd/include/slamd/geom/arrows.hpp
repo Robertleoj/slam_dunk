@@ -1,11 +1,11 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <slamd/geometry/geometry.hpp>
-#include <slamd/geometry/simple_mesh.hpp>
+#include <slamd/geom/geometry.hpp>
+#include <slamd/geom/simple_mesh.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 class Arrows : public Geometry {
    public:
@@ -22,11 +22,11 @@ class Arrows : public Geometry {
     SimpleMesh mesh;
 };
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 
-using _geometry::Arrows;
+using _geom::Arrows;
 
 std::shared_ptr<Arrows> arrows(
     const std::vector<glm::vec3>& starts,
@@ -35,5 +35,5 @@ std::shared_ptr<Arrows> arrows(
     float thickness
 );
 
-}  // namespace geometry
+}  // namespace geom
 }  // namespace slamd

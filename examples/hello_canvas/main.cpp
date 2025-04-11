@@ -56,7 +56,7 @@ int main() {
 
     slamd::data::Image image = read_image();
 
-    canvas->set_object("/image", slamd::geometry2d::image(std::move(image)));
+    canvas->set_object("/image", slamd::geom2d::image(std::move(image)));
 
     window.wait_for_close();
 }

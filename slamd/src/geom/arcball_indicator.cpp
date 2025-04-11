@@ -1,12 +1,12 @@
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd/assert.hpp>
-#include <slamd/geometry/arcball_indicator.hpp>
+#include <slamd/geom/arcball_indicator.hpp>
 #include <slamd/paths.hpp>
 #include <slamd/render_thread_job_queue.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 const fs::path vertex_shader_path =
     shader_folder() / "arcball_indicator" / "vertex_shader.vert";
@@ -141,5 +141,5 @@ void ArcballIndicator::set_arcball_zoom(
     this->arcball_zoom = zoom;
 }
 
-}  // namespace _geometry
+}  // namespace _geom
 }  // namespace slamd

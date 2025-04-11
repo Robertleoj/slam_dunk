@@ -11,7 +11,7 @@ int main() {
     window.add_scene("scene view 2", scene);
 
     // example object - triad at origin
-    scene->set_object("/origin", slamd::geometry::triad());
+    scene->set_object("/origin", slamd::geom::triad());
 
     window.wait_for_close();
 }

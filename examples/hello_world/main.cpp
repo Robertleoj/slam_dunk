@@ -5,7 +5,7 @@ int main() {
 
     auto scene = slamd::scene();
 
-    scene->set_object("/origin", slamd::geometry::triad());
+    scene->set_object("/origin", slamd::geom::triad());
 
     window.add_scene("scene", scene);
 

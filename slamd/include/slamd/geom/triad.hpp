@@ -1,11 +1,11 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <slamd/geometry/arrows.hpp>
-#include <slamd/geometry/geometry.hpp>
+#include <slamd/geom/arrows.hpp>
+#include <slamd/geom/geometry.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 class Triad : public Geometry {
    public:
@@ -17,14 +17,14 @@ class Triad : public Geometry {
     Arrows arrows;
 };
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 
-using _geometry::Triad;
+using _geom::Triad;
 
 std::shared_ptr<Triad> triad(float scale = 1.0, float thickness = 0.1);
 
-}  // namespace geometry
+}  // namespace geom
 
 }  // namespace slamd

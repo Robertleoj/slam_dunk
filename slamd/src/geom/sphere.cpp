@@ -1,12 +1,12 @@
 #include <glm/glm.hpp>
 #include <numbers>
 #include <ranges>
-#include <slamd/geometry/sphere.hpp>
-#include <slamd/geometry/utils.hpp>
+#include <slamd/geom/sphere.hpp>
+#include <slamd/geom/utils.hpp>
 #include <vector>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 MonoMesh make_sphere_mesh(
     float radius,
@@ -42,15 +42,15 @@ void Sphere::render(
     this->mesh.render(model, view, projection);
 };
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 std::shared_ptr<Sphere> sphere(
     float radius,
     glm::vec3 color
 ) {
     return std::make_shared<Sphere>(radius, color);
 }
-}  // namespace geometry
+}  // namespace geom
 
 }  // namespace slamd

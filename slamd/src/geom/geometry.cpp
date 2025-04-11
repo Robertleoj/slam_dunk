@@ -1,11 +1,11 @@
-#include <slamd/geometry/geometry.hpp>
+#include <slamd/geom/geometry.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 std::optional<gmath::AABB> Geometry::bounds() {
     return std::nullopt;
 }
 
-}  // namespace _geometry
+}  // namespace _geom
 }  // namespace slamd

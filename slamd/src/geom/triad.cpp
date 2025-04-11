@@ -1,7 +1,7 @@
-#include <slamd/geometry/triad.hpp>
+#include <slamd/geom/triad.hpp>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 Arrows make_arrows(
     float scale,
@@ -31,15 +31,15 @@ void Triad::render(
     this->arrows.render(model, view, projection);
 }
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 std::shared_ptr<Triad> triad(
     float scale,
     float thickness
 ) {
     return std::make_shared<Triad>(scale, thickness);
 }
-}  // namespace geometry
+}  // namespace geom
 
 }  // namespace slamd

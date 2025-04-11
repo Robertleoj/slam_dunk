@@ -5,14 +5,14 @@
 #include <optional>
 #include <slamd/constants.hpp>
 #include <slamd/data/mesh.hpp>
-#include <slamd/geometry/geometry.hpp>
+#include <slamd/geom/geometry.hpp>
 #include <slamd/shaders.hpp>
 #include <slamd/thread_box.hpp>
 #include <thread>
 #include <vector>
 
 namespace slamd {
-namespace _geometry {
+namespace _geom {
 
 // TODO: move to data
 
@@ -51,11 +51,11 @@ class SimpleMesh : public Geometry {
     float min_brightness;
 };
 
-}  // namespace _geometry
+}  // namespace _geom
 
-namespace geometry {
+namespace geom {
 
-using _geometry::SimpleMesh;
+using _geom::SimpleMesh;
 std::shared_ptr<SimpleMesh> simple_mesh(
     const std::vector<glm::vec3>& vertices,
     const std::vector<glm::vec3>& vertex_colors,
@@ -64,5 +64,5 @@ std::shared_ptr<SimpleMesh> simple_mesh(
 
 std::shared_ptr<SimpleMesh> simple_mesh(const data::ColoredMesh& mesh_data);
 
-}  // namespace geometry
+}  // namespace geom
 }  // namespace slamd
