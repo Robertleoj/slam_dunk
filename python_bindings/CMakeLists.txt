@@ -4,7 +4,7 @@ project(myviz_bindings LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-set(LIB_DIR ../vendored_deps)
+set(LIB_DIR vendored_deps)
 
 
 if(NOT TARGET spdlog::spdlog)
