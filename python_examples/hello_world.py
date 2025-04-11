@@ -4,7 +4,7 @@ import numpy as np
 
 
 def f(inp, t):
-    return np.sin(inp[:, :, 0] + t) * np.sin(inp[:, :, 1] + t)
+    return np.sin(0.5 * inp[:, :, 0] + t) * np.sin(0.5 * inp[:, :, 1] + t)
 
 
 def make_grid(n: int, a: float):
@@ -17,7 +17,7 @@ def make_grid(n: int, a: float):
 def main():
     window = slamd.Window("hello python", 1000, 1000)
 
-    coords = make_grid(20, 5.0)
+    coords = make_grid(30, 10.0)
 
     scene = slamd.scene()
     window.add_scene("scene", scene)
@@ -28,16 +28,29 @@ def main():
         z = f(coords, t)
         points = np.concatenate((coords, z[:, :, None]), axis=2)
 
+        red = np.exp(-points[:, :, 2])
+        blue = 1.0 - red
+        green = 0.5
+
+        colors = np.zeros(points.shape, dtype=np.float32)
+        colors[:, :, 0] = red
+        colors[:, :, 1] = blue
+        colors[:, :, 2] = green
+
+        radii = np.ones(points.shape[:2], dtype=float) * 0.3
+
+        scene.set_object("/origin", slamd.geom.triad())
+
         scene.set_object(
             "/points",
             slamd.geom.point_cloud(
                 points.reshape(-1, 3).astype(np.float32),
-                np.array([1.0, 0.0, 0.0], dtype=np.float32),
-                0.3,
+                colors.reshape(-1, 3).astype(np.float32),
+                radii.reshape(-1).astype(float),
             ),
         )
 
-        t += 0.1
+        t += 0.02
 
     window.wait_for_close()
 
