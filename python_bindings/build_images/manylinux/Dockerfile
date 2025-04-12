@@ -18,8 +18,8 @@ ARG CORES=4
 
 # ARG GCC_VERSION=9.3.0
 # ARG GCC_PATH=/usr/local/gcc-$GCC_VERSION
-ARG GCC_VERSION=13.2.0
-ARG GCC_PATH=/usr/local/gcc-13.2.0
+ARG GCC_VERSION=13.1.0
+ARG GCC_PATH=/usr/local/gcc-13.1.0
 
 RUN cd /tmp \
     && curl -L -o gcc.tar.gz "https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.gz" \
