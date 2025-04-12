@@ -12,8 +12,4 @@ inline fs::path repo_root() {
         .parent_path();        // repo root
 }
 
-inline fs::path shader_folder() {
-    return repo_root() / "shaders";
-}
-
 }  // namespace slamd

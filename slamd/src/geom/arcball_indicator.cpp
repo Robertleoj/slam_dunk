@@ -1,17 +1,13 @@
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd/assert.hpp>
+#include <slamd/gen/shader_sources.hpp>
 #include <slamd/geom/arcball_indicator.hpp>
 #include <slamd/paths.hpp>
 #include <slamd/render_thread_job_queue.hpp>
 
 namespace slamd {
 namespace _geom {
-
-const fs::path vertex_shader_path =
-    shader_folder() / "arcball_indicator" / "vertex_shader.vert";
-const fs::path fragment_shader_path =
-    shader_folder() / "arcball_indicator" / "fragment_shader.frag";
 
 void ArcballIndicator::initialize() {
     assert_thread(this->render_thread_id.value());
@@ -63,7 +59,10 @@ void ArcballIndicator::initialize() {
     GLData gl_state = {
         vao_id,
         vbo_id,
-        ShaderProgram(vertex_shader_path, fragment_shader_path)
+        ShaderProgram(
+            shader_source::arcball_indicator::vert,
+            shader_source::arcball_indicator::frag
+        )
     };
 
     this->gl_state.emplace(gl_state);

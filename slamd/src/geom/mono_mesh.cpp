@@ -1,5 +1,6 @@
 #include <slamd/assert.hpp>
 #include <slamd/constants.hpp>
+#include <slamd/gen/shader_sources.hpp>
 #include <slamd/geom/mono_mesh.hpp>
 #include <slamd/geom/utils.hpp>
 #include <slamd/paths.hpp>
@@ -7,18 +8,16 @@
 namespace slamd {
 namespace _geom {
 
-const fs::path vertex_shader_path =
-    shader_folder() / "mono_mesh" / "vertex_shader.vert";
-const fs::path fragment_shader_path =
-    shader_folder() / "mono_mesh" / "fragment_shader.frag";
-
 thread_local std::optional<ShaderProgram> MonoMesh::shader;
 
 void MonoMesh::initialize() {
     assert_thread(this->render_thread_id.value());
 
     if (!MonoMesh::shader.has_value()) {
-        shader.emplace(vertex_shader_path, fragment_shader_path);
+        shader.emplace(
+            shader_source::mono_mesh::vert,
+            shader_source::mono_mesh::frag
+        );
     }
 
     GLData gl_data;

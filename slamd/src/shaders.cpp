@@ -74,13 +74,6 @@ gl::GLuint compile_vertex_shader(
     return shader_id;
 }
 
-gl::GLuint compile_vertex_shader(
-    fs::path path
-) {
-    const std::string shader_source = read_file_text(path);
-    return compile_vertex_shader(shader_source);
-}
-
 gl::GLuint compile_fragment_shader(
     std::string source
 ) {
@@ -95,13 +88,6 @@ gl::GLuint compile_fragment_shader(
     spdlog::info("Fragment shader compiled: id={}", shader_id);
 
     return shader_id;
-}
-
-gl::GLuint compile_fragment_shader(
-    fs::path path
-) {
-    const std::string shader_source = read_file_text(path);
-    return compile_fragment_shader(shader_source);
 }
 
 gl::GLuint make_shader_program(
@@ -119,11 +105,11 @@ gl::GLuint make_shader_program(
 }
 
 gl::GLuint make_shader_program(
-    fs::path vertex_shader_path,
-    fs::path fragment_shader_path
+    std::string vertex_shader_source,
+    std::string fragment_shader_source
 ) {
-    auto vertex_shader_id = compile_vertex_shader(vertex_shader_path);
-    auto fragment_shader_id = compile_fragment_shader(fragment_shader_path);
+    auto vertex_shader_id = compile_vertex_shader(vertex_shader_source);
+    auto fragment_shader_id = compile_fragment_shader(fragment_shader_source);
 
     auto shader_program_id =
         make_shader_program(vertex_shader_id, fragment_shader_id);
@@ -135,10 +121,11 @@ gl::GLuint make_shader_program(
 }
 
 ShaderProgram::ShaderProgram(
-    fs::path vertex_shader_path,
-    fs::path fragment_shader_path
+    std::string vertex_shader_source,
+    std::string fragment_shader_source
 ) {
-    this->id = make_shader_program(vertex_shader_path, fragment_shader_path);
+    this->id =
+        make_shader_program(vertex_shader_source, fragment_shader_source);
 }
 
 ShaderProgram::ShaderProgram(

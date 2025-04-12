@@ -2,6 +2,7 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <glm/glm.hpp>
+#include <memory>
 #include <optional>
 #include <slamd/constants.hpp>
 #include <slamd/data/mesh.hpp>

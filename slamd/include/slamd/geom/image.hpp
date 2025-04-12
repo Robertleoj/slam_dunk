@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <optional>
 #include <slamd/data/image.hpp>
 #include <slamd/geom/geometry.hpp>
@@ -50,7 +51,6 @@ namespace geom2d {
 using _geom::Image;
 
 std::shared_ptr<Image> image(data::Image&& image);
-
 
 }  // namespace geom2d
 

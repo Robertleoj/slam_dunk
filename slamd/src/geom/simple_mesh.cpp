@@ -1,6 +1,7 @@
 #include <ranges>
 #include <slamd/assert.hpp>
 #include <slamd/constants.hpp>
+#include <slamd/gen/shader_sources.hpp>
 #include <slamd/geom/simple_mesh.hpp>
 #include <slamd/geom/utils.hpp>
 #include <slamd/paths.hpp>
@@ -8,18 +9,16 @@
 namespace slamd {
 namespace _geom {
 
-const fs::path vertex_shader_path =
-    shader_folder() / "simple_mesh" / "vertex_shader.vert";
-const fs::path fragment_shader_path =
-    shader_folder() / "simple_mesh" / "fragment_shader.frag";
-
 thread_local std::optional<ShaderProgram> SimpleMesh::shader;
 
 void SimpleMesh::initialize() {
     assert_thread(this->render_thread_id.value());
 
     if (!SimpleMesh::shader.has_value()) {
-        shader.emplace(vertex_shader_path, fragment_shader_path);
+        shader.emplace(
+            shader_source::simple_mesh::vert,
+            shader_source::simple_mesh::frag
+        );
     }
 
     GLData gl_data;

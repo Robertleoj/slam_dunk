@@ -1,17 +1,13 @@
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd/assert.hpp>
+#include <slamd/gen/shader_sources.hpp>
 #include <slamd/geom/xy_grid.hpp>
 #include <slamd/paths.hpp>
 #include <slamd/render_thread_job_queue.hpp>
 
 namespace slamd {
 namespace _geom {
-
-const fs::path vertex_shader_path =
-    shader_folder() / "xy_grid" / "vertex_shader.vert";
-const fs::path fragment_shader_path =
-    shader_folder() / "xy_grid" / "fragment_shader.frag";
 
 glm::mat4 get_scale_mat(
     float log_scale
@@ -71,7 +67,10 @@ void GridXYPlane::initialize() {
     GLData gl_data{
         vao_id,
         vbo_id,
-        ShaderProgram(vertex_shader_path, fragment_shader_path),
+        ShaderProgram(
+            shader_source::xy_grid::vert,
+            shader_source::xy_grid::frag
+        ),
         vertex_count
     };
 

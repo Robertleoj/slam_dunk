@@ -1,18 +1,11 @@
-#include <filesystem>
 #include <slamd/assert.hpp>
+#include <slamd/gen/shader_sources.hpp>
 #include <slamd/geom/image.hpp>
 #include <slamd/gmath/transforms.hpp>
 #include <slamd/paths.hpp>
 
-namespace fs = std::filesystem;
-
 namespace slamd {
 namespace _geom {
-
-const fs::path vertex_shader_path =
-    shader_folder() / "image" / "vertex_shader.vert";
-const fs::path fragment_shader_path =
-    shader_folder() / "image" / "fragment_shader.frag";
 
 void Image::initialize() {
     assert_thread(this->render_thread_id.value());
@@ -101,7 +94,7 @@ void Image::initialize() {
         vbo_id,
         eab_id,
         graphics::ImageTexture(this->image),
-        ShaderProgram(vertex_shader_path, fragment_shader_path)
+        ShaderProgram(shader_source::image::vert, shader_source::image::frag)
     };
 
     this->gl_data.emplace(gl_data);
