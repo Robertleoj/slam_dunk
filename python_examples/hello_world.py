@@ -39,8 +39,6 @@ def main():
 
         radii = np.ones(points.shape[:2], dtype=float) * 0.3
 
-        scene.set_object("/origin", slamd.geom.triad())
-
         scene.set_object(
             "/points",
             slamd.geom.point_cloud(
