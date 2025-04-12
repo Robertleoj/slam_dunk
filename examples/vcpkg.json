@@ -1,8 +1,7 @@
 {
     "dependencies": [
+        "stb",
         "glbinding",
-        "glfw3",
-        "glm",
         {
             "name": "imgui",
             "features": [
@@ -11,8 +10,6 @@
                 "opengl3-binding"
             ]
         },
-        "spdlog",
-        "stb",
-        "pybind11"
+        "spdlog"
     ]
 }

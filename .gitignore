@@ -2,3 +2,5 @@
 .venv/
 vcpkg_installed/
 build/
+**/*.so
+**/*__pycache__

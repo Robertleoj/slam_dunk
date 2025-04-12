@@ -45,8 +45,8 @@ dependencies = [
     { name = "imageio" },
     { name = "jinja2" },
     { name = "numpy" },
+    { name = "pybind11" },
     { name = "pybind11-stubgen" },
-    { name = "slamd" },
 ]
 
 [package.metadata]
@@ -55,8 +55,8 @@ requires-dist = [
     { name = "imageio", specifier = ">=2.37.0" },
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "numpy", specifier = ">=2.2.4" },
+    { name = "pybind11", specifier = ">=2.13.6" },
     { name = "pybind11-stubgen", specifier = ">=2.5.3" },
-    { name = "slamd", directory = "python_bindings" },
 ]
 
 [[package]]
@@ -205,6 +205,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pybind11"
+version = "2.13.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d2/c1/72b9622fcb32ff98b054f724e213c7f70d6898baa714f4516288456ceaba/pybind11-2.13.6.tar.gz", hash = "sha256:ba6af10348c12b24e92fa086b39cfba0eff619b61ac77c406167d813b096d39a", size = 218403 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/13/2f/0f24b288e2ce56f51c920137620b4434a38fd80583dbbe24fc2a1656c388/pybind11-2.13.6-py3-none-any.whl", hash = "sha256:237c41e29157b962835d356b370ededd57594a26d5894a795960f0047cb5caf5", size = 243282 },
+]
+
+[[package]]
 name = "pybind11-stubgen"
 version = "2.5.3"
 source = { registry = "https://pypi.org/simple" }
@@ -212,17 +221,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/67/c6/2c695a3f94a9dfa19
 wheels = [
     { url = "https://files.pythonhosted.org/packages/cd/c3/fb2e68bf0b0bb1c233854f4f9ad7c388c7497d80a60597efc1640356ab7a/pybind11_stubgen-2.5.3-py3-none-any.whl", hash = "sha256:7c6a642027e5dcb6a734822cac0cc8600ceadccd9b0339e1fab0da632c3de0fa", size = 29894 },
 ]
-
-[[package]]
-name = "slamd"
-version = "0.1.0"
-source = { directory = "python_bindings" }
-dependencies = [
-    { name = "numpy" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "numpy", specifier = ">=1.23" }]
 
 [[package]]
 name = "termcolor"

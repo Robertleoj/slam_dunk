@@ -1,8 +1,13 @@
-import os
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
-from pathlib import Path
 from dataclasses import dataclass, asdict
+
+
+def repo_root():
+    curr_path = Path(__file__)
+    while not (curr_path / ".git").exists():
+        curr_path = curr_path.parent
+    return curr_path.resolve()
 
 
 @dataclass
@@ -44,9 +49,9 @@ def render_header(shaders: list[Shader], template_path: Path, output_path: Path)
 
 
 def embed_shaders():
-    shader_dir = Path("slamd/shaders")
-    output_file = Path("slamd/include/slamd/gen/shader_sources.hpp")
-    template_file = Path("templates/shader_template.hpp.j2")
+    shader_dir = repo_root() / Path("slamd/shaders")
+    output_file = repo_root() / Path("slamd/include/slamd/gen/shader_sources.hpp")
+    template_file = repo_root() / Path("templates/shader_template.hpp.j2")
 
     shader_data = collect_shaders(shader_dir)
     render_header(shader_data, template_file, output_file)

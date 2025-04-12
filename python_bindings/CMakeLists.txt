@@ -3,7 +3,6 @@ project(myviz_bindings LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
 set(LIB_DIR vendored_deps)
 
 
@@ -27,13 +26,8 @@ endif()
 if(NOT TARGET imgui::imgui)
     message(STATUS "Adding imgui...")
     add_subdirectory(${LIB_DIR}/imgui_wrapper)
-    add_library(imgui::imgui ALIAS imgui)
 endif()
 
-# if(NOT TARGET glm::glm)
-#     message(STATUS "Adding glm...")
-#     add_subdirectory(${LIB_DIR}/glm)
-# endif()
 
 if(NOT TARGET slamd)
     message(STATUS "Adding slamd...")
@@ -41,9 +35,21 @@ if(NOT TARGET slamd)
 endif()
 
 
-
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
-find_package(pybind11 CONFIG REQUIRED)
+
+# Try to find installed pybind11
+find_package(pybind11 CONFIG QUIET)
+
+if(NOT pybind11_FOUND)
+    message(STATUS "pybind11 not found, using FetchContent to grab it")
+    include(FetchContent)
+    FetchContent_Declare(
+        pybind11
+        GIT_REPOSITORY https://github.com/pybind/pybind11.git
+        GIT_TAG        stable
+    )
+    FetchContent_MakeAvailable(pybind11)
+endif()
 
 # === pybind11 module ===
 pybind11_add_module(bindings src/main.cpp)
@@ -54,23 +60,18 @@ target_include_directories(
 
     PRIVATE
 
-    ${LIB_DIR}/glm
-    ${LIB_DIR}/glbinding/include
-    ${LIB_DIR}/glfw/include
+        ${LIB_DIR}/glm
+        ${LIB_DIR}/glbinding/include
+        ${LIB_DIR}/glfw/include
 )
 
-target_link_libraries(bindings PRIVATE
-
-    slamd::slamd
-    glbinding::glbinding
-    glbinding::glbinding-aux
-
-    spdlog::spdlog
-
-    glfw
-
-    imgui::imgui
-    # glm::glm
+target_link_libraries(bindings 
+    PRIVATE 
+        slamd::slamd
+        imgui::imgui
+        glfw
+        glbinding::glbinding
+        glbinding::glbinding-aux
 )
 
 set_target_properties(bindings PROPERTIES

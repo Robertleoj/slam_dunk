@@ -10,35 +10,66 @@ project(slam_dunk VERSION 0.1.0)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# find_package(glbinding CONFIG REQUIRED)
-# find_package(glfw3 CONFIG REQUIRED)
-# find_package(spdlog CONFIG REQUIRED)
-# find_package(glm CONFIG REQUIRED)
-# find_package(imgui CONFIG REQUIRED)
+set(LIB_DIR vendored_deps)
+set(BIN_DIR ${CMAKE_BINARY_DIR}/_deps)
 
-function(find_required_package pkg_name target_name found_var)
-    # Only run find_package() if the target isn’t already present.
+function(find_required_package 
+    pkg_name 
+    target_name 
+    found_var 
+    subdir
+)
     if (NOT TARGET ${target_name})
         find_package(${pkg_name} CONFIG QUIET)
         if (NOT ${found_var})
-            message(FATAL_ERROR "${pkg_name} not found, bro! Build can't continue without it.")
+            message(STATUS "${pkg_name} not found via find_package, trying add_subdirectory, bro.")
+            add_subdirectory(
+                ${subdir} 
+                # ${CMAKE_BINARY_DIR}/${pkg_name}
+            )
+        endif()
+        # After add_subdirectory, check again
+        if (NOT TARGET ${target_name})
+            message(FATAL_ERROR "${pkg_name} not found, even after add_subdirectory, bro! We're toast.")
         endif()
     endif()
 endfunction()
 
 # Slam those deps in with confidence:
-find_required_package(glbinding glbinding::glbinding glbinding_FOUND)
-find_required_package(glfw3 glfw3::glfw3 glfw3_FOUND)  # or "glfw" if that’s the real target
-find_required_package(spdlog spdlog::spdlog spdlog_FOUND)
-# find_required_package(glm glm::glm glm_FOUND)
+find_required_package(
+    glbinding 
+    glbinding::glbinding 
+    glbinding_FOUND
+    ${LIB_DIR}/glbinding
+)
 
-find_required_package(imgui imgui::imgui imgui_FOUND)
+find_required_package(
+    glfw
+    glfw
+    glfw_FOUND
+    ${LIB_DIR}/glfw
+) 
 
-add_subdirectory(../vendored_deps/glm ${CMAKE_BINARY_DIR}/_libs/glm)
+find_required_package(
+    spdlog 
+    spdlog::spdlog 
+    spdlog_FOUND
+    ${LIB_DIR}/spdlog
+)
+
+find_required_package(
+    imgui 
+    imgui::imgui
+    imgui_FOUND
+    ${LIB_DIR}/imgui_wrapper
+)
+
+add_subdirectory(${LIB_DIR}/glm ${BIN_DIR}/glm)
 
 
 add_library(slamd STATIC)
 add_library(slamd::slamd ALIAS slamd)
+
 target_sources(
     slamd
 
@@ -93,26 +124,20 @@ target_include_directories(
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
-        ../vendored_deps/glm
+        ${LIB_DIR}/glm
 )
 
 target_link_libraries(
     slamd 
     
     PRIVATE
-
-        spdlog::spdlog
-
         glfw
-
+        spdlog::spdlog
         imgui::imgui
 
     PUBLIC
         glbinding::glbinding
         glbinding::glbinding-aux
-
-    # PUBLIC
-        # glm::glm
 )
 
 
