@@ -32,15 +32,15 @@ jobs:
           cp -r slamd python_bindings/slamd_src
           cp README.md python_bindings/README.md
 
-      # - name: Set up Python
-      #   uses: actions/setup-python@v4
-      #   with:
-      #     python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-      # - name: Install build deps
-      #   run: |
-      #     python -m pip install --upgrade pip
-      #     pip install cibuildwheel
+      - name: Install build deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install cibuildwheel
       # - name: Build custom Docker image
       #   run: docker build -t gcc13-wheel -f python_bindings/build_images/manylinux/Dockerfile .
 
