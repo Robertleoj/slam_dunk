@@ -31,8 +31,9 @@ if(NOT TARGET imgui::imgui)
 endif()
 
 if(NOT TARGET glm::glm)
-    message(STATUS "Adding glm...")
+    # message(STATUS "Adding glm...")
     add_subdirectory(${LIB_DIR}/glm)
+    # install(TARGETS glm DESTIMATION slamd OPTIONAL)
 endif()
 
 if(NOT TARGET slamd)
@@ -70,7 +71,7 @@ target_link_libraries(bindings PRIVATE
     glfw
 
     imgui::imgui
-    glm::glm
+    # glm::glm
 )
 
 set_target_properties(bindings PROPERTIES
