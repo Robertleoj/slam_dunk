@@ -15,7 +15,7 @@ def camera_frustum(*args, **kwargs) -> slamd.bindings._geom.CameraFrustum:
     """
     Create a CameraFrustum geometry
     """
-def mono_mesh(vertices: numpy.ndarray[float32[n][3]], triangle_indices: ..., std: ..., color: numpy.ndarray[float32[3]]) -> slamd.bindings._geom.MonoMesh:
+def mono_mesh(vertices: numpy.ndarray[float32[n][3]], triangle_indices: list[int], color: numpy.ndarray[float32[3]]) -> slamd.bindings._geom.MonoMesh:
     """
     Create a MonoMesh geometry
     """
@@ -25,7 +25,7 @@ def point_cloud(positions: numpy.ndarray[float32[n][3]], color: numpy.ndarray[fl
     Create a PointCloud with uniform color and radius
     """
 @typing.overload
-def point_cloud(positions: numpy.ndarray[float32[n][3]], colors: numpy.ndarray[float32[n][3]], radii: ..., std: ...) -> slamd.bindings._geom.PointCloud:
+def point_cloud(positions: numpy.ndarray[float32[n][3]], colors: numpy.ndarray[float32[n][3]], radii: list[float]) -> slamd.bindings._geom.PointCloud:
     """
     Create a PointCloud with per-point color and radius
     """
@@ -33,7 +33,7 @@ def poly_line(points: numpy.ndarray[float32[n][3]], thickness: float, color: num
     """
     Create a PolyLine geometry
     """
-def simple_mesh(vertices: numpy.ndarray[float32[n][3]], vertex_colors: numpy.ndarray[float32[n][3]], triangle_indices: ..., std: ...) -> slamd.bindings._geom.SimpleMesh:
+def simple_mesh(vertices: numpy.ndarray[float32[n][3]], vertex_colors: numpy.ndarray[float32[n][3]], triangle_indices: list[int]) -> slamd.bindings._geom.SimpleMesh:
     """
     Create a SimpleMesh geometry from raw data
     """

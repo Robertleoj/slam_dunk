@@ -30,8 +30,11 @@ endfunction()
 find_required_package(glbinding glbinding::glbinding glbinding_FOUND)
 find_required_package(glfw3 glfw3::glfw3 glfw3_FOUND)  # or "glfw" if that’s the real target
 find_required_package(spdlog spdlog::spdlog spdlog_FOUND)
-find_required_package(glm glm::glm glm_FOUND)
+# find_required_package(glm glm::glm glm_FOUND)
+
 find_required_package(imgui imgui::imgui imgui_FOUND)
+
+add_subdirectory(../vendored_deps/glm ${CMAKE_BINARY_DIR}/_libs/glm)
 
 
 add_library(slamd STATIC)
@@ -90,15 +93,13 @@ target_include_directories(
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
+        ../vendored_deps/glm
 )
 
 target_link_libraries(
     slamd 
     
     PRIVATE
-
-        glbinding::glbinding
-        glbinding::glbinding-aux
 
         spdlog::spdlog
 
@@ -107,7 +108,11 @@ target_link_libraries(
         imgui::imgui
 
     PUBLIC
-        glm::glm
+        glbinding::glbinding
+        glbinding::glbinding-aux
+
+    # PUBLIC
+        # glm::glm
 )
 
 
