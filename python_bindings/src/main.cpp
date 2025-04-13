@@ -381,9 +381,14 @@ void define_private_geom(
         std::shared_ptr<slamd::geom::Triad>>(m, "Triad");
 
     py::class_<
-        slamd::geom::Image,
+        slamd::_geom::Image,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::Image>>(m, "Image");
+        std::shared_ptr<slamd::_geom::Image>>(m, "Image");
+
+    py::class_<
+        slamd::_geom::PolyLine2D,
+        slamd::_geom::Geometry,
+        std::shared_ptr<slamd::_geom::PolyLine2D>>(m, "PolyLine2D");
 }
 
 void define_geom(
@@ -566,6 +571,15 @@ void define_geom2d(
         },
         py::arg("image"),
         "Create an Image geometry from a NumPy uint8 array (H, W, C)"
+    );
+
+    m.def(
+        "poly_line",
+        &slamd::geom2d::poly_line,
+        py::arg("points"),
+        py::arg("color"),
+        py::arg("thickness"),
+        "Create a 2D poly line"
     );
 }
 

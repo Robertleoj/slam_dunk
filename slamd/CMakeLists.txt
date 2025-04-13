@@ -119,6 +119,7 @@ target_sources(
         src/geom/image.cpp
         src/geom/point_cloud.cpp
         src/geom/camera_frustum.cpp
+        src/geom/poly_line_2d.cpp
 )
 
 target_include_directories(

@@ -1,6 +1,6 @@
 from __future__ import annotations
 import numpy
-__all__ = ['Arrows', 'Box', 'CameraFrustum', 'Geometry', 'Image', 'Mesh', 'PointCloud', 'Points2D', 'PolyLine', 'Sphere', 'Triad']
+__all__ = ['Arrows', 'Box', 'CameraFrustum', 'Geometry', 'Image', 'Mesh', 'PointCloud', 'Points2D', 'PolyLine', 'PolyLine2D', 'Sphere', 'Triad']
 class Arrows(Geometry):
     pass
 class Box(Geometry):
@@ -28,6 +28,8 @@ class PointCloud(Geometry):
 class Points2D(Geometry):
     pass
 class PolyLine(Geometry):
+    pass
+class PolyLine2D(Geometry):
     pass
 class Sphere(Geometry):
     pass

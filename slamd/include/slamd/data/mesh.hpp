@@ -48,6 +48,7 @@ class MeshDataBuilder {
     // Normal setters
     MeshDataBuilder& set_normals(const std::vector<glm::vec3>& normals);
     MeshDataBuilder& set_normals(std::vector<glm::vec3>&& normals);  // move
+    MeshDataBuilder& set_normals(const glm::vec3& normal);
     MeshDataBuilder& compute_normals();
 
     // Index setters

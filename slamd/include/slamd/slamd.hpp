@@ -7,6 +7,7 @@
 #include <slamd/geom/point_cloud.hpp>
 #include <slamd/geom/points_2d.hpp>
 #include <slamd/geom/poly_line.hpp>
+#include <slamd/geom/poly_line_2d.hpp>
 #include <slamd/geom/sphere.hpp>
 #include <slamd/geom/triad.hpp>
 #include <slamd/tree/tree.hpp>

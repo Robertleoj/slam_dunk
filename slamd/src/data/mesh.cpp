@@ -95,6 +95,20 @@ MeshDataBuilder& MeshDataBuilder::set_normals(
     return *this;
 }
 
+MeshDataBuilder& MeshDataBuilder::set_normals(
+    const glm::vec3& normal
+) {
+    if (!this->positions.has_value()) {
+        throw std::runtime_error(
+            "Set positions before using uniform color setter"
+        );
+    }
+
+    std::vector<glm::vec3> uniform_normals(positions->size(), normal);
+    this->normals = std::move(uniform_normals);
+    return *this;
+}
+
 MeshDataBuilder& MeshDataBuilder::compute_normals() {
     if (!this->positions.has_value() || !this->triangle_indices.has_value()) {
         throw std::runtime_error(

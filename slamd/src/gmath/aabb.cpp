@@ -1,4 +1,5 @@
 #include <slamd/gmath/aabb.hpp>
+#include <stdexcept>
 
 namespace slamd {
 namespace gmath {
@@ -12,6 +13,48 @@ AABB::AABB(
 
 AABB::AABB()
     : AABB(glm::vec3(0.0f), glm::vec3(0.0f)) {}
+
+AABB AABB::around_points(
+    const std::vector<glm::vec3>& points
+) {
+    if (points.empty()) {
+        throw std::invalid_argument("Cannot make bounds around no points");
+    }
+    auto min = points[0];
+    auto max = points[1];
+
+    for (const auto& pt : points) {
+        min.x = glm::min(min.x, pt.x);
+        min.y = glm::min(min.y, pt.y);
+        min.z = glm::min(min.z, pt.z);
+
+        max.x = glm::max(max.x, pt.x);
+        max.y = glm::max(max.y, pt.y);
+        max.z = glm::max(max.z, pt.z);
+    }
+
+    return AABB(min, max);
+}
+
+AABB AABB::around_points(
+    const std::vector<glm::vec2>& points
+) {
+    if (points.empty()) {
+        throw std::invalid_argument("Cannot make bounds around no points");
+    }
+    auto min = points[0];
+    auto max = points[1];
+
+    for (const auto& pt : points) {
+        min.x = glm::min(min.x, pt.x);
+        min.y = glm::min(min.y, pt.y);
+
+        max.x = glm::max(max.x, pt.x);
+        max.y = glm::max(max.y, pt.y);
+    }
+
+    return AABB(glm::vec3(min, 0.0f), glm::vec3(max, 0.0f));
+}
 
 AABB AABB::transform(
     const glm::mat4& transform
