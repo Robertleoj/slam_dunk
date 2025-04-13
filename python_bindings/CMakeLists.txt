@@ -6,6 +6,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(LIB_DIR vendored_deps)
 
 
+add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF)
+
+
 if(NOT TARGET spdlog::spdlog)
     message(STATUS "Adding spdlog...")
     add_subdirectory(${LIB_DIR}/spdlog)

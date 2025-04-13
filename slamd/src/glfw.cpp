@@ -24,7 +24,7 @@ GLFWwindow* make_window(
         glfwTerminate();
         throw std::runtime_error("Failed to create window");
     }
-    spdlog::info("GLFW window created");
+    SPDLOG_INFO("GLFW window created");
 
     glfwMakeContextCurrent(window);
 

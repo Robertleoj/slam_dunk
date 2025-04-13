@@ -135,10 +135,10 @@ target_link_libraries(
     PRIVATE
         glfw
         spdlog::spdlog
-        imgui::imgui
     PUBLIC
         glbinding::glbinding
         glbinding::glbinding-aux
+        imgui::imgui
 )
 
 

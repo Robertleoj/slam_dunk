@@ -87,7 +87,7 @@ uint compile_fragment_shader(
     gl::glCompileShader(shader_id);
 
     ensure_shader_compiled(shader_id);
-    spdlog::info("Fragment shader compiled: id={}", shader_id);
+    SPDLOG_INFO("Fragment shader compiled: id={}", shader_id);
 
     return shader_id;
 }
