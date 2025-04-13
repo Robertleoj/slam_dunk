@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <optional>
 #include <slamd/data/mesh.hpp>
 #include <vector>
 
@@ -25,6 +26,12 @@ data::ColoredMesh make_colored_mesh(
     const std::vector<glm::vec3>& vertex_positions,
     const std::vector<glm::vec3>& vertex_colors,
     const std::vector<uint32_t>& triangle_indices
+);
+
+data::Mesh make_mesh(
+    const std::vector<glm::vec3>& vertex_positions,
+    const std::vector<uint32_t>& triangle_indices,
+    const std::vector<glm::vec3>& normals
 );
 
 data::Mesh make_mesh(

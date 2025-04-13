@@ -42,12 +42,12 @@ std::shared_ptr<slamd::geom::PointCloud> cool_point_cloud() {
     radii.reserve(count);
 
     for (int i = 0; i < count; ++i) {
-        positions.emplace_back(
-            random_float(-100.f, 100.f),
-            random_float(-100.f, 100.f),
-            random_float(-100.f, 100.f)
+        // positions.emplace_back(
+        //     random_float(-100.f, 100.f),
+        //     random_float(-100.f, 100.f),
+        //     random_float(-100.f, 100.f)
 
-        );
+        // );
 
         colors.emplace_back(
             random_float(0.f, 1.f),

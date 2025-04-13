@@ -5,7 +5,7 @@
       "name": "Debug C++",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/examples/point_cloud/point_cloud",
+      "program": "${workspaceFolder}/examples/build/point_cloud/point_cloud",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

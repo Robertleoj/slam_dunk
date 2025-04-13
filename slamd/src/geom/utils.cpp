@@ -117,6 +117,23 @@ data::ColoredMesh make_colored_mesh(
 
 data::Mesh make_mesh(
     const std::vector<glm::vec3>& vertex_positions,
+    const std::vector<uint32_t>& triangle_indices,
+    const std::vector<glm::vec3>& normals
+) {
+    data::Mesh mesh;
+
+    for (const auto& [vert, norm] :
+         std::views::zip(vertex_positions, normals)) {
+        mesh.vertices.emplace_back(vert, norm);
+    }
+
+    mesh.triangle_indices = std::move(triangle_indices);
+
+    return mesh;
+}
+
+data::Mesh make_mesh(
+    const std::vector<glm::vec3>& vertex_positions,
     const std::vector<uint32_t>& triangle_indices
 ) {
     auto normals = compute_vertex_normals(vertex_positions, triangle_indices);

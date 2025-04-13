@@ -1,6 +1,6 @@
 {
   "C_Cpp.default.compileCommands": [
-    "${workspaceFolder}/build/compile_commands.json"
+    "${workspaceFolder}/examples/build/compile_commands.json"
   ],
   "files.associations": {
     "*.py": "python",
@@ -112,5 +112,6 @@
   "C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": false,
   "C_Cpp.inlayHints.parameterNames.enabled": true,
   "C_Cpp.inlayHints.referenceOperator.enabled": true,
-  "python.analysis.extraPaths": ["python_bindings/src/"]
+  "python.analysis.extraPaths": ["python_bindings/src/"],
+  "cmake.sourceDirectory": "/home/robert/learning/slam_dunk/examples"
 }
