@@ -1,6 +1,5 @@
 #pragma once
-#include <glbinding/gl/gl.h>
-#include <glbinding/glbinding.h>
+
 #include <glm/glm.hpp>
 #include <memory>
 #include <optional>
@@ -38,9 +37,9 @@ class MonoMesh : public Geometry {
     static thread_local std::optional<ShaderProgram> shader;
 
     struct GLData {
-        gl::GLuint vao_id;
-        gl::GLuint vbo_id;
-        gl::GLuint eab_id;
+        uint vao_id;
+        uint vbo_id;
+        uint eab_id;
     };
 
     std::optional<ThreadBox<GLData>> gl_data;

@@ -22,8 +22,8 @@ class ArcballIndicator : public Geometry {
 
    private:
     struct GLData {
-        gl::GLuint vao_id;
-        gl::GLuint vbo_id;
+        uint vao_id;
+        uint vbo_id;
         ShaderProgram shader;
     };
     std::optional<ThreadBox<GLData>> gl_state;

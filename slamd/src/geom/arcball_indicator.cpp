@@ -1,3 +1,5 @@
+#include <glbinding/gl/gl.h>
+#include <glbinding/glbinding.h>
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd/assert.hpp>
@@ -29,8 +31,8 @@ void ArcballIndicator::initialize() {
 
     this->vertex_count = verts.size() / 3;
 
-    gl::GLuint vao_id;
-    gl::GLuint vbo_id;
+    uint vao_id;
+    uint vbo_id;
 
     gl::glGenVertexArrays(1, &vao_id);
     gl::glGenBuffers(1, &vbo_id);

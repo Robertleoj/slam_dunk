@@ -1,3 +1,5 @@
+#include <glbinding/gl/gl.h>
+#include <glbinding/glbinding.h>
 #include <slamd/assert.hpp>
 #include <slamd/constants.hpp>
 #include <slamd/gen/shader_sources.hpp>

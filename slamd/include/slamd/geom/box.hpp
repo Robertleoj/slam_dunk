@@ -1,6 +1,4 @@
 #pragma once
-#include <glbinding/gl/gl.h>
-#include <glbinding/glbinding.h>
 #include <slamd/geom/geometry.hpp>
 #include <slamd/geom/simple_mesh.hpp>
 #include <slamd/thread_box.hpp>

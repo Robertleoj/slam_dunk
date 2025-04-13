@@ -114,7 +114,7 @@ FrameBuffer::~FrameBuffer() {
     RenderQueueManager::force_enqueue(this->render_thread_id.value(), job);
 }
 
-gl::GLuint FrameBuffer::frame_texture() {
+uint FrameBuffer::frame_texture() {
     auto gl_data = this->get_gl_data();
     return gl_data->texture_id;
 }
@@ -186,12 +186,7 @@ void FrameBuffer::rescale(
 void FrameBuffer::bind() {
     auto gl_data = this->get_gl_data();
     gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, gl_data->frame_buffer_object_id);
-    gl::glViewport(
-        0,
-        0,
-        this->width(),
-        this->height()
-    );
+    gl::glViewport(0, 0, this->width(), this->height());
 }
 
 void FrameBuffer::unbind() {

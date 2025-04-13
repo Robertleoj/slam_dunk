@@ -1,3 +1,5 @@
+#include <glbinding/gl/gl.h>
+#include <glbinding/glbinding.h>
 #include <spdlog/spdlog.h>
 #include <format>
 #include <glm/glm.hpp>
@@ -11,7 +13,7 @@ namespace slamd {
 const std::size_t info_buffer_size = 512;
 
 void ensure_shader_compiled(
-    gl::GLuint shader_id
+    uint shader_id
 ) {
     int success;
     char info_log_buf[info_buffer_size];
@@ -35,7 +37,7 @@ void ensure_shader_compiled(
 }
 
 void ensure_shader_program_linked(
-    gl::GLuint program_id
+    uint program_id
 ) {
     int success;
     char info_log_buf[info_buffer_size];
@@ -55,11 +57,11 @@ void ensure_shader_program_linked(
     }
 }
 
-gl::GLuint compile_vertex_shader(
+uint compile_vertex_shader(
     std::string source
 ) {
     // now we create the vertex shader
-    const gl::GLuint shader_id = gl::glCreateShader(gl::GL_VERTEX_SHADER);
+    const uint shader_id = gl::glCreateShader(gl::GL_VERTEX_SHADER);
 
     // read the shader source
     const char* shader_source_cstr = source.c_str();
@@ -74,10 +76,10 @@ gl::GLuint compile_vertex_shader(
     return shader_id;
 }
 
-gl::GLuint compile_fragment_shader(
+uint compile_fragment_shader(
     std::string source
 ) {
-    const gl::GLuint shader_id = gl::glCreateShader(gl::GL_FRAGMENT_SHADER);
+    const uint shader_id = gl::glCreateShader(gl::GL_FRAGMENT_SHADER);
 
     const char* shader_source_cstr = source.c_str();
 
@@ -90,11 +92,11 @@ gl::GLuint compile_fragment_shader(
     return shader_id;
 }
 
-gl::GLuint make_shader_program(
-    gl::GLuint vertex_shader_id,
-    gl::GLuint fragment_shader_id
+uint make_shader_program(
+    uint vertex_shader_id,
+    uint fragment_shader_id
 ) {
-    gl::GLuint shader_program_id = gl::glCreateProgram();
+    uint shader_program_id = gl::glCreateProgram();
     gl::glAttachShader(shader_program_id, vertex_shader_id);
     gl::glAttachShader(shader_program_id, fragment_shader_id);
     gl::glLinkProgram(shader_program_id);
@@ -104,7 +106,7 @@ gl::GLuint make_shader_program(
     return shader_program_id;
 }
 
-gl::GLuint make_shader_program(
+uint make_shader_program(
     std::string vertex_shader_source,
     std::string fragment_shader_source
 ) {
@@ -129,8 +131,8 @@ ShaderProgram::ShaderProgram(
 }
 
 ShaderProgram::ShaderProgram(
-    gl::GLuint vertex_shader_id,
-    gl::GLuint fragment_shader_id
+    uint vertex_shader_id,
+    uint fragment_shader_id
 ) {
     this->id = make_shader_program(vertex_shader_id, fragment_shader_id);
 }
@@ -144,7 +146,7 @@ void ShaderProgram::set_uniform<bool>(
     const std::string& name,
     const bool value
 ) const {
-    gl::glUniform1i(getUniformLocation(name), static_cast<int>(value));
+    gl::glUniform1i(this->get_uniform_location(name), static_cast<int>(value));
 }
 
 template <>
@@ -152,9 +154,7 @@ void ShaderProgram::set_uniform<int>(
     const std::string& name,
     const int value
 ) const {
-    int variable_location = gl::glGetUniformLocation(this->id, name.c_str());
-
-    gl::glUniform1i(variable_location, value);
+    gl::glUniform1i(this->get_uniform_location(name), value);
 }
 
 template <>
@@ -162,9 +162,7 @@ void ShaderProgram::set_uniform<float>(
     const std::string& name,
     const float value
 ) const {
-    int variable_location = gl::glGetUniformLocation(this->id, name.c_str());
-
-    gl::glUniform1f(variable_location, value);
+    gl::glUniform1f(this->get_uniform_location(name), value);
 }
 
 template <>
@@ -172,7 +170,11 @@ void ShaderProgram::set_uniform<glm::vec2>(
     const std::string& name,
     const glm::vec2 value
 ) const {
-    gl::glUniform2fv(getUniformLocation(name), 1, glm::value_ptr(value));
+    gl::glUniform2fv(
+        this->get_uniform_location(name),
+        1,
+        glm::value_ptr(value)
+    );
 }
 
 template <>
@@ -180,7 +182,11 @@ void ShaderProgram::set_uniform<glm::vec3>(
     const std::string& name,
     const glm::vec3 value
 ) const {
-    gl::glUniform3fv(getUniformLocation(name), 1, glm::value_ptr(value));
+    gl::glUniform3fv(
+        this->get_uniform_location(name),
+        1,
+        glm::value_ptr(value)
+    );
 }
 
 template <>
@@ -188,7 +194,11 @@ void ShaderProgram::set_uniform<glm::vec4>(
     const std::string& name,
     const glm::vec4 value
 ) const {
-    gl::glUniform4fv(getUniformLocation(name), 1, glm::value_ptr(value));
+    gl::glUniform4fv(
+        this->get_uniform_location(name),
+        1,
+        glm::value_ptr(value)
+    );
 }
 
 // Matrices? Why not!
@@ -198,11 +208,17 @@ void ShaderProgram::set_uniform<glm::mat4>(
     const glm::mat4 value
 ) const {
     gl::glUniformMatrix4fv(
-        getUniformLocation(name),
+        this->get_uniform_location(name),
         1,
         gl::GL_FALSE,
         glm::value_ptr(value)
     );
+}
+
+int ShaderProgram::get_uniform_location(
+    const std::string& name
+) const {
+    return gl::glGetUniformLocation(id, name.c_str());
 }
 
 }  // namespace slamd

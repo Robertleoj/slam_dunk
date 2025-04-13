@@ -1,6 +1,5 @@
 #pragma once
 
-#include <imgui.h>
 #include <memory>
 #include <slamd/camera_2d.hpp>
 #include <slamd/frame_buffer.hpp>

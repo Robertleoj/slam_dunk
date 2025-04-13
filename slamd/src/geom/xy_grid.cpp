@@ -1,5 +1,7 @@
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glbinding/gl/gl.h>
+#include <glbinding/glbinding.h>
 #include <slamd/assert.hpp>
 #include <slamd/gen/shader_sources.hpp>
 #include <slamd/geom/xy_grid.hpp>

@@ -136,7 +136,6 @@ target_link_libraries(
         glfw
         spdlog::spdlog
         imgui::imgui
-
     PUBLIC
         glbinding::glbinding
         glbinding::glbinding-aux

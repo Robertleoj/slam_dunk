@@ -1,7 +1,5 @@
 #pragma once
 
-#include <glbinding/gl/gl.h>
-#include <glbinding/glbinding.h>
 #include <slamd/geom/geometry.hpp>
 #include <slamd/shaders.hpp>
 #include <slamd/thread_box.hpp>
@@ -25,8 +23,8 @@ class GridXYPlane : public Geometry {
 
    private:
     struct GLData {
-        gl::GLuint vao_id;
-        gl::GLuint vbo_id;
+        uint vao_id;
+        uint vbo_id;
         ShaderProgram shader;
         size_t vertex_count;
     };

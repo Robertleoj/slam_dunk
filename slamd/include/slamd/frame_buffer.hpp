@@ -1,6 +1,5 @@
 #pragma once
 #include <glbinding/gl/gl.h>
-#include <glbinding/glbinding.h>
 #include <optional>
 #include <slamd/thread_box.hpp>
 #include <thread>
@@ -10,9 +9,9 @@ namespace slamd {
 class FrameBuffer {
    private:
     struct GLData {
-        gl::GLuint frame_buffer_object_id;
-        gl::GLuint texture_id;
-        gl::GLuint render_buffer_object_id;
+        uint frame_buffer_object_id;
+        uint texture_id;
+        uint render_buffer_object_id;
     };
 
     std::optional<ThreadBox<GLData>> gl_data;
@@ -25,7 +24,7 @@ class FrameBuffer {
     FrameBuffer(size_t width, size_t height);
     ~FrameBuffer();
 
-    gl::GLuint frame_texture();
+    uint frame_texture();
     void rescale(size_t width, size_t height);
     void bind();
     void unbind();

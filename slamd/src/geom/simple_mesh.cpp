@@ -1,3 +1,5 @@
+#include <glbinding/gl/gl.h>
+#include <glbinding/glbinding.h>
 #include <ranges>
 #include <slamd/assert.hpp>
 #include <slamd/constants.hpp>

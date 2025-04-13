@@ -16,12 +16,10 @@ set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CAC
 set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-linux")
 
 find_package(spdlog CONFIG REQUIRED)
-find_package(glbinding CONFIG REQUIRED)
 
 add_subdirectory(slamd)
 
 add_subdirectory(hello_world)
-add_subdirectory(do_it_yourself)
 add_subdirectory(two_scenes)
 add_subdirectory(one_scene_two_views)
 add_subdirectory(moving_box)
