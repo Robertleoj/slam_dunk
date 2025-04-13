@@ -80,5 +80,11 @@ glm::mat4 scale(
     return glm::scale(glm::mat4(1.0f), scale);
 }
 
+glm::mat4 scale_all(
+    float amount
+) {
+    return scale(glm::vec3(amount, amount, amount));
+}
+
 }  // namespace gmath
 }  // namespace slamd

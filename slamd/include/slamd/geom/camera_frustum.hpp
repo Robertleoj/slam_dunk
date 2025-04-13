@@ -41,6 +41,7 @@ class CameraFrustum : public Geometry {
         glm::mat4 transform;
     };
 
+    glm::mat4 scale_transform;
     std::optional<CameraImage> cam_image;
     std::vector<PolyLine> poly_lines;
 };

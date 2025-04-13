@@ -47,7 +47,7 @@ CameraFrustum::CameraFrustum(
     auto pixel_to_camera = [&](float x, float y) -> glm::vec3 {
         float nx = (x - cx) / fx;
         float ny = (y - cy) / fy;
-        return glm::vec3(nx, ny, 1.0f) * scale;
+        return glm::vec3(nx, ny, 1.0f);
     };
 
     glm::vec3 cam_origin(0.0f);
@@ -77,9 +77,9 @@ CameraFrustum::CameraFrustum(
 
     glm::vec3 top_center = (tl + tr) * 0.5f;
 
-    float notch_height = scale * 0.15f;
-    float notch_width = scale * 0.3f;
-    float float_dist = scale * 0.02;
+    float notch_height = 0.15f;
+    float notch_width = 0.3f;
+    float float_dist = 0.02;
     glm::vec3 float_transl(0.0f, -float_dist, 0.0f);
 
     glm::vec3 notch_tip =
@@ -101,6 +101,8 @@ CameraFrustum::CameraFrustum(
             min_brightness
         );
     }
+
+    this->scale_transform = gmath::scale_all(scale);
 }
 
 void CameraFrustum::render(
@@ -108,6 +110,7 @@ void CameraFrustum::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
+    model = model * this->scale_transform;
     for (auto& polyline : poly_lines) {
         polyline.render(model, view, projection);
     }
