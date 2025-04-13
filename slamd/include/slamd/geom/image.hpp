@@ -6,6 +6,7 @@
 #include <slamd/gmath/aabb.hpp>
 #include <slamd/image_texture.hpp>
 #include <slamd/shaders.hpp>
+#include <thread>
 
 namespace slamd {
 namespace _geom {

@@ -99,6 +99,44 @@ struct type_caster<glm::mat4> {
     }
 };
 
+template <>
+struct type_caster<glm::mat3> {
+    PYBIND11_TYPE_CASTER(glm::mat3, _("numpy.ndarray[float32[3][3]]"));
+
+    bool load(
+        handle src,
+        bool
+    ) {
+        auto buf =
+            py::array_t<float, py::array::c_style | py::array::forcecast>::
+                ensure(src);
+        if (!buf || buf.ndim() != 2 || buf.shape(0) != 3 || buf.shape(1) != 3) {
+            return false;
+        }
+        glm::mat4 m(1.0f);
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                m[j][i] = buf.at(i, j);  // GLM column-major
+            }
+        }
+        value = m;
+        return true;
+    }
+
+    static handle cast(
+        const glm::mat4& m,
+        return_value_policy,
+        handle
+    ) {
+        return py::array_t<float>(
+                   {3, 3},
+                   {sizeof(float) * 3, sizeof(float)},
+                   &m[0][0]
+        )
+            .release();
+    }
+};
+
 // vector<glm::vec3>
 template <>
 struct type_caster<std::vector<glm::vec3>> {
@@ -353,13 +391,35 @@ void define_geom(
 
     m.def(
         "camera_frustum",
-        &slamd::geom::camera_frustum,
+        [](glm::mat3 intrinsics_matrix,
+           size_t image_width,
+           size_t image_height,
+           std::optional<slamd::data::Image> image,
+           float scale = 1.0) {
+            if (!image.has_value()) {
+                return slamd::geom::camera_frustum(
+                    intrinsics_matrix,
+                    image_width,
+                    image_height,
+                    scale
+                );
+            }
+            return slamd::geom::camera_frustum(
+                intrinsics_matrix,
+                image_width,
+                image_height,
+                std::move(image.value()),
+                scale
+            );
+        },
         py::arg("intrinsics_matrix"),
         py::arg("image_width"),
         py::arg("image_height"),
+        py::arg("image") = std::nullopt,
         py::arg("scale") = 1.0f,
         "Create a CameraFrustum geometry"
     );
+
     m.def(
         "mono_mesh",
         &slamd::geom::mono_mesh,

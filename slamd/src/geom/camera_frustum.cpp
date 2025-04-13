@@ -1,8 +1,34 @@
 #include <glm/glm.hpp>
 #include <slamd/geom/camera_frustum.hpp>
+#include <slamd/gmath/transforms.hpp>
 
 namespace slamd {
 namespace _geom {
+
+CameraFrustum::CameraFrustum(
+    glm::mat3 intrinsics_matrix,
+    size_t image_width,
+    size_t image_height,
+    data::Image&& image,
+    float scale
+)
+    : CameraFrustum(intrinsics_matrix, image_width, image_height, scale) {
+    // we assume the image has the same aspect as the frustum
+    // so we just need to scale it by a single number
+    // we can just use the larger
+    float image_scale = std::fmax(
+        this->corners.tr.x - this->corners.tl.x,
+        this->corners.bl.y - this->corners.tr.y
+    );
+    glm::mat4 scale_transform =
+        gmath::scale_xy(glm::vec2(image_scale, image_scale));
+    glm::mat4 translate = gmath::t3D(this->corners.tl);
+
+    this->cam_image.emplace(
+        Image(std::move(image), true),
+        translate * scale_transform
+    );
+}
 
 CameraFrustum::CameraFrustum(
     glm::mat3 intrinsics_matrix,
@@ -30,6 +56,8 @@ CameraFrustum::CameraFrustum(
     glm::vec3 tr = pixel_to_camera(w, 0);
     glm::vec3 br = pixel_to_camera(w, h);
     glm::vec3 bl = pixel_to_camera(0, h);
+
+    this->corners = {tl, tr, br, bl};
 
     float thickness = 0.01f;
     glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -83,10 +111,32 @@ void CameraFrustum::render(
     for (auto& polyline : poly_lines) {
         polyline.render(model, view, projection);
     }
+
+    if (this->cam_image.has_value()) {
+        auto& img = this->cam_image.value().image_geometry;
+        auto& transform = this->cam_image.value().transform;
+        img.render(model * transform, view, projection);
+    }
 }
 }  // namespace _geom
 
 namespace geom {
+std::shared_ptr<CameraFrustum> camera_frustum(
+    glm::mat3 intrinsics_matrix,
+    size_t image_width,
+    size_t image_height,
+    data::Image&& image,
+    float scale
+) {
+    return std::make_shared<CameraFrustum>(
+        intrinsics_matrix,
+        image_width,
+        image_height,
+        std::move(image),
+        scale
+    );
+}
+
 std::shared_ptr<CameraFrustum> camera_frustum(
     glm::mat3 intrinsics_matrix,
     size_t image_width,

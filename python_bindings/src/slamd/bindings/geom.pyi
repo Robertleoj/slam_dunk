@@ -11,7 +11,7 @@ def box() -> bindings._geom.Box:
     """
     Create a Box geometry
     """
-def camera_frustum(*args, **kwargs) -> bindings._geom.CameraFrustum:
+def camera_frustum(intrinsics_matrix: numpy.ndarray, image_width: int, image_height: int, image: numpy.ndarray | None = None, scale: float = 1.0) -> bindings._geom.CameraFrustum:
     """
     Create a CameraFrustum geometry
     """

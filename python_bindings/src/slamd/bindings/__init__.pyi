@@ -8,10 +8,9 @@ from . import geom
 from . import geom2d
 __all__ = ['Canvas', 'Scene', 'Window', 'canvas', 'geom', 'geom2d', 'scene']
 class Canvas:
-    @staticmethod
-    def set_transform(*args, **kwargs) -> None:
-        ...
     def set_object(self, path: str, object: ...) -> None:
+        ...
+    def set_transform(self, path: str, transform: numpy.ndarray) -> None:
         ...
 class Scene:
     def set_object(self, path: str, object: ...) -> None:
