@@ -18,7 +18,7 @@ Window::Window(
 }
 
 fs::path Window::layout_path() {
-    return fs::current_path() / std::format("{}.ini", this->name);
+    return fs::current_path() / std::format(".{}.ini", this->name);
 }
 
 void framebuffer_size_callback(
