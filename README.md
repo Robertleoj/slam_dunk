@@ -109,6 +109,7 @@ int main() {
 
     glm::mat4 sphere_transform(1.0);
     sphere_transform[3] += glm::vec4(5.0, 1.0, 2.0, 1.0);
+
     scene2->set_transform("/ball", sphere_transform);
 
     window.wait_for_close();
