@@ -1,0 +1,77 @@
+import slamd
+import time
+import numpy as np
+
+
+def f(inp: np.ndarray, t: float) -> np.ndarray:
+    x = inp[:, 0]
+    y = inp[:, 1]
+
+    return np.sin(0.1 * x**2 + t) * np.sin(0.1 * y**2 + t) * x * y * 0.1
+
+
+def uniform_grid_points_with_mesh(n: int, a: float) -> tuple[np.ndarray, list[int]]:
+    side = int(np.sqrt(n))
+    x = np.linspace(-a, a, side)
+    y = np.linspace(-a, a, side)
+    xv, yv = np.meshgrid(x, y)
+    grid = np.stack([xv.ravel(), yv.ravel()], axis=1)
+
+    # Build triangle indices
+    indices = []
+    for j in range(side - 1):
+        for i in range(side - 1):
+            top_left = j * side + i
+            top_right = top_left + 1
+            bottom_left = top_left + side
+            bottom_right = bottom_left + 1
+
+            # Triangle 1
+            indices.extend([top_left, top_right, bottom_left])
+            # Triangle 2
+            indices.extend([top_right, bottom_right, bottom_left])
+
+    return grid[:n], indices
+
+
+def main():
+    window = slamd.Window("hello python", 1000, 1000)
+
+    coords, indices = uniform_grid_points_with_mesh(100000, 13.0)
+
+    scene = slamd.scene()
+    window.add_scene("scene", scene)
+
+    mesh = None
+
+    t = 0
+    while True:
+        time.sleep(0.01)
+        z = f(coords, t)
+        points = np.concatenate((coords, z[:, None]), axis=1)
+
+        red = np.exp(-points[:, 2])
+        blue = 1.0 - red
+        green = np.exp(2.0 - points[:, 2])
+
+        colors = np.zeros(points.shape, dtype=np.float32)
+        colors[:, 0] = red
+        colors[:, 1] = blue
+        colors[:, 2] = green
+
+        mesh_positions = points.astype(np.float32)
+        mesh_colors = colors.astype(np.float32)
+
+        if mesh is None:
+            mesh = slamd.geom.mesh(mesh_positions, mesh_colors, indices)
+
+            scene.set_object("/mesh", mesh)
+        else:
+            mesh.update_positions(mesh_positions)
+            mesh.update_colors(mesh_colors)
+
+        t += 0.02
+
+
+if __name__ == "__main__":
+    main()

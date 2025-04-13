@@ -108,6 +108,80 @@ void Mesh::maybe_initialize() {
     this->gl_data.emplace(gl_data);
 }
 
+void Mesh::update_positions(
+    const std::vector<glm::vec3>& positions,
+    bool recompute_normals
+) {
+    if (positions.size() != this->mesh_data.positions.size()) {
+        throw std::invalid_argument(
+            "New positions must have the same size as original"
+        );
+    }
+
+    this->mesh_data.positions = positions;
+    if (recompute_normals) {
+        this->mesh_data.recompute_normals();
+        this->normal_update_pending = true;
+    }
+    this->pos_update_pending = true;
+};
+void Mesh::update_colors(
+    const std::vector<glm::vec3>& colors
+) {
+    if (colors.size() != this->mesh_data.colors.size()) {
+        throw std::invalid_argument("Size of new colors should match existing");
+    }
+
+    this->mesh_data.colors = colors;
+    this->color_update_pending = true;
+};
+void Mesh::update_normals(
+    const std::vector<glm::vec3>& normals
+) {
+    if (normals.size() != this->mesh_data.normals.size()) {
+        throw std::invalid_argument("Size of new colors should match existing");
+    }
+
+    this->mesh_data.normals = normals;
+    this->normal_update_pending = true;
+};
+
+void Mesh::handle_updates() {
+    auto& gl_data = this->gl_data.value();
+    if (this->pos_update_pending) {
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.pos_vbo_id);
+        gl::glBufferData(
+            gl::GL_ARRAY_BUFFER,
+            this->mesh_data.positions.size() * sizeof(glm::vec3),
+            this->mesh_data.positions.data(),
+            gl::GL_DYNAMIC_DRAW
+        );
+        this->pos_update_pending = false;
+    }
+
+    if (this->color_update_pending) {
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.color_vbo_id);
+        gl::glBufferData(
+            gl::GL_ARRAY_BUFFER,
+            this->mesh_data.colors.size() * sizeof(glm::vec3),
+            this->mesh_data.colors.data(),
+            gl::GL_DYNAMIC_DRAW
+        );
+        this->color_update_pending = false;
+    }
+
+    if (this->normal_update_pending) {
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.normal_vbo_id);
+        gl::glBufferData(
+            gl::GL_ARRAY_BUFFER,
+            this->mesh_data.normals.size() * sizeof(glm::vec3),
+            this->mesh_data.normals.data(),
+            gl::GL_DYNAMIC_DRAW
+        );
+        this->normal_update_pending = false;
+    }
+}
+
 Mesh::Mesh(
     const data::MeshData& mesh_data,
     float min_brightness
@@ -131,6 +205,8 @@ void Mesh::render(
     auto& gl_data = this->gl_data.value();
 
     gl::glBindVertexArray(gl_data.vao_id);
+
+    this->handle_updates();
 
     if (!Mesh::shader.has_value()) {
         throw std::runtime_error("Shader not initialized!");

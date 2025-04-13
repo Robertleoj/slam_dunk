@@ -12,7 +12,12 @@ class Geometry:
 class Image(Geometry):
     pass
 class Mesh(Geometry):
-    pass
+    def update_colors(self, colors: numpy.ndarray) -> None:
+        ...
+    def update_normals(self, normals: numpy.ndarray) -> None:
+        ...
+    def update_positions(self, positions: numpy.ndarray, recompute_normals: bool = True) -> None:
+        ...
 class PointCloud(Geometry):
     def update_colors(self, colors: numpy.ndarray) -> None:
         ...

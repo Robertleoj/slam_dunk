@@ -27,14 +27,15 @@ class Mesh : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
-    void update_mesh(
-        std::optional<std::vector<glm::vec3>> positions,
-        std::optional<std::vector<glm::vec3>> colors,
-        std::optional<std::vector<glm::vec3>> normals,
-        bool recompute_normals = false
+    void update_positions(
+    const std::vector<glm::vec3>& positions,
+        bool recompute_normals = true
     );
+    void update_colors(const std::vector<glm::vec3>& colors);
+    void update_normals(const std::vector<glm::vec3>& normals);
 
    private:
+    void handle_updates();
     void maybe_initialize();
 
    private:
@@ -47,14 +48,13 @@ class Mesh : public Geometry {
         uint eab_id;
     };
 
-    bool pos_update_pending;
-    bool color_update_pending;
-    bool normal_update_pending;
-
     std::optional<GLData> gl_data;
     std::optional<std::thread::id> render_thread_id;
 
     data::MeshData mesh_data;
+    bool pos_update_pending = false;
+    bool color_update_pending = false;
+    bool normal_update_pending = false;
 
     float min_brightness;
 };

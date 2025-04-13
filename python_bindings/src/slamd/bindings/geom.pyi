@@ -15,7 +15,13 @@ def camera_frustum(intrinsics_matrix: numpy.ndarray, image_width: int, image_hei
     """
     Create a CameraFrustum geometry
     """
+@typing.overload
 def mesh(vertices: numpy.ndarray, vertex_colors: numpy.ndarray, triangle_indices: list[int]) -> bindings._geom.Mesh:
+    """
+    Create a SimpleMesh geometry from raw data
+    """
+@typing.overload
+def mesh(vertices: numpy.ndarray, vertex_colors: numpy.ndarray, triangle_indices: list[int], vertex_normals: numpy.ndarray) -> bindings._geom.Mesh:
     """
     Create a SimpleMesh geometry from raw data
     """

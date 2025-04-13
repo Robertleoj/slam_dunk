@@ -38,6 +38,8 @@ class MeshData {
         const std::vector<glm::vec3>& normals
     );
 
+    void recompute_normals();
+
     void add_vertex(
         const glm::vec3& pos,
         const glm::vec3& color,

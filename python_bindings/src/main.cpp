@@ -352,7 +352,23 @@ void define_private_geom(
     py::class_<
         slamd::geom::Mesh,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::Mesh>>(m, "Mesh");
+        std::shared_ptr<slamd::geom::Mesh>>(m, "Mesh")
+        .def(
+            "update_positions",
+            &slamd::_geom::Mesh::update_positions,
+            py::arg("positions"),
+            py::arg("recompute_normals") = true
+        )
+        .def(
+            "update_colors",
+            &slamd::_geom::Mesh::update_colors,
+            py::arg("colors")
+        )
+        .def(
+            "update_normals",
+            &slamd::_geom::Mesh::update_normals,
+            py::arg("normals")
+        );
 
     py::class_<
         slamd::geom::Sphere,
@@ -469,6 +485,29 @@ void define_geom(
         py::arg("vertices"),
         py::arg("vertex_colors"),
         py::arg("triangle_indices"),
+        "Create a SimpleMesh geometry from raw data"
+    );
+    m.def(
+        "mesh",
+        [](const std::vector<glm::vec3>& positions,
+           const std::vector<glm::vec3>& vertex_colors,
+           const std::vector<uint32_t>& triangle_indices,
+           const std::vector<glm::vec3>& normals
+
+        ) {
+            slamd::data::MeshData data = slamd::data::MeshDataBuilder()
+                                             .set_positions(positions)
+                                             .set_colors(vertex_colors)
+                                             .set_indices(triangle_indices)
+                                             .set_normals(normals)
+                                             .build();
+
+            return slamd::geom::Mesh(std::move(data));
+        },
+        py::arg("vertices"),
+        py::arg("vertex_colors"),
+        py::arg("triangle_indices"),
+        py::arg("vertex_normals"),
         "Create a SimpleMesh geometry from raw data"
     );
 
