@@ -5,7 +5,7 @@
 namespace slamd {
 namespace _geom {
 
-SimpleMesh make_mesh(
+Mesh make_mesh(
     const std::vector<glm::vec2>& positions,
     const std::vector<glm::vec3>& colors,
     const std::vector<float>& radii
@@ -58,7 +58,7 @@ SimpleMesh make_mesh(
         curr_idx += num_segments + 1;
     }
 
-    return SimpleMesh(mesh_data, 1.0f);
+    return Mesh(mesh_data, 1.0f);
 }
 
 gmath::AABB make_bounds(

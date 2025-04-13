@@ -1,10 +1,11 @@
 #include <numbers>
 #include <slamd/geom/poly_line.hpp>
+#include <slamd/geom/utils.hpp>
 
 namespace slamd {
 namespace _geom {
 
-MonoMesh make_poly_line_mesh(
+Mesh make_poly_line_mesh(
     const std::vector<glm::vec3>& points,
     float thickness,
     const glm::vec3& color,
@@ -69,7 +70,7 @@ MonoMesh make_poly_line_mesh(
         }
     }
 
-    return MonoMesh(verts, indices, color, min_brightness);
+    return Mesh(make_colored_mesh(verts, color, indices));
 }
 
 PolyLine::PolyLine(

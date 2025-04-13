@@ -15,14 +15,20 @@ namespace _geom {
 
 // TODO: move to data
 
-class SimpleMesh : public Geometry {
+class Mesh : public Geometry {
    public:
-    SimpleMesh(
+    Mesh(
         const data::ColoredMesh& mesh_data,
         float min_brightness = _const::default_min_brightness
     );
 
-    SimpleMesh(
+    Mesh(
+        const data::Mesh& mesh_data,
+        const glm::vec3& color,
+        float min_brightness = _const::default_min_brightness
+    );
+
+    Mesh(
         const std::vector<glm::vec3>& vertices,
         const std::vector<glm::vec3>& vertex_colors,
         const std::vector<uint32_t>& triangle_indices,
@@ -54,15 +60,23 @@ class SimpleMesh : public Geometry {
 
 namespace geom {
 
-using _geom::SimpleMesh;
+using _geom::Mesh;
 
-std::shared_ptr<SimpleMesh> simple_mesh(
+std::shared_ptr<Mesh> mesh(
     const std::vector<glm::vec3>& vertices,
     const std::vector<glm::vec3>& vertex_colors,
     const std::vector<uint32_t>& triangle_indices
 );
 
-std::shared_ptr<SimpleMesh> simple_mesh(const data::ColoredMesh& mesh_data);
+// std::shared_ptr<Mesh> mesh(
+//     const std::vector<glm::vec3>& vertices,
+//     const glm::vec3& color,
+//     const std::vector<uint32_t>& triangle_indices
+// );
+
+std::shared_ptr<Mesh> mesh(const data::ColoredMesh& mesh_data);
+// std::shared_ptr<Mesh> mesh(const data::Mesh& mesh_data, const glm::vec3&
+// color);
 
 }  // namespace geom
 }  // namespace slamd

@@ -8,7 +8,7 @@
 namespace slamd {
 namespace _geom {
 
-MonoMesh make_sphere_mesh(
+Mesh make_sphere_mesh(
     float radius,
     glm::vec3 color
 ) {
@@ -25,7 +25,7 @@ MonoMesh make_sphere_mesh(
         mesh_data.vertices.emplace_back(vert, norm);
     }
 
-    return MonoMesh(mesh_data, color);
+    return Mesh(make_colored_mesh(vertices, indices, color, normals));
 }
 
 Sphere::Sphere(

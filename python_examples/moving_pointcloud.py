@@ -28,7 +28,6 @@ def main():
 
     scene = slamd.scene()
     window.add_scene("scene", scene)
-    scene.set_object("/origin", slamd.geom.triad())
 
     point_cloud = None
 

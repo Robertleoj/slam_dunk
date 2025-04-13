@@ -115,6 +115,49 @@ data::ColoredMesh make_colored_mesh(
     return mesh;
 }
 
+data::ColoredMesh make_colored_mesh(
+    const std::vector<glm::vec3>& vertex_positions,
+    const glm::vec3& color,
+    const std::vector<uint32_t>& triangle_indices
+) {
+    std::vector<glm::vec3> colors(vertex_positions.size(), color);
+
+    return make_colored_mesh(vertex_positions, colors, triangle_indices);
+}
+
+data::ColoredMesh make_colored_mesh(
+    const data::Mesh& mesh_data,
+    const glm::vec3& color
+) {
+    data::ColoredMesh colored_mesh;
+
+    for (auto& vert : mesh_data.vertices) {
+        colored_mesh.vertices.emplace_back(vert.position, color, vert.normal);
+    }
+
+    colored_mesh.triangle_indices = mesh_data.triangle_indices;
+
+    return colored_mesh;
+}
+
+data::ColoredMesh make_colored_mesh(
+    const std::vector<glm::vec3>& vertex_positions,
+    const std::vector<uint32_t>& triangle_indices,
+    const glm::vec3& color,
+    const std::vector<glm::vec3>& normals
+) {
+    data::ColoredMesh mesh;
+
+    for (const auto& [vert, norm] :
+         std::views::zip(vertex_positions, normals)) {
+        mesh.vertices.emplace_back(vert, color, norm);
+    }
+
+    mesh.triangle_indices = std::move(triangle_indices);
+
+    return mesh;
+}
+
 data::Mesh make_mesh(
     const std::vector<glm::vec3>& vertex_positions,
     const std::vector<uint32_t>& triangle_indices,

@@ -28,6 +28,22 @@ data::ColoredMesh make_colored_mesh(
     const std::vector<uint32_t>& triangle_indices
 );
 
+data::ColoredMesh make_colored_mesh(
+    const std::vector<glm::vec3>& vertex_positions,
+    const glm::vec3& color,
+    const std::vector<uint32_t>& triangle_indices
+);
+
+data::ColoredMesh make_colored_mesh(
+    const std::vector<glm::vec3>& vertex_positions,
+    const std::vector<uint32_t>& triangle_indices,
+    const glm::vec3& color,
+    const std::vector<glm::vec3>& normals
+);
+
+data::ColoredMesh
+make_colored_mesh(const data::Mesh& mesh_data, const glm::vec3& color);
+
 data::Mesh make_mesh(
     const std::vector<glm::vec3>& vertex_positions,
     const std::vector<uint32_t>& triangle_indices,

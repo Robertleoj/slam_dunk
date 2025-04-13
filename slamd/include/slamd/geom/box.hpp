@@ -1,6 +1,6 @@
 #pragma once
 #include <slamd/geom/geometry.hpp>
-#include <slamd/geom/simple_mesh.hpp>
+#include <slamd/geom/mesh.hpp>
 
 namespace slamd {
 namespace _geom {
@@ -11,7 +11,7 @@ class Box : public Geometry {
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
    private:
-    SimpleMesh box_mesh;
+    Mesh box_mesh;
 };
 
 }  // namespace _geom

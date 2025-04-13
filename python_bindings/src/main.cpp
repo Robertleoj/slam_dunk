@@ -320,11 +320,6 @@ void define_private_geom(
         std::shared_ptr<slamd::geom::CameraFrustum>>(m, "CameraFrustum");
 
     py::class_<
-        slamd::geom::MonoMesh,
-        slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::MonoMesh>>(m, "MonoMesh");
-
-    py::class_<
         slamd::_geom::PointCloud,
         slamd::_geom::Geometry,
         std::shared_ptr<slamd::_geom::PointCloud>>(m, "PointCloud")
@@ -355,9 +350,9 @@ void define_private_geom(
         std::shared_ptr<slamd::geom::PolyLine>>(m, "PolyLine");
 
     py::class_<
-        slamd::geom::SimpleMesh,
+        slamd::geom::Mesh,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::SimpleMesh>>(m, "SimpleMesh");
+        std::shared_ptr<slamd::geom::Mesh>>(m, "Mesh");
 
     py::class_<
         slamd::geom::Sphere,
@@ -420,15 +415,6 @@ void define_geom(
         "Create a CameraFrustum geometry"
     );
 
-    m.def(
-        "mono_mesh",
-        &slamd::geom::mono_mesh,
-        py::arg("vertices"),
-        py::arg("triangle_indices"),
-        py::arg("color"),
-        "Create a MonoMesh geometry"
-    );
-
     // Overload: uniform color + uniform radius
     m.def(
         "point_cloud",
@@ -467,15 +453,15 @@ void define_geom(
     );
 
     // Explicitly cast the version we want
-    std::shared_ptr<slamd::geom::SimpleMesh> (*simple_mesh_from_raw)(
+    std::shared_ptr<slamd::geom::Mesh> (*mesh_from_raw)(
         const std::vector<glm::vec3>&,
         const std::vector<glm::vec3>&,
         const std::vector<uint32_t>&
-    ) = &slamd::geom::simple_mesh;
+    ) = &slamd::geom::mesh;
 
     m.def(
-        "simple_mesh",
-        simple_mesh_from_raw,
+        "mesh",
+        mesh_from_raw,
         py::arg("vertices"),
         py::arg("vertex_colors"),
         py::arg("triangle_indices"),

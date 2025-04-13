@@ -2,7 +2,7 @@ from __future__ import annotations
 import bindings._geom
 import numpy
 import typing
-__all__ = ['arrows', 'box', 'camera_frustum', 'mono_mesh', 'point_cloud', 'poly_line', 'simple_mesh', 'sphere', 'triad']
+__all__ = ['arrows', 'box', 'camera_frustum', 'mesh', 'point_cloud', 'poly_line', 'sphere', 'triad']
 def arrows(starts: numpy.ndarray, ends: numpy.ndarray, colors: numpy.ndarray, thickness: float) -> bindings._geom.Arrows:
     """
     Create an Arrows geometry
@@ -15,9 +15,9 @@ def camera_frustum(intrinsics_matrix: numpy.ndarray, image_width: int, image_hei
     """
     Create a CameraFrustum geometry
     """
-def mono_mesh(vertices: numpy.ndarray, triangle_indices: list[int], color: numpy.ndarray) -> bindings._geom.MonoMesh:
+def mesh(vertices: numpy.ndarray, vertex_colors: numpy.ndarray, triangle_indices: list[int]) -> bindings._geom.Mesh:
     """
-    Create a MonoMesh geometry
+    Create a SimpleMesh geometry from raw data
     """
 @typing.overload
 def point_cloud(positions: numpy.ndarray, color: numpy.ndarray, radius: float) -> bindings._geom.PointCloud:
@@ -32,10 +32,6 @@ def point_cloud(positions: numpy.ndarray, colors: numpy.ndarray, radii: list[flo
 def poly_line(points: numpy.ndarray, thickness: float, color: numpy.ndarray) -> bindings._geom.PolyLine:
     """
     Create a PolyLine geometry
-    """
-def simple_mesh(vertices: numpy.ndarray, vertex_colors: numpy.ndarray, triangle_indices: list[int]) -> bindings._geom.SimpleMesh:
-    """
-    Create a SimpleMesh geometry from raw data
     """
 def sphere(radius: float = 1.0, color: numpy.ndarray = ...) -> bindings._geom.Sphere:
     """

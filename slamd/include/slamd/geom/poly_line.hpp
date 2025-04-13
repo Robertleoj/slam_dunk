@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <slamd/constants.hpp>
 #include <slamd/geom/geometry.hpp>
-#include <slamd/geom/mono_mesh.hpp>
+#include <slamd/geom/mesh.hpp>
 #include <vector>
 
 namespace slamd {
@@ -21,7 +21,7 @@ class PolyLine : public Geometry {
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
    private:
-    MonoMesh mesh;
+    Mesh mesh;
 };
 
 }  // namespace _geom

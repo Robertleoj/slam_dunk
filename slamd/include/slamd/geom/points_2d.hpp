@@ -1,7 +1,7 @@
 #pragma once
 
 #include <slamd/geom/geometry.hpp>
-#include <slamd/geom/simple_mesh.hpp>
+#include <slamd/geom/mesh.hpp>
 
 namespace slamd {
 namespace _geom {
@@ -19,7 +19,7 @@ class Points2D : public Geometry {
     std::optional<gmath::AABB> bounds() override;
 
    private:
-    SimpleMesh mesh;
+    Mesh mesh;
     gmath::AABB cached_bounds;
 };
 

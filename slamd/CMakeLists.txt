@@ -108,11 +108,10 @@ target_sources(
         src/geom/points_2d.cpp
         src/geom/geometry.cpp
         src/geom/box.cpp
-        src/geom/simple_mesh.cpp
+        src/geom/mesh.cpp
         src/geom/arrows.cpp
         src/geom/sphere.cpp
         src/geom/triad.cpp
-        src/geom/mono_mesh.cpp
         src/geom/poly_line.cpp
         src/geom/xy_grid.cpp
         src/geom/arcball_indicator.cpp

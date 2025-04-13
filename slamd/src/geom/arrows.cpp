@@ -138,7 +138,7 @@ ArrowMesh generate_arrow(
     return mesh;
 }
 
-SimpleMesh make_arrows_mesh(
+Mesh make_arrows_mesh(
     const std::vector<glm::vec3>& starts,
     const std::vector<glm::vec3>& ends,
     const std::vector<glm::vec3>& colors,
@@ -166,7 +166,7 @@ SimpleMesh make_arrows_mesh(
         index_offset += mesh.vertices.size();
     }
 
-    return SimpleMesh(make_colored_mesh(vertices, out_colors, inds));
+    return Mesh(make_colored_mesh(vertices, out_colors, inds));
 }
 
 Arrows::Arrows(

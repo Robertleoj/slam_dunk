@@ -4,16 +4,16 @@
 #include <slamd/assert.hpp>
 #include <slamd/constants.hpp>
 #include <slamd/gen/shader_sources.hpp>
-#include <slamd/geom/simple_mesh.hpp>
+#include <slamd/geom/mesh.hpp>
 #include <slamd/geom/utils.hpp>
 #include <slamd/paths.hpp>
 
 namespace slamd {
 namespace _geom {
 
-thread_local std::optional<ShaderProgram> SimpleMesh::shader;
+thread_local std::optional<ShaderProgram> Mesh::shader;
 
-void SimpleMesh::maybe_initialize() {
+void Mesh::maybe_initialize() {
     if (this->render_thread_id.has_value()) {
         assert_thread(this->render_thread_id.value());
         return;
@@ -21,11 +21,8 @@ void SimpleMesh::maybe_initialize() {
 
     this->render_thread_id = std::this_thread::get_id();
 
-    if (!SimpleMesh::shader.has_value()) {
-        shader.emplace(
-            shader_source::simple_mesh::vert,
-            shader_source::simple_mesh::frag
-        );
+    if (!Mesh::shader.has_value()) {
+        shader.emplace(shader_source::mesh::vert, shader_source::mesh::frag);
     }
 
     GLData gl_data;
@@ -94,31 +91,31 @@ void SimpleMesh::maybe_initialize() {
     this->gl_data.emplace(gl_data);
 }
 
-SimpleMesh::SimpleMesh(
+Mesh::Mesh(
     const data::ColoredMesh& mesh_data,
     float min_brightness
 )
     : mesh_data(mesh_data),
       min_brightness(min_brightness) {}
 
-SimpleMesh::SimpleMesh(
+Mesh::Mesh(
+    const data::Mesh& mesh_data,
+    const glm::vec3& color,
+    float min_brightness
+)
+    : mesh_data(make_colored_mesh(mesh_data, color)),
+      min_brightness(min_brightness) {}
+
+Mesh::Mesh(
     const std::vector<glm::vec3>& vertices,
     const std::vector<glm::vec3>& vertex_colors,
     const std::vector<uint32_t>& triangle_indices,
     float min_brightness
 )
-    : min_brightness(min_brightness) {
-    if (vertices.size() != vertex_colors.size()) {
-        throw std::invalid_argument(
-            "number of vertices must equal number of vertex colors"
-        );
-    }
+    : mesh_data(make_colored_mesh(vertices, vertex_colors, triangle_indices)),
+      min_brightness(min_brightness) {}
 
-    this->mesh_data =
-        make_colored_mesh(vertices, vertex_colors, triangle_indices);
-}
-
-void SimpleMesh::render(
+void Mesh::render(
     glm::mat4 model,
     glm::mat4 view,
     glm::mat4 projection
@@ -128,11 +125,11 @@ void SimpleMesh::render(
 
     gl::glBindVertexArray(gl_data.vao_id);
 
-    if (!SimpleMesh::shader.has_value()) {
+    if (!Mesh::shader.has_value()) {
         throw std::runtime_error("Shader not initialized!");
     }
 
-    auto& shader = SimpleMesh::shader.value();
+    auto& shader = Mesh::shader.value();
 
     shader.use();
     shader.set_uniform("model", model);
@@ -153,22 +150,18 @@ void SimpleMesh::render(
 
 namespace geom {
 
-std::shared_ptr<SimpleMesh> simple_mesh(
+std::shared_ptr<Mesh> mesh(
     const data::ColoredMesh& mesh_data
 ) {
-    return std::make_shared<SimpleMesh>(mesh_data);
+    return std::make_shared<Mesh>(mesh_data);
 }
 
-std::shared_ptr<SimpleMesh> simple_mesh(
+std::shared_ptr<Mesh> mesh(
     const std::vector<glm::vec3>& vertices,
     const std::vector<glm::vec3>& vertex_colors,
     const std::vector<uint32_t>& triangle_indices
 ) {
-    return std::make_shared<SimpleMesh>(
-        vertices,
-        vertex_colors,
-        triangle_indices
-    );
+    return std::make_shared<Mesh>(vertices, vertex_colors, triangle_indices);
 }
 
 }  // namespace geom

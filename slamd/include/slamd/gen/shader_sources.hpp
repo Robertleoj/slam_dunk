@@ -65,12 +65,14 @@ void main() {
 } )";
 }  // namespace image
 
-namespace mono_mesh {
+namespace mesh {
 inline const std::string vert = R"( #version 330 core
 
-layout(location = 0) in vec3 aPos;
-layout(location = 1) in vec3 aNormal;
+layout(location = 0) in vec3 a_pos;
+layout(location = 1) in vec3 a_color;
+layout(location = 2) in vec3 aNormal;
 
+out vec3 vertex_color;
 out vec3 Normal;
 
 uniform mat4 model;
@@ -79,15 +81,17 @@ uniform mat4 projection;
 
 void main() {
     Normal = mat3(transpose(inverse(model))) * aNormal;
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    gl_Position = projection * view * model * vec4(a_pos, 1.0);
+    vertex_color = a_color;
 }
  )";
 inline const std::string frag = R"( #version 330 core
 
 in vec3 Normal;
+in vec3 vertex_color;
+
 out vec4 FragColor;
 
-uniform vec3 color;
 uniform vec3 light_dir;
 uniform float min_brightness;
 
@@ -95,10 +99,9 @@ void main() {
     vec3 norm = normalize(Normal);
     float diff =
         max(dot(norm, normalize(light_dir)), min_brightness);  // never too dark
-    FragColor = vec4(color * diff, 1.0);
-}
- )";
-}  // namespace mono_mesh
+    FragColor = vec4(vertex_color * diff, 1.0);
+} )";
+}  // namespace mesh
 
 namespace point_cloud {
 inline const std::string vert = R"( #version 330 core
@@ -144,44 +147,6 @@ void main() {
     FragColor = vec4(o_vertex_color * diff, 1.0);
 } )";
 }  // namespace point_cloud
-
-namespace simple_mesh {
-inline const std::string vert = R"( #version 330 core
-
-layout(location = 0) in vec3 a_pos;
-layout(location = 1) in vec3 a_color;
-layout(location = 2) in vec3 aNormal;
-
-out vec3 vertex_color;
-out vec3 Normal;
-
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-
-void main() {
-    Normal = mat3(transpose(inverse(model))) * aNormal;
-    gl_Position = projection * view * model * vec4(a_pos, 1.0);
-    vertex_color = a_color;
-}
- )";
-inline const std::string frag = R"( #version 330 core
-
-in vec3 Normal;
-in vec3 vertex_color;
-
-out vec4 FragColor;
-
-uniform vec3 light_dir;
-uniform float min_brightness;
-
-void main() {
-    vec3 norm = normalize(Normal);
-    float diff =
-        max(dot(norm, normalize(light_dir)), min_brightness);  // never too dark
-    FragColor = vec4(vertex_color * diff, 1.0);
-} )";
-}  // namespace simple_mesh
 
 namespace xy_grid {
 inline const std::string vert = R"( #version 330 core

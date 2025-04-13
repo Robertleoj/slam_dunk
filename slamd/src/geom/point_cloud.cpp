@@ -3,6 +3,7 @@
 #include <format>
 #include <ranges>
 #include <slamd/assert.hpp>
+#include <slamd/constants.hpp>
 #include <slamd/gen/shader_sources.hpp>
 #include <slamd/geom/point_cloud.hpp>
 #include <slamd/geom/utils.hpp>
