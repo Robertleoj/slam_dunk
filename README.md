@@ -2,7 +2,7 @@
 
 ---
 
-SlamDunk is a simple and user-friendly C++/Python library for making live 3D and 2D visualizations for prototyping, data exploration, and algorithm development.
+SlamDunk is a powerful and user-friendly C++/Python library for making live 3D and 2D visualizations for prototyping, data exploration, and algorithm development.
 
 It is very lightweight, built using OpenGL and ImGui.
 
