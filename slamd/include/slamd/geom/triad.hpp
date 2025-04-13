@@ -15,6 +15,7 @@ class Triad : public Geometry {
 
    private:
     Arrows arrows;
+    glm::mat4 scale_transform;
 };
 
 }  // namespace _geom

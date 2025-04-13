@@ -1,17 +1,17 @@
 #include <slamd/geom/triad.hpp>
+#include <slamd/gmath/transforms.hpp>
 
 namespace slamd {
 namespace _geom {
 
 Arrows make_arrows(
-    float scale,
     float thickness
 ) {
     glm::vec3 origin(0.0, 0.0, 0.0);
 
     return Arrows(
         {origin, origin, origin},
-        {{scale, 0.0, 0.0}, {0.0, scale, 0.0}, {0.0, 0.0, scale}},
+        {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}},
         {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}},
         thickness
     );
@@ -21,14 +21,16 @@ Triad::Triad(
     float scale,
     float thickness
 )
-    : arrows(make_arrows(scale, thickness)) {}
+    : arrows(make_arrows(thickness)) {
+    this->scale_transform = gmath::scale(glm::vec3(scale, scale, scale));
+}
 
 void Triad::render(
     glm::mat4 model,
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    this->arrows.render(model, view, projection);
+    this->arrows.render(model * this->scale_transform, view, projection);
 }
 
 }  // namespace _geom

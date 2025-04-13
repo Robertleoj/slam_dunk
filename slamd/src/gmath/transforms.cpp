@@ -69,9 +69,15 @@ glm::mat4 xy_to_3d(
 }
 
 glm::mat4 scale_xy(
-    const glm::vec2& scale
+    const glm::vec2& scale_vec
 ) {
-    return glm::scale(glm::mat4(1.0f), glm::vec3(scale, 1.0));
+    return scale(glm::vec3(scale_vec, 1.0));
+}
+
+glm::mat4 scale(
+    const glm::vec3& scale
+) {
+    return glm::scale(glm::mat4(1.0f), scale);
 }
 
 }  // namespace gmath
