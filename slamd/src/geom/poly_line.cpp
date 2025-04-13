@@ -1,3 +1,4 @@
+#include <glm/gtc/matrix_transform.hpp>
 #include <numbers>
 #include <slamd/geom/poly_line.hpp>
 #include <slamd/geom/utils.hpp>
@@ -22,23 +23,35 @@ Mesh make_poly_line_mesh(
     const float radius = thickness * 0.5f;
     const float pi = std::numbers::pi;
 
-    for (size_t i = 0; i < points.size(); ++i) {
+    glm::vec3 prev_forward = glm::normalize(points[1] - points[0]);
+    glm::vec3 prev_up = glm::vec3(0, 1, 0);
+    if (glm::abs(glm::dot(prev_forward, prev_up)) > 0.9f) {
+        prev_up = glm::vec3(1, 0, 0);
+    }
+
+    for (size_t i = 0; i < points.size(); i++) {
         glm::vec3 forward;
-        if (i == 0) {
-            forward = glm::normalize(points[i + 1] - points[i]);
-        } else if (i == points.size() - 1) {
+        if (i == points.size() - 1) {
             forward = glm::normalize(points[i] - points[i - 1]);
         } else {
-            forward = glm::normalize(points[i + 1] - points[i - 1]);
+            forward = glm::normalize(points[i + 1] - points[i]);
         }
 
-        glm::vec3 up = glm::vec3(0, 1, 0);
-        if (glm::abs(glm::dot(forward, up)) > 0.9f) {
-            up = glm::vec3(1, 0, 0);
+        // Smooth frame transport
+        glm::vec3 axis = glm::cross(prev_forward, forward);
+        float axis_len = glm::length(axis);
+        if (axis_len > 1e-6f) {
+            float angle = glm::asin(axis_len);
+            axis = glm::normalize(axis);
+            glm::mat3 rot =
+                glm::mat3(glm::rotate(glm::mat4(1.0f), angle, axis));
+            prev_up = rot * prev_up;
         }
 
-        glm::vec3 right = glm::normalize(glm::cross(forward, up));
+        glm::vec3 right = glm::normalize(glm::cross(forward, prev_up));
         glm::vec3 local_up = glm::normalize(glm::cross(right, forward));
+
+        prev_forward = forward;
 
         uint32_t base = static_cast<uint32_t>(verts.size());
 
