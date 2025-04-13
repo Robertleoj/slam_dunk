@@ -13,8 +13,13 @@ namespace _geom {
 
 thread_local std::optional<ShaderProgram> SimpleMesh::shader;
 
-void SimpleMesh::initialize() {
-    assert_thread(this->render_thread_id.value());
+void SimpleMesh::maybe_initialize() {
+    if (this->render_thread_id.has_value()) {
+        assert_thread(this->render_thread_id.value());
+        return;
+    }
+
+    this->render_thread_id = std::this_thread::get_id();
 
     if (!SimpleMesh::shader.has_value()) {
         shader.emplace(
@@ -118,14 +123,10 @@ void SimpleMesh::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    if (!this->render_thread_id.has_value()) {
-        this->render_thread_id = std::this_thread::get_id();
-        this->initialize();
-    }
+    this->maybe_initialize();
+    auto& gl_data = this->gl_data.value();
 
-    auto gl_data = this->gl_data.value().get();
-
-    gl::glBindVertexArray(gl_data->vao_id);
+    gl::glBindVertexArray(gl_data.vao_id);
 
     if (!SimpleMesh::shader.has_value()) {
         throw std::runtime_error("Shader not initialized!");

@@ -177,8 +177,13 @@ uint PointCloud::initialize_color_buffer() {
     return vbo_id;
 }
 
-void PointCloud::initialize() {
-    assert_thread(this->render_thread_id.value());
+void PointCloud::maybe_initialize() {
+    if (this->render_thread_id.has_value()) {
+        assert_thread(this->render_thread_id.value());
+        return;
+    }
+
+    this->render_thread_id = std::this_thread::get_id();
 
     uint vao_id;
     gl::glGenVertexArrays(1, &vao_id);
@@ -274,11 +279,7 @@ void PointCloud::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    // this->mesh.render(model, view, projection);
-    if (!this->render_thread_id.has_value()) {
-        this->render_thread_id = std::this_thread::get_id();
-        this->initialize();
-    }
+    this->maybe_initialize();
 
     auto& gl_data = this->gl_data.value();
 
@@ -296,11 +297,11 @@ void PointCloud::render(
         _const::default_min_brightness
     );
     gl::glDrawElementsInstanced(
-        gl::GL_TRIANGLES,           // Mode
-        gl_data.ball_vertex_count,  // Number of indices in your EBO
-        gl::GL_UNSIGNED_INT,        // Type (match your EBO type)
-        0,                          // Offset in the EBO
-        this->positions.size()      // 🔥 Number of balls to draw
+        gl::GL_TRIANGLES,
+        gl_data.ball_vertex_count,
+        gl::GL_UNSIGNED_INT,
+        0,
+        this->positions.size()
     );
 
     gl::glBindVertexArray(0);

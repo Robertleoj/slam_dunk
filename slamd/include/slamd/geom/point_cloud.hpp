@@ -2,7 +2,6 @@
 
 #include <slamd/geom/geometry.hpp>
 #include <slamd/geom/simple_mesh.hpp>
-#include <slamd/thread_box.hpp>
 
 namespace slamd {
 namespace _geom {
@@ -24,7 +23,7 @@ class PointCloud : public Geometry {
    private:
     // SimpleMesh mesh;
 
-    void initialize();
+    void maybe_initialize();
     std::tuple<size_t, uint, uint> initialize_sphere_mesh();
     uint initialize_pos_buffer();
     uint initialize_radii_buffer();

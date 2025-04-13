@@ -7,6 +7,8 @@ set(CMAKE_C_COMPILER /usr/bin/gcc-13)
 set(CMAKE_CXX_COMPILER /usr/bin/g++-13)
 set(CMAKE_LINKER /usr/bin/ldd)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 project(slam_dunk_examples)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)

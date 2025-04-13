@@ -11,8 +11,13 @@
 namespace slamd {
 namespace _geom {
 
-void ArcballIndicator::initialize() {
-    assert_thread(this->render_thread_id.value());
+void ArcballIndicator::maybe_initialize() {
+    if (this->render_thread_id.has_value()) {
+        assert_thread(this->render_thread_id.value());
+        return;
+    }
+
+    this->render_thread_id = std::this_thread::get_id();
     // clang-format off
     std::vector<float> verts = {
         // x cross
@@ -105,12 +110,8 @@ void ArcballIndicator::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    if (!this->render_thread_id.has_value()) {
-        this->render_thread_id = std::this_thread::get_id();
-        this->initialize();
-    }
-
-    auto gl_state = this->gl_state.value().get();
+    this->maybe_initialize();
+    auto& gl_state = this->gl_state.value();
 
     auto alpha = this->get_alpha();
     if (alpha < 1e-6) {
@@ -120,17 +121,17 @@ void ArcballIndicator::render(
 
     auto scale_mat =
         ArcballIndicator::get_scale_mat(this->arcball_zoom / 20.0f);
-    gl_state->shader.use();
-    gl_state->shader.set_uniform("uModel", model * scale_mat);
-    gl_state->shader.set_uniform("uView", view);
-    gl_state->shader.set_uniform("uProjection", projection);
-    gl_state->shader.set_uniform(
+    gl_state.shader.use();
+    gl_state.shader.set_uniform("uModel", model * scale_mat);
+    gl_state.shader.set_uniform("uView", view);
+    gl_state.shader.set_uniform("uProjection", projection);
+    gl_state.shader.set_uniform(
         "uColor",
         glm::vec3(1.0f, 1.0f, 1.0f)
     );  // clean gray
-    gl_state->shader.set_uniform("uAlpha", alpha);
+    gl_state.shader.set_uniform("uAlpha", alpha);
 
-    gl::glBindVertexArray(gl_state->vao_id);
+    gl::glBindVertexArray(gl_state.vao_id);
     gl::glDrawArrays(gl::GL_LINES, 0, this->vertex_count);
 
     gl::glBindVertexArray(0);

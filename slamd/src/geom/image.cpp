@@ -7,8 +7,13 @@
 namespace slamd {
 namespace _geom {
 
-void Image::initialize() {
-    assert_thread(this->render_thread_id.value());
+void Image::maybe_initialize() {
+    if (this->render_thread_id.has_value()) {
+        assert_thread(this->render_thread_id.value());
+        return;
+    }
+
+    this->render_thread_id = std::this_thread::get_id();
 
     // clang-format off
     std::vector<float> verts = {
@@ -122,21 +127,17 @@ void Image::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    if (!this->render_thread_id.has_value()) {
-        this->render_thread_id = std::this_thread::get_id();
-        this->initialize();
-    }
+    this->maybe_initialize();
+    auto& gl_data = this->gl_data.value();
 
-    auto gl_data = this->gl_data.value().get();
+    gl::glBindVertexArray(gl_data.vao_id);
 
-    gl::glBindVertexArray(gl_data->vao_id);
+    gl_data.shader.use();
+    gl_data.shader.set_uniform("model", model * gmath::scale_xy(this->scale));
+    gl_data.shader.set_uniform("view", view);
+    gl_data.shader.set_uniform("projection", projection);
 
-    gl_data->shader.use();
-    gl_data->shader.set_uniform("model", model * gmath::scale_xy(this->scale));
-    gl_data->shader.set_uniform("view", view);
-    gl_data->shader.set_uniform("projection", projection);
-
-    gl_data->texture.bind();
+    gl_data.texture.bind();
 
     gl::glDrawElements(gl::GL_TRIANGLES, 6, gl::GL_UNSIGNED_INT, 0);
 

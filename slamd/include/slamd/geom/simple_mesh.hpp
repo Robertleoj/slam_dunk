@@ -7,7 +7,6 @@
 #include <slamd/data/mesh.hpp>
 #include <slamd/geom/geometry.hpp>
 #include <slamd/shaders.hpp>
-#include <slamd/thread_box.hpp>
 #include <thread>
 #include <vector>
 
@@ -33,7 +32,7 @@ class SimpleMesh : public Geometry {
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
    private:
-    void initialize();
+    void maybe_initialize();
 
    private:
     static thread_local std::optional<ShaderProgram> shader;
@@ -43,7 +42,7 @@ class SimpleMesh : public Geometry {
         uint eab_id;
     };
 
-    std::optional<ThreadBox<GLData>> gl_data;
+    std::optional<GLData> gl_data;
     std::optional<std::thread::id> render_thread_id;
 
     data::ColoredMesh mesh_data;

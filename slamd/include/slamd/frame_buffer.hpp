@@ -1,7 +1,6 @@
 #pragma once
 #include <glbinding/gl/gl.h>
 #include <optional>
-#include <slamd/thread_box.hpp>
 #include <thread>
 
 namespace slamd {
@@ -14,7 +13,7 @@ class FrameBuffer {
         uint render_buffer_object_id;
     };
 
-    std::optional<ThreadBox<GLData>> gl_data;
+    std::optional<GLData> gl_data;
     std::optional<std::thread::id> render_thread_id;
 
     size_t current_height;
@@ -33,9 +32,7 @@ class FrameBuffer {
     size_t height() const;
 
    private:
-    void initialize();
-    GLData* get_gl_data();
-    void set_render_thread();
+    void maybe_initialize();
 };
 
 }  // namespace slamd

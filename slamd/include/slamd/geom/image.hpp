@@ -6,7 +6,6 @@
 #include <slamd/gmath/aabb.hpp>
 #include <slamd/image_texture.hpp>
 #include <slamd/shaders.hpp>
-#include <slamd/thread_box.hpp>
 
 namespace slamd {
 namespace _geom {
@@ -21,7 +20,7 @@ class Image : public Geometry {
         ShaderProgram shader;
     };
 
-    std::optional<ThreadBox<GLData>> gl_data;
+    std::optional<GLData> gl_data;
     std::optional<std::thread::id> render_thread_id;
 
    private:
@@ -36,7 +35,7 @@ class Image : public Geometry {
     std::optional<gmath::AABB> bounds() override;
 
    private:
-    void initialize();
+    void maybe_initialize();
 };
 
 }  // namespace _geom

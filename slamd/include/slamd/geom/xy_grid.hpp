@@ -2,7 +2,7 @@
 
 #include <slamd/geom/geometry.hpp>
 #include <slamd/shaders.hpp>
-#include <slamd/thread_box.hpp>
+#include <thread>
 #include <vector>
 
 namespace slamd {
@@ -19,7 +19,7 @@ class GridXYPlane : public Geometry {
     void set_arcball_zoom(float zoom);
 
    private:
-    void initialize();
+    void maybe_initialize();
 
    private:
     struct GLData {
@@ -29,7 +29,7 @@ class GridXYPlane : public Geometry {
         size_t vertex_count;
     };
 
-    std::optional<ThreadBox<GLData>> gl_data;
+    std::optional<GLData> gl_data;
     std::optional<std::thread::id> render_thread_id;
 
     float arcball_zoom;

@@ -1,7 +1,6 @@
 #pragma once
 #include <slamd/geom/geometry.hpp>
 #include <slamd/geom/simple_mesh.hpp>
-#include <slamd/thread_box.hpp>
 
 namespace slamd {
 namespace _geom {

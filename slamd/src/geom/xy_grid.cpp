@@ -1,7 +1,7 @@
-#include <spdlog/spdlog.h>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
+#include <spdlog/spdlog.h>
+#include <glm/gtc/matrix_transform.hpp>
 #include <slamd/assert.hpp>
 #include <slamd/gen/shader_sources.hpp>
 #include <slamd/geom/xy_grid.hpp>
@@ -18,8 +18,13 @@ glm::mat4 get_scale_mat(
     return glm::scale(glm::mat4(1.0f), glm::vec3(scale, scale, 0.0));
 }
 
-void GridXYPlane::initialize() {
-    assert_thread(this->render_thread_id.value());
+void GridXYPlane::maybe_initialize() {
+    if (this->render_thread_id.has_value()) {
+        assert_thread(this->render_thread_id.value());
+        return;
+    }
+
+    this->render_thread_id = std::this_thread::get_id();
 
     std::vector<float> verts;
 
@@ -96,12 +101,8 @@ void GridXYPlane::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    if (!this->render_thread_id.has_value()) {
-        this->render_thread_id = std::this_thread::get_id();
-        this->initialize();
-    }
-
-    auto gl_data = this->gl_data.value().get();
+    this->maybe_initialize();
+    auto& gl_data = this->gl_data.value();
 
     float desired_scale = this->arcball_zoom / 10.0;
 
@@ -122,37 +123,37 @@ void GridXYPlane::render(
 
     // Assuming your shader is already bound
     // And has these uniforms: uModel, uView, uProjection, uColor
-    gl_data->shader.use();
-    gl_data->shader.set_uniform("uView", view);
-    gl_data->shader.set_uniform("uProjection", projection);
-    gl_data->shader.set_uniform(
+    gl_data.shader.use();
+    gl_data.shader.set_uniform("uView", view);
+    gl_data.shader.set_uniform("uProjection", projection);
+    gl_data.shader.set_uniform(
         "uColor",
         glm::vec3(0.6f, 0.6f, 0.6f)
     );  // clean gray
 
     // render best scale
-    gl_data->shader.set_uniform("uModel", model * best_scale_mat);
-    gl_data->shader.set_uniform("uExtraAlpha", best_alpha);
-    gl_data->shader.set_uniform("uScale", desired_scale);
+    gl_data.shader.set_uniform("uModel", model * best_scale_mat);
+    gl_data.shader.set_uniform("uExtraAlpha", best_alpha);
+    gl_data.shader.set_uniform("uScale", desired_scale);
 
-    gl::glBindVertexArray(gl_data->vao_id);
+    gl::glBindVertexArray(gl_data.vao_id);
     gl::glDepthMask(gl::GL_FALSE);  // don't mess with z-buffer
 
-    gl::glDrawArrays(gl::GL_LINES, 0, gl_data->vertex_count);
+    gl::glDrawArrays(gl::GL_LINES, 0, gl_data.vertex_count);
 
     float draw_threshold = 0.01;
 
     if (below_alpha > draw_threshold) {
-        gl_data->shader.set_uniform("uModel", model * below_scale_mat);
-        gl_data->shader.set_uniform("uExtraAlpha", below_alpha);
+        gl_data.shader.set_uniform("uModel", model * below_scale_mat);
+        gl_data.shader.set_uniform("uExtraAlpha", below_alpha);
 
-        gl::glDrawArrays(gl::GL_LINES, 0, gl_data->vertex_count);
+        gl::glDrawArrays(gl::GL_LINES, 0, gl_data.vertex_count);
     }
     if (above_alpha > draw_threshold) {
-        gl_data->shader.set_uniform("uModel", model * above_scale_mat);
-        gl_data->shader.set_uniform("uExtraAlpha", above_alpha);
+        gl_data.shader.set_uniform("uModel", model * above_scale_mat);
+        gl_data.shader.set_uniform("uExtraAlpha", above_alpha);
 
-        gl::glDrawArrays(gl::GL_LINES, 0, gl_data->vertex_count);
+        gl::glDrawArrays(gl::GL_LINES, 0, gl_data.vertex_count);
     }
     gl::glDepthMask(gl::GL_TRUE);
 
@@ -164,10 +165,10 @@ GridXYPlane::~GridXYPlane() {
         return;
     }
 
-    auto gl_data = this->gl_data.value().circumvent();
+    auto& gl_data = this->gl_data.value();
 
-    gl::GLuint vbo_id = gl_data->vbo_id;
-    auto vao_id = gl_data->vao_id;
+    gl::GLuint vbo_id = gl_data.vbo_id;
+    auto vao_id = gl_data.vao_id;
 
     auto job = [vbo_id, vao_id]() {
         gl::glDeleteBuffers(1, &vbo_id);

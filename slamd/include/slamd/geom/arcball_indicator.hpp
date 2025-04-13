@@ -3,7 +3,7 @@
 #include <chrono>
 #include <slamd/geom/geometry.hpp>
 #include <slamd/shaders.hpp>
-#include <slamd/thread_box.hpp>
+#include <thread>
 
 namespace slamd {
 namespace _geom {
@@ -18,7 +18,7 @@ class ArcballIndicator : public Geometry {
    private:
     static glm::mat4 get_scale_mat(float scale);
     float get_alpha();
-    void initialize();
+    void maybe_initialize();
 
    private:
     struct GLData {
@@ -26,7 +26,7 @@ class ArcballIndicator : public Geometry {
         uint vbo_id;
         ShaderProgram shader;
     };
-    std::optional<ThreadBox<GLData>> gl_state;
+    std::optional<GLData> gl_state;
     std::optional<std::thread::id> render_thread_id;
 
     uint vertex_count;

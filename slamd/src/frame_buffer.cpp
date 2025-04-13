@@ -7,9 +7,13 @@
 
 namespace slamd {
 
-void FrameBuffer::initialize() {
-    assert_thread(this->render_thread_id.value());
-    assert_nil(this->gl_data);
+void FrameBuffer::maybe_initialize() {
+    if (this->render_thread_id.has_value()) {
+        assert_thread(this->render_thread_id.value());
+        return;
+    }
+
+    this->render_thread_id = std::this_thread::get_id();
 
     GLData gl_data;
 
@@ -88,24 +92,16 @@ FrameBuffer::FrameBuffer(
     this->current_width = width;
 }
 
-FrameBuffer::GLData* FrameBuffer::get_gl_data() {
-    this->set_render_thread();
-    return this->gl_data.value().get();
-}
-
 FrameBuffer::~FrameBuffer() {
     if (!this->render_thread_id.has_value()) {
         return;
     }
-    if (!this->gl_data.has_value()) {
-        return;
-    }
 
-    auto gl_data = this->gl_data.value().circumvent();
+    auto& gl_data = this->gl_data.value();
 
-    auto job = [fbo = gl_data->frame_buffer_object_id,
-                rbo = gl_data->render_buffer_object_id,
-                tex = gl_data->texture_id]() {
+    auto job = [fbo = gl_data.frame_buffer_object_id,
+                rbo = gl_data.render_buffer_object_id,
+                tex = gl_data.texture_id]() {
         gl::glDeleteFramebuffers(1, &fbo);
         gl::glDeleteTextures(1, &tex);
         gl::glDeleteRenderbuffers(1, &rbo);
@@ -115,23 +111,26 @@ FrameBuffer::~FrameBuffer() {
 }
 
 uint FrameBuffer::frame_texture() {
-    auto gl_data = this->get_gl_data();
-    return gl_data->texture_id;
+    assert_thread(this->render_thread_id.value());
+    auto& gl_data = this->gl_data.value();
+    return gl_data.texture_id;
 }
 
 void FrameBuffer::rescale(
     size_t width,
     size_t height
 ) {
+    this->maybe_initialize();
+
     if (this->current_height == height && this->current_width == width) {
         return;
     }
 
-    auto gl_data = this->get_gl_data();
+    auto& gl_data = this->gl_data.value();
 
     gl::glViewport(0, 0, width, height);
 
-    gl::glBindTexture(gl::GL_TEXTURE_2D, gl_data->texture_id);
+    gl::glBindTexture(gl::GL_TEXTURE_2D, gl_data.texture_id);
     gl::glTexImage2D(
         gl::GL_TEXTURE_2D,
         0,
@@ -158,13 +157,13 @@ void FrameBuffer::rescale(
         gl::GL_FRAMEBUFFER,
         gl::GL_COLOR_ATTACHMENT0,
         gl::GL_TEXTURE_2D,
-        gl_data->texture_id,
+        gl_data.texture_id,
         0
     );
 
     gl::glBindRenderbuffer(
         gl::GL_RENDERBUFFER,
-        gl_data->render_buffer_object_id
+        gl_data.render_buffer_object_id
     );
     gl::glRenderbufferStorage(
         gl::GL_RENDERBUFFER,
@@ -176,7 +175,7 @@ void FrameBuffer::rescale(
         gl::GL_FRAMEBUFFER,
         gl::GL_DEPTH_STENCIL_ATTACHMENT,
         gl::GL_RENDERBUFFER,
-        gl_data->render_buffer_object_id
+        gl_data.render_buffer_object_id
     );
 
     this->current_height = height;
@@ -184,15 +183,16 @@ void FrameBuffer::rescale(
 }
 
 void FrameBuffer::bind() {
-    auto gl_data = this->get_gl_data();
-    gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, gl_data->frame_buffer_object_id);
+    this->maybe_initialize();
+
+    auto& gl_data = this->gl_data.value();
+
+    gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, gl_data.frame_buffer_object_id);
     gl::glViewport(0, 0, this->width(), this->height());
 }
 
 void FrameBuffer::unbind() {
-    // make sure we can
-    this->get_gl_data();
-
+    assert_thread(this->render_thread_id.value());
     gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, 0);
 }
 
@@ -207,15 +207,6 @@ size_t FrameBuffer::width() const {
 
 size_t FrameBuffer::height() const {
     return this->current_height;
-}
-
-void FrameBuffer::set_render_thread() {
-    if (this->render_thread_id.has_value()) {
-        assert_thread(this->render_thread_id.value());
-        return;
-    }
-    this->render_thread_id = std::this_thread::get_id();
-    this->initialize();
 }
 
 }  // namespace slamd
