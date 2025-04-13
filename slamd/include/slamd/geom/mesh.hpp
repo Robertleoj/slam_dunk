@@ -28,7 +28,7 @@ class Mesh : public Geometry {
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
     void update_positions(
-    const std::vector<glm::vec3>& positions,
+        const std::vector<glm::vec3>& positions,
         bool recompute_normals = true
     );
     void update_colors(const std::vector<glm::vec3>& colors);
@@ -65,7 +65,7 @@ namespace geom {
 
 using _geom::Mesh;
 
-std::shared_ptr<Mesh> mesh(const data::ColoredMesh& mesh_data);
+std::shared_ptr<Mesh> mesh(const data::MeshData& mesh_data);
 
 }  // namespace geom
 }  // namespace slamd

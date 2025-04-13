@@ -45,18 +45,31 @@ std::tuple<size_t, uint, uint> PointCloud::initialize_sphere_mesh() {
 
     generate_sphere(mesh_vertices, mesh_indices, vertex_normals, 1.0f, 10, 10);
 
-    data::Mesh mesh_data =
-        make_mesh(mesh_vertices, mesh_indices, vertex_normals);
-
     // vertex buffer
     uint mesh_vbo_id;
     gl::glGenBuffers(1, &mesh_vbo_id);
     gl::glBindBuffer(gl::GL_ARRAY_BUFFER, mesh_vbo_id);
+
+    size_t vert_size = mesh_vertices.size() * sizeof(glm::vec3);
+    size_t normals_size = vertex_normals.size() * sizeof(glm::vec3);
+
     gl::glBufferData(
         gl::GL_ARRAY_BUFFER,
-        mesh_data.vertices.size() * sizeof(data::Vertex),
-        mesh_data.vertices.data(),
-        gl::GL_STATIC_DRAW  // we won't change this one
+        vert_size + normals_size,
+        nullptr,
+        gl::GL_STATIC_DRAW
+    );
+    gl::glBufferSubData(
+        gl::GL_ARRAY_BUFFER,
+        0,
+        vert_size,
+        mesh_vertices.data()
+    );
+    gl::glBufferSubData(
+        gl::GL_ARRAY_BUFFER,
+        vert_size,
+        normals_size,
+        vertex_normals.data()
     );
 
     // element buffer
@@ -66,8 +79,8 @@ std::tuple<size_t, uint, uint> PointCloud::initialize_sphere_mesh() {
 
     gl::glBufferData(
         gl::GL_ELEMENT_ARRAY_BUFFER,
-        mesh_data.triangle_indices.size() * sizeof(uint32_t),
-        mesh_data.triangle_indices.data(),
+        mesh_indices.size() * sizeof(uint32_t),
+        mesh_indices.data(),
         gl::GL_STATIC_DRAW
     );
 
@@ -77,8 +90,8 @@ std::tuple<size_t, uint, uint> PointCloud::initialize_sphere_mesh() {
         3,
         gl::GL_FLOAT,
         gl::GL_FALSE,
-        sizeof(data::Vertex),
-        (void*)offsetof(data::Vertex, position)
+        sizeof(glm::vec3),
+        (void*)0
     );
     gl::glEnableVertexAttribArray(0);
 
@@ -88,8 +101,8 @@ std::tuple<size_t, uint, uint> PointCloud::initialize_sphere_mesh() {
         3,
         gl::GL_FLOAT,
         gl::GL_FALSE,
-        sizeof(data::Vertex),
-        (void*)offsetof(data::Vertex, normal)
+        sizeof(glm::vec3),
+        (void*)vert_size
     );
     gl::glEnableVertexAttribArray(1);
 
