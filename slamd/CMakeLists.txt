@@ -5,13 +5,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(SLAMD_ENABLE_INSTALL "Enable install targets" OFF)
+option(SLAMD_VENDOR_DEPS "Use vendored dependencies" ON)
 
 project(slam_dunk VERSION 0.1.0)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(LIB_DIR vendored_deps)
-set(BIN_DIR ${CMAKE_BINARY_DIR}/_deps)
 
 function(find_required_package 
     pkg_name 
@@ -20,25 +20,27 @@ function(find_required_package
     subdir
 )
     if (NOT TARGET ${target_name})
-        find_package(${pkg_name} CONFIG QUIET)
-        if (NOT ${found_var})
-            message(STATUS "${pkg_name} not found via find_package, trying add_subdirectory, bro.")
-            add_subdirectory(
-                ${subdir} 
-                # ${CMAKE_BINARY_DIR}/${pkg_name}
-            )
+        if (SLAMD_VENDOR_DEPS)
+            message(STATUS "Vendoring is ON, skipping find_package for ${pkg_name}, bro.")
+            if (NOT TARGET ${target_name})
+                message(STATUS "${pkg_name} target not found, trying add_subdirectory, bro.")
+                add_subdirectory(${subdir})
+            endif()
+        else()
+            find_package(${pkg_name} CONFIG QUIET)
         endif()
-        # After add_subdirectory, check again
+
         if (NOT TARGET ${target_name})
-            message(FATAL_ERROR "${pkg_name} not found, even after add_subdirectory, bro! We're toast.")
+            message(FATAL_ERROR "${pkg_name} still not found. No target, no backup, bro — we're hosed.")
         endif()
     endif()
 endfunction()
 
-# Slam those deps in with confidence:
+# sometimes glbinding-aux does not come with
+# glbinding, so we need to check for that target
 find_required_package(
-    glbinding 
-    glbinding::glbinding 
+    glbinding
+    glbinding::glbinding-aux
     glbinding_FOUND
     ${LIB_DIR}/glbinding
 )
@@ -64,7 +66,7 @@ find_required_package(
     ${LIB_DIR}/imgui_wrapper
 )
 
-add_subdirectory(${LIB_DIR}/glm ${BIN_DIR}/glm)
+add_subdirectory(${LIB_DIR}/glm)
 
 
 add_library(slamd STATIC)

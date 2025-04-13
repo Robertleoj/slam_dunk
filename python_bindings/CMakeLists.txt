@@ -11,7 +11,7 @@ if(NOT TARGET spdlog::spdlog)
     add_subdirectory(${LIB_DIR}/spdlog)
 endif()
 
-if(NOT TARGET glbinding::glbinding)
+if(NOT TARGET glbinding::glbinding-aux)
     message(STATUS "Adding glbinding...")
     add_subdirectory(${LIB_DIR}/glbinding)
     install(TARGETS glbinding DESTINATION slamd OPTIONAL)

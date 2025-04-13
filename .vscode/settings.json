@@ -111,5 +111,6 @@
   "C_Cpp.inlayHints.autoDeclarationTypes.enabled": false,
   "C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": false,
   "C_Cpp.inlayHints.parameterNames.enabled": true,
-  "C_Cpp.inlayHints.referenceOperator.enabled": true
+  "C_Cpp.inlayHints.referenceOperator.enabled": true,
+  "python.analysis.extraPaths": ["python_bindings/src/"]
 }
