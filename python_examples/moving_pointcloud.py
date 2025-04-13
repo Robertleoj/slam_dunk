@@ -1,52 +1,66 @@
 import slamd
 import time
 import numpy as np
+from typing import cast
 
 
 def f(inp, t):
-    return np.sin(0.5 * inp[:, :, 0] + t) * np.sin(0.5 * inp[:, :, 1] + t)
+    x = inp[:, 0]
+    y = inp[:, 1]
+
+    return np.sin(2 * x + t) * np.sin(2 * y + t) * x * y * 0.1
 
 
-def make_grid(n: int, a: float):
-    lin = np.linspace(-a, a, n)
-    x, y = np.meshgrid(lin, lin)
-    coords = np.stack((x, y), axis=-1)
-    return coords
+def uniform_grid_points(N, a):
+    side = int(np.sqrt(N))
+    x = np.linspace(-a, a, side)
+    y = np.linspace(-a, a, side)
+    xv, yv = np.meshgrid(x, y)
+    grid = np.stack([xv.ravel(), yv.ravel()], axis=1)
+    return grid[:N]
 
 
 def main():
     window = slamd.Window("hello python", 1000, 1000)
 
-    coords = make_grid(30, 10.0)
+    coords = uniform_grid_points(100000, 10.0)
+    print(uniform_grid_points)
 
     scene = slamd.scene()
     window.add_scene("scene", scene)
+    scene.set_object("/origin", slamd.geom.triad())
+
+    point_cloud = None
 
     t = 0
     while True:
         time.sleep(0.01)
         z = f(coords, t)
-        points = np.concatenate((coords, z[:, :, None]), axis=2)
+        points = np.concatenate((coords, z[:, None]), axis=1)
 
-        red = np.exp(-points[:, :, 2])
+        red = np.exp(-points[:, 2])
         blue = 1.0 - red
         green = 0.5
 
         colors = np.zeros(points.shape, dtype=np.float32)
-        colors[:, :, 0] = red
-        colors[:, :, 1] = blue
-        colors[:, :, 2] = green
+        colors[:, 0] = red
+        colors[:, 1] = blue
+        colors[:, 2] = green
 
-        radii = np.ones(points.shape[:2], dtype=float) * 0.3
+        radii = np.ones(points.shape[0], dtype=float) * 0.3
 
-        scene.set_object(
-            "/points",
-            slamd.geom.point_cloud(
-                points.reshape(-1, 3).astype(np.float32),
-                colors.reshape(-1, 3).astype(np.float32),
-                radii.reshape(-1).astype(float),
-            ),
-        )
+        pc_positions = points.astype(np.float32)
+        pc_colors = colors.astype(np.float32)
+        pc_radii = cast(list[float], radii.astype(float).tolist())
+
+        if point_cloud is None:
+            point_cloud = slamd.geom.point_cloud(pc_positions, pc_colors, pc_radii)
+
+            scene.set_object("/points", point_cloud)
+        else:
+            point_cloud.update_positions(pc_positions)
+            point_cloud.update_colors(pc_colors)
+            point_cloud.update_radii(pc_radii)
 
         t += 0.02
 

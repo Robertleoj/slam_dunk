@@ -16,8 +16,11 @@ PointCloud::PointCloud(
     const std::vector<float>& radii
 )
     : positions(positions),
+      pending_pos_update(false),
       colors(colors),
-      radii(radii) {
+      pending_colors_update(false),
+      radii(radii),
+      pending_radii_update(false) {
     if (!((positions.size() == colors.size()) && (colors.size() == radii.size())
         )) {
         throw std::invalid_argument(
@@ -204,6 +207,68 @@ void PointCloud::initialize() {
     ));
 }
 
+void PointCloud::update_positions(
+    const std::vector<glm::vec3>& positions
+) {
+    this->positions = positions;
+    this->pending_pos_update = true;
+}
+
+void PointCloud::update_colors(
+    const std::vector<glm::vec3>& colors
+) {
+    this->colors = colors;
+    this->pending_colors_update = true;
+}
+
+void PointCloud::update_radii(
+    const std::vector<float>& radii
+) {
+    this->radii = radii;
+    this->pending_radii_update = true;
+}
+
+void PointCloud::handle_updates() {
+    if (this->pending_pos_update) {
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->gl_data.value().pos_vbo_id);
+        gl::glBufferData(
+            gl::GL_ARRAY_BUFFER,
+            this->positions.size() * sizeof(glm::vec3),
+            this->positions.data(),
+            gl::GL_DYNAMIC_DRAW
+        );
+        this->pending_pos_update = false;
+    }
+
+    if (this->pending_colors_update) {
+        gl::glBindBuffer(
+            gl::GL_ARRAY_BUFFER,
+            this->gl_data.value().colors_vbo_id
+        );
+        gl::glBufferData(
+            gl::GL_ARRAY_BUFFER,
+            this->colors.size() * sizeof(glm::vec3),
+            this->colors.data(),
+            gl::GL_DYNAMIC_DRAW
+        );
+        this->pending_colors_update = false;
+    }
+
+    if (this->pending_radii_update) {
+        gl::glBindBuffer(
+            gl::GL_ARRAY_BUFFER,
+            this->gl_data.value().radii_vbo_id
+        );
+        gl::glBufferData(
+            gl::GL_ARRAY_BUFFER,
+            this->radii.size() * sizeof(float),
+            this->radii.data(),
+            gl::GL_DYNAMIC_DRAW
+        );
+        this->pending_radii_update = false;
+    }
+}
+
 void PointCloud::render(
     glm::mat4 model,
     glm::mat4 view,
@@ -215,33 +280,27 @@ void PointCloud::render(
         this->initialize();
     }
 
-    auto gl_data = this->gl_data.value().get();
+    auto& gl_data = this->gl_data.value();
 
-    gl::glBindVertexArray(gl_data->vao_id);
+    gl::glBindVertexArray(gl_data.vao_id);
+    this->handle_updates();
 
-    gl_data->shader.use();
+    gl_data.shader.use();
 
-    gl_data->shader.set_uniform("u_model", model);
-    gl_data->shader.set_uniform("u_view", view);
-    gl_data->shader.set_uniform("u_projection", projection);
-    gl_data->shader.set_uniform("u_light_dir", slamd::_const::light_dir);
-    gl_data->shader.set_uniform(
+    gl_data.shader.set_uniform("u_model", model);
+    gl_data.shader.set_uniform("u_view", view);
+    gl_data.shader.set_uniform("u_projection", projection);
+    gl_data.shader.set_uniform("u_light_dir", slamd::_const::light_dir);
+    gl_data.shader.set_uniform(
         "u_min_brightness",
         _const::default_min_brightness
     );
-    // gl::glDrawArraysInstanced(
-    //     gl::GL_TRIANGLES,
-    //     0,
-    //     gl_data->ball_vertex_count,
-    //     this->positions.size()
-    // );
-
     gl::glDrawElementsInstanced(
-        gl::GL_TRIANGLES,            // Mode
-        gl_data->ball_vertex_count,  // Number of indices in your EBO
-        gl::GL_UNSIGNED_INT,         // Type (match your EBO type)
-        0,                           // Offset in the EBO
-        this->positions.size()       // 🔥 Number of balls to draw
+        gl::GL_TRIANGLES,           // Mode
+        gl_data.ball_vertex_count,  // Number of indices in your EBO
+        gl::GL_UNSIGNED_INT,        // Type (match your EBO type)
+        0,                          // Offset in the EBO
+        this->positions.size()      // 🔥 Number of balls to draw
     );
 
     gl::glBindVertexArray(0);

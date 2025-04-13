@@ -287,9 +287,24 @@ void define_private_geom(
         std::shared_ptr<slamd::geom::MonoMesh>>(m, "MonoMesh");
 
     py::class_<
-        slamd::geom::PointCloud,
+        slamd::_geom::PointCloud,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::PointCloud>>(m, "PointCloud");
+        std::shared_ptr<slamd::_geom::PointCloud>>(m, "PointCloud")
+        .def(
+            "update_positions",
+            &slamd::_geom::PointCloud::update_positions,
+            py::arg("positions")
+        )
+        .def(
+            "update_colors",
+            &slamd::_geom::PointCloud::update_colors,
+            py::arg("colors")
+        )
+        .def(
+            "update_radii",
+            &slamd::_geom::PointCloud::update_radii,
+            py::arg("radii")
+        );
 
     py::class_<
         slamd::geom2d::Points2D,

@@ -17,6 +17,10 @@ class PointCloud : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
+    void update_positions(const std::vector<glm::vec3>& positions);
+    void update_colors(const std::vector<glm::vec3>& colors);
+    void update_radii(const std::vector<float>& radii);
+
    private:
     // SimpleMesh mesh;
 
@@ -25,6 +29,7 @@ class PointCloud : public Geometry {
     uint initialize_pos_buffer();
     uint initialize_radii_buffer();
     uint initialize_color_buffer();
+    void handle_updates();
 
    private:
     struct GLData {
@@ -38,18 +43,17 @@ class PointCloud : public Geometry {
         size_t ball_vertex_count;
     };
 
-    std::optional<ThreadBox<GLData>> gl_data;
+    std::optional<GLData> gl_data;
     std::optional<std::thread::id> render_thread_id;
 
     std::vector<glm::vec3> positions;
-    std::vector<glm::vec3> colors;
-    std::vector<float> radii;
+    bool pending_pos_update;
 
-    // static SimpleMesh make_mesh(
-    //     const std::vector<glm::vec3>& positions,
-    //     const std::vector<glm::vec3>& colors,
-    //     const std::vector<float>& radii
-    // );
+    std::vector<glm::vec3> colors;
+    bool pending_colors_update;
+
+    std::vector<float> radii;
+    bool pending_radii_update;
 };
 
 }  // namespace _geom

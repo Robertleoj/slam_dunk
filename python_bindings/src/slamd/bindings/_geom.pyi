@@ -1,4 +1,5 @@
 from __future__ import annotations
+import numpy
 __all__ = ['Arrows', 'Box', 'CameraFrustum', 'Geometry', 'Image', 'MonoMesh', 'PointCloud', 'Points2D', 'PolyLine', 'SimpleMesh', 'Sphere', 'Triad']
 class Arrows(Geometry):
     pass
@@ -13,7 +14,12 @@ class Image(Geometry):
 class MonoMesh(Geometry):
     pass
 class PointCloud(Geometry):
-    pass
+    def update_colors(self, colors: numpy.ndarray) -> None:
+        ...
+    def update_positions(self, positions: numpy.ndarray) -> None:
+        ...
+    def update_radii(self, radii: list[float]) -> None:
+        ...
 class Points2D(Geometry):
     pass
 class PolyLine(Geometry):
