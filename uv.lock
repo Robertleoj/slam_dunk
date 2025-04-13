@@ -37,31 +37,6 @@ wheels = [
 ]
 
 [[package]]
-name = "learning-opengl"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "fire" },
-    { name = "imageio" },
-    { name = "jinja2" },
-    { name = "numpy" },
-    { name = "pybind11" },
-    { name = "pybind11-stubgen" },
-    { name = "scipy" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "fire", specifier = ">=0.7.0" },
-    { name = "imageio", specifier = ">=2.37.0" },
-    { name = "jinja2", specifier = ">=3.1.6" },
-    { name = "numpy", specifier = ">=2.2.4" },
-    { name = "pybind11", specifier = ">=2.13.6" },
-    { name = "pybind11-stubgen", specifier = ">=2.5.3" },
-    { name = "scipy", specifier = ">=1.15.2" },
-]
-
-[[package]]
 name = "markupsafe"
 version = "3.0.2"
 source = { registry = "https://pypi.org/simple" }
@@ -269,6 +244,31 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/03/f3/e699e19cabe96bbac5189c04aaa970718f0105cff03d458dc5e2b6bd1e8c/scipy-1.15.2-cp313-cp313t-musllinux_1_2_aarch64.whl", hash = "sha256:bae43364d600fdc3ac327db99659dcb79e6e7ecd279a75fe1266669d9a652828", size = 36545159 },
     { url = "https://files.pythonhosted.org/packages/af/f5/ab3838e56fe5cc22383d6fcf2336e48c8fe33e944b9037fbf6cbdf5a11f8/scipy-1.15.2-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:f031846580d9acccd0044efd1a90e6f4df3a6e12b4b6bd694a7bc03a89892b28", size = 39136566 },
     { url = "https://files.pythonhosted.org/packages/0a/c8/b3f566db71461cabd4b2d5b39bcc24a7e1c119535c8361f81426be39bb47/scipy-1.15.2-cp313-cp313t-win_amd64.whl", hash = "sha256:fe8a9eb875d430d81755472c5ba75e84acc980e4a8f6204d402849234d3017db", size = 40477705 },
+]
+
+[[package]]
+name = "slamd-dev-env"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "fire" },
+    { name = "imageio" },
+    { name = "jinja2" },
+    { name = "numpy" },
+    { name = "pybind11" },
+    { name = "pybind11-stubgen" },
+    { name = "scipy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "fire", specifier = ">=0.7.0" },
+    { name = "imageio", specifier = ">=2.37.0" },
+    { name = "jinja2", specifier = ">=3.1.6" },
+    { name = "numpy", specifier = ">=2.2.4" },
+    { name = "pybind11", specifier = ">=2.13.6" },
+    { name = "pybind11-stubgen", specifier = ">=2.5.3" },
+    { name = "scipy", specifier = ">=1.15.2" },
 ]
 
 [[package]]
