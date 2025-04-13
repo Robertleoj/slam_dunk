@@ -1,11 +1,3 @@
 @PACKAGE_INIT@
 
 include("${CMAKE_CURRENT_LIST_DIR}/slamdTargets.cmake")
-
-include(CMakeFindDependencyMacro)
-
-find_dependency(glbinding REQUIRED)
-find_dependency(glfw3 REQUIRED)
-find_dependency(spdlog REQUIRED)
-find_dependency(glm REQUIRED)
-find_dependency(imgui REQUIRED)

@@ -21,17 +21,18 @@ function(find_required_package
 )
     if (NOT TARGET ${target_name})
         if (SLAMD_VENDOR_DEPS)
-            message(STATUS "Vendoring is ON, skipping find_package for ${pkg_name}, bro.")
+            message(STATUS "Vendoring is ON, skipping find_package for ${pkg_name}")
             if (NOT TARGET ${target_name})
-                message(STATUS "${pkg_name} target not found, trying add_subdirectory, bro.")
+                message(STATUS "${pkg_name} target not found, trying add_subdirectory")
                 add_subdirectory(${subdir})
             endif()
         else()
+            message(STATUS "Finding ${pkg_name}")
             find_package(${pkg_name} CONFIG QUIET)
         endif()
 
         if (NOT TARGET ${target_name})
-            message(FATAL_ERROR "${pkg_name} still not found. No target, no backup, bro — we're hosed.")
+            message(FATAL_ERROR "${pkg_name} still not found. No target, no backup — we're hosed.")
         endif()
     endif()
 endfunction()
@@ -142,7 +143,8 @@ target_link_libraries(
 )
 
 
-if(SLAMD_ENABLE_INSTALL)
+# only install if this is the top-level dir
+if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     install(TARGETS slamd
         EXPORT slamdTargets
         RUNTIME DESTINATION bin

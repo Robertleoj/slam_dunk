@@ -15,7 +15,20 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-linux")
 
+# to use as submodule
 add_subdirectory(slamd)
+
+# to use with fetchcontent
+# include(FetchContent)
+
+# FetchContent_Declare(
+#   slamd
+#   GIT_REPOSITORY https://github.com/Robertleoj/slam_dunk.git
+#   GIT_TAG main
+#   SOURCE_SUBDIR slamd
+# )
+
+# FetchContent_MakeAvailable(slamd)
 
 add_subdirectory(hello_world)
 add_subdirectory(two_scenes)
