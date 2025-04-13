@@ -91,6 +91,7 @@ target_sources(
         src/render_thread_job_queue.cpp
 
         src/data/image.cpp
+        src/data/mesh.cpp
 
         src/tree/tree.cpp
         src/tree/node.cpp

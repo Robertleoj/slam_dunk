@@ -31,15 +31,65 @@ void Mesh::maybe_initialize() {
     gl::glGenVertexArrays(1, &gl_data.vao_id);
     gl::glBindVertexArray(gl_data.vao_id);
 
-    // make the vertex buffer object
-    gl::glGenBuffers(1, &gl_data.vbo_id);
-    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.vbo_id);
+    // positions
+    gl::glGenBuffers(1, &gl_data.pos_vbo_id);
+    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.pos_vbo_id);
     gl::glBufferData(
         gl::GL_ARRAY_BUFFER,
-        this->mesh_data.vertices.size() * sizeof(data::ColoredVertex),
-        this->mesh_data.vertices.data(),
-        gl::GL_STATIC_DRAW
+        this->mesh_data.positions.size() * sizeof(glm::vec3),
+        this->mesh_data.positions.data(),
+        gl::GL_DYNAMIC_DRAW
     );
+
+    gl::glVertexAttribPointer(
+        0,
+        3,
+        gl::GL_FLOAT,
+        gl::GL_FALSE,
+        sizeof(glm::vec3),
+        (void*)0
+    );
+    gl::glEnableVertexAttribArray(0);
+
+    // colors
+    gl::glGenBuffers(1, &gl_data.color_vbo_id);
+    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.color_vbo_id);
+    gl::glBufferData(
+        gl::GL_ARRAY_BUFFER,
+        this->mesh_data.colors.size() * sizeof(glm::vec3),
+        this->mesh_data.colors.data(),
+        gl::GL_DYNAMIC_DRAW
+    );
+
+    gl::glVertexAttribPointer(
+        1,
+        3,
+        gl::GL_FLOAT,
+        gl::GL_FALSE,
+        sizeof(glm::vec3),
+        (void*)0
+    );
+    gl::glEnableVertexAttribArray(1);
+
+    // /normals
+    gl::glGenBuffers(1, &gl_data.normal_vbo_id);
+    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.normal_vbo_id);
+    gl::glBufferData(
+        gl::GL_ARRAY_BUFFER,
+        this->mesh_data.normals.size() * sizeof(glm::vec3),
+        this->mesh_data.normals.data(),
+        gl::GL_DYNAMIC_DRAW
+    );
+
+    gl::glVertexAttribPointer(
+        2,
+        3,
+        gl::GL_FLOAT,
+        gl::GL_FALSE,
+        sizeof(glm::vec3),
+        (void*)0
+    );
+    gl::glEnableVertexAttribArray(2);
 
     // make the element array buffer
     gl::glGenBuffers(1, &gl_data.eab_id);
@@ -52,39 +102,6 @@ void Mesh::maybe_initialize() {
         gl::GL_STATIC_DRAW
     );
 
-    // Position attribute (location = 0)
-    gl::glVertexAttribPointer(
-        0,
-        3,
-        gl::GL_FLOAT,
-        gl::GL_FALSE,
-        sizeof(data::ColoredVertex),
-        (void*)offsetof(data::ColoredVertex, position)
-    );
-    gl::glEnableVertexAttribArray(0);
-
-    // Color attribute (location = 1)
-    gl::glVertexAttribPointer(
-        1,
-        3,
-        gl::GL_FLOAT,
-        gl::GL_FALSE,
-        sizeof(data::ColoredVertex),
-        (void*)offsetof(data::ColoredVertex, color)
-    );
-    gl::glEnableVertexAttribArray(1);
-
-    // Normals
-    gl::glVertexAttribPointer(
-        2,
-        3,
-        gl::GL_FLOAT,
-        gl::GL_FALSE,
-        sizeof(data::ColoredVertex),
-        (void*)offsetof(data::ColoredVertex, normal)
-    );
-    gl::glEnableVertexAttribArray(2);
-
     // unbind the vao
     gl::glBindVertexArray(0);
 
@@ -92,27 +109,17 @@ void Mesh::maybe_initialize() {
 }
 
 Mesh::Mesh(
-    const data::ColoredMesh& mesh_data,
+    const data::MeshData& mesh_data,
     float min_brightness
 )
     : mesh_data(mesh_data),
       min_brightness(min_brightness) {}
 
 Mesh::Mesh(
-    const data::Mesh& mesh_data,
-    const glm::vec3& color,
+    data::MeshData&& mesh_data,
     float min_brightness
 )
-    : mesh_data(make_colored_mesh(mesh_data, color)),
-      min_brightness(min_brightness) {}
-
-Mesh::Mesh(
-    const std::vector<glm::vec3>& vertices,
-    const std::vector<glm::vec3>& vertex_colors,
-    const std::vector<uint32_t>& triangle_indices,
-    float min_brightness
-)
-    : mesh_data(make_colored_mesh(vertices, vertex_colors, triangle_indices)),
+    : mesh_data(std::move(mesh_data)),
       min_brightness(min_brightness) {}
 
 void Mesh::render(
@@ -151,18 +158,40 @@ void Mesh::render(
 namespace geom {
 
 std::shared_ptr<Mesh> mesh(
-    const data::ColoredMesh& mesh_data
+    const data::MeshData& mesh_data
 ) {
     return std::make_shared<Mesh>(mesh_data);
 }
 
-std::shared_ptr<Mesh> mesh(
-    const std::vector<glm::vec3>& vertices,
-    const std::vector<glm::vec3>& vertex_colors,
-    const std::vector<uint32_t>& triangle_indices
-) {
-    return std::make_shared<Mesh>(vertices, vertex_colors, triangle_indices);
-}
+// std::shared_ptr<Mesh> mesh(
+//     const std::vector<glm::vec3>& vertices,
+//     const std::vector<glm::vec3>& vertex_colors,
+//     const std::vector<uint32_t>& triangle_indices
+// ) {
+//     data::MeshData data = data::MeshDataBuilder()
+//                               .set_positions(vertices)
+//                               .set_colors(vertex_colors)
+//                               .set_indices(triangle_indices)
+//                               .compute_normals()
+//                               .build();
+
+//     return std::make_shared<Mesh>(data);
+// }
+// std::shared_ptr<Mesh> mesh(
+//     const std::vector<glm::vec3>& vertices,
+//     const std::vector<glm::vec3>& vertex_colors,
+//     const std::vector<uint32_t>& triangle_indices,
+//     const std::vector<glm::vec3>& normals
+// ) {
+//     data::MeshData data = data::MeshDataBuilder()
+//                               .set_positions(vertices)
+//                               .set_colors(vertex_colors)
+//                               .set_indices(triangle_indices)
+//                               .set_normals(normals)
+//                               .build();
+
+//     return std::make_shared<Mesh>(vertices, vertex_colors, triangle_indices);
+// }
 
 }  // namespace geom
 

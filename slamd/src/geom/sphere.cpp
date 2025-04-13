@@ -18,14 +18,14 @@ Mesh make_sphere_mesh(
 
     generate_sphere(vertices, indices, normals, radius, 20, 20);
 
-    data::Mesh mesh_data;
+    data::MeshData mesh_data = data::MeshDataBuilder()
+                                   .set_positions(std::move(vertices))
+                                   .set_indices(std::move(indices))
+                                   .set_normals(std::move(normals))
+                                   .set_colors(color)
+                                   .build();
 
-    mesh_data.triangle_indices = std::move(indices);
-    for (const auto& [vert, norm] : std::views::zip(vertices, normals)) {
-        mesh_data.vertices.emplace_back(vert, norm);
-    }
-
-    return Mesh(make_colored_mesh(vertices, indices, color, normals));
+    return Mesh(std::move(mesh_data));
 }
 
 Sphere::Sphere(

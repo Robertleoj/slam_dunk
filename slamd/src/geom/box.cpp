@@ -69,23 +69,25 @@ const std::vector<glm::vec3> vertex_normals = {{
 }};
 
 auto get_mesh_data() {
-
-
-    data::ColoredMesh mesh;
-
-    for (const auto&[vert, col, norm]: std::views::zip(box_corners, vertex_colors, vertex_normals)) {
-        mesh.vertices.emplace_back(vert, col, norm);
-    }
-
-    mesh.triangle_indices = box_indices;
-
-    return mesh;
+    return data::MeshData(
+        box_corners,
+        vertex_colors,
+        box_indices,
+        vertex_normals
+    );
 }
 
 // clang-format on
 
 Box::Box()
-    : box_mesh(get_mesh_data()) {}
+    : box_mesh(
+          data::MeshData(
+              box_corners,
+              vertex_colors,
+              box_indices,
+              vertex_normals
+          )
+      ) {}
 
 void Box::render(
     glm::mat4 model,

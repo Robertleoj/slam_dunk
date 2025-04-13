@@ -452,16 +452,20 @@ void define_geom(
         "Create a PolyLine geometry"
     );
 
-    // Explicitly cast the version we want
-    std::shared_ptr<slamd::geom::Mesh> (*mesh_from_raw)(
-        const std::vector<glm::vec3>&,
-        const std::vector<glm::vec3>&,
-        const std::vector<uint32_t>&
-    ) = &slamd::geom::mesh;
-
     m.def(
         "mesh",
-        mesh_from_raw,
+        [](const std::vector<glm::vec3>& positions,
+           const std::vector<glm::vec3>& vertex_colors,
+           const std::vector<uint32_t>& triangle_indices) {
+            slamd::data::MeshData data = slamd::data::MeshDataBuilder()
+                                             .set_positions(positions)
+                                             .set_colors(vertex_colors)
+                                             .set_indices(triangle_indices)
+                                             .compute_normals()
+                                             .build();
+
+            return slamd::geom::Mesh(std::move(data));
+        },
         py::arg("vertices"),
         py::arg("vertex_colors"),
         py::arg("triangle_indices"),

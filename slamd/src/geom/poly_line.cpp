@@ -70,7 +70,14 @@ Mesh make_poly_line_mesh(
         }
     }
 
-    return Mesh(make_colored_mesh(verts, color, indices));
+    data::MeshData data = data::MeshDataBuilder()
+                              .set_positions(verts)
+                              .set_colors(color)
+                              .set_indices(indices)
+                              .compute_normals()
+                              .build();
+
+    return Mesh(data);
 }
 
 PolyLine::PolyLine(

@@ -166,7 +166,14 @@ Mesh make_arrows_mesh(
         index_offset += mesh.vertices.size();
     }
 
-    return Mesh(make_colored_mesh(vertices, out_colors, inds));
+    data::MeshData mesh_data = data::MeshDataBuilder()
+                                   .set_positions(vertices)
+                                   .set_colors(out_colors)
+                                   .set_indices(inds)
+                                   .compute_normals()
+                                   .build();
+
+    return Mesh(mesh_data);
 }
 
 Arrows::Arrows(

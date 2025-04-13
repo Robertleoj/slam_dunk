@@ -10,7 +10,7 @@ Mesh make_mesh(
     const std::vector<glm::vec3>& colors,
     const std::vector<float>& radii
 ) {
-    data::ColoredMesh mesh_data;
+    data::MeshData mesh_data;
 
     uint32_t curr_idx = 0;
     size_t num_segments = 10;
@@ -20,11 +20,8 @@ Mesh make_mesh(
     for (const auto& [pos, col, rad] :
          std::views::zip(positions, colors, radii)) {
         // the center of the circle
-        mesh_data.vertices.emplace_back(
-            glm::vec3(pos, 0.0f),
-            col,
-            glm::vec3(0.0f, 0.0f, 1.0f)
-        );
+        mesh_data
+            .add_vertex(glm::vec3(pos, 0.0f), col, glm::vec3(0.0f, 0.0f, 1.0f));
 
         for (int i = 0; i < num_segments; i++) {
             float segment_start =
@@ -36,7 +33,7 @@ Mesh make_mesh(
                 0.0f
             );
 
-            mesh_data.vertices.emplace_back(
+            mesh_data.add_vertex(
                 (start * rad) + glm::vec3(pos, 0.0f),
                 col,
                 glm::vec3(0.0f, 0.0f, 1.0f)
