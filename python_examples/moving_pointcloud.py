@@ -4,20 +4,20 @@ import numpy as np
 from typing import cast
 
 
-def f(inp, t):
+def f(inp: np.ndarray, t: float) -> np.ndarray:
     x = inp[:, 0]
     y = inp[:, 1]
 
     return np.sin(2 * x + t) * np.sin(2 * y + t) * x * y * 0.1
 
 
-def uniform_grid_points(N, a):
-    side = int(np.sqrt(N))
+def uniform_grid_points(n: int, a: float) -> np.ndarray:
+    side = int(np.sqrt(n))
     x = np.linspace(-a, a, side)
     y = np.linspace(-a, a, side)
     xv, yv = np.meshgrid(x, y)
     grid = np.stack([xv.ravel(), yv.ravel()], axis=1)
-    return grid[:N]
+    return grid[:n]
 
 
 def main():
