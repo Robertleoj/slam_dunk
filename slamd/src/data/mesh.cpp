@@ -35,7 +35,6 @@ void MeshData::recompute_normals() {
     this->normals =
         _geom::compute_vertex_normals(this->positions, this->triangle_indices);
 }
-// ==== MeshDataBuilder ====
 
 MeshDataBuilder::MeshDataBuilder() = default;
 
