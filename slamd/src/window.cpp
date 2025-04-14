@@ -134,9 +134,6 @@ void Window::wait_for_close() {
 
 Window::~Window() {
     this->render_thread.request_stop();
-    if (this->render_thread.joinable()) {
-        this->render_thread.join();
-    }
 }
 
 }  // namespace slamd
