@@ -28,7 +28,7 @@ if __name__ == "__main__":
         coords = cool_spiral(1000, t)
         max_z = coords[:, 2].max()
 
-        poly_line = slamd.geom.poly_line(coords, 0.7, pink)
+        poly_line = slamd.geom.PolyLine(coords, 0.7, pink)
 
         scene.set_object("/poly_line", poly_line)
 

@@ -60,7 +60,7 @@ def main():
         colors[:, 2] = green
 
         if mesh is None:
-            mesh = slamd.geom.mesh(points, colors, indices)
+            mesh = slamd.geom.Mesh(points, colors, indices)
 
             scene.set_object("/mesh", mesh)
         else:

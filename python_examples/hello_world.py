@@ -5,7 +5,7 @@ if __name__ == "__main__":
 
     scene = slamd.scene()
 
-    scene.set_object("/origin", slamd.geom.triad())
+    scene.set_object("/origin", slamd.geom.Triad())
 
     window.add_scene("scene", scene)
 

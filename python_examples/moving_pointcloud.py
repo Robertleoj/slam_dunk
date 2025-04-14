@@ -48,7 +48,7 @@ def main():
         radii = np.ones(points.shape[0], dtype=float) * 0.3
 
         if point_cloud is None:
-            point_cloud = slamd.geom.point_cloud(points, colors, radii)
+            point_cloud = slamd.geom.PointCloud(points, colors, radii)
 
             scene.set_object("/points", point_cloud)
         else:

@@ -429,9 +429,9 @@ void define_private_geom(
 void define_geom(
     py::module_& m
 ) {
-    m.def("box", &slamd::geom::box, "Create a Box geometry");
+    m.def("Box", &slamd::geom::box, "Create a Box geometry");
     m.def(
-        "arrows",
+        "Arrows",
         &slamd::geom::arrows,
         py::arg("starts"),
         py::arg("ends"),
@@ -441,7 +441,7 @@ void define_geom(
     );
 
     m.def(
-        "camera_frustum",
+        "CameraFrustum",
         [](glm::mat3 intrinsics_matrix,
            size_t image_width,
            size_t image_height,
@@ -473,7 +473,7 @@ void define_geom(
 
     // Overload: uniform color + uniform radius
     m.def(
-        "point_cloud",
+        "PointCloud",
         [](const std::vector<glm::vec3>& positions,
            const glm::vec3& color,
            float radius) {
@@ -487,7 +487,7 @@ void define_geom(
 
     // Overload: per-point color + per-point radius
     m.def(
-        "point_cloud",
+        "PointCloud",
         [](const std::vector<glm::vec3>& positions,
            const std::vector<glm::vec3>& colors,
            const std::vector<float>& radii) {
@@ -500,7 +500,7 @@ void define_geom(
     );
 
     m.def(
-        "poly_line",
+        "PolyLine",
         &slamd::geom::poly_line,
         py::arg("points"),
         py::arg("thickness"),
@@ -509,7 +509,7 @@ void define_geom(
     );
 
     m.def(
-        "mesh",
+        "Mesh",
         [](const std::vector<glm::vec3>& positions,
            const std::vector<glm::vec3>& vertex_colors,
            const std::vector<uint32_t>& triangle_indices) {
@@ -528,7 +528,7 @@ void define_geom(
         "Create a SimpleMesh geometry from raw data"
     );
     m.def(
-        "mesh",
+        "Mesh",
         [](const std::vector<glm::vec3>& positions,
            const std::vector<glm::vec3>& vertex_colors,
            const std::vector<uint32_t>& triangle_indices,
@@ -552,7 +552,7 @@ void define_geom(
     );
 
     m.def(
-        "sphere",
+        "Sphere",
         &slamd::geom::sphere,
         py::arg("radius") = 1.0f,
         py::arg("color") = glm::vec3(0.8f, 0.2f, 0.0f),
@@ -560,7 +560,7 @@ void define_geom(
     );
 
     m.def(
-        "triad",
+        "Triad",
         &slamd::geom::triad,
         py::arg("scale") = 1.0f,
         py::arg("thickness") = 0.1f,
@@ -573,7 +573,7 @@ void define_geom2d(
 ) {
     // Overload: uniform color + radius
     m.def(
-        "points",
+        "Points",
         [](const std::vector<glm::vec2>& positions,
            const glm::vec3& color,
            float radius) {
@@ -587,7 +587,7 @@ void define_geom2d(
 
     // Overload: per-point color + radius
     m.def(
-        "points",
+        "Points",
         [](const std::vector<glm::vec2>& positions,
            const std::vector<glm::vec3>& colors,
            const std::vector<float>& radii) {
@@ -600,7 +600,7 @@ void define_geom2d(
     );
 
     m.def(
-        "image",
+        "Image",
         [](slamd::data::Image img) {
             return slamd::geom2d::image(std::move(img));
         },
@@ -609,7 +609,7 @@ void define_geom2d(
     );
 
     m.def(
-        "poly_line",
+        "PolyLine",
         &slamd::geom2d::poly_line,
         py::arg("points"),
         py::arg("color"),

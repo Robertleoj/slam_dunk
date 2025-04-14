@@ -12,7 +12,7 @@ def main():
 
     image = iio.imread(image_path)
 
-    canvas.set_object("/image", slamd.geom2d.image(image))
+    canvas.set_object("/image", slamd.geom2d.Image(image))
 
     window.add_canvas("canvas", canvas)
 

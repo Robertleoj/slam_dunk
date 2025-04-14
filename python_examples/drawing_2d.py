@@ -22,7 +22,7 @@ if __name__ == "__main__":
     while True:
         line_points = cool_spiral(10000, t)
 
-        poly_line = slamd.geom2d.poly_line(
+        poly_line = slamd.geom2d.PolyLine(
             line_points,
             np.array([0.5, 0.5, 0.0]),
             0.1,
