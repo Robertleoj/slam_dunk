@@ -59,8 +59,6 @@ std::shared_ptr<slamd::geom::PointCloud> cool_point_cloud() {
 }
 
 int main() {
-    std::srand(static_cast<unsigned>(std::time(0)));
-
     slamd::Window window("point_cloud", 1000, 1000);
 
     auto scene = slamd::scene();
