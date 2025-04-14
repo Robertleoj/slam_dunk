@@ -14,7 +14,10 @@ Window::Window(
 )
     : name(name),
       loaded_layout(false) {
-    this->render_thread = std::thread(&Window::render_job, this, height, width);
+    this->render_thread =
+        std::jthread([this, height, width](std::stop_token st) {
+            this->render_job(st, height, width);
+        });
 }
 
 fs::path Window::layout_path() {
@@ -48,6 +51,7 @@ void Window::add_canvas(
 }
 
 void Window::render_job(
+    std::stop_token& stop_token,
     size_t height,
     size_t width
 ) {
@@ -73,7 +77,7 @@ void Window::render_job(
         this->loaded_layout = true;
     }
 
-    while (!glfwWindowShouldClose(window) && !should_stop) {
+    while (!glfwWindowShouldClose(window) && !stop_token.stop_requested()) {
         render_queue->execute_all();
 
         ImGui_ImplOpenGL3_NewFrame();
@@ -129,7 +133,7 @@ void Window::wait_for_close() {
 }
 
 Window::~Window() {
-    should_stop = true;
+    this->render_thread.request_stop();
     if (this->render_thread.joinable()) {
         this->render_thread.join();
     }
