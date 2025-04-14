@@ -1,20 +1,17 @@
 #include <format>
 #include <glm/glm.hpp>
+#include <random>
 #include <slamd/slamd.hpp>
 
-void seed_random() {
-    std::srand(static_cast<unsigned int>(std::time(0)));
-}
-
-float rand_float() {
-    return static_cast<float>(std::rand()) / RAND_MAX;
-}
+std::random_device rd;
+std::mt19937 gen(rd());
 
 float rand_float(
     float min,
     float max
 ) {
-    return rand_float() * (max - min) + min;
+    std::uniform_real_distribution<float> dist(min, max);
+    return dist(gen);
 }
 
 glm::vec3 random_vector(

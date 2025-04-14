@@ -5,16 +5,28 @@
 #include <filesystem>
 #include <format>
 #include <iostream>
+#include <random>
 #include <slamd/slamd.hpp>
 #include <stdexcept>
 
 namespace fs = std::filesystem;
+
+std::random_device rd;
+std::mt19937 gen(rd());
 
 const fs::path image_path = fs::path(__FILE__)
                                 .parent_path()  // hello canvas
                                 .parent_path()  // examples
                                 .parent_path()  // repo root
                             / "images" / "logo.png";
+
+float random_float(
+    float start,
+    float end
+) {
+    std::uniform_real_distribution<float> dist(start, end);
+    return dist(gen);
+}
 
 slamd::data::Image read_image() {
     int width, height, channels;
@@ -44,14 +56,6 @@ slamd::data::Image read_image() {
     stbi_image_free(data_ptr);
 
     return slamd::data::Image(std::move(data), width, height, channels);
-}
-
-float random_float(
-    float start,
-    float end
-) {
-    float norm = static_cast<float>(rand()) / RAND_MAX;
-    return norm * (end - start) + start;
 }
 
 auto random_points() {

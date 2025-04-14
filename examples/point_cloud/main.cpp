@@ -1,15 +1,19 @@
 #include <cstdlib>
 #include <ctime>
 #include <glm/glm.hpp>
+#include <random>
 #include <slamd/slamd.hpp>
 #include <vector>
+
+std::random_device rd;
+std::mt19937 gen(rd());
 
 float random_float(
     float start,
     float end
 ) {
-    float norm = static_cast<float>(rand()) / RAND_MAX;
-    return norm * (end - start) + start;
+    std::uniform_real_distribution<float> dist(start, end);
+    return dist(gen);
 }
 
 float surface(
@@ -42,13 +46,6 @@ std::shared_ptr<slamd::geom::PointCloud> cool_point_cloud() {
     radii.reserve(count);
 
     for (int i = 0; i < count; ++i) {
-        // positions.emplace_back(
-        //     random_float(-100.f, 100.f),
-        //     random_float(-100.f, 100.f),
-        //     random_float(-100.f, 100.f)
-
-        // );
-
         colors.emplace_back(
             random_float(0.f, 1.f),
             random_float(0.f, 1.f),
