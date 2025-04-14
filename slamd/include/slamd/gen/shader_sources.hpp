@@ -103,6 +103,48 @@ void main() {
 } )";
 }  // namespace mesh
 
+namespace mono_instanced {
+inline const std::string vert = R"( #version 330 core
+
+layout(location = 0) in vec3 a_model_vertex_pos;
+layout(location = 1) in vec3 a_normal;
+layout(location = 2) in mat4 a_transform;
+layout(location = 3) in vec3 a_color;
+
+out vec3 o_vertex_color;
+out vec3 o_normal;
+
+uniform mat4 u_model;
+uniform mat4 u_view;
+uniform mat4 u_projection;
+
+void main() {
+    o_normal = mat3(transpose(inverse(u_model))) * a_normal;
+
+    gl_Position = u_projection * u_view * u_model * a_transform *
+                  vec4(a_model_vertex_pos, 1.0);
+    o_vertex_color = a_color;
+}
+ )";
+inline const std::string frag = R"( #version 330 core
+
+in vec3 o_normal;
+in vec3 o_vertex_color;
+
+out vec4 FragColor;
+
+uniform vec3 u_light_dir;
+uniform float u_min_brightness;
+
+void main() {
+    vec3 norm = normalize(o_normal);
+    float diff =
+        max(dot(norm, normalize(u_light_dir)),
+            u_min_brightness);  // never too dark
+    FragColor = vec4(o_vertex_color * diff, 1.0);
+} )";
+}  // namespace mono_instanced
+
 namespace point_cloud {
 inline const std::string vert = R"( #version 330 core
 

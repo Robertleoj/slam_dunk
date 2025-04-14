@@ -120,6 +120,8 @@ target_sources(
         src/geom/point_cloud.cpp
         src/geom/camera_frustum.cpp
         src/geom/poly_line_2d.cpp
+        src/geom/mono_instanced.cpp
+        src/geom/circles_2d.cpp
 )
 
 target_include_directories(
