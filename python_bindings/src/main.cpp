@@ -625,6 +625,9 @@ PYBIND11_MODULE(
     m.doc() = "SlamDunk visualization library";
 
     py::class_<slamd::Scene, std::shared_ptr<slamd::Scene>>(m, "Scene")
+        .def(py::init([]() {
+            return slamd::scene();
+        }))
         .def(
             "set_transform",
             &slamd::Scene::set_transform,
@@ -638,10 +641,11 @@ PYBIND11_MODULE(
             py::arg("object")
         );
 
-    m.def("scene", &slamd::scene);
-
     // Canvas bindings
     py::class_<slamd::Canvas, std::shared_ptr<slamd::Canvas>>(m, "Canvas")
+        .def(py::init([]() {
+            return slamd::canvas();
+        }))
         .def(
             "set_transform",
             &slamd::Canvas::set_transform,
@@ -654,8 +658,6 @@ PYBIND11_MODULE(
             py::arg("path"),
             py::arg("object")
         );
-
-    m.def("canvas", &slamd::canvas);
 
     py::class_<slamd::Window>(m, "Window")
         .def(

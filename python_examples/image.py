@@ -6,7 +6,7 @@ from pathlib import Path
 def main():
     window = slamd.Window("image", 1000, 1000)
 
-    canvas = slamd.canvas()
+    canvas = slamd.Canvas()
 
     image_path = Path(__file__).parent.parent / "images" / "logo.png"
 

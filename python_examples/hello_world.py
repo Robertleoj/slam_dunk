@@ -3,7 +3,7 @@ import slamd
 if __name__ == "__main__":
     window = slamd.Window("Hello world", 1000, 1000)
 
-    scene = slamd.scene()
+    scene = slamd.Scene()
 
     scene.set_object("/origin", slamd.geom.Triad())
 

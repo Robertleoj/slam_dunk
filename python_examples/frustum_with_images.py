@@ -39,7 +39,7 @@ def get_camera_intrinsics_and_image():
 if __name__ == "__main__":
     window = slamd.Window("camera and image", 1000, 1000)
 
-    scene = slamd.scene()
+    scene = slamd.Scene()
     scene.set_object("/origin", slamd.geom.Triad())
 
     window.add_scene("scene", scene)

@@ -39,7 +39,7 @@ def main():
 
     coords, indices = uniform_grid_points_with_mesh(100000, 13.0)
 
-    scene = slamd.scene()
+    scene = slamd.Scene()
     window.add_scene("scene", scene)
 
     mesh = None

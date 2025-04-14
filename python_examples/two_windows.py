@@ -4,8 +4,8 @@ import numpy as np
 if __name__ == "__main__":
     window = slamd.Window("two windows", 1000, 1000)
 
-    scene1 = slamd.scene()
-    scene2 = slamd.scene()
+    scene1 = slamd.Scene()
+    scene2 = slamd.Scene()
 
     window.add_scene("scene 1", scene1)
     scene1.set_object("/box", slamd.geom.Box())
