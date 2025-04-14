@@ -20,7 +20,6 @@ if __name__ == "__main__":
 
     window.add_scene("scene", scene)
 
-    # yellow = np.array([230, 197, 37]) / 255
     pink = np.array([212, 13, 125]) / 255
 
     t = 0.0
@@ -28,9 +27,6 @@ if __name__ == "__main__":
         # make spiral
         coords = cool_spiral(1000, t)
         max_z = coords[:, 2].max()
-
-        # interp = coords[:, 2] / max_z
-        # color = yellow * (1.0 - interp) + interp * pink
 
         poly_line = slamd.geom.poly_line(coords, 0.7, pink)
 
