@@ -233,10 +233,10 @@ void Mesh::render(
 
 namespace geom {
 
-std::shared_ptr<Mesh> mesh(
+MeshPtr mesh(
     const data::MeshData& mesh_data
 ) {
-    return std::make_shared<Mesh>(mesh_data);
+    return std::make_shared<_geom::Mesh>(mesh_data);
 }
 
 // std::shared_ptr<Mesh> mesh(

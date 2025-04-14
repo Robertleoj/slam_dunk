@@ -78,7 +78,7 @@ auto random_points() {
         );
     }
 
-    return slamd::geom2d::points_2d(pos, col, rad);
+    return slamd::geom2d::points(pos, col, rad);
 }
 
 int main() {

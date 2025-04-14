@@ -195,13 +195,14 @@ void Arrows::render(
 }  // namespace _geom
 
 namespace geom {
-std::shared_ptr<Arrows> arrows(
+
+ArrowsPtr arrows(
     const std::vector<glm::vec3>& starts,
     const std::vector<glm::vec3>& ends,
     const std::vector<glm::vec3>& colors,
     float thickness
 ) {
-    return std::make_shared<Arrows>(starts, ends, colors, thickness);
+    return std::make_shared<_geom::Arrows>(starts, ends, colors, thickness);
 }
 }  // namespace geom
 }  // namespace slamd

@@ -161,19 +161,19 @@ std::optional<gmath::AABB> Image::bounds() {
 
 namespace geom {
 
-std::shared_ptr<Image> image(
+ImagePtr image(
     data::Image&& image
 ) {
-    return std::make_shared<Image>(std::move(image), true);
+    return std::make_shared<_geom::Image>(std::move(image), true);
 }
 }  // namespace geom
 
 namespace geom2d {
 
-std::shared_ptr<Image> image(
+ImagePtr image(
     data::Image&& image
 ) {
-    return std::make_shared<Image>(std::move(image), false);
+    return std::make_shared<_geom::Image>(std::move(image), false);
 }
 
 }  // namespace geom2d

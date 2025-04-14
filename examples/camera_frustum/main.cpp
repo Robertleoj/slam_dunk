@@ -49,7 +49,7 @@ glm::mat4 random_transform(
     return transform;
 }
 
-std::shared_ptr<slamd::geom::CameraFrustum> get_frustum() {
+slamd::geom::CameraFrustumPtr get_frustum() {
     float fx = 525.0f;
     float fy = 525.0f;
     float cx = 320.0f;

@@ -28,8 +28,9 @@ class PolyLine : public Geometry {
 
 namespace geom {
 
-using _geom::PolyLine;
-std::shared_ptr<PolyLine> poly_line(
+using PolyLinePtr = std::shared_ptr<_geom::PolyLine>;
+
+PolyLinePtr poly_line(
     const std::vector<glm::vec3>& points,
     float thickness,
     const glm::vec3& color

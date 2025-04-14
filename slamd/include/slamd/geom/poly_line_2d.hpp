@@ -34,9 +34,9 @@ class PolyLine2D : public Geometry {
 }  // namespace _geom
 
 namespace geom2d {
-using _geom::PolyLine2D;
+using PolyLinePtr = std::shared_ptr<_geom::PolyLine2D>;
 
-std::shared_ptr<PolyLine2D> poly_line(
+PolyLinePtr poly_line(
     const std::vector<glm::vec2>& points,
     const glm::vec3& color,
     float thickness

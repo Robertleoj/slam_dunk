@@ -26,10 +26,10 @@ class Points2D : public Geometry {
 }  // namespace _geom
 
 namespace geom2d {
-using _geom::Points2D;
+using PointsPtr = std::shared_ptr<_geom::Points2D>;
 
 template <typename ColorType, typename RadiiType>
-std::shared_ptr<Points2D> points_2d(
+PointsPtr points(
     const std::vector<glm::vec2>& positions,
     const ColorType& colors,
     const RadiiType& radii
@@ -51,7 +51,7 @@ std::shared_ptr<Points2D> points_2d(
         final_radii = radii;
     }
 
-    return std::make_shared<Points2D>(
+    return std::make_shared<_geom::Points2D>(
         positions,
         std::move(final_colors),
         std::move(final_radii)

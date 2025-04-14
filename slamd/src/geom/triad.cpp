@@ -36,11 +36,12 @@ void Triad::render(
 }  // namespace _geom
 
 namespace geom {
-std::shared_ptr<Triad> triad(
+
+TriadPtr triad(
     float scale,
     float thickness
 ) {
-    return std::make_shared<Triad>(scale, thickness);
+    return std::make_shared<_geom::Triad>(scale, thickness);
 }
 }  // namespace geom
 

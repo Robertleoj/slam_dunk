@@ -96,14 +96,13 @@ std::optional<gmath::AABB> PolyLine2D::bounds() {
 }  // namespace _geom
 
 namespace geom2d {
-using _geom::PolyLine2D;
 
-std::shared_ptr<PolyLine2D> poly_line(
+PolyLinePtr poly_line(
     const std::vector<glm::vec2>& points,
     const glm::vec3& color,
     float thickness
 ) {
-    return std::make_shared<PolyLine2D>(points, color, thickness);
+    return std::make_shared<_geom::PolyLine2D>(points, color, thickness);
 }
 
 }  // namespace geom2d

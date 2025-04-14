@@ -45,11 +45,12 @@ void Sphere::render(
 }  // namespace _geom
 
 namespace geom {
-std::shared_ptr<Sphere> sphere(
+
+SpherePtr sphere(
     float radius,
     glm::vec3 color
 ) {
-    return std::make_shared<Sphere>(radius, color);
+    return std::make_shared<_geom::Sphere>(radius, color);
 }
 }  // namespace geom
 

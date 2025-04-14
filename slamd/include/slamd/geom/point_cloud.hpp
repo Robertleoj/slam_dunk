@@ -60,10 +60,10 @@ class PointCloud : public Geometry {
 }  // namespace _geom
 
 namespace geom {
-using _geom::PointCloud;
+using PointCloudPtr = std::shared_ptr<_geom::PointCloud>;
 
 template <typename ColorType, typename RadiiType>
-std::shared_ptr<PointCloud> point_cloud(
+PointCloudPtr point_cloud(
     const std::vector<glm::vec3>& positions,
     const ColorType& colors,
     const RadiiType& radii
@@ -85,7 +85,7 @@ std::shared_ptr<PointCloud> point_cloud(
         final_radii = radii;
     }
 
-    return std::make_shared<PointCloud>(
+    return std::make_shared<_geom::PointCloud>(
         positions,
         std::move(final_colors),
         std::move(final_radii)

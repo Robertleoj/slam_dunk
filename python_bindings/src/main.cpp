@@ -340,19 +340,19 @@ void define_private_geom(
     );
 
     py::class_<
-        slamd::geom::Box,
+        slamd::_geom::Box,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::Box>>(m, "Box");
+        std::shared_ptr<slamd::_geom::Box>>(m, "Box");
 
     py::class_<
-        slamd::geom::Arrows,
+        slamd::_geom::Arrows,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::Arrows>>(m, "Arrows");
+        std::shared_ptr<slamd::_geom::Arrows>>(m, "Arrows");
 
     py::class_<
-        slamd::geom::CameraFrustum,
+        slamd::_geom::CameraFrustum,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::CameraFrustum>>(m, "CameraFrustum");
+        std::shared_ptr<slamd::_geom::CameraFrustum>>(m, "CameraFrustum");
 
     py::class_<
         slamd::_geom::PointCloud,
@@ -375,19 +375,19 @@ void define_private_geom(
         );
 
     py::class_<
-        slamd::geom2d::Points2D,
+        slamd::_geom::Points2D,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom2d::Points2D>>(m, "Points2D");
+        std::shared_ptr<slamd::_geom::Points2D>>(m, "Points2D");
 
     py::class_<
-        slamd::geom::PolyLine,
+        slamd::_geom::PolyLine,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::PolyLine>>(m, "PolyLine");
+        std::shared_ptr<slamd::_geom::PolyLine>>(m, "PolyLine");
 
     py::class_<
-        slamd::geom::Mesh,
+        slamd::_geom::Mesh,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::Mesh>>(m, "Mesh")
+        std::shared_ptr<slamd::_geom::Mesh>>(m, "Mesh")
         .def(
             "update_positions",
             &slamd::_geom::Mesh::update_positions,
@@ -406,14 +406,14 @@ void define_private_geom(
         );
 
     py::class_<
-        slamd::geom::Sphere,
+        slamd::_geom::Sphere,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::Sphere>>(m, "Sphere");
+        std::shared_ptr<slamd::_geom::Sphere>>(m, "Sphere");
 
     py::class_<
-        slamd::geom::Triad,
+        slamd::_geom::Triad,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::geom::Triad>>(m, "Triad");
+        std::shared_ptr<slamd::_geom::Triad>>(m, "Triad");
 
     py::class_<
         slamd::_geom::Image,
@@ -520,7 +520,7 @@ void define_geom(
                                              .compute_normals()
                                              .build();
 
-            return slamd::geom::Mesh(std::move(data));
+            return slamd::geom::mesh(std::move(data));
         },
         py::arg("vertices"),
         py::arg("vertex_colors"),
@@ -542,7 +542,7 @@ void define_geom(
                                              .set_normals(normals)
                                              .build();
 
-            return slamd::geom::Mesh(std::move(data));
+            return slamd::geom::mesh(std::move(data));
         },
         py::arg("vertices"),
         py::arg("vertex_colors"),
@@ -573,11 +573,11 @@ void define_geom2d(
 ) {
     // Overload: uniform color + radius
     m.def(
-        "points_2d",
+        "points",
         [](const std::vector<glm::vec2>& positions,
            const glm::vec3& color,
            float radius) {
-            return slamd::geom2d::points_2d(positions, color, radius);
+            return slamd::geom2d::points(positions, color, radius);
         },
         py::arg("positions"),
         py::arg("color"),
@@ -587,11 +587,11 @@ void define_geom2d(
 
     // Overload: per-point color + radius
     m.def(
-        "points_2d",
+        "points",
         [](const std::vector<glm::vec2>& positions,
            const std::vector<glm::vec3>& colors,
            const std::vector<float>& radii) {
-            return slamd::geom2d::points_2d(positions, colors, radii);
+            return slamd::geom2d::points(positions, colors, radii);
         },
         py::arg("positions"),
         py::arg("colors"),

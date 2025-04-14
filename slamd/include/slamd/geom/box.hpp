@@ -18,9 +18,9 @@ class Box : public Geometry {
 
 namespace geom {
 
-using _geom::Box;
+using BoxPtr = std::shared_ptr<_geom::Box>;
 
-std::shared_ptr<Box> box();
+BoxPtr box();
 }  // namespace geom
 
 }  // namespace slamd

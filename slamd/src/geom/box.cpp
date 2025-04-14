@@ -100,8 +100,8 @@ void Box::render(
 }  // namespace _geom
 
 namespace geom {
-std::shared_ptr<Box> box() {
-    return std::make_shared<Box>();
+BoxPtr box() {
+    return std::make_shared<_geom::Box>();
 }
 
 }  // namespace geom

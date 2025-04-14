@@ -42,15 +42,15 @@ class Image : public Geometry {
 }  // namespace _geom
 
 namespace geom {
-using _geom::Image;
+using ImagePtr = std::shared_ptr<_geom::Image>;
 
-std::shared_ptr<Image> image(data::Image&& image);
+ImagePtr image(data::Image&& image);
 }  // namespace geom
 
 namespace geom2d {
-using _geom::Image;
+using ImagePtr = std::shared_ptr<_geom::Image>;
 
-std::shared_ptr<Image> image(data::Image&& image);
+ImagePtr image(data::Image&& image);
 
 }  // namespace geom2d
 

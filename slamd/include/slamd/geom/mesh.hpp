@@ -63,9 +63,9 @@ class Mesh : public Geometry {
 
 namespace geom {
 
-using _geom::Mesh;
+using MeshPtr = std::shared_ptr<_geom::Mesh>;
 
-std::shared_ptr<Mesh> mesh(const data::MeshData& mesh_data);
+MeshPtr mesh(const data::MeshData& mesh_data);
 
 }  // namespace geom
 }  // namespace slamd

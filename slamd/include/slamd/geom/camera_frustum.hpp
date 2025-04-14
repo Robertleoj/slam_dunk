@@ -49,9 +49,9 @@ class CameraFrustum : public Geometry {
 
 namespace geom {
 
-using _geom::CameraFrustum;
+using CameraFrustumPtr = std::shared_ptr<_geom::CameraFrustum>;
 
-std::shared_ptr<CameraFrustum> camera_frustum(
+CameraFrustumPtr camera_frustum(
     glm::mat3 intrinsics_matrix,
     size_t image_width,
     size_t image_height,
@@ -59,7 +59,7 @@ std::shared_ptr<CameraFrustum> camera_frustum(
     float scale = 1.0
 );
 
-std::shared_ptr<CameraFrustum> camera_frustum(
+CameraFrustumPtr camera_frustum(
     glm::mat3 intrinsics_matrix,
     size_t image_width,
     size_t image_height,

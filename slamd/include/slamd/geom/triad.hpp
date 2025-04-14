@@ -22,9 +22,9 @@ class Triad : public Geometry {
 
 namespace geom {
 
-using _geom::Triad;
+using TriadPtr = std::shared_ptr<_geom::Triad>;
 
-std::shared_ptr<Triad> triad(float scale = 1.0, float thickness = 0.1);
+TriadPtr triad(float scale = 1.0, float thickness = 0.1);
 
 }  // namespace geom
 

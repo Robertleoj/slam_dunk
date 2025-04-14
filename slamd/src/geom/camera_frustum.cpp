@@ -124,14 +124,15 @@ void CameraFrustum::render(
 }  // namespace _geom
 
 namespace geom {
-std::shared_ptr<CameraFrustum> camera_frustum(
+
+CameraFrustumPtr camera_frustum(
     glm::mat3 intrinsics_matrix,
     size_t image_width,
     size_t image_height,
     data::Image&& image,
     float scale
 ) {
-    return std::make_shared<CameraFrustum>(
+    return std::make_shared<_geom::CameraFrustum>(
         intrinsics_matrix,
         image_width,
         image_height,
@@ -140,13 +141,13 @@ std::shared_ptr<CameraFrustum> camera_frustum(
     );
 }
 
-std::shared_ptr<CameraFrustum> camera_frustum(
+CameraFrustumPtr camera_frustum(
     glm::mat3 intrinsics_matrix,
     size_t image_width,
     size_t image_height,
     float scale
 ) {
-    return std::make_shared<CameraFrustum>(
+    return std::make_shared<_geom::CameraFrustum>(
         intrinsics_matrix,
         image_width,
         image_height,

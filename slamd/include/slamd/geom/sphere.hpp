@@ -20,8 +20,9 @@ class Sphere : public Geometry {
 
 namespace geom {
 
-using _geom::Sphere;
-std::shared_ptr<Sphere>
+using SpherePtr = std::shared_ptr<_geom::Sphere>;
+
+SpherePtr
 sphere(float radius = 1.0f, glm::vec3 color = glm::vec3(0.8, 0.2, 0.0));
 
 }  // namespace geom
