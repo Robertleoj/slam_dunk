@@ -10,6 +10,8 @@ namespace data {
 class MeshData {
    public:
     MeshData();
+    MeshData(const MeshData& other);
+    MeshData(MeshData&& other);
     MeshData(
         const std::vector<glm::vec3>& positions,
         const std::vector<glm::vec3>& colors,

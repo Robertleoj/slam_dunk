@@ -7,6 +7,9 @@ namespace data {
 
 MeshData::MeshData() = default;
 
+MeshData::MeshData(const MeshData& other) = default;
+MeshData::MeshData(MeshData&& other) = default;
+
 MeshData::MeshData(
     const std::vector<glm::vec3>& positions,
     const std::vector<glm::vec3>& colors,
