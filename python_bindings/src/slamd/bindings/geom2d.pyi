@@ -13,7 +13,7 @@ def points_2d(positions: numpy.ndarray, color: numpy.ndarray, radius: float) -> 
     Create 2D points with uniform color and radius
     """
 @typing.overload
-def points_2d(positions: numpy.ndarray, colors: numpy.ndarray, radii: list[float]) -> bindings._geom.Points2D:
+def points_2d(positions: numpy.ndarray, colors: numpy.ndarray, radii: list[float] | numpy.ndarray) -> bindings._geom.Points2D:
     """
     Create 2D points with per-point color and radius
     """

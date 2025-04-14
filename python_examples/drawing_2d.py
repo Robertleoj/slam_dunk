@@ -23,8 +23,8 @@ if __name__ == "__main__":
         line_points = cool_spiral(10000, t)
 
         poly_line = slamd.geom2d.poly_line(
-            line_points.astype(np.float32),
-            np.array([0.5, 0.5, 0.0], dtype=np.float32),
+            line_points,
+            np.array([0.5, 0.5, 0.0]),
             0.1,
         )
 

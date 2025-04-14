@@ -59,16 +59,13 @@ def main():
         colors[:, 1] = blue
         colors[:, 2] = green
 
-        mesh_positions = points.astype(np.float32)
-        mesh_colors = colors.astype(np.float32)
-
         if mesh is None:
-            mesh = slamd.geom.mesh(mesh_positions, mesh_colors, indices)
+            mesh = slamd.geom.mesh(points, colors, indices)
 
             scene.set_object("/mesh", mesh)
         else:
-            mesh.update_positions(mesh_positions)
-            mesh.update_colors(mesh_colors)
+            mesh.update_positions(points)
+            mesh.update_colors(colors)
 
         t += 0.02
 

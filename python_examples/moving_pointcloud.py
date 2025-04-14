@@ -1,7 +1,6 @@
 import slamd
 import time
 import numpy as np
-from typing import cast
 
 
 def f(inp: np.ndarray, t: float) -> np.ndarray:
@@ -48,18 +47,14 @@ def main():
 
         radii = np.ones(points.shape[0], dtype=float) * 0.3
 
-        pc_positions = points.astype(np.float32)
-        pc_colors = colors.astype(np.float32)
-        pc_radii = cast(list[float], radii.astype(float).tolist())
-
         if point_cloud is None:
-            point_cloud = slamd.geom.point_cloud(pc_positions, pc_colors, pc_radii)
+            point_cloud = slamd.geom.point_cloud(points, colors, radii)
 
             scene.set_object("/points", point_cloud)
         else:
-            point_cloud.update_positions(pc_positions)
-            point_cloud.update_colors(pc_colors)
-            point_cloud.update_radii(pc_radii)
+            point_cloud.update_positions(points)
+            point_cloud.update_colors(colors)
+            point_cloud.update_radii(radii)
 
         t += 0.02
 

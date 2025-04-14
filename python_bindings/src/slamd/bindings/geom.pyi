@@ -31,7 +31,7 @@ def point_cloud(positions: numpy.ndarray, color: numpy.ndarray, radius: float) -
     Create a PointCloud with uniform color and radius
     """
 @typing.overload
-def point_cloud(positions: numpy.ndarray, colors: numpy.ndarray, radii: list[float]) -> bindings._geom.PointCloud:
+def point_cloud(positions: numpy.ndarray, colors: numpy.ndarray, radii: list[float] | numpy.ndarray) -> bindings._geom.PointCloud:
     """
     Create a PointCloud with per-point color and radius
     """

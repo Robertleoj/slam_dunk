@@ -1,5 +1,6 @@
 from __future__ import annotations
 import numpy
+import typing
 __all__ = ['Arrows', 'Box', 'CameraFrustum', 'Geometry', 'Image', 'Mesh', 'PointCloud', 'Points2D', 'PolyLine', 'PolyLine2D', 'Sphere', 'Triad']
 class Arrows(Geometry):
     pass
@@ -23,7 +24,7 @@ class PointCloud(Geometry):
         ...
     def update_positions(self, positions: numpy.ndarray) -> None:
         ...
-    def update_radii(self, radii: list[float]) -> None:
+    def update_radii(self, radii: list[float] | numpy.ndarray) -> None:
         ...
 class Points2D(Geometry):
     pass

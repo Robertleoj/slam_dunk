@@ -294,6 +294,41 @@ struct type_caster<slamd::data::Image> {
     }
 };
 
+template <>
+struct type_caster<std::vector<float>>
+    : list_caster<std::vector<float>, float> {
+    using base = list_caster<std::vector<float>, float>;
+    static constexpr auto name =
+        const_name("Union[List[float], numpy.ndarray]");
+
+    bool load(
+        handle src,
+        bool convert
+    ) {
+        // Fast path: NumPy float32 array
+        if (py::isinstance<py::array_t<float>>(src)) {
+            auto arr = py::array_t<float>::ensure(src);
+            if (!arr) {
+                return false;
+            }
+
+            py::buffer_info info = arr.request();
+            if (info.ndim != 1) {
+                return false;
+            }
+
+            value.resize(info.shape[0]);
+            std::memcpy(value.data(), info.ptr, info.shape[0] * sizeof(float));
+            return true;
+        }
+
+        // Fallback: standard py::list behavior
+        return base::load(src, convert);
+    }
+
+    // Cast works fine from base
+};
+
 }  // namespace pybind11::detail
 
 void define_private_geom(
