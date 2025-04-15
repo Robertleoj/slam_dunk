@@ -1,5 +1,6 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
+#include <spdlog/spdlog.h>
 #include <format>
 #include <ranges>
 #include <slamd/assert.hpp>
@@ -12,15 +13,28 @@ namespace slamd {
 namespace _geom {
 
 MonoInstanced::MonoInstanced(
-    const data::MeshData& instance_mesh,
+    const std::vector<glm::vec3>& vertices,
+    const std::vector<glm::vec3>& normals,
+    const std::vector<uint32_t>& triangle_indices,
     const std::vector<glm::mat4>& transforms,
     const std::vector<glm::vec3>& colors
 )
-    : mesh_data(instance_mesh),
+    : vertices(vertices),
+      normals(normals),
+      triangle_indices(triangle_indices),
       transforms(transforms),
       pending_trans_update(false),
       colors(colors),
       pending_colors_update(false) {
+    if (!(vertices.size() == normals.size())) {
+        throw std::invalid_argument(
+            std::format(
+                "number of vertices {}, number of normals {}",
+                vertices.size(),
+                normals.size()
+            )
+        );
+    }
     if (!((transforms.size() == colors.size()))) {
         throw std::invalid_argument(
             std::format(
@@ -39,8 +53,8 @@ std::tuple<uint, uint> MonoInstanced::initialize_mesh() {
     gl::glGenBuffers(1, &mesh_vbo_id);
     gl::glBindBuffer(gl::GL_ARRAY_BUFFER, mesh_vbo_id);
 
-    size_t vert_size = this->mesh_data.positions.size() * sizeof(glm::vec3);
-    size_t normals_size = this->mesh_data.normals.size() * sizeof(glm::vec3);
+    size_t vert_size = this->vertices.size() * sizeof(glm::vec3);
+    size_t normals_size = this->normals.size() * sizeof(glm::vec3);
 
     gl::glBufferData(
         gl::GL_ARRAY_BUFFER,
@@ -52,13 +66,13 @@ std::tuple<uint, uint> MonoInstanced::initialize_mesh() {
         gl::GL_ARRAY_BUFFER,
         0,
         vert_size,
-        this->mesh_data.positions.data()
+        this->vertices.data()
     );
     gl::glBufferSubData(
         gl::GL_ARRAY_BUFFER,
         vert_size,
         normals_size,
-        this->mesh_data.normals.data()
+        this->normals.data()
     );
 
     // element buffer
@@ -68,8 +82,8 @@ std::tuple<uint, uint> MonoInstanced::initialize_mesh() {
 
     gl::glBufferData(
         gl::GL_ELEMENT_ARRAY_BUFFER,
-        this->mesh_data.triangle_indices.size() * sizeof(uint32_t),
-        this->mesh_data.triangle_indices.data(),
+        this->triangle_indices.size() * sizeof(uint32_t),
+        this->triangle_indices.data(),
         gl::GL_STATIC_DRAW
     );
 
@@ -111,16 +125,18 @@ uint MonoInstanced::initialize_trans_buffer() {
         gl::GL_DYNAMIC_DRAW
     );
 
-    gl::glVertexAttribPointer(
-        2,
-        3,
-        gl::GL_FLOAT,
-        gl::GL_FALSE,
-        sizeof(glm::mat4),
-        (void*)0
-    );
-    gl::glEnableVertexAttribArray(2);
-    gl::glVertexAttribDivisor(2, 1);
+    for (int i = 0; i < 4; ++i) {
+        gl::glEnableVertexAttribArray(2 + i);
+        gl::glVertexAttribPointer(
+            2 + i,
+            4,
+            gl::GL_FLOAT,
+            gl::GL_FALSE,
+            sizeof(glm::mat4),
+            (void*)(sizeof(glm::vec4) * i)
+        );
+        gl::glVertexAttribDivisor(2 + i, 1);
+    }
 
     return trans_vbo_id;
 }
@@ -139,16 +155,16 @@ uint MonoInstanced::initialize_color_buffer() {
     );
 
     gl::glVertexAttribPointer(
-        3,
+        6,
         3,
         gl::GL_FLOAT,
         gl::GL_FALSE,
         sizeof(glm::vec3),
         (void*)0
     );
-    gl::glEnableVertexAttribArray(4);
+    gl::glEnableVertexAttribArray(6);
     // one per instance
-    gl::glVertexAttribDivisor(4, 1);
+    gl::glVertexAttribDivisor(6, 1);
 
     return vbo_id;
 }
@@ -171,7 +187,7 @@ void MonoInstanced::maybe_initialize() {
 
     gl::glBindVertexArray(0);
 
-    this->gl_data.emplace(GLData(
+    this->gl_data.emplace(
         ShaderProgram(
             shader_source::mono_instanced::vert,
             shader_source::mono_instanced::frag
@@ -181,7 +197,7 @@ void MonoInstanced::maybe_initialize() {
         mesh_eab_id,
         trans_vbo_id,
         colors_vbo_id
-    ));
+    );
 }
 
 void MonoInstanced::update_transforms(
@@ -250,9 +266,10 @@ void MonoInstanced::render(
         "u_min_brightness",
         _const::default_min_brightness
     );
+
     gl::glDrawElementsInstanced(
         gl::GL_TRIANGLES,
-        this->mesh_data.triangle_indices.size(),
+        this->triangle_indices.size(),
         gl::GL_UNSIGNED_INT,
         0,
         this->transforms.size()

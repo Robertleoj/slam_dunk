@@ -424,6 +424,11 @@ void define_private_geom(
         slamd::_geom::PolyLine2D,
         slamd::_geom::Geometry,
         std::shared_ptr<slamd::_geom::PolyLine2D>>(m, "PolyLine2D");
+
+    py::class_<
+        slamd::_geom::Circles2D,
+        slamd::_geom::Geometry,
+        std::shared_ptr<slamd::_geom::Circles2D>>(m, "Circles2D");
 }
 
 void define_geom(
@@ -615,6 +620,16 @@ void define_geom2d(
         py::arg("color"),
         py::arg("thickness"),
         "Create a 2D poly line"
+    );
+
+    m.def(
+        "Circles",
+        &slamd::geom2d::circles,
+        py::arg("positions"),
+        py::arg("colors"),
+        py::arg("radii"),
+        py::arg("thickness") = 0.1,
+        "Create a set of circles"
     );
 }
 

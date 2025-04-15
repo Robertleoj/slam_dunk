@@ -12,7 +12,9 @@ namespace _geom {
 class MonoInstanced : public Geometry {
    public:
     MonoInstanced(
-        const data::MeshData& instance_mesh,
+        const std::vector<glm::vec3>& vertices,
+        const std::vector<glm::vec3>& normals,
+        const std::vector<uint32_t>& triangle_indices,
         const std::vector<glm::mat4>& transforms,
         const std::vector<glm::vec3>& colors
     );
@@ -30,7 +32,9 @@ class MonoInstanced : public Geometry {
     void handle_updates();
 
    private:
-    data::MeshData mesh_data;
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec3> normals;
+    std::vector<uint32_t> triangle_indices;
 
     struct GLData {
         ShaderProgram shader;
@@ -41,8 +45,8 @@ class MonoInstanced : public Geometry {
         uint colors_vbo_id;
     };
 
-    std::optional<GLData> gl_data;
-    std::optional<std::thread::id> render_thread_id;
+    std::optional<GLData> gl_data = std::nullopt;
+    std::optional<std::thread::id> render_thread_id = std::nullopt;
 
     std::vector<glm::mat4> transforms;
     bool pending_trans_update;

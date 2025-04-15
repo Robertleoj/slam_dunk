@@ -2,7 +2,11 @@ from __future__ import annotations
 import bindings._geom
 import numpy
 import typing
-__all__ = ['Image', 'Points', 'PolyLine']
+__all__ = ['Circles', 'Image', 'Points', 'PolyLine']
+def Circles(positions: numpy.ndarray, colors: numpy.ndarray, radii: list[float] | numpy.ndarray, thickness: float = 0.1) -> bindings._geom.Circles2D:
+    """
+    Create a set of circles
+    """
 def Image(image: numpy.ndarray) -> bindings._geom.Image:
     """
     Create an Image geometry from a NumPy uint8 array (H, W, C)
