@@ -8,6 +8,9 @@
 namespace slamd {
 namespace _geom {
 
+/**
+ * TODO: refactor to use MonoInstanced
+ */
 class PointCloud : public Geometry {
    public:
     PointCloud(

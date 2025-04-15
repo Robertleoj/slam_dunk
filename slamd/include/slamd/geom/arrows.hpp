@@ -7,6 +7,9 @@
 namespace slamd {
 namespace _geom {
 
+/**
+ * TOOD: use MonoInstanced to allow modifying arrows
+ */
 class Arrows : public Geometry {
    public:
     Arrows(
@@ -26,7 +29,7 @@ class Arrows : public Geometry {
 
 namespace geom {
 
-using ArrowsPtr = std::shared_ptr<_geom::Arrows>;   
+using ArrowsPtr = std::shared_ptr<_geom::Arrows>;
 
 ArrowsPtr arrows(
     const std::vector<glm::vec3>& starts,
