@@ -1,28 +1,58 @@
 import slamd
 import numpy as np
-
-
-def make_circles(n: int = 100):
-    positions = np.random.uniform(-1000.0, 2000.0, (n, 2))
-    colors = np.random.uniform(0.0, 1.0, (n, 3))
-    radii = np.random.uniform(1.0, 10.0, n)
-    thickness = 0.1
-
-    return slamd.geom2d.Circles(positions, colors, radii, thickness)
+import time
 
 
 def main():
-    window = slamd.Window("image", 1000, 1000)
-
+    window = slamd.Window("🌀 Slamd Circle Rave — Juiced Edition 🌀", 1000, 1000)
     canvas = slamd.Canvas()
-
-    circles = make_circles(100000)
-
-    canvas.set_object("/circles", circles)
-
     window.add_canvas("canvas", canvas)
 
-    window.wait_for_close()
+    # Fewer, beefier circles
+    n = 500
+    positions = np.random.uniform(-500.0, 500.0, (n, 2))
+    velocities = np.random.uniform(-50.0, 50.0, (n, 2))
+    colors = np.zeros((n, 3))
+    radii = np.random.uniform(20.0, 40.0, n)  # more thicc
+    base_radii = radii.copy()
+    thickness = 0.1
+
+    circles = slamd.geom2d.Circles(positions, colors, radii, thickness)
+    canvas.set_object("/circles", circles)
+
+    t = 0.0
+    center = np.array([0.0, 0.0])
+
+    while True:
+        t += 0.016
+
+        # Orbit swirl
+        direction_to_center = center - positions
+        distance = np.linalg.norm(direction_to_center, axis=1, keepdims=True) + 1e-6
+        normalized = direction_to_center / distance
+        perp = np.stack([-normalized[:, 1], normalized[:, 0]], axis=1)
+        velocities += 0.5 * perp
+        velocities *= 0.99
+        positions += velocities * 0.016
+
+        # RGB cyclone
+        colors = 0.5 + 0.5 * np.stack(
+            [
+                np.sin(0.001 * positions[:, 0] + t),
+                np.sin(0.001 * positions[:, 1] + t + 2.1),
+                np.sin(0.001 * (positions[:, 0] + positions[:, 1]) + t + 4.2),
+            ],
+            axis=1,
+        )
+
+        # Pulse bigger bois
+        radii = base_radii * (1.0 + 0.4 * np.sin(t * 2 + positions[:, 0] * 0.01))
+
+        circles.update_positions(positions)
+        circles.update_colors(colors)
+        circles.update_radii(radii)
+
+        time.sleep(0.016)
 
 
 if __name__ == "__main__":

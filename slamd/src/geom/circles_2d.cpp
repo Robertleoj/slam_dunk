@@ -16,6 +16,7 @@ Circles2D::Circles2D(
     : circles_instanced(
           Circles2D::make_mono_instanced(positions, colors, radii, thickness)
       ),
+      colors(colors),
       positions(positions),
       radii(radii),
       cached_bounds(Circles2D::make_bounds(positions, radii)) {}
@@ -25,6 +26,7 @@ void Circles2D::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
+    this->handle_updates();
     this->circles_instanced.render(model, view, projection);
 }
 
@@ -88,6 +90,44 @@ MonoInstanced Circles2D::make_mono_instanced(
         colors
     );
 
+}
+
+void Circles2D::update_positions(
+    const std::vector<glm::vec2>& positions
+) {
+    this->positions = positions;
+    this->pending_trans_update = true;
+}
+
+void Circles2D::update_colors(
+    const std::vector<glm::vec3>& colors
+) {
+    this->colors = colors;
+    this->pending_color_update = true;
+}
+
+void Circles2D::update_radii(
+    const std::vector<float>& radii
+) {
+    this->radii = radii;
+    this->pending_trans_update = true;
+}
+
+void Circles2D::handle_updates() {
+    if (this->pending_trans_update) {
+        this->circles_instanced.update_transforms(
+            Circles2D::make_transforms(
+                this->positions,
+                this->radii
+            )
+        );
+        this->pending_trans_update = false;
+    }
+
+    if (this->pending_color_update) {
+        this->circles_instanced.update_colors(this->colors);
+        this->pending_color_update = false;
+    }
 }
 
 std::vector<glm::mat4> Circles2D::make_transforms(

@@ -19,6 +19,10 @@ class Circles2D : public Geometry {
 
     std::optional<gmath::AABB> bounds() override;
 
+    void update_positions(const std::vector<glm::vec2>& positions);
+    void update_colors(const std::vector<glm::vec3>& colors);
+    void update_radii(const std::vector<float>& radii);
+
    private:
     static MonoInstanced make_mono_instanced(
         const std::vector<glm::vec2>& positions,
@@ -35,12 +39,18 @@ class Circles2D : public Geometry {
     static std::vector<glm::mat4>
     make_transforms(std::vector<glm::vec2> positions, std::vector<float> radii);
 
+    void handle_updates();
+
    private:
     MonoInstanced circles_instanced;
     gmath::AABB cached_bounds;
 
+    std::vector<glm::vec3> colors;
     std::vector<glm::vec2> positions;
     std::vector<float> radii;
+
+    bool pending_trans_update = false;
+    bool pending_color_update = false;
 };
 
 }  // namespace _geom

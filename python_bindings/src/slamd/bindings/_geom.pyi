@@ -9,7 +9,12 @@ class Box(Geometry):
 class CameraFrustum(Geometry):
     pass
 class Circles2D(Geometry):
-    pass
+    def update_colors(self, colors: numpy.ndarray) -> None:
+        ...
+    def update_positions(self, positions: numpy.ndarray) -> None:
+        ...
+    def update_radii(self, radii: list[float] | numpy.ndarray) -> None:
+        ...
 class Geometry:
     pass
 class Image(Geometry):

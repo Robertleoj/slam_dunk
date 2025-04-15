@@ -428,7 +428,22 @@ void define_private_geom(
     py::class_<
         slamd::_geom::Circles2D,
         slamd::_geom::Geometry,
-        std::shared_ptr<slamd::_geom::Circles2D>>(m, "Circles2D");
+        std::shared_ptr<slamd::_geom::Circles2D>>(m, "Circles2D")
+        .def(
+            "update_positions",
+            &slamd::_geom::Circles2D::update_positions,
+            py::arg("positions")
+        )
+        .def(
+            "update_colors",
+            &slamd::_geom::Circles2D::update_colors,
+            py::arg("colors")
+        )
+        .def(
+            "update_radii",
+            &slamd::_geom::Circles2D::update_radii,
+            py::arg("radii")
+        );
 }
 
 void define_geom(
