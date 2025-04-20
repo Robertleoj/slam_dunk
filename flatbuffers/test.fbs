@@ -1,0 +1,9 @@
+// monster.fbs
+namespace Example;
+
+table Monster {
+  id:int;
+  name:string;
+  hp:short;
+}
+root_type Monster;

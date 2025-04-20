@@ -13,3 +13,6 @@
 [submodule "vendored_deps/imgui_wrapper/imgui"]
 	path = vendored_deps/imgui_wrapper/imgui
 	url = git@github.com:ocornut/imgui.git
+[submodule "vendored_deps/flatbuffers"]
+	path = vendored_deps/flatbuffers
+	url = git@github.com:google/flatbuffers.git

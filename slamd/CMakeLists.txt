@@ -69,6 +69,7 @@ find_required_package(
 
 add_subdirectory(${LIB_DIR}/glm)
 
+add_subdirectory(flatb)
 
 add_library(slamd STATIC)
 add_library(slamd::slamd ALIAS slamd)
