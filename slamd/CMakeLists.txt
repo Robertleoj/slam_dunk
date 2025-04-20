@@ -132,6 +132,7 @@ target_include_directories(
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
         ${LIB_DIR}/glm
+        ${LIB_DIR}/asio/include
 )
 
 target_link_libraries(
@@ -140,6 +141,7 @@ target_link_libraries(
     PRIVATE
         glfw
         spdlog::spdlog
+        slamd_flatbuff
     PUBLIC
         glbinding::glbinding
         glbinding::glbinding-aux
