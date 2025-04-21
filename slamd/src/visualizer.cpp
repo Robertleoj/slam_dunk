@@ -69,7 +69,7 @@ std::vector<uint8_t> Visualizer::get_state() {
 
     auto views_fb = builder.CreateVector(view_vec);
 
-    auto state_fb = slamd::flatb::CreateVizFullState(
+    auto state_fb = slamd::flatb::CreateInitialState(
         builder,
         vis_name_fb,
         views_fb,

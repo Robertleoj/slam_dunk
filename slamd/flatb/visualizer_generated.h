@@ -22,8 +22,8 @@ struct TreeBuilder;
 struct View;
 struct ViewBuilder;
 
-struct VizFullState;
-struct VizFullStateBuilder;
+struct InitialState;
+struct InitialStateBuilder;
 
 enum TreeType : int8_t {
   TreeType_NONE = 0,
@@ -172,8 +172,8 @@ inline ::flatbuffers::Offset<View> CreateViewDirect(
       tree_id);
 }
 
-struct VizFullState FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef VizFullStateBuilder Builder;
+struct InitialState FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef InitialStateBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NAME = 4,
     VT_VIEWS = 6,
@@ -202,43 +202,43 @@ struct VizFullState FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
 };
 
-struct VizFullStateBuilder {
-  typedef VizFullState Table;
+struct InitialStateBuilder {
+  typedef InitialState Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
   void add_name(::flatbuffers::Offset<::flatbuffers::String> name) {
-    fbb_.AddOffset(VizFullState::VT_NAME, name);
+    fbb_.AddOffset(InitialState::VT_NAME, name);
   }
   void add_views(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::View>>> views) {
-    fbb_.AddOffset(VizFullState::VT_VIEWS, views);
+    fbb_.AddOffset(InitialState::VT_VIEWS, views);
   }
   void add_trees(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::Tree>>> trees) {
-    fbb_.AddOffset(VizFullState::VT_TREES, trees);
+    fbb_.AddOffset(InitialState::VT_TREES, trees);
   }
-  explicit VizFullStateBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+  explicit InitialStateBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ::flatbuffers::Offset<VizFullState> Finish() {
+  ::flatbuffers::Offset<InitialState> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<VizFullState>(end);
+    auto o = ::flatbuffers::Offset<InitialState>(end);
     return o;
   }
 };
 
-inline ::flatbuffers::Offset<VizFullState> CreateVizFullState(
+inline ::flatbuffers::Offset<InitialState> CreateInitialState(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     ::flatbuffers::Offset<::flatbuffers::String> name = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::View>>> views = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::Tree>>> trees = 0) {
-  VizFullStateBuilder builder_(_fbb);
+  InitialStateBuilder builder_(_fbb);
   builder_.add_trees(trees);
   builder_.add_views(views);
   builder_.add_name(name);
   return builder_.Finish();
 }
 
-inline ::flatbuffers::Offset<VizFullState> CreateVizFullStateDirect(
+inline ::flatbuffers::Offset<InitialState> CreateInitialStateDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *name = nullptr,
     const std::vector<::flatbuffers::Offset<slamd::flatb::View>> *views = nullptr,
@@ -246,40 +246,40 @@ inline ::flatbuffers::Offset<VizFullState> CreateVizFullStateDirect(
   auto name__ = name ? _fbb.CreateString(name) : 0;
   auto views__ = views ? _fbb.CreateVector<::flatbuffers::Offset<slamd::flatb::View>>(*views) : 0;
   auto trees__ = trees ? _fbb.CreateVector<::flatbuffers::Offset<slamd::flatb::Tree>>(*trees) : 0;
-  return slamd::flatb::CreateVizFullState(
+  return slamd::flatb::CreateInitialState(
       _fbb,
       name__,
       views__,
       trees__);
 }
 
-inline const slamd::flatb::VizFullState *GetVizFullState(const void *buf) {
-  return ::flatbuffers::GetRoot<slamd::flatb::VizFullState>(buf);
+inline const slamd::flatb::InitialState *GetInitialState(const void *buf) {
+  return ::flatbuffers::GetRoot<slamd::flatb::InitialState>(buf);
 }
 
-inline const slamd::flatb::VizFullState *GetSizePrefixedVizFullState(const void *buf) {
-  return ::flatbuffers::GetSizePrefixedRoot<slamd::flatb::VizFullState>(buf);
+inline const slamd::flatb::InitialState *GetSizePrefixedInitialState(const void *buf) {
+  return ::flatbuffers::GetSizePrefixedRoot<slamd::flatb::InitialState>(buf);
 }
 
-inline bool VerifyVizFullStateBuffer(
+inline bool VerifyInitialStateBuffer(
     ::flatbuffers::Verifier &verifier) {
-  return verifier.VerifyBuffer<slamd::flatb::VizFullState>(nullptr);
+  return verifier.VerifyBuffer<slamd::flatb::InitialState>(nullptr);
 }
 
-inline bool VerifySizePrefixedVizFullStateBuffer(
+inline bool VerifySizePrefixedInitialStateBuffer(
     ::flatbuffers::Verifier &verifier) {
-  return verifier.VerifySizePrefixedBuffer<slamd::flatb::VizFullState>(nullptr);
+  return verifier.VerifySizePrefixedBuffer<slamd::flatb::InitialState>(nullptr);
 }
 
-inline void FinishVizFullStateBuffer(
+inline void FinishInitialStateBuffer(
     ::flatbuffers::FlatBufferBuilder &fbb,
-    ::flatbuffers::Offset<slamd::flatb::VizFullState> root) {
+    ::flatbuffers::Offset<slamd::flatb::InitialState> root) {
   fbb.Finish(root);
 }
 
-inline void FinishSizePrefixedVizFullStateBuffer(
+inline void FinishSizePrefixedInitialStateBuffer(
     ::flatbuffers::FlatBufferBuilder &fbb,
-    ::flatbuffers::Offset<slamd::flatb::VizFullState> root) {
+    ::flatbuffers::Offset<slamd::flatb::InitialState> root) {
   fbb.FinishSizePrefixed(root);
 }
 

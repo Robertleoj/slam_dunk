@@ -20,8 +20,8 @@ void StateManager::try_connect(
 void StateManager::handle_initial_state(
     const std::vector<uint8_t>& data
 ) {
-    const slamd::flatb::VizFullState* full_state_fb =
-        slamd::flatb::GetVizFullState(data.data());
+    const slamd::flatb::InitialState* full_state_fb =
+        slamd::flatb::GetInitialState(data.data());
 
     this->name = full_state_fb->name()->str();
 

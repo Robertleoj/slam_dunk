@@ -1,0 +1,13 @@
+include "visualizer.fbs";
+
+namespace slamd.flatb;
+
+union MessageUnion {
+    initial_state: InitialState
+}
+
+table Message {
+    message: MessageUnion;
+}
+
+root_type Message;

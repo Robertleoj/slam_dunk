@@ -17,10 +17,10 @@ table View {
     tree_id: ulong;
 }
 
-table VizFullState {
+table InitialState {
     name: string;
     views: [View];
     trees: [Tree];
 }
 
-root_type VizFullState;
+root_type InitialState;
