@@ -1,7 +1,6 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-#include <visualizer_generated.h>
 #include <spdlog/spdlog.h>
 #include <set>
 #include <asio.hpp>
@@ -37,11 +36,7 @@ void Visualizer::add_canvas(
     this->view_map.emplace(name, std::make_shared<CanvasView>(canvas));
 }
 
-std::vector<uint8_t> Visualizer::get_state() {
-    flatbuffers::FlatBufferBuilder builder(1024);
 
-    auto vis_name = builder.CreateString(this->name);
-}
 
 void Visualizer::server_job(
     std::stop_token& stop_token
