@@ -1,5 +1,5 @@
 // monster.fbs
-namespace slamd;
+namespace slamd.flatb;
 
 enum TreeType: byte {
     NONE = 0,
@@ -8,13 +8,13 @@ enum TreeType: byte {
 }
 
 table Tree {
-    id: int;
+    id: ulong;
     tree_type: TreeType;
 }
 
 table View {
     name: string;
-    tree_id: int;
+    tree_id: ulong;
 }
 
 table VizFullState {

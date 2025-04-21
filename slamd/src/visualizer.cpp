@@ -1,10 +1,10 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-#include <visualizer_generated.h>
 #include <spdlog/spdlog.h>
-#include <set>
+#include <visualizer_generated.h>
 #include <asio.hpp>
+#include <set>
 #include <slamd/render_thread_job_queue.hpp>
 #include <slamd/visualizer.hpp>
 
@@ -25,7 +25,11 @@ void Visualizer::add_scene(
 ) {
     std::scoped_lock l(this->view_map_mutex);
 
-    this->view_map.emplace(name, std::make_shared<SceneView>(scene));
+    if (this->trees.find(scene->id) == this->trees.end()) {
+        this->trees.insert({scene->id, scene});
+    }
+
+    this->view_name_to_tree_id.emplace(name, scene->id);
 }
 
 void Visualizer::add_canvas(
@@ -34,13 +38,50 @@ void Visualizer::add_canvas(
 ) {
     std::scoped_lock l(this->view_map_mutex);
 
-    this->view_map.emplace(name, std::make_shared<CanvasView>(canvas));
+    if (this->trees.find(canvas->id) == this->trees.end()) {
+        this->trees.insert({canvas->id, canvas});
+    }
+
+    this->view_name_to_tree_id.emplace(name, canvas->id);
 }
 
 std::vector<uint8_t> Visualizer::get_state() {
     flatbuffers::FlatBufferBuilder builder(1024);
 
-    auto vis_name = builder.CreateString(this->name);
+    auto vis_name_fb = builder.CreateString(this->name);
+
+    std::vector<flatbuffers::Offset<slamd::flatb::Tree>> tree_vec;
+
+    for (auto& [_, tree] : this->trees) {
+        tree_vec.push_back(tree->serialize(builder));
+    }
+
+    auto trees_fb = builder.CreateVector(tree_vec);
+
+    std::vector<flatbuffers::Offset<slamd::flatb::View>> view_vec;
+
+    for (auto& [view_name, tree_id] : this->view_name_to_tree_id) {
+        auto view_name_flatb = builder.CreateString(view_name);
+        view_vec.push_back(
+            slamd::flatb::CreateView(builder, view_name_flatb, tree_id)
+        );
+    }
+
+    auto views_fb = builder.CreateVector(view_vec);
+
+    auto state_fb = slamd::flatb::CreateVizFullState(
+        builder,
+        vis_name_fb,
+        views_fb,
+        trees_fb
+    );
+
+    builder.Finish(state_fb);
+
+    uint8_t* ptr = builder.GetBufferPointer();
+    size_t size = builder.GetSize();
+
+    return std::vector<uint8_t>(ptr, ptr + size);
 }
 
 void Visualizer::server_job(
@@ -59,6 +100,7 @@ void Visualizer::server_job(
                                   asio::ip::tcp::socket socket) {
             if (!ec) {
                 auto conn = std::make_shared<Connection>(std::move(socket));
+                conn->write(this->get_state());
                 clients.insert(conn);
             }
             accept_loop();  // keep accepting
@@ -70,8 +112,8 @@ void Visualizer::server_job(
     // // Simulate update loop in a thread
     // std::thread update_thread([&]() {
     //     while (true) {
-    //         std::string update = "state_update_" + std::to_string(rand() % 100);
-    //         for (auto& client : clients) {
+    //         std::string update = "state_update_" + std::to_string(rand() %
+    //         100); for (auto& client : clients) {
     //             client->send_update(update);
     //         }
     //         std::this_thread::sleep_for(std::chrono::seconds(1));

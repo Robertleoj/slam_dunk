@@ -1,5 +1,4 @@
 #pragma once
-#include <visualizer_generated.h>
 #include <glm/glm.hpp>
 #include <slamd/geom/geometry.hpp>
 #include <slamd/gmath/aabb.hpp>
@@ -12,10 +11,8 @@ namespace _tree {
 class Tree {
    private:
     std::unique_ptr<Node> root;
-    static uint64_t id_counter;
 
    public:
-    uint64_t id;
     Tree();
 
     virtual void set_object(
@@ -26,10 +23,6 @@ class Tree {
     void render(const glm::mat4& view, const glm::mat4& projection) const;
 
     std::optional<gmath::AABB> bounds();
-
-    virtual flatbuffers::Offset<slamd::flatb::Tree> serialize(
-        flatbuffers::FlatBufferBuilder& builder
-    ) = 0;
 
    protected:
     void
@@ -49,6 +42,7 @@ class Tree {
     std::optional<gmath::AABB>
 
     bounds_recursive(const Node* node, const glm::mat4& prev_transform);
+
 };
 
 }  // namespace _tree
@@ -59,9 +53,6 @@ class Tree {
 class Scene : public _tree::Tree {
    public:
     void set_transform(const std::string& path, glm::mat4 transform);
-    flatbuffers::Offset<slamd::flatb::Tree> serialize(
-        flatbuffers::FlatBufferBuilder& builder
-    ) override;
 };
 
 std::shared_ptr<Scene> scene();
@@ -75,10 +66,6 @@ class Canvas : public _tree::Tree {
     void set_object(
         const std::string& path,
         std::shared_ptr<_geom::Geometry> object
-    ) override;
-
-    flatbuffers::Offset<slamd::flatb::Tree> serialize(
-        flatbuffers::FlatBufferBuilder& builder
     ) override;
 
    private:

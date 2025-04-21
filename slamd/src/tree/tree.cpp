@@ -6,6 +6,8 @@ namespace slamd {
 
 namespace _tree {
 
+uint64_t Tree::id_counter = 1;
+
 Tree::Tree() {
     this->root = std::make_unique<Node>();
 }
@@ -177,6 +179,16 @@ std::shared_ptr<Scene> scene() {
     return std::make_shared<Scene>();
 }
 
+flatbuffers::Offset<slamd::flatb::Tree> Scene::serialize(
+    flatbuffers::FlatBufferBuilder& builder
+) {
+    return slamd::flatb::CreateTree(
+        builder,
+        this->id,
+        slamd::flatb::TreeType_SCENE
+    );
+}
+
 void Canvas::set_transform(
     const std::string& path,
     glm::mat3 transform
@@ -219,6 +231,16 @@ float Canvas::new_depth() {
 
 std::shared_ptr<Canvas> canvas() {
     return std::make_shared<Canvas>();
+}
+
+flatbuffers::Offset<slamd::flatb::Tree> Canvas::serialize(
+    flatbuffers::FlatBufferBuilder& builder
+) {
+    return slamd::flatb::CreateTree(
+        builder,
+        this->id,
+        slamd::flatb::TreeType_CANVAS
+    );
 }
 
 }  // namespace slamd

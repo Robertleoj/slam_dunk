@@ -9,12 +9,6 @@ Connection::Connection(
 )
     : socket(std::move(socket)) {
     SPDLOG_INFO("Client connected");
-
-    this->send_initial_state();
-}
-
-void Connection::send_initial_state() {
-    // TODO: implement
 }
 
 void Connection::write(

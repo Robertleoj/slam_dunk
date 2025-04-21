@@ -1,16 +1,16 @@
 #pragma once
-#include <asio.hpp>
 #include <cstddef>
 #include <filesystem>
-#include <list>
 #include <memory>
 #include <mutex>
+#include <asio.hpp>
 #include <slamd/connection.hpp>
 #include <slamd/glfw.hpp>
 #include <slamd/view/canvas_view.hpp>
 #include <slamd/view/scene_view.hpp>
 #include <stop_token>
 #include <thread>
+#include <list>
 #include <vector>
 
 namespace slamd {
@@ -27,17 +27,13 @@ class Visualizer {
    private:
     void server_job(std::stop_token& stop_token);
     void connection_handler(asio::ip::tcp::socket socket);
-    std::vector<uint8_t> get_state();
 
    private:
     std::string name;
     std::jthread server_thread;
 
     std::mutex view_map_mutex;
-
-    std::map<std::string, uint64_t> view_name_to_tree_id;
-    std::map<uint64_t, std::shared_ptr<_tree::Tree>> trees;
-
+    std::map<std::string, std::shared_ptr<View>> view_map;
     std::list<Connection> open_connections;
 };
 

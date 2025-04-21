@@ -1,11 +1,8 @@
 #pragma once
-#include <asio.hpp>
 #include <cstddef>
 #include <filesystem>
-#include <list>
 #include <memory>
 #include <mutex>
-#include <slamd/connection.hpp>
 #include <slamd/glfw.hpp>
 #include <slamd/view/canvas_view.hpp>
 #include <slamd/view/scene_view.hpp>
@@ -17,28 +14,27 @@ namespace slamd {
 
 namespace fs = std::filesystem;
 
-class Visualizer {
+class Window {
    public:
-    Visualizer(std::string name);
-    ~Visualizer();
+    Window(std::string name, size_t height, size_t width);
+    ~Window();
+    void wait_for_close();
     void add_scene(std::string name, std::shared_ptr<Scene> scene);
     void add_canvas(std::string name, std::shared_ptr<Canvas> canvas);
 
    private:
-    void server_job(std::stop_token& stop_token);
-    void connection_handler(asio::ip::tcp::socket socket);
-    std::vector<uint8_t> get_state();
+    void render_job(std::stop_token& stop_token, size_t height, size_t width);
+    fs::path layout_path();
 
    private:
     std::string name;
-    std::jthread server_thread;
+    std::jthread render_thread;
+    GLFWwindow* window = nullptr;
 
     std::mutex view_map_mutex;
+    std::map<std::string, std::shared_ptr<View>> view_map;
 
-    std::map<std::string, uint64_t> view_name_to_tree_id;
-    std::map<uint64_t, std::shared_ptr<_tree::Tree>> trees;
-
-    std::list<Connection> open_connections;
+    bool loaded_layout;
 };
 
 }  // namespace slamd
