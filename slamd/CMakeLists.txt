@@ -88,7 +88,6 @@ target_sources(
         src/arcball.cpp
         src/frame_timer.cpp
         src/assert.cpp
-        src/window.cpp
         src/render_thread_job_queue.cpp
         src/visualizer.cpp
         src/connection.cpp
@@ -99,9 +98,6 @@ target_sources(
         src/tree/tree.cpp
         src/tree/node.cpp
         src/tree/tree_path.cpp
-
-        src/view/scene_view.cpp
-        src/view/canvas_view.cpp
 
         src/gmath/aabb.cpp
         src/gmath/rect2d.cpp

@@ -10,7 +10,7 @@
 namespace slamdw {
 class CanvasView : public View {
    public:
-    std::shared_ptr<Canvas> canvas;
+    std::shared_ptr<Tree> tree;
 
    private:
     FrameBuffer frame_buffer;
@@ -19,7 +19,7 @@ class CanvasView : public View {
     bool manually_moved;
 
    public:
-    CanvasView(std::shared_ptr<Canvas> canvas);
+    CanvasView(std::shared_ptr<Tree> tree);
     void render_to_imgui() override;
 
    private:

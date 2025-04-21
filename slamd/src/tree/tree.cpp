@@ -28,6 +28,12 @@ void Tree::set_object(
     node->set_object(object);
 }
 
+flatbuffers::Offset<slamd::flatb::Tree> Tree::serialize(
+    flatbuffers::FlatBufferBuilder& builder
+) {
+    return slamd::flatb::CreateTree(builder, this->id);
+}
+
 void Tree::render(
     const glm::mat4& view,
     const glm::mat4& projection
@@ -181,16 +187,6 @@ std::shared_ptr<Scene> scene() {
     return std::make_shared<Scene>();
 }
 
-flatbuffers::Offset<slamd::flatb::Tree> Scene::serialize(
-    flatbuffers::FlatBufferBuilder& builder
-) {
-    return slamd::flatb::CreateTree(
-        builder,
-        this->id,
-        slamd::flatb::TreeType_SCENE
-    );
-}
-
 void Canvas::set_transform(
     const std::string& path,
     glm::mat3 transform
@@ -235,14 +231,5 @@ std::shared_ptr<Canvas> canvas() {
     return std::make_shared<Canvas>();
 }
 
-flatbuffers::Offset<slamd::flatb::Tree> Canvas::serialize(
-    flatbuffers::FlatBufferBuilder& builder
-) {
-    return slamd::flatb::CreateTree(
-        builder,
-        this->id,
-        slamd::flatb::TreeType_CANVAS
-    );
-}
 
 }  // namespace slamd

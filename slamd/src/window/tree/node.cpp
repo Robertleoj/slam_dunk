@@ -2,7 +2,6 @@
 #include <stdexcept>
 
 namespace slamdw {
-namespace _tree {
 
 std::optional<std::shared_ptr<_geom::Geometry>> Node::get_object() const {
     std::scoped_lock l(this->object_mutex);
@@ -32,5 +31,4 @@ void Node::set_transform(
     this->transform = transform;
 }
 
-}  // namespace _tree
 }  // namespace slamd

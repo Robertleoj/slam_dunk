@@ -1,20 +1,22 @@
 // monster.fbs
 namespace slamd.flatb;
 
-enum TreeType: byte {
+
+
+table Tree {
+    id: ulong;
+}
+
+enum ViewType: byte {
     NONE = 0,
     CANVAS = 1,
     SCENE = 2
 }
 
-table Tree {
-    id: ulong;
-    tree_type: TreeType;
-}
-
 table View {
     name: string;
     tree_id: ulong;
+    view_type: ViewType;
 }
 
 table InitialState {

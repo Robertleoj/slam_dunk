@@ -6,7 +6,6 @@
 #include <slamd_window/tree/tree_path.hpp>
 
 namespace slamdw {
-namespace _tree {
 
 class Tree {
    private:
@@ -43,34 +42,6 @@ class Tree {
     std::optional<gmath::AABB>
 
     bounds_recursive(const Node* node, const glm::mat4& prev_transform);
-};
-
-}  // namespace _tree
-
-/**
- * 3D version
- */
-class Scene : public _tree::Tree {
-   public:
-    Scene(uint64_t id);
-    void set_transform(const std::string& path, glm::mat4 transform);
-};
-
-/**
- * 2D version
- */
-class Canvas : public _tree::Tree {
-   public:
-    Canvas(uint64_t id);
-    void set_transform(const std::string& path, glm::mat3 transform);
-    void set_object(
-        const std::string& path,
-        std::shared_ptr<_geom::Geometry> object
-    ) override;
-
-   private:
-    uint64_t insertion_order_counter;
-    float new_depth();
 };
 
 }  // namespace slamdw

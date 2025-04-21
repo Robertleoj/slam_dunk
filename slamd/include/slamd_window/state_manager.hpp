@@ -29,7 +29,7 @@ class StateManager {
     bool loaded = false;
     std::string name;
     std::map<std::string, std::unique_ptr<View>> views;
-    std::map<uint64_t, std::shared_ptr<_tree::Tree>> trees;
+    std::map<uint64_t, std::shared_ptr<Tree>> trees;
 
    private:
     std::optional<Connection> connection;

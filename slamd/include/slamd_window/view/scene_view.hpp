@@ -12,7 +12,7 @@
 namespace slamdw {
 class SceneView : public View {
    public:
-    std::shared_ptr<Scene> scene;
+    std::shared_ptr<Tree> tree;
 
    private:
     FrameBuffer frame_buffer;
@@ -23,7 +23,7 @@ class SceneView : public View {
     _geom::ArcballIndicator arcball_indicator;
 
    public:
-    SceneView(std::shared_ptr<Scene> scene);
+    SceneView(std::shared_ptr<Tree> tree);
     void render_to_imgui() override;
 
    private:

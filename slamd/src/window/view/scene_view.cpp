@@ -18,9 +18,9 @@ glm::vec3 make_background_color(
 }
 
 SceneView::SceneView(
-    std::shared_ptr<Scene> scene
+    std::shared_ptr<Tree> tree
 )
-    : scene(scene),
+    : tree(tree),
       frame_buffer(500, 500),
       camera(45.0, 0.1f, 100000.0f),
       xy_grid(1000.0) {
@@ -69,7 +69,7 @@ void SceneView::render_to_frame_buffer() {
     auto projection =
         this->camera.get_projection_matrix(this->frame_buffer.aspect());
 
-    this->scene->render(view, projection);
+    this->tree->render(view, projection);
 
     this->xy_grid.render(glm::mat4(1.0), view, projection);
     this->arcball_indicator.render(this->arcball.center, view, projection);

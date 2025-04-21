@@ -8,7 +8,6 @@
 #include <string>
 
 namespace slamdw {
-namespace _tree {
 
 class Node {
    public:
@@ -30,6 +29,5 @@ class Node {
 
     void set_transform(glm::mat4 transform);
 };
-}  // namespace _tree
 
 }  // namespace slamd

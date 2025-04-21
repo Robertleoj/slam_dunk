@@ -7,9 +7,9 @@
 namespace slamdw {
 
 CanvasView::CanvasView(
-    std::shared_ptr<Canvas> canvas
+    std::shared_ptr<Tree> tree
 )
-    : canvas(canvas),
+    : tree(tree),
       frame_buffer(500, 500),
       camera(gmath::Rect2D({0.0, 0.0}, {1.0, 1.0})),
       manually_moved(false) {}
@@ -84,7 +84,7 @@ void CanvasView::render_to_frame_buffer() {
     glm::mat4 projection_matrix = this->camera.get_projection_matrix();
 
     // TODO: render calls here
-    this->canvas->render(glm::mat4(1.0), projection_matrix);
+    this->tree->render(glm::mat4(1.0), projection_matrix);
 
     this->frame_buffer.unbind();
 }
@@ -202,7 +202,7 @@ void CanvasView::handle_translation_input() {
 }
 
 void CanvasView::set_default_pos() {
-    auto maybe_bounds = this->canvas->bounds();
+    auto maybe_bounds = this->tree->bounds();
 
     gmath::AABB bounds = maybe_bounds.has_value()
                              ? maybe_bounds.value()

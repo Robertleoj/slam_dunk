@@ -7,8 +7,8 @@
 #include <mutex>
 #include <slamd/connection.hpp>
 #include <slamd/glfw.hpp>
-#include <slamd/view/canvas_view.hpp>
-#include <slamd/view/scene_view.hpp>
+#include <slamd/tree/tree.hpp>
+#include <slamd/view.hpp>
 #include <stop_token>
 #include <thread>
 #include <vector>
@@ -35,7 +35,7 @@ class Visualizer {
 
     std::mutex view_map_mutex;
 
-    std::map<std::string, uint64_t> view_name_to_tree_id;
+    std::map<std::string, View> view_name_to_view;
     std::map<uint64_t, std::shared_ptr<_tree::Tree>> trees;
 
     std::list<Connection> open_connections;

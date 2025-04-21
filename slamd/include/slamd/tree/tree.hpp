@@ -29,7 +29,7 @@ class Tree {
 
     virtual flatbuffers::Offset<slamd::flatb::Tree> serialize(
         flatbuffers::FlatBufferBuilder& builder
-    ) = 0;
+    );
 
    protected:
     void
@@ -59,9 +59,6 @@ class Tree {
 class Scene : public _tree::Tree {
    public:
     void set_transform(const std::string& path, glm::mat4 transform);
-    flatbuffers::Offset<slamd::flatb::Tree> serialize(
-        flatbuffers::FlatBufferBuilder& builder
-    ) override;
 };
 
 std::shared_ptr<Scene> scene();
@@ -75,10 +72,6 @@ class Canvas : public _tree::Tree {
     void set_object(
         const std::string& path,
         std::shared_ptr<_geom::Geometry> object
-    ) override;
-
-    flatbuffers::Offset<slamd::flatb::Tree> serialize(
-        flatbuffers::FlatBufferBuilder& builder
     ) override;
 
    private:
