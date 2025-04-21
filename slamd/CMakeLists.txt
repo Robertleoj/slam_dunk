@@ -149,6 +149,85 @@ target_link_libraries(
 )
 
 
+add_executable(slamd_window)
+
+target_sources(
+    slamd_window
+
+    PRIVATE
+        src/window/main.cpp
+
+        src/camera_2d.cpp
+        src/image_texture.cpp
+        src/glfw.cpp
+        src/frame_buffer.cpp
+        src/camera.cpp
+        src/io.cpp
+        src/shaders.cpp
+        src/arcball.cpp
+        src/frame_timer.cpp
+        src/assert.cpp
+        src/window.cpp
+        src/render_thread_job_queue.cpp
+
+        src/data/image.cpp
+        src/data/mesh.cpp
+
+        src/tree/tree.cpp
+        src/tree/node.cpp
+        src/tree/tree_path.cpp
+
+        src/view/scene_view.cpp
+        src/view/canvas_view.cpp
+
+        src/gmath/aabb.cpp
+        src/gmath/rect2d.cpp
+        src/gmath/angle.cpp
+        src/gmath/transforms.cpp
+
+        src/geom/utils.cpp
+        src/geom/points_2d.cpp
+        src/geom/geometry.cpp
+        src/geom/box.cpp
+        src/geom/mesh.cpp
+        src/geom/arrows.cpp
+        src/geom/sphere.cpp
+        src/geom/triad.cpp
+        src/geom/poly_line.cpp
+        src/geom/xy_grid.cpp
+        src/geom/arcball_indicator.cpp
+        src/geom/image.cpp
+        src/geom/point_cloud.cpp
+        src/geom/camera_frustum.cpp
+        src/geom/poly_line_2d.cpp
+        src/geom/mono_instanced.cpp
+        src/geom/circles_2d.cpp
+)
+
+target_include_directories(
+    slamd_window
+
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+        ${LIB_DIR}/glm
+        ${LIB_DIR}/asio/include
+)
+
+target_link_libraries(
+    slamd_window
+    
+    PRIVATE
+        glfw
+        spdlog::spdlog
+        slamd_flatbuff
+    PUBLIC
+        glbinding::glbinding
+        glbinding::glbinding-aux
+        imgui::imgui
+)
+
+
 # only install if this is the top-level dir
 if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     install(TARGETS slamd
