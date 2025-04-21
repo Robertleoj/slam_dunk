@@ -84,6 +84,7 @@ void StateManager::apply_updates() {
         auto& message = maybe_message.value();
 
         auto message_fb = message.msg();
+
         switch (message_fb->message_type()) {
             case (slamd::flatb::MessageUnion_initial_state): {
                 this->handle_initial_state(message_fb->message_as_initial_state(
