@@ -172,6 +172,7 @@ target_sources(
         src/window/window.cpp
         src/window/state_manager.cpp
         src/window/connection.cpp
+        src/window/message.cpp
 
         src/window/data/image.cpp
         src/window/data/mesh.cpp

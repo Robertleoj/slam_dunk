@@ -21,7 +21,7 @@ class StateManager {
     void apply_updates();
 
    private:
-    void handle_initial_state(const std::vector<uint8_t>& data);
+    void handle_initial_state(const slamd::flatb::InitialState* initial_state);
 
     // fs::path layout_path();
 

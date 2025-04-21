@@ -1,7 +1,8 @@
+#include <spdlog/spdlog.h>
 #include <asio.hpp>
 #include <slamd_window/connection.hpp>
+#include <slamd_window/message.hpp>
 #include <thread>
-#include <spdlog/spdlog.h>
 
 namespace slamdw {
 
@@ -13,7 +14,6 @@ Connection::Connection(
       port(port) {
     this->job_thread = std::jthread(&Connection::job, this);
 }
-
 
 void Connection::job() {
     spdlog::info("Connection job started for {}:{}", ip, port);
@@ -46,10 +46,11 @@ void Connection::job() {
             uint32_t len = ntohl(len_net);
             spdlog::info("Reading {} bytes", len);
 
-            std::vector<uint8_t> buf(len);
-            asio::read(socket, asio::buffer(buf.data(), len));
+            Message message(len);
 
-            this->messages.push(std::move(buf));
+            asio::read(socket, asio::buffer(message.data(), len));
+
+            this->messages.push(std::move(message));
 
         } catch (const std::exception& e) {
             spdlog::error("Error while reading from socket: {}", e.what());

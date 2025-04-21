@@ -1,6 +1,7 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+#include <messages_generated.h>
 #include <spdlog/spdlog.h>
 #include <visualizer_generated.h>
 #include <asio.hpp>
@@ -76,7 +77,13 @@ std::vector<uint8_t> Visualizer::get_state() {
         trees_fb
     );
 
-    builder.Finish(state_fb);
+    auto message_fb = slamd::flatb::CreateMessage(
+        builder,
+        slamd::flatb::MessageUnion_initial_state,
+        state_fb.Union()
+    );
+
+    builder.Finish(message_fb);
 
     uint8_t* ptr = builder.GetBufferPointer();
     size_t size = builder.GetSize();

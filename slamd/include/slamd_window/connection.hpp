@@ -2,6 +2,7 @@
 
 #include <asio.hpp>
 #include <slamd_window/message_queue.hpp>
+#include <slamd_window/message.hpp>
 
 namespace slamdw {
 
@@ -13,7 +14,7 @@ class Connection {
     const std::string ip;
     const ushort port;
     bool connected = false;
-    MessageQueue<std::vector<uint8_t>> messages;
+    MessageQueue<Message> messages;
 
    private:
     void job();

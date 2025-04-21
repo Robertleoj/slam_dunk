@@ -18,10 +18,10 @@ void StateManager::try_connect(
 }
 
 void StateManager::handle_initial_state(
-    const std::vector<uint8_t>& data
+    const slamd::flatb::InitialState* full_state_fb
 ) {
-    const slamd::flatb::InitialState* full_state_fb =
-        slamd::flatb::GetInitialState(data.data());
+    // const slamd::flatb::InitialState* full_state_fb =
+    // slamd::flatb::GetInitialState(data.data());
 
     this->name = full_state_fb->name()->str();
 
@@ -90,7 +90,20 @@ void StateManager::apply_updates() {
         }
         auto& message = maybe_message.value();
 
-        this->handle_initial_state(message);
+        auto message_fb = message.msg();
+        switch (message_fb->message_type()) {
+            case (slamd::flatb::MessageUnion_initial_state): {
+                this->handle_initial_state(message_fb->message_as_initial_state(
+                ));
+                break;
+            }
+            default: {
+                spdlog::info(
+                    "Unknown message type {}",
+                    static_cast<uint32_t>(message_fb->message_type())
+                );
+            }
+        }
     }
 }
 
