@@ -22,3 +22,5 @@ table VizFullState {
     views: [View];
     trees: [Tree];
 }
+
+root_type VizFullState;

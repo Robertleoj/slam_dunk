@@ -5,7 +5,7 @@
       "name": "Debug C++",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/examples/build/hello_visualizer/hello_visualizer",
+      "program": "${workspaceFolder}/examples/build/slamd/slamd_window",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",

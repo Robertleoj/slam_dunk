@@ -6,16 +6,6 @@
 
 namespace slamdw {
 
-Window::Window(
-    std::string name
-)
-    : name(name),
-      loaded_layout(false) {}
-
-fs::path Window::layout_path() {
-    return fs::current_path() / std::format(".{}.ini", this->name);
-}
-
 void framebuffer_size_callback(
     GLFWwindow* window,
     int width,
@@ -24,7 +14,7 @@ void framebuffer_size_callback(
     gl::glViewport(0, 0, width, height);
 }
 
-void Window::run(
+Window::Window(
     size_t height,
     size_t width
 ) {
@@ -40,11 +30,17 @@ void Window::run(
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
+}
 
-    if (fs::exists(this->layout_path())) {
-        ImGui::LoadIniSettingsFromDisk(this->layout_path().string().c_str());
-        this->loaded_layout = true;
-    }
+// fs::path Window::layout_path() {
+//     return fs::current_path() / std::format(".{}.ini", this->name);
+// }
+
+void Window::run() {
+    // if (fs::exists(this->layout_path())) {
+    //     ImGui::LoadIniSettingsFromDisk(this->layout_path().string().c_str());
+    //     this->loaded_layout = true;
+    // }
 
     while (!glfwWindowShouldClose(window)) {
         ImGui_ImplOpenGL3_NewFrame();
@@ -54,15 +50,12 @@ void Window::run(
         main_dockspace_id = ImGui::DockSpaceOverViewport();
 
         {
-            std::scoped_lock l(this->view_map_mutex);
+            // std::scoped_lock l(this->view_map_mutex);
 
-            for (auto& [scene_name, scene] : this->view_map) {
-                if (!this->loaded_layout) {
-                    ImGui::SetNextWindowDockID(
-                        main_dockspace_id,
-                        ImGuiCond_Once
-                    );
-                }
+            for (auto& [scene_name, scene] : this->state_manager.views) {
+                // if (!this->loaded_layout) {
+                ImGui::SetNextWindowDockID(main_dockspace_id, ImGuiCond_Once);
+                // }
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
                 ImGui::Begin(
@@ -88,7 +81,7 @@ void Window::run(
         glfwPollEvents();
     }
 
-    ImGui::SaveIniSettingsToDisk(this->layout_path().string().c_str());
+    // ImGui::SaveIniSettingsToDisk(this->layout_path().string().c_str());
 
     glfwTerminate();
 }

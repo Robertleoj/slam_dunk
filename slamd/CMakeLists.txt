@@ -170,6 +170,7 @@ target_sources(
         src/window/frame_timer.cpp
         src/window/assert.cpp
         src/window/window.cpp
+        src/window/state_manager.cpp
 
         src/window/data/image.cpp
         src/window/data/mesh.cpp

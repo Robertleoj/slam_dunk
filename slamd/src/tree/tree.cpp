@@ -9,6 +9,8 @@ namespace _tree {
 uint64_t Tree::id_counter = 1;
 
 Tree::Tree() {
+    this->id = Tree::id_counter++;
+
     this->root = std::make_unique<Node>();
 }
 

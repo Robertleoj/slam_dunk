@@ -6,7 +6,10 @@ namespace slamdw {
 
 namespace _tree {
 
-Tree::Tree() {
+Tree::Tree(
+    uint64_t id
+)
+    : id(id) {
     this->root = std::make_unique<Node>();
 }
 
@@ -173,9 +176,10 @@ void Scene::set_transform(
     this->set_transform_mat4(path, transform);
 }
 
-std::shared_ptr<Scene> scene() {
-    return std::make_shared<Scene>();
-}
+Scene::Scene(
+    uint64_t id
+)
+    : _tree::Tree(id) {}
 
 void Canvas::set_transform(
     const std::string& path,
@@ -217,8 +221,9 @@ float Canvas::new_depth() {
     return new_depth;
 }
 
-std::shared_ptr<Canvas> canvas() {
-    return std::make_shared<Canvas>();
-}
+Canvas::Canvas(
+    uint64_t id
+)
+    : _tree::Tree(id) {}
 
-}  // namespace slamd
+}  // namespace slamdw

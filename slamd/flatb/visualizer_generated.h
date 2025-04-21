@@ -253,6 +253,36 @@ inline ::flatbuffers::Offset<VizFullState> CreateVizFullStateDirect(
       trees__);
 }
 
+inline const slamd::flatb::VizFullState *GetVizFullState(const void *buf) {
+  return ::flatbuffers::GetRoot<slamd::flatb::VizFullState>(buf);
+}
+
+inline const slamd::flatb::VizFullState *GetSizePrefixedVizFullState(const void *buf) {
+  return ::flatbuffers::GetSizePrefixedRoot<slamd::flatb::VizFullState>(buf);
+}
+
+inline bool VerifyVizFullStateBuffer(
+    ::flatbuffers::Verifier &verifier) {
+  return verifier.VerifyBuffer<slamd::flatb::VizFullState>(nullptr);
+}
+
+inline bool VerifySizePrefixedVizFullStateBuffer(
+    ::flatbuffers::Verifier &verifier) {
+  return verifier.VerifySizePrefixedBuffer<slamd::flatb::VizFullState>(nullptr);
+}
+
+inline void FinishVizFullStateBuffer(
+    ::flatbuffers::FlatBufferBuilder &fbb,
+    ::flatbuffers::Offset<slamd::flatb::VizFullState> root) {
+  fbb.Finish(root);
+}
+
+inline void FinishSizePrefixedVizFullStateBuffer(
+    ::flatbuffers::FlatBufferBuilder &fbb,
+    ::flatbuffers::Offset<slamd::flatb::VizFullState> root) {
+  fbb.FinishSizePrefixed(root);
+}
+
 }  // namespace flatb
 }  // namespace slamd
 

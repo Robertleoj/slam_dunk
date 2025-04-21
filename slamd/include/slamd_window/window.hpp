@@ -4,6 +4,7 @@
 #include <memory>
 #include <mutex>
 #include <slamd_window/glfw.hpp>
+#include <slamd_window/state_manager.hpp>
 #include <slamd_window/view/canvas_view.hpp>
 #include <slamd_window/view/scene_view.hpp>
 #include <stop_token>
@@ -16,22 +17,20 @@ namespace fs = std::filesystem;
 
 class Window {
    public:
-    Window(std::string name);
+    Window(size_t height = 1000, size_t width = 1000);
     ~Window();
 
-    void run(size_t height = 1000, size_t width = 1000);
+    void run();
+
+    StateManager state_manager;
 
    private:
-    fs::path layout_path();
-
-   private:
-    std::string name;
+    // std::string name;
     GLFWwindow* window = nullptr;
 
-    std::mutex view_map_mutex;
-    std::map<std::string, std::shared_ptr<View>> view_map;
-
-    bool loaded_layout;
+    // std::mutex view_map_mutex;
+    // std::map<std::string, std::shared_ptr<View>> view_map;
+    // bool loaded_layout;
 };
 
 }  // namespace slamdw
