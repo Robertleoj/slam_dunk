@@ -6,4 +6,11 @@ table Monster {
   name:string;
   hp:short;
 }
+
 root_type Monster;
+
+
+
+table VizFullState {
+    name: string;
+}

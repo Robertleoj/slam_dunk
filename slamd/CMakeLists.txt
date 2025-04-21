@@ -90,6 +90,8 @@ target_sources(
         src/assert.cpp
         src/window.cpp
         src/render_thread_job_queue.cpp
+        src/visualizer.cpp
+        src/connection.cpp
 
         src/data/image.cpp
         src/data/mesh.cpp
@@ -132,7 +134,7 @@ target_include_directories(
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
         ${LIB_DIR}/glm
-        ${LIB_DIR}/asio/include
+        ${LIB_DIR}/asio/asio/include
 )
 
 target_link_libraries(
@@ -211,7 +213,7 @@ target_include_directories(
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
         ${LIB_DIR}/glm
-        ${LIB_DIR}/asio/include
+        ${LIB_DIR}/asio/asio/include
 )
 
 target_link_libraries(
