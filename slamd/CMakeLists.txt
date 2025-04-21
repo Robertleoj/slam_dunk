@@ -171,6 +171,7 @@ target_sources(
         src/window/assert.cpp
         src/window/window.cpp
         src/window/state_manager.cpp
+        src/window/connection.cpp
 
         src/window/data/image.cpp
         src/window/data/mesh.cpp

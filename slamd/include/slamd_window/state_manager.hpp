@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <map>
 #include <memory>
+#include <slamd_window/connection.hpp>
 #include <slamd_window/tree/tree.hpp>
 #include <slamd_window/view/view.hpp>
 #include <string>
@@ -20,9 +21,11 @@ class StateManager {
 
    public:
     bool loaded = false;
-
     std::string name;
     std::map<std::string, std::unique_ptr<View>> views;
     std::map<uint64_t, std::shared_ptr<_tree::Tree>> trees;
+
+   private:
+    std::optional<Connection> connection;
 };
 }  // namespace slamdw
