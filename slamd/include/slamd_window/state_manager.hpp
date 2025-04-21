@@ -15,7 +15,13 @@ namespace fs = std::filesystem;
 class StateManager {
    public:
     StateManager();
+
     void try_connect(std::string ip = "127.0.0.1", ushort port = 555);
+
+    void apply_updates();
+
+   private:
+    void handle_initial_state(const std::vector<uint8_t>& data);
 
     // fs::path layout_path();
 

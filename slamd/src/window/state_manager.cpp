@@ -14,22 +14,14 @@ void StateManager::try_connect(
     std::string ip,
     ushort port
 ) {
-    asio::io_context io;
-    asio::ip::tcp::socket socket(io);
+    this->connection.emplace(ip, port);
+}
 
-    socket.connect(asio::ip::tcp::endpoint(asio::ip::make_address(ip), port));
-
-    uint32_t len_net;
-    asio::read(socket, asio::buffer(&len_net, 4));
-    uint32_t len = ntohl(len_net);
-    spdlog::info("Reading {} bytes", len);
-
-    std::vector<uint8_t> buf(len);
-
-    asio::read(socket, asio::buffer(buf.data(), len));
-
+void StateManager::handle_initial_state(
+    const std::vector<uint8_t>& data
+) {
     const slamd::flatb::VizFullState* full_state_fb =
-        slamd::flatb::GetVizFullState(buf.data());
+        slamd::flatb::GetVizFullState(data.data());
 
     this->name = full_state_fb->name()->str();
 
@@ -81,6 +73,25 @@ void StateManager::try_connect(
         this->views.insert({view_name, std::move(view)});
     }
     spdlog::info("loaded state");
+}
+
+void StateManager::apply_updates() {
+    if (!this->connection.has_value()) {
+        return;
+    }
+
+    auto& connection = this->connection.value();
+    auto& message_queue = connection.messages;
+
+    while (true) {
+        auto maybe_message = message_queue.try_pop();
+        if (!maybe_message.has_value()) {
+            return;
+        }
+        auto& message = maybe_message.value();
+
+        this->handle_initial_state(message);
+    }
 }
 
 }  // namespace slamdw

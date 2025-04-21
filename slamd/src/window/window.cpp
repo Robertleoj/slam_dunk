@@ -43,6 +43,7 @@ void Window::run() {
     // }
 
     while (!glfwWindowShouldClose(window)) {
+        this->state_manager.apply_updates();
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();

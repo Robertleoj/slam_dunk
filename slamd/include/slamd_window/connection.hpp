@@ -13,12 +13,12 @@ class Connection {
     const std::string ip;
     const ushort port;
     bool connected = false;
+    MessageQueue<std::vector<uint8_t>> messages;
 
    private:
     void job();
 
     std::jthread job_thread;
-    MessageQueue<std::vector<uint8_t>> messages;
 };
 
 }  // namespace slamdw

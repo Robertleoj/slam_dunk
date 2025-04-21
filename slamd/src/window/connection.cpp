@@ -36,10 +36,20 @@ void Connection::job() {
 
     while (connected) {
         try {
-            // === Placeholder: slap in your message reading here ===
-            // std::vector<uint8_t> msg = read_message(socket);
-            // messages.push(msg);
-            spdlog::debug("Waiting for message...");
+            // // === Placeholder: slap in your message reading here ===
+            // // std::vector<uint8_t> msg = read_message(socket);
+            // // messages.push(msg);
+            // spdlog::debug("Waiting for message...");
+
+            uint32_t len_net;
+            asio::read(socket, asio::buffer(&len_net, 4));
+            uint32_t len = ntohl(len_net);
+            spdlog::info("Reading {} bytes", len);
+
+            std::vector<uint8_t> buf(len);
+            asio::read(socket, asio::buffer(buf.data(), len));
+
+            this->messages.push(std::move(buf));
 
         } catch (const std::exception& e) {
             spdlog::error("Error while reading from socket: {}", e.what());
