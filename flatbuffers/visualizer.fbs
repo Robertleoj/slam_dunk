@@ -1,16 +1,24 @@
 // monster.fbs
-namespace Example;
+namespace slamd;
 
-table Monster {
-  id:int;
-  name:string;
-  hp:short;
+enum TreeType: byte {
+    NONE = 0,
+    CANVAS = 1,
+    SCENE = 2
 }
 
-root_type Monster;
+table Tree {
+    id: int;
+    tree_type: TreeType;
+}
 
-
+table View {
+    name: string;
+    tree_id: int;
+}
 
 table VizFullState {
     name: string;
+    views: [View];
+    trees: [Tree];
 }

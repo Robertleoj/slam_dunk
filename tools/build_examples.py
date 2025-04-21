@@ -8,6 +8,7 @@ import subprocess
 from functools import partial
 from pathlib import Path
 from embed_shaders import embed_shaders
+from build_flatbuffers import compile_flatbuffers
 
 from fire import Fire
 
@@ -17,6 +18,7 @@ BUILD_DIR = "build"
 def build(debug: bool) -> None:
     """(Re)build the C++ backend."""
     embed_shaders()
+    compile_flatbuffers()
 
     build_path = Path("build")
     build_path.mkdir(exist_ok=True)
