@@ -1,27 +1,17 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <spdlog/spdlog.h>
-#include <slamd/assert.hpp>
-#include <slamd/frame_buffer.hpp>
-#include <slamd/render_thread_job_queue.hpp>
+#include <slamd_window/assert.hpp>
+#include <slamd_window/frame_buffer.hpp>
 
-namespace slamd {
+namespace slamdw {
 
-void FrameBuffer::maybe_initialize() {
-    if (this->render_thread_id.has_value()) {
-        assert_thread(this->render_thread_id.value());
-        return;
-    }
+void FrameBuffer::initialize() {
+    gl::glGenFramebuffers(1, &this->frame_buffer_object_id);
+    gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, this->frame_buffer_object_id);
 
-    this->render_thread_id = std::this_thread::get_id();
-
-    GLData gl_data;
-
-    gl::glGenFramebuffers(1, &gl_data.frame_buffer_object_id);
-    gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, gl_data.frame_buffer_object_id);
-
-    gl::glGenTextures(1, &gl_data.texture_id);
-    gl::glBindTexture(gl::GL_TEXTURE_2D, gl_data.texture_id);
+    gl::glGenTextures(1, &this->texture_id);
+    gl::glBindTexture(gl::GL_TEXTURE_2D, this->texture_id);
     gl::glTexImage2D(
         gl::GL_TEXTURE_2D,
         0,
@@ -48,15 +38,12 @@ void FrameBuffer::maybe_initialize() {
         gl::GL_FRAMEBUFFER,
         gl::GL_COLOR_ATTACHMENT0,
         gl::GL_TEXTURE_2D,
-        gl_data.texture_id,
+        this->texture_id,
         0
     );
 
-    gl::glGenRenderbuffers(1, &gl_data.render_buffer_object_id);
-    gl::glBindRenderbuffer(
-        gl::GL_RENDERBUFFER,
-        gl_data.render_buffer_object_id
-    );
+    gl::glGenRenderbuffers(1, &this->render_buffer_object_id);
+    gl::glBindRenderbuffer(gl::GL_RENDERBUFFER, this->render_buffer_object_id);
     gl::glRenderbufferStorage(
         gl::GL_RENDERBUFFER,
         gl::GL_DEPTH24_STENCIL8,
@@ -68,7 +55,7 @@ void FrameBuffer::maybe_initialize() {
         gl::GL_FRAMEBUFFER,
         gl::GL_DEPTH_STENCIL_ATTACHMENT,
         gl::GL_RENDERBUFFER,
-        gl_data.render_buffer_object_id
+        this->render_buffer_object_id
     );
 
     if (gl::glCheckFramebufferStatus(gl::GL_FRAMEBUFFER) !=
@@ -80,57 +67,38 @@ void FrameBuffer::maybe_initialize() {
     gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, 0);
     gl::glBindTexture(gl::GL_TEXTURE_2D, 0);
     gl::glBindRenderbuffer(gl::GL_RENDERBUFFER, 0);
-
-    this->gl_data.emplace(gl_data);
 }
 
 FrameBuffer::FrameBuffer(
     size_t width,
     size_t height
-) {
-    this->current_height = height;
-    this->current_width = width;
+)
+    : current_height(height),
+      current_width(width) {
+    this->initialize();
 }
 
 FrameBuffer::~FrameBuffer() {
-    if (!this->render_thread_id.has_value()) {
-        return;
-    }
-
-    auto& gl_data = this->gl_data.value();
-
-    auto job = [fbo = gl_data.frame_buffer_object_id,
-                rbo = gl_data.render_buffer_object_id,
-                tex = gl_data.texture_id]() {
-        gl::glDeleteFramebuffers(1, &fbo);
-        gl::glDeleteTextures(1, &tex);
-        gl::glDeleteRenderbuffers(1, &rbo);
-    };
-
-    RenderQueueManager::force_enqueue(this->render_thread_id.value(), job);
+    gl::glDeleteFramebuffers(1, &this->frame_buffer_object_id);
+    gl::glDeleteTextures(1, &this->texture_id);
+    gl::glDeleteRenderbuffers(1, &this->render_buffer_object_id);
 }
 
 uint FrameBuffer::frame_texture() {
-    assert_thread(this->render_thread_id.value());
-    auto& gl_data = this->gl_data.value();
-    return gl_data.texture_id;
+    return this->texture_id;
 }
 
 void FrameBuffer::rescale(
     size_t width,
     size_t height
 ) {
-    this->maybe_initialize();
-
     if (this->current_height == height && this->current_width == width) {
         return;
     }
 
-    auto& gl_data = this->gl_data.value();
-
     gl::glViewport(0, 0, width, height);
 
-    gl::glBindTexture(gl::GL_TEXTURE_2D, gl_data.texture_id);
+    gl::glBindTexture(gl::GL_TEXTURE_2D, this->texture_id);
     gl::glTexImage2D(
         gl::GL_TEXTURE_2D,
         0,
@@ -157,14 +125,11 @@ void FrameBuffer::rescale(
         gl::GL_FRAMEBUFFER,
         gl::GL_COLOR_ATTACHMENT0,
         gl::GL_TEXTURE_2D,
-        gl_data.texture_id,
+        this->texture_id,
         0
     );
 
-    gl::glBindRenderbuffer(
-        gl::GL_RENDERBUFFER,
-        gl_data.render_buffer_object_id
-    );
+    gl::glBindRenderbuffer(gl::GL_RENDERBUFFER, this->render_buffer_object_id);
     gl::glRenderbufferStorage(
         gl::GL_RENDERBUFFER,
         gl::GL_DEPTH24_STENCIL8,
@@ -175,7 +140,7 @@ void FrameBuffer::rescale(
         gl::GL_FRAMEBUFFER,
         gl::GL_DEPTH_STENCIL_ATTACHMENT,
         gl::GL_RENDERBUFFER,
-        gl_data.render_buffer_object_id
+        this->render_buffer_object_id
     );
 
     this->current_height = height;
@@ -183,16 +148,11 @@ void FrameBuffer::rescale(
 }
 
 void FrameBuffer::bind() {
-    this->maybe_initialize();
-
-    auto& gl_data = this->gl_data.value();
-
-    gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, gl_data.frame_buffer_object_id);
+    gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, this->frame_buffer_object_id);
     gl::glViewport(0, 0, this->width(), this->height());
 }
 
 void FrameBuffer::unbind() {
-    assert_thread(this->render_thread_id.value());
     gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, 0);
 }
 
@@ -209,4 +169,4 @@ size_t FrameBuffer::height() const {
     return this->current_height;
 }
 
-}  // namespace slamd
+}  // namespace slamdw

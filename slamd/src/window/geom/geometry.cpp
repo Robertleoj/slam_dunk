@@ -1,6 +1,6 @@
-#include <slamd/geom/geometry.hpp>
+#include <slamd_window/geom/geometry.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 std::optional<gmath::AABB> Geometry::bounds() {

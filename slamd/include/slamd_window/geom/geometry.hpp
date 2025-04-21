@@ -1,9 +1,9 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <optional>
-#include <slamd/gmath/aabb.hpp>
+#include <slamd_window/gmath/aabb.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 class Geometry {

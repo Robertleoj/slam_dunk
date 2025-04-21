@@ -1,15 +1,15 @@
 #pragma once
-#include <slamd/arcball.hpp>
-#include <slamd/camera.hpp>
-#include <slamd/frame_buffer.hpp>
-#include <slamd/frame_timer.hpp>
-#include <slamd/geom/arcball_indicator.hpp>
-#include <slamd/geom/xy_grid.hpp>
-#include <slamd/tree/tree.hpp>
-#include <slamd/view/view.hpp>
+#include <slamd_window/arcball.hpp>
+#include <slamd_window/camera.hpp>
+#include <slamd_window/frame_buffer.hpp>
+#include <slamd_window/frame_timer.hpp>
+#include <slamd_window/geom/arcball_indicator.hpp>
+#include <slamd_window/geom/xy_grid.hpp>
+#include <slamd_window/tree/tree.hpp>
+#include <slamd_window/view/view.hpp>
 #include <thread>
 
-namespace slamd {
+namespace slamdw {
 class SceneView : public View {
    public:
     std::shared_ptr<Scene> scene;
@@ -34,4 +34,4 @@ class SceneView : public View {
     void render_to_frame_buffer();
 };
 
-}  // namespace slamd
+}  // namespace slamdw

@@ -4,7 +4,7 @@
 #pragma once
 #include <string>
 
-namespace slamd {
+namespace slamdw {
 namespace shader_source {
 
 namespace arcball_indicator {
@@ -239,5 +239,5 @@ void main() {
  )";
 }  // namespace xy_grid
 
-}  // namespace shaders
-}  // namespace slamd
+}  // namespace shader_source
+}  // namespace slamdw

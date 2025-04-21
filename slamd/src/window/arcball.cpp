@@ -4,10 +4,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <numbers>
-#include <slamd/arcball.hpp>
-#include <slamd/gmath/transforms.hpp>
+#include <slamd_window/arcball.hpp>
+#include <slamd_window/gmath/transforms.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 Arcball::Arcball()
     : theta(Arcball::default_theta),

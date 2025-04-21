@@ -109,19 +109,7 @@ void Visualizer::server_job(
 
     accept_loop();
 
-    // // Simulate update loop in a thread
-    // std::thread update_thread([&]() {
-    //     while (true) {
-    //         std::string update = "state_update_" + std::to_string(rand() %
-    //         100); for (auto& client : clients) {
-    //             client->send_update(update);
-    //         }
-    //         std::this_thread::sleep_for(std::chrono::seconds(1));
-    //     }
-    // });
-
     io.run();
-    // update_thread.join();
 }
 
 Visualizer::~Visualizer() {

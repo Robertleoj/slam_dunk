@@ -1,9 +1,9 @@
 #pragma once
-#include <slamd/data/mesh.hpp>
-#include <slamd/geom/geometry.hpp>
-#include <slamd/geom/mono_instanced.hpp>
+#include <slamd_window/data/mesh.hpp>
+#include <slamd_window/geom/geometry.hpp>
+#include <slamd_window/geom/mono_instanced.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 class Circles2D : public Geometry {

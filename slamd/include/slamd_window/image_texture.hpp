@@ -1,9 +1,9 @@
 #pragma once
 
 #include <glbinding/gl/gl.h>
-#include <slamd/data/image.hpp>
+#include <slamd_window/data/image.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace graphics {
 
 class ImageTexture {

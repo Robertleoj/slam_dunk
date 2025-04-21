@@ -1,8 +1,8 @@
 #include <glm/glm.hpp>
-#include <slamd/geom/camera_frustum.hpp>
-#include <slamd/gmath/transforms.hpp>
+#include <slamd_window/geom/camera_frustum.hpp>
+#include <slamd_window/gmath/transforms.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 CameraFrustum::CameraFrustum(
@@ -156,4 +156,4 @@ CameraFrustumPtr camera_frustum(
 }
 
 }  // namespace geom
-}  // namespace slamd
+}  // namespace slamdw

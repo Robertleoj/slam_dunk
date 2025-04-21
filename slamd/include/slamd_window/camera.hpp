@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 class Camera {
    public:
@@ -14,4 +14,4 @@ class Camera {
     double near_plane;
     double far_plane;
 };
-}  // namespace slamd
+}  // namespace slamdw

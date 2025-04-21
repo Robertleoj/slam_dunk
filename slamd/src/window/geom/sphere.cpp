@@ -1,11 +1,11 @@
 #include <glm/glm.hpp>
 #include <numbers>
 #include <ranges>
-#include <slamd/geom/sphere.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_window/geom/sphere.hpp>
+#include <slamd_window/geom/utils.hpp>
 #include <vector>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 Mesh make_sphere_mesh(

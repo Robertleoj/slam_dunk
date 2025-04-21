@@ -1,6 +1,6 @@
-#include <slamd/frame_timer.hpp>
+#include <slamd_window/frame_timer.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 FrameTimer::FrameTimer()
     : last_frame(std::chrono::high_resolution_clock::now()) {}

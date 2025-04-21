@@ -1,8 +1,8 @@
-#include <slamd/data/mesh.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_window/data/mesh.hpp>
+#include <slamd_window/geom/utils.hpp>
 #include <stdexcept>
 
-namespace slamd {
+namespace slamdw {
 namespace data {
 
 MeshData::MeshData() = default;

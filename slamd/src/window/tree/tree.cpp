@@ -1,8 +1,8 @@
 #include <spdlog/spdlog.h>
-#include <slamd/gmath/transforms.hpp>
-#include <slamd/tree/tree.hpp>
+#include <slamd_window/gmath/transforms.hpp>
+#include <slamd_window/tree/tree.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 namespace _tree {
 

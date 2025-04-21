@@ -1,14 +1,13 @@
 #pragma once
 
 #include <memory>
-#include <slamd/camera_2d.hpp>
-#include <slamd/frame_buffer.hpp>
-#include <slamd/frame_timer.hpp>
-#include <slamd/tree/tree.hpp>
-#include <slamd/view/view.hpp>
+#include <slamd_window/camera_2d.hpp>
+#include <slamd_window/frame_buffer.hpp>
+#include <slamd_window/frame_timer.hpp>
+#include <slamd_window/tree/tree.hpp>
+#include <slamd_window/view/view.hpp>
 
-namespace slamd {
-
+namespace slamdw {
 class CanvasView : public View {
    public:
     std::shared_ptr<Canvas> canvas;
@@ -34,4 +33,4 @@ class CanvasView : public View {
     glm::vec2 get_normalized_mouse_pos();
 };
 
-}  // namespace slamd
+}  // namespace slamdw

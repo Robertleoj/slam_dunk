@@ -2,7 +2,7 @@
 #include <optional>
 #include <thread>
 
-namespace slamd {
+namespace slamdw {
 
 void assert_thread(std::thread::id thread_id);
 

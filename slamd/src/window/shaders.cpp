@@ -4,11 +4,11 @@
 #include <format>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <slamd/io.hpp>
-#include <slamd/shaders.hpp>
+#include <slamd_window/io.hpp>
+#include <slamd_window/shaders.hpp>
 #include <stdexcept>
 
-namespace slamd {
+namespace slamdw {
 
 const std::size_t info_buffer_size = 512;
 
@@ -221,4 +221,4 @@ int ShaderProgram::get_uniform_location(
     return gl::glGetUniformLocation(id, name.c_str());
 }
 
-}  // namespace slamd
+}  // namespace slamdw

@@ -1,9 +1,9 @@
 #include <iostream>
-#include <slamd/tree/tree_path.hpp>
+#include <slamd_window/tree/tree_path.hpp>
 #include <sstream>
 #include <stdexcept>
 
-namespace slamd {
+namespace slamdw {
 namespace _tree {
 
 std::vector<std::string> split_path(

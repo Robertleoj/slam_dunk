@@ -1,10 +1,10 @@
 
 #include <imgui.h>
 #include <spdlog/spdlog.h>
-#include <slamd/gmath/rect2d.hpp>
-#include <slamd/view/canvas_view.hpp>
+#include <slamd_window/gmath/rect2d.hpp>
+#include <slamd_window/view/canvas_view.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 CanvasView::CanvasView(
     std::shared_ptr<Canvas> canvas

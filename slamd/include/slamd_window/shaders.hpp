@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace slamd {
+namespace slamdw {
 
 void ensure_shader_compiled(uint shader_id);
 

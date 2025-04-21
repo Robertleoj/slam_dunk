@@ -3,7 +3,7 @@
 
 namespace fs = std::filesystem;
 
-namespace slamd {
+namespace slamdw {
 
 inline fs::path repo_root() {
     return fs::path(__FILE__)  // this file

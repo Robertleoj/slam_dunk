@@ -2,23 +2,15 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <spdlog/spdlog.h>
-#include <slamd/render_thread_job_queue.hpp>
-#include <slamd/window.hpp>
+#include <slamd_window/window.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 Window::Window(
-    std::string name,
-    size_t height,
-    size_t width
+    std::string name
 )
     : name(name),
-      loaded_layout(false) {
-    this->render_thread =
-        std::jthread([this, height, width](std::stop_token st) {
-            this->render_job(st, height, width);
-        });
-}
+      loaded_layout(false) {}
 
 fs::path Window::layout_path() {
     return fs::current_path() / std::format(".{}.ini", this->name);
@@ -32,34 +24,11 @@ void framebuffer_size_callback(
     gl::glViewport(0, 0, width, height);
 }
 
-void Window::add_scene(
-    std::string name,
-    std::shared_ptr<Scene> scene
-) {
-    std::scoped_lock l(this->view_map_mutex);
-
-    this->view_map.emplace(name, std::make_shared<SceneView>(scene));
-}
-
-void Window::add_canvas(
-    std::string name,
-    std::shared_ptr<Canvas> canvas
-) {
-    std::scoped_lock l(this->view_map_mutex);
-
-    this->view_map.emplace(name, std::make_shared<CanvasView>(canvas));
-}
-
-void Window::render_job(
-    std::stop_token& stop_token,
+void Window::run(
     size_t height,
     size_t width
 ) {
-    RenderQueueManager::ensure_current_thread_queue();
-
-    auto render_queue = RenderQueueManager::get_current_thread_queue().value();
-
-    this->window = slamd::glutils::make_window("Slam Dunk", width, height);
+    this->window = glutils::make_window("Slam Dunk", width, height);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     IMGUI_CHECKVERSION();
@@ -70,16 +39,14 @@ void Window::render_job(
     io.ConfigWindowsMoveFromTitleBarOnly = true;
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 130");
+    ImGui_ImplOpenGL3_Init("#version 330");
 
     if (fs::exists(this->layout_path())) {
         ImGui::LoadIniSettingsFromDisk(this->layout_path().string().c_str());
         this->loaded_layout = true;
     }
 
-    while (!glfwWindowShouldClose(window) && !stop_token.stop_requested()) {
-        render_queue->execute_all();
-
+    while (!glfwWindowShouldClose(window)) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -126,14 +93,6 @@ void Window::render_job(
     glfwTerminate();
 }
 
-void Window::wait_for_close() {
-    if (this->render_thread.joinable()) {
-        this->render_thread.join();
-    }
-}
+Window::~Window() {}
 
-Window::~Window() {
-    this->render_thread.request_stop();
-}
-
-}  // namespace slamd
+}  // namespace slamdw

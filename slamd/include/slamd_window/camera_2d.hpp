@@ -1,9 +1,9 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <slamd/gmath/rect2d.hpp>
+#include <slamd_window/gmath/rect2d.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 class Camera2D {
    public:

@@ -1,7 +1,7 @@
 #include <glm/gtc/matrix_transform.hpp>
-#include <slamd/camera.hpp>
+#include <slamd_window/camera.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 Camera::Camera(
     double fov,
@@ -16,8 +16,11 @@ glm::mat4 Camera::get_projection_matrix(
     double aspect_ratio
 ) const {
     return glm::perspective(
-        glm::radians(this->fov), aspect_ratio, near_plane, far_plane
+        glm::radians(this->fov),
+        aspect_ratio,
+        near_plane,
+        far_plane
     );
 }
 
-}  // namespace slamd
+}  // namespace slamdw

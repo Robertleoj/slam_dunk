@@ -4,7 +4,7 @@
 #include <optional>
 #include <vector>
 
-namespace slamd {
+namespace slamdw {
 namespace data {
 
 class MeshData {

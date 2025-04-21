@@ -1,11 +1,11 @@
 #pragma once
 
 #include <memory>
-#include <slamd/geom/geometry.hpp>
-#include <slamd/shaders.hpp>
+#include <slamd_window/geom/geometry.hpp>
+#include <slamd_window/shaders.hpp>
 #include <thread>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 /**
@@ -28,7 +28,7 @@ class PointCloud : public Geometry {
    private:
     // SimpleMesh mesh;
 
-    void maybe_initialize();
+    void initialize();
     std::tuple<size_t, uint, uint> initialize_sphere_mesh();
     uint initialize_pos_buffer();
     uint initialize_radii_buffer();
@@ -36,19 +36,14 @@ class PointCloud : public Geometry {
     void handle_updates();
 
    private:
-    struct GLData {
-        ShaderProgram shader;
-        uint vao_id;
-        uint mesh_vbo_id;
-        uint mesh_eab_id;
-        uint pos_vbo_id;
-        uint radii_vbo_id;
-        uint colors_vbo_id;
-        size_t ball_vertex_count;
-    };
-
-    std::optional<GLData> gl_data;
-    std::optional<std::thread::id> render_thread_id;
+    ShaderProgram shader;
+    uint vao_id = 0;
+    uint mesh_vbo_id = 0;
+    uint mesh_eab_id = 0;
+    uint pos_vbo_id = 0;
+    uint radii_vbo_id = 0;
+    uint colors_vbo_id = 0;
+    size_t ball_vertex_count;
 
     std::vector<glm::vec3> positions;
     bool pending_pos_update;
@@ -96,4 +91,4 @@ PointCloudPtr point_cloud(
 }
 
 }  // namespace geom
-}  // namespace slamd
+}  // namespace slamdw

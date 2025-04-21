@@ -1,11 +1,11 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <slamd/geom/geometry.hpp>
-#include <slamd/gmath/aabb.hpp>
-#include <slamd/tree/node.hpp>
-#include <slamd/tree/tree_path.hpp>
+#include <slamd_window/geom/geometry.hpp>
+#include <slamd_window/gmath/aabb.hpp>
+#include <slamd_window/tree/node.hpp>
+#include <slamd_window/tree/tree_path.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _tree {
 
 class Tree {
@@ -42,7 +42,6 @@ class Tree {
     std::optional<gmath::AABB>
 
     bounds_recursive(const Node* node, const glm::mat4& prev_transform);
-
 };
 
 }  // namespace _tree
@@ -75,4 +74,4 @@ class Canvas : public _tree::Tree {
 
 std::shared_ptr<Canvas> canvas();
 
-}  // namespace slamd
+}  // namespace slamdw

@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-namespace slamd {
+namespace slamdw {
 
 class Connection : public std::enable_shared_from_this<Connection> {
    public:

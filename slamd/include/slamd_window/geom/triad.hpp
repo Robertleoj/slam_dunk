@@ -1,10 +1,10 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <slamd/geom/arrows.hpp>
-#include <slamd/geom/geometry.hpp>
+#include <slamd_window/geom/arrows.hpp>
+#include <slamd_window/geom/geometry.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 class Triad : public Geometry {

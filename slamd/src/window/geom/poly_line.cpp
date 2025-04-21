@@ -1,9 +1,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <numbers>
-#include <slamd/geom/poly_line.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_window/geom/poly_line.hpp>
+#include <slamd_window/geom/utils.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 Mesh make_poly_line_mesh(

@@ -1,7 +1,7 @@
-#include <slamd/geom/poly_line_2d.hpp>
+#include <slamd_window/geom/poly_line_2d.hpp>
 #include <stdexcept>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 Mesh PolyLine2D::make_mesh(
@@ -106,4 +106,4 @@ PolyLinePtr poly_line(
 }
 
 }  // namespace geom2d
-}  // namespace slamd
+}  // namespace slamdw

@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-namespace slamd {
+namespace slamdw {
 namespace glutils {
 
 GLFWwindow*

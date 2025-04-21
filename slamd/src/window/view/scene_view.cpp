@@ -1,11 +1,10 @@
 #include <imgui.h>
 #include <spdlog/spdlog.h>
 #include <numbers>
-#include <slamd/gmath/angle.hpp>
-#include <slamd/render_thread_job_queue.hpp>
-#include <slamd/view/scene_view.hpp>
+#include <slamd_window/gmath/angle.hpp>
+#include <slamd_window/view/scene_view.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 glm::vec3 make_background_color(
     const glm::mat4& view
@@ -30,8 +29,6 @@ SceneView::SceneView(
 }
 
 void SceneView::render_to_imgui() {
-    RenderQueueManager::ensure_current_thread_queue();
-
     ImVec2 availSize = ImGui::GetContentRegionAvail();
     int width = static_cast<int>(availSize.x);
     int height = static_cast<int>(availSize.y);

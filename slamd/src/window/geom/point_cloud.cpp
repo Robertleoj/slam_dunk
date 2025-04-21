@@ -2,13 +2,13 @@
 #include <glbinding/glbinding.h>
 #include <format>
 #include <ranges>
-#include <slamd/assert.hpp>
-#include <slamd/constants.hpp>
-#include <slamd/gen/shader_sources.hpp>
-#include <slamd/geom/point_cloud.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_window/assert.hpp>
+#include <slamd_window/constants.hpp>
+#include <slamd_window/gen/shader_sources.hpp>
+#include <slamd_window/geom/point_cloud.hpp>
+#include <slamd_window/geom/utils.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 PointCloud::PointCloud(
@@ -21,7 +21,11 @@ PointCloud::PointCloud(
       colors(colors),
       pending_colors_update(false),
       radii(radii),
-      pending_radii_update(false) {
+      pending_radii_update(false),
+      shader(
+          shader_source::point_cloud::vert,
+          shader_source::point_cloud::frag
+      ) {
     if (!((positions.size() == colors.size()) && (colors.size() == radii.size())
         )) {
         throw std::invalid_argument(
@@ -34,6 +38,7 @@ PointCloud::PointCloud(
             )
         );
     }
+    this->initialize();
 }
 // : mesh(PointCloud::make_mesh(positions, colors, radii)) {}
 
@@ -191,39 +196,18 @@ uint PointCloud::initialize_color_buffer() {
     return vbo_id;
 }
 
-void PointCloud::maybe_initialize() {
-    if (this->render_thread_id.has_value()) {
-        assert_thread(this->render_thread_id.value());
-        return;
-    }
+void PointCloud::initialize() {
+    gl::glGenVertexArrays(1, &this->vao_id);
+    gl::glBindVertexArray(this->vao_id);
 
-    this->render_thread_id = std::this_thread::get_id();
-
-    uint vao_id;
-    gl::glGenVertexArrays(1, &vao_id);
-    gl::glBindVertexArray(vao_id);
-
-    auto [num_vertices, mesh_vbo_id, mesh_eab_id] =
+    std::tie(this->ball_vertex_count, this->mesh_vbo_id, this->mesh_eab_id) =
         this->initialize_sphere_mesh();
-    uint pos_vbo_id = this->initialize_pos_buffer();
-    uint radii_vbo_id = this->initialize_radii_buffer();
-    uint colors_vbo_id = this->initialize_color_buffer();
+
+    this->pos_vbo_id = this->initialize_pos_buffer();
+    this->radii_vbo_id = this->initialize_radii_buffer();
+    this->colors_vbo_id = this->initialize_color_buffer();
 
     gl::glBindVertexArray(0);
-
-    this->gl_data.emplace(GLData(
-        ShaderProgram(
-            shader_source::point_cloud::vert,
-            shader_source::point_cloud::frag
-        ),
-        vao_id,
-        mesh_vbo_id,
-        mesh_eab_id,
-        pos_vbo_id,
-        radii_vbo_id,
-        colors_vbo_id,
-        num_vertices
-    ));
 }
 
 void PointCloud::update_positions(
@@ -249,7 +233,7 @@ void PointCloud::update_radii(
 
 void PointCloud::handle_updates() {
     if (this->pending_pos_update) {
-        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->gl_data.value().pos_vbo_id);
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->pos_vbo_id);
         gl::glBufferData(
             gl::GL_ARRAY_BUFFER,
             this->positions.size() * sizeof(glm::vec3),
@@ -260,10 +244,7 @@ void PointCloud::handle_updates() {
     }
 
     if (this->pending_colors_update) {
-        gl::glBindBuffer(
-            gl::GL_ARRAY_BUFFER,
-            this->gl_data.value().colors_vbo_id
-        );
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->colors_vbo_id);
         gl::glBufferData(
             gl::GL_ARRAY_BUFFER,
             this->colors.size() * sizeof(glm::vec3),
@@ -274,10 +255,7 @@ void PointCloud::handle_updates() {
     }
 
     if (this->pending_radii_update) {
-        gl::glBindBuffer(
-            gl::GL_ARRAY_BUFFER,
-            this->gl_data.value().radii_vbo_id
-        );
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->radii_vbo_id);
         gl::glBufferData(
             gl::GL_ARRAY_BUFFER,
             this->radii.size() * sizeof(float),
@@ -293,26 +271,22 @@ void PointCloud::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    this->maybe_initialize();
-
-    auto& gl_data = this->gl_data.value();
-
-    gl::glBindVertexArray(gl_data.vao_id);
+    gl::glBindVertexArray(this->vao_id);
     this->handle_updates();
 
-    gl_data.shader.use();
+    this->shader.use();
 
-    gl_data.shader.set_uniform("u_model", model);
-    gl_data.shader.set_uniform("u_view", view);
-    gl_data.shader.set_uniform("u_projection", projection);
-    gl_data.shader.set_uniform("u_light_dir", slamd::_const::light_dir);
-    gl_data.shader.set_uniform(
+    this->shader.set_uniform("u_model", model);
+    this->shader.set_uniform("u_view", view);
+    this->shader.set_uniform("u_projection", projection);
+    this->shader.set_uniform("u_light_dir", _const::light_dir);
+    this->shader.set_uniform(
         "u_min_brightness",
         _const::default_min_brightness
     );
     gl::glDrawElementsInstanced(
         gl::GL_TRIANGLES,
-        gl_data.ball_vertex_count,
+        this->ball_vertex_count,
         gl::GL_UNSIGNED_INT,
         0,
         this->positions.size()
@@ -322,4 +296,4 @@ void PointCloud::render(
 }
 
 }  // namespace _geom
-}  // namespace slamd
+}  // namespace slamdw

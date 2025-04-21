@@ -3,18 +3,13 @@
 #include <optional>
 #include <thread>
 
-namespace slamd {
+namespace slamdw {
 
 class FrameBuffer {
    private:
-    struct GLData {
-        uint frame_buffer_object_id;
-        uint texture_id;
-        uint render_buffer_object_id;
-    };
-
-    std::optional<GLData> gl_data;
-    std::optional<std::thread::id> render_thread_id;
+    uint frame_buffer_object_id = 0;
+    uint texture_id = 0;
+    uint render_buffer_object_id = 0;
 
     size_t current_height;
     size_t current_width;
@@ -32,7 +27,7 @@ class FrameBuffer {
     size_t height() const;
 
    private:
-    void maybe_initialize();
+    void initialize();
 };
 
 }  // namespace slamd

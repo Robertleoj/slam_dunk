@@ -1,19 +1,19 @@
 #pragma once
+#include <asio.hpp>
 #include <cstddef>
 #include <filesystem>
+#include <list>
 #include <memory>
 #include <mutex>
-#include <asio.hpp>
-#include <slamd/connection.hpp>
-#include <slamd/glfw.hpp>
-#include <slamd/view/canvas_view.hpp>
-#include <slamd/view/scene_view.hpp>
+#include <slamd_window/connection.hpp>
+#include <slamd_window/glfw.hpp>
+#include <slamd_window/view/canvas_view.hpp>
+#include <slamd_window/view/scene_view.hpp>
 #include <stop_token>
 #include <thread>
-#include <list>
 #include <vector>
 
-namespace slamd {
+namespace slamdw {
 
 namespace fs = std::filesystem;
 
@@ -37,4 +37,4 @@ class Visualizer {
     std::list<Connection> open_connections;
 };
 
-}  // namespace slamd
+}  // namespace slamdw

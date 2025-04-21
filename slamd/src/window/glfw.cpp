@@ -1,10 +1,10 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <spdlog/spdlog.h>
-#include <slamd/glfw.hpp>
+#include <slamd_window/glfw.hpp>
 #include <stdexcept>
 
-namespace slamd {
+namespace slamdw {
 namespace glutils {
 
 GLFWwindow* make_window(

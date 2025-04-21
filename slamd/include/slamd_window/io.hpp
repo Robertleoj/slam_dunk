@@ -4,7 +4,7 @@
 
 namespace fs = std::filesystem;
 
-namespace slamd {
+namespace slamdw {
 
 std::string read_file_text(const fs::path& path);
 

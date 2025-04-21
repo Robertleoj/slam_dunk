@@ -1,6 +1,6 @@
-#include <slamd/image_texture.hpp>
+#include <slamd_window/image_texture.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace graphics {
 
 ImageTexture::ImageTexture(
@@ -15,11 +15,15 @@ ImageTexture::ImageTexture(
     // set the texture wrapping/filtering options (on the currently bound
     // texture object)
     gl::glTexParameteri(
-        gl::GL_TEXTURE_2D, gl::GL_TEXTURE_WRAP_S, gl::GL_REPEAT
+        gl::GL_TEXTURE_2D,
+        gl::GL_TEXTURE_WRAP_S,
+        gl::GL_REPEAT
     );
 
     gl::glTexParameteri(
-        gl::GL_TEXTURE_2D, gl::GL_TEXTURE_WRAP_T, gl::GL_REPEAT
+        gl::GL_TEXTURE_2D,
+        gl::GL_TEXTURE_WRAP_T,
+        gl::GL_REPEAT
     );
 
     gl::glTexParameteri(
@@ -29,7 +33,9 @@ ImageTexture::ImageTexture(
     );
 
     gl::glTexParameteri(
-        gl::GL_TEXTURE_2D, gl::GL_TEXTURE_MAG_FILTER, gl::GL_LINEAR
+        gl::GL_TEXTURE_2D,
+        gl::GL_TEXTURE_MAG_FILTER,
+        gl::GL_LINEAR
     );
 
     // load and generate the texture
@@ -53,4 +59,4 @@ void ImageTexture::bind() {
 
 }  // namespace graphics
 
-}  // namespace slamd
+}  // namespace slamdw

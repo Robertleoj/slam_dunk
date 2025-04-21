@@ -1,39 +1,30 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <ranges>
-#include <slamd/assert.hpp>
-#include <slamd/constants.hpp>
-#include <slamd/gen/shader_sources.hpp>
-#include <slamd/geom/mesh.hpp>
-#include <slamd/geom/utils.hpp>
-#include <slamd/paths.hpp>
+#include <slamd_window/assert.hpp>
+#include <slamd_window/constants.hpp>
+#include <slamd_window/gen/shader_sources.hpp>
+#include <slamd_window/geom/mesh.hpp>
+#include <slamd_window/geom/utils.hpp>
+#include <slamd_window/paths.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 thread_local std::optional<ShaderProgram> Mesh::shader;
 
-void Mesh::maybe_initialize() {
-    if (this->render_thread_id.has_value()) {
-        assert_thread(this->render_thread_id.value());
-        return;
-    }
-
-    this->render_thread_id = std::this_thread::get_id();
-
+void Mesh::initialize() {
     if (!Mesh::shader.has_value()) {
         shader.emplace(shader_source::mesh::vert, shader_source::mesh::frag);
     }
 
-    GLData gl_data;
-
     // create the vertex array object
-    gl::glGenVertexArrays(1, &gl_data.vao_id);
-    gl::glBindVertexArray(gl_data.vao_id);
+    gl::glGenVertexArrays(1, &this->vao_id);
+    gl::glBindVertexArray(this->vao_id);
 
     // positions
-    gl::glGenBuffers(1, &gl_data.pos_vbo_id);
-    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.pos_vbo_id);
+    gl::glGenBuffers(1, &this->pos_vbo_id);
+    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->pos_vbo_id);
     gl::glBufferData(
         gl::GL_ARRAY_BUFFER,
         this->mesh_data.positions.size() * sizeof(glm::vec3),
@@ -52,8 +43,8 @@ void Mesh::maybe_initialize() {
     gl::glEnableVertexAttribArray(0);
 
     // colors
-    gl::glGenBuffers(1, &gl_data.color_vbo_id);
-    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.color_vbo_id);
+    gl::glGenBuffers(1, &this->color_vbo_id);
+    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->color_vbo_id);
     gl::glBufferData(
         gl::GL_ARRAY_BUFFER,
         this->mesh_data.colors.size() * sizeof(glm::vec3),
@@ -72,8 +63,8 @@ void Mesh::maybe_initialize() {
     gl::glEnableVertexAttribArray(1);
 
     // /normals
-    gl::glGenBuffers(1, &gl_data.normal_vbo_id);
-    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.normal_vbo_id);
+    gl::glGenBuffers(1, &this->normal_vbo_id);
+    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->normal_vbo_id);
     gl::glBufferData(
         gl::GL_ARRAY_BUFFER,
         this->mesh_data.normals.size() * sizeof(glm::vec3),
@@ -92,8 +83,8 @@ void Mesh::maybe_initialize() {
     gl::glEnableVertexAttribArray(2);
 
     // make the element array buffer
-    gl::glGenBuffers(1, &gl_data.eab_id);
-    gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, gl_data.eab_id);
+    gl::glGenBuffers(1, &this->eab_id);
+    gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, this->eab_id);
 
     gl::glBufferData(
         gl::GL_ELEMENT_ARRAY_BUFFER,
@@ -104,8 +95,6 @@ void Mesh::maybe_initialize() {
 
     // unbind the vao
     gl::glBindVertexArray(0);
-
-    this->gl_data.emplace(gl_data);
 }
 
 void Mesh::update_positions(
@@ -147,9 +136,8 @@ void Mesh::update_normals(
 };
 
 void Mesh::handle_updates() {
-    auto& gl_data = this->gl_data.value();
     if (this->pos_update_pending) {
-        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.pos_vbo_id);
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->pos_vbo_id);
         gl::glBufferData(
             gl::GL_ARRAY_BUFFER,
             this->mesh_data.positions.size() * sizeof(glm::vec3),
@@ -160,7 +148,7 @@ void Mesh::handle_updates() {
     }
 
     if (this->color_update_pending) {
-        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.color_vbo_id);
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->color_vbo_id);
         gl::glBufferData(
             gl::GL_ARRAY_BUFFER,
             this->mesh_data.colors.size() * sizeof(glm::vec3),
@@ -171,7 +159,7 @@ void Mesh::handle_updates() {
     }
 
     if (this->normal_update_pending) {
-        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, gl_data.normal_vbo_id);
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->normal_vbo_id);
         gl::glBufferData(
             gl::GL_ARRAY_BUFFER,
             this->mesh_data.normals.size() * sizeof(glm::vec3),
@@ -187,24 +175,26 @@ Mesh::Mesh(
     float min_brightness
 )
     : mesh_data(mesh_data),
-      min_brightness(min_brightness) {}
+      min_brightness(min_brightness) {
+        this->initialize();
+      }
 
 Mesh::Mesh(
     data::MeshData&& mesh_data,
     float min_brightness
 )
     : mesh_data(std::move(mesh_data)),
-      min_brightness(min_brightness) {}
+      min_brightness(min_brightness) {
+        this->initialize();
+      }
 
 void Mesh::render(
     glm::mat4 model,
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    this->maybe_initialize();
-    auto& gl_data = this->gl_data.value();
 
-    gl::glBindVertexArray(gl_data.vao_id);
+    gl::glBindVertexArray(this->vao_id);
 
     this->handle_updates();
 
@@ -218,7 +208,7 @@ void Mesh::render(
     shader.set_uniform("model", model);
     shader.set_uniform("view", view);
     shader.set_uniform("projection", projection);
-    shader.set_uniform("light_dir", slamd::_const::light_dir);
+    shader.set_uniform("light_dir", _const::light_dir);
     shader.set_uniform("min_brightness", this->min_brightness);
     gl::glDrawElements(
         gl::GL_TRIANGLES,

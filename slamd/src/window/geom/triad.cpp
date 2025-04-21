@@ -1,7 +1,7 @@
-#include <slamd/geom/triad.hpp>
-#include <slamd/gmath/transforms.hpp>
+#include <slamd_window/geom/triad.hpp>
+#include <slamd_window/gmath/transforms.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 Arrows make_arrows(

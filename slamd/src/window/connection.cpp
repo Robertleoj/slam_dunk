@@ -1,8 +1,8 @@
 #include <spdlog/spdlog.h>
 #include <iostream>
-#include <slamd/connection.hpp>
+#include <slamd_window/connection.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 Connection::Connection(
     asio::ip::tcp::socket socket

@@ -1,8 +1,8 @@
 #include <numbers>
 #include <ranges>
-#include <slamd/geom/points_2d.hpp>
+#include <slamd_window/geom/points_2d.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 Mesh make_mesh(

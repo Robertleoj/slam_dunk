@@ -4,10 +4,10 @@
 #include <memory>
 #include <mutex>
 #include <optional>
-#include <slamd/geom/geometry.hpp>
+#include <slamd_window/geom/geometry.hpp>
 #include <string>
 
-namespace slamd {
+namespace slamdw {
 namespace _tree {
 
 class Node {

@@ -1,11 +1,11 @@
 #pragma once
 
 #include <chrono>
-#include <slamd/geom/geometry.hpp>
-#include <slamd/shaders.hpp>
+#include <slamd_window/geom/geometry.hpp>
+#include <slamd_window/shaders.hpp>
 #include <thread>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 class ArcballIndicator : public Geometry {
    public:
@@ -18,16 +18,12 @@ class ArcballIndicator : public Geometry {
    private:
     static glm::mat4 get_scale_mat(float scale);
     float get_alpha();
-    void maybe_initialize();
+    void initialize();
 
    private:
-    struct GLData {
-        uint vao_id;
-        uint vbo_id;
-        ShaderProgram shader;
-    };
-    std::optional<GLData> gl_state;
-    std::optional<std::thread::id> render_thread_id;
+    uint vao_id = 0;
+    uint vbo_id = 0;
+    ShaderProgram shader;
 
     uint vertex_count;
     float arcball_zoom;

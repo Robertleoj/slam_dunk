@@ -2,12 +2,12 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <spdlog/spdlog.h>
-#include <set>
 #include <asio.hpp>
-#include <slamd/render_thread_job_queue.hpp>
-#include <slamd/visualizer.hpp>
+#include <set>
+#include <slamd_window/render_thread_job_queue.hpp>
+#include <slamd_window/visualizer.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 Visualizer::Visualizer(
     std::string name
@@ -36,8 +36,6 @@ void Visualizer::add_canvas(
     this->view_map.emplace(name, std::make_shared<CanvasView>(canvas));
 }
 
-
-
 void Visualizer::server_job(
     std::stop_token& stop_token
 ) {
@@ -65,8 +63,8 @@ void Visualizer::server_job(
     // // Simulate update loop in a thread
     // std::thread update_thread([&]() {
     //     while (true) {
-    //         std::string update = "state_update_" + std::to_string(rand() % 100);
-    //         for (auto& client : clients) {
+    //         std::string update = "state_update_" + std::to_string(rand() %
+    //         100); for (auto& client : clients) {
     //             client->send_update(update);
     //         }
     //         std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -81,4 +79,4 @@ Visualizer::~Visualizer() {
     this->server_thread.request_stop();
 }
 
-}  // namespace slamd
+}  // namespace slamdw

@@ -3,32 +3,29 @@
 #include <filesystem>
 #include <memory>
 #include <mutex>
-#include <slamd/glfw.hpp>
-#include <slamd/view/canvas_view.hpp>
-#include <slamd/view/scene_view.hpp>
+#include <slamd_window/glfw.hpp>
+#include <slamd_window/view/canvas_view.hpp>
+#include <slamd_window/view/scene_view.hpp>
 #include <stop_token>
 #include <thread>
 #include <vector>
 
-namespace slamd {
+namespace slamdw {
 
 namespace fs = std::filesystem;
 
 class Window {
    public:
-    Window(std::string name, size_t height, size_t width);
+    Window(std::string name);
     ~Window();
-    void wait_for_close();
-    void add_scene(std::string name, std::shared_ptr<Scene> scene);
-    void add_canvas(std::string name, std::shared_ptr<Canvas> canvas);
+
+    void run(size_t height = 1000, size_t width = 1000);
 
    private:
-    void render_job(std::stop_token& stop_token, size_t height, size_t width);
     fs::path layout_path();
 
    private:
     std::string name;
-    std::jthread render_thread;
     GLFWwindow* window = nullptr;
 
     std::mutex view_map_mutex;
@@ -37,4 +34,4 @@ class Window {
     bool loaded_layout;
 };
 
-}  // namespace slamd
+}  // namespace slamdw

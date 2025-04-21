@@ -1,8 +1,8 @@
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include <slamd/camera_2d.hpp>
+#include <slamd_window/camera_2d.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 Camera2D::Camera2D(
     const gmath::Rect2D& viewport

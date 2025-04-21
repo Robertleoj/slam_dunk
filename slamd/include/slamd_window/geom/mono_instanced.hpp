@@ -1,12 +1,12 @@
 #pragma once
 
 #include <memory>
-#include <slamd/data/mesh.hpp>
-#include <slamd/geom/geometry.hpp>
-#include <slamd/shaders.hpp>
+#include <slamd_window/data/mesh.hpp>
+#include <slamd_window/geom/geometry.hpp>
+#include <slamd_window/shaders.hpp>
 #include <thread>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 class MonoInstanced : public Geometry {
@@ -25,7 +25,7 @@ class MonoInstanced : public Geometry {
     void update_colors(const std::vector<glm::vec3>& colors);
 
    private:
-    void maybe_initialize();
+    void initialize();
     std::tuple<uint, uint> initialize_mesh();
     uint initialize_trans_buffer();
     uint initialize_color_buffer();
@@ -36,17 +36,12 @@ class MonoInstanced : public Geometry {
     std::vector<glm::vec3> normals;
     std::vector<uint32_t> triangle_indices;
 
-    struct GLData {
-        ShaderProgram shader;
-        uint vao_id;
-        uint mesh_vbo_id;
-        uint mesh_eab_id;
-        uint trans_vbo_id;
-        uint colors_vbo_id;
-    };
-
-    std::optional<GLData> gl_data = std::nullopt;
-    std::optional<std::thread::id> render_thread_id = std::nullopt;
+    ShaderProgram shader;
+    uint vao_id = 0;
+    uint mesh_vbo_id = 0;
+    uint mesh_eab_id = 0;
+    uint trans_vbo_id = 0;
+    uint colors_vbo_id = 0;
 
     std::vector<glm::mat4> transforms;
     bool pending_trans_update;

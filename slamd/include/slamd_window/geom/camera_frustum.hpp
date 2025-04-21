@@ -1,9 +1,9 @@
 #pragma once
-#include <slamd/geom/geometry.hpp>
-#include <slamd/geom/image.hpp>
-#include <slamd/geom/poly_line.hpp>
+#include <slamd_window/geom/geometry.hpp>
+#include <slamd_window/geom/image.hpp>
+#include <slamd_window/geom/poly_line.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 class CameraFrustum : public Geometry {

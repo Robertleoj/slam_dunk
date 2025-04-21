@@ -1,9 +1,9 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <slamd/gmath/angle.hpp>
+#include <slamd_window/gmath/angle.hpp>
 
-namespace slamd {
+namespace slamdw {
 
 class Arcball {
    public:

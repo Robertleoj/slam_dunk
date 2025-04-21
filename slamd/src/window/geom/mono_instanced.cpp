@@ -3,13 +3,13 @@
 #include <spdlog/spdlog.h>
 #include <format>
 #include <ranges>
-#include <slamd/assert.hpp>
-#include <slamd/constants.hpp>
-#include <slamd/gen/shader_sources.hpp>
-#include <slamd/geom/mono_instanced.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_window/assert.hpp>
+#include <slamd_window/constants.hpp>
+#include <slamd_window/gen/shader_sources.hpp>
+#include <slamd_window/geom/mono_instanced.hpp>
+#include <slamd_window/geom/utils.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 MonoInstanced::MonoInstanced(
@@ -25,7 +25,11 @@ MonoInstanced::MonoInstanced(
       transforms(transforms),
       pending_trans_update(false),
       colors(colors),
-      pending_colors_update(false) {
+      pending_colors_update(false),
+      shader(
+          shader_source::mono_instanced::vert,
+          shader_source::mono_instanced::frag
+      ) {
     if (!(vertices.size() == normals.size())) {
         throw std::invalid_argument(
             std::format(
@@ -45,6 +49,7 @@ MonoInstanced::MonoInstanced(
             )
         );
     }
+    this->initialize();
 }
 
 std::tuple<uint, uint> MonoInstanced::initialize_mesh() {
@@ -169,35 +174,15 @@ uint MonoInstanced::initialize_color_buffer() {
     return vbo_id;
 }
 
-void MonoInstanced::maybe_initialize() {
-    if (this->render_thread_id.has_value()) {
-        assert_thread(this->render_thread_id.value());
-        return;
-    }
+void MonoInstanced::initialize() {
+    gl::glGenVertexArrays(1, &this->vao_id);
+    gl::glBindVertexArray(this->vao_id);
 
-    this->render_thread_id = std::this_thread::get_id();
-
-    uint vao_id;
-    gl::glGenVertexArrays(1, &vao_id);
-    gl::glBindVertexArray(vao_id);
-
-    auto [mesh_vbo_id, mesh_eab_id] = this->initialize_mesh();
-    uint trans_vbo_id = this->initialize_trans_buffer();
-    uint colors_vbo_id = this->initialize_color_buffer();
+    std::tie(this->mesh_vbo_id, this->mesh_eab_id) = this->initialize_mesh();
+    this->trans_vbo_id = this->initialize_trans_buffer();
+    this->colors_vbo_id = this->initialize_color_buffer();
 
     gl::glBindVertexArray(0);
-
-    this->gl_data.emplace(
-        ShaderProgram(
-            shader_source::mono_instanced::vert,
-            shader_source::mono_instanced::frag
-        ),
-        vao_id,
-        mesh_vbo_id,
-        mesh_eab_id,
-        trans_vbo_id,
-        colors_vbo_id
-    );
 }
 
 void MonoInstanced::update_transforms(
@@ -216,10 +201,7 @@ void MonoInstanced::update_colors(
 
 void MonoInstanced::handle_updates() {
     if (this->pending_trans_update) {
-        gl::glBindBuffer(
-            gl::GL_ARRAY_BUFFER,
-            this->gl_data.value().trans_vbo_id
-        );
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->trans_vbo_id);
         gl::glBufferData(
             gl::GL_ARRAY_BUFFER,
             this->transforms.size() * sizeof(glm::mat4),
@@ -230,10 +212,7 @@ void MonoInstanced::handle_updates() {
     }
 
     if (this->pending_colors_update) {
-        gl::glBindBuffer(
-            gl::GL_ARRAY_BUFFER,
-            this->gl_data.value().colors_vbo_id
-        );
+        gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->colors_vbo_id);
         gl::glBufferData(
             gl::GL_ARRAY_BUFFER,
             this->colors.size() * sizeof(glm::vec3),
@@ -249,20 +228,15 @@ void MonoInstanced::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    this->maybe_initialize();
-
-    auto& gl_data = this->gl_data.value();
-
-    gl::glBindVertexArray(gl_data.vao_id);
+    gl::glBindVertexArray(this->vao_id);
     this->handle_updates();
 
-    gl_data.shader.use();
-
-    gl_data.shader.set_uniform("u_model", model);
-    gl_data.shader.set_uniform("u_view", view);
-    gl_data.shader.set_uniform("u_projection", projection);
-    gl_data.shader.set_uniform("u_light_dir", slamd::_const::light_dir);
-    gl_data.shader.set_uniform(
+    this->shader.use();
+    this->shader.set_uniform("u_model", model);
+    this->shader.set_uniform("u_view", view);
+    this->shader.set_uniform("u_projection", projection);
+    this->shader.set_uniform("u_light_dir", _const::light_dir);
+    this->shader.set_uniform(
         "u_min_brightness",
         _const::default_min_brightness
     );
@@ -279,4 +253,4 @@ void MonoInstanced::render(
 }
 
 }  // namespace _geom
-}  // namespace slamd
+}  // namespace slamdw

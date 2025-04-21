@@ -1,7 +1,7 @@
-#include <slamd/geom/arrows.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_window/geom/arrows.hpp>
+#include <slamd_window/geom/utils.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 constexpr uint segments = 12;

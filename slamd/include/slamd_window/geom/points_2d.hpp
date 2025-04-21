@@ -1,9 +1,9 @@
 #pragma once
 
-#include <slamd/geom/geometry.hpp>
-#include <slamd/geom/mesh.hpp>
+#include <slamd_window/geom/geometry.hpp>
+#include <slamd_window/geom/mesh.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 class Points2D : public Geometry {

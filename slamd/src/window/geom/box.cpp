@@ -1,8 +1,8 @@
 #include <ranges>
-#include <slamd/geom/box.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_window/geom/box.hpp>
+#include <slamd_window/geom/utils.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 // clang-format off

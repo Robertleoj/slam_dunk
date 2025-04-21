@@ -1,8 +1,8 @@
 #include <format>
 #include <fstream>
-#include <slamd/io.hpp>
+#include <slamd_window/io.hpp>
 
-namespace slamd {
+namespace slamdw {
 std::string read_file_text(
     const fs::path& path
 ) {

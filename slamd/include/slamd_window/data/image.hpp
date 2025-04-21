@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace slamd {
+namespace slamdw {
 namespace data {
 
 class Image {

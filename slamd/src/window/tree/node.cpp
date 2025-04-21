@@ -1,7 +1,7 @@
-#include <slamd/tree/node.hpp>
+#include <slamd_window/tree/node.hpp>
 #include <stdexcept>
 
-namespace slamd {
+namespace slamdw {
 namespace _tree {
 
 std::optional<std::shared_ptr<_geom::Geometry>> Node::get_object() const {

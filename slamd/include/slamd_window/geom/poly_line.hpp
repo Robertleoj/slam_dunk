@@ -1,12 +1,12 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <slamd/constants.hpp>
-#include <slamd/geom/geometry.hpp>
-#include <slamd/geom/mesh.hpp>
+#include <slamd_window/constants.hpp>
+#include <slamd_window/geom/geometry.hpp>
+#include <slamd_window/geom/mesh.hpp>
 #include <vector>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 class PolyLine : public Geometry {

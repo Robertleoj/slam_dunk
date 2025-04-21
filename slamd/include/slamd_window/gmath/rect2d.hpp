@@ -1,8 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <slamd/gmath/aabb.hpp>
+#include <slamd_window/gmath/aabb.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace gmath {
 
 class Rect2D {

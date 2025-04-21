@@ -1,14 +1,14 @@
 #pragma once
 #include <memory>
 #include <optional>
-#include <slamd/data/image.hpp>
-#include <slamd/geom/geometry.hpp>
-#include <slamd/gmath/aabb.hpp>
-#include <slamd/image_texture.hpp>
-#include <slamd/shaders.hpp>
+#include <slamd_window/data/image.hpp>
+#include <slamd_window/geom/geometry.hpp>
+#include <slamd_window/gmath/aabb.hpp>
+#include <slamd_window/image_texture.hpp>
+#include <slamd_window/shaders.hpp>
 #include <thread>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 class Image : public Geometry {

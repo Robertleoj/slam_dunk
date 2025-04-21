@@ -3,14 +3,14 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <optional>
-#include <slamd/constants.hpp>
-#include <slamd/data/mesh.hpp>
-#include <slamd/geom/geometry.hpp>
-#include <slamd/shaders.hpp>
+#include <slamd_window/constants.hpp>
+#include <slamd_window/data/mesh.hpp>
+#include <slamd_window/geom/geometry.hpp>
+#include <slamd_window/shaders.hpp>
 #include <thread>
 #include <vector>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 class Mesh : public Geometry {
@@ -36,20 +36,16 @@ class Mesh : public Geometry {
 
    private:
     void handle_updates();
-    void maybe_initialize();
+    void initialize();
 
    private:
     static thread_local std::optional<ShaderProgram> shader;
-    struct GLData {
-        uint vao_id;
-        uint pos_vbo_id;
-        uint color_vbo_id;
-        uint normal_vbo_id;
-        uint eab_id;
-    };
 
-    std::optional<GLData> gl_data;
-    std::optional<std::thread::id> render_thread_id;
+    uint vao_id = 0;
+    uint pos_vbo_id = 0;
+    uint color_vbo_id = 0;
+    uint normal_vbo_id = 0;
+    uint eab_id = 0;
 
     data::MeshData mesh_data;
     bool pos_update_pending = false;

@@ -1,7 +1,7 @@
-#include <slamd/assert.hpp>
+#include <slamd_window/assert.hpp>
 #include <stdexcept>
 
-namespace slamd {
+namespace slamdw {
 void assert_thread(
     std::thread::id thread_id
 ) {

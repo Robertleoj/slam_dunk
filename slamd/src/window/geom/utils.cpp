@@ -1,8 +1,8 @@
 #include <numbers>
 #include <ranges>
-#include <slamd/geom/utils.hpp>
+#include <slamd_window/geom/utils.hpp>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 size_t generate_sphere(

@@ -2,10 +2,10 @@
 
 #include <glm/glm.hpp>
 #include <optional>
-#include <slamd/data/mesh.hpp>
+#include <slamd_window/data/mesh.hpp>
 #include <vector>
 
-namespace slamd {
+namespace slamdw {
 namespace _geom {
 
 size_t generate_sphere(
@@ -23,4 +23,4 @@ std::vector<glm::vec3> compute_vertex_normals(
 );
 
 }  // namespace _geom
-}  // namespace slamd
+}  // namespace slamdw
