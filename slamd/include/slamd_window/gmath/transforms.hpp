@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <slamd_window/gmath/angle.hpp>
+#include <slamd_common/gmath/angle.hpp>
 
 namespace slamdw {
 namespace gmath {

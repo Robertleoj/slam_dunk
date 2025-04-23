@@ -79,7 +79,7 @@ PolyLine2D::PolyLine2D(
     float thickness
 )
     : line_mesh(PolyLine2D::make_mesh(points, color, thickness)),
-      cached_bounds(gmath::AABB::around_points(points)) {}
+      cached_bounds(slamd::gmath::AABB::around_points(points)) {}
 
 void PolyLine2D::render(
     glm::mat4 model,
@@ -89,7 +89,7 @@ void PolyLine2D::render(
     this->line_mesh.render(model, view, projection);
 }
 
-std::optional<gmath::AABB> PolyLine2D::bounds() {
+std::optional<slamd::gmath::AABB> PolyLine2D::bounds() {
     return this->cached_bounds;
 }
 

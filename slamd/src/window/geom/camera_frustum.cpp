@@ -1,6 +1,6 @@
 #include <glm/glm.hpp>
+#include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/geom/camera_frustum.hpp>
-#include <slamd_window/gmath/transforms.hpp>
 
 namespace slamdw {
 namespace _geom {
@@ -21,8 +21,8 @@ CameraFrustum::CameraFrustum(
         this->corners.bl.y - this->corners.tr.y
     );
     glm::mat4 scale_transform =
-        gmath::scale_xy(glm::vec2(image_scale, image_scale));
-    glm::mat4 translate = gmath::t3D(this->corners.tl);
+        slamd::gmath::scale_xy(glm::vec2(image_scale, image_scale));
+    glm::mat4 translate = slamd::gmath::t3D(this->corners.tl);
 
     this->cam_image.emplace(
         Image(std::move(image), true),
@@ -102,7 +102,7 @@ CameraFrustum::CameraFrustum(
         );
     }
 
-    this->scale_transform = gmath::scale_all(scale);
+    this->scale_transform = slamd::gmath::scale_all(scale);
 }
 
 void CameraFrustum::render(

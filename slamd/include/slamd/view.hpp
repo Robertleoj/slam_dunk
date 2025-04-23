@@ -1,5 +1,5 @@
 #pragma once
-#include <visualizer_generated.h>
+#include <flatb/visualizer_generated.h>
 
 namespace slamd {
 

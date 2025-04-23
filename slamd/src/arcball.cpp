@@ -5,7 +5,7 @@
 #include <glm/gtx/string_cast.hpp>
 #include <numbers>
 #include <slamd/arcball.hpp>
-#include <slamd/gmath/transforms.hpp>
+#include <slamd_common/gmath/transforms.hpp>
 
 namespace slamd {
 

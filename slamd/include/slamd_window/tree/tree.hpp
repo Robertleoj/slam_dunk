@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <slamd_common/gmath/aabb.hpp>
 #include <slamd_window/geom/geometry.hpp>
-#include <slamd_window/gmath/aabb.hpp>
 #include <slamd_window/tree/node.hpp>
 #include <slamd_window/tree/tree_path.hpp>
 
@@ -22,7 +22,7 @@ class Tree {
 
     void render(const glm::mat4& view, const glm::mat4& projection) const;
 
-    std::optional<gmath::AABB> bounds();
+    std::optional<slamd::gmath::AABB> bounds();
 
    protected:
     void
@@ -39,7 +39,7 @@ class Tree {
         const glm::mat4& projection
     ) const;
 
-    std::optional<gmath::AABB>
+    std::optional<slamd::gmath::AABB>
 
     bounds_recursive(const Node* node, const glm::mat4& prev_transform);
 };

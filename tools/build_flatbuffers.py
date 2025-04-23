@@ -12,7 +12,7 @@ FLATBUFFER_EXECUTABLE_PATH = BUILD_DIR / "flatc"
 
 SCHEMA_DIR = REPO_DIR / "flatbuffers"
 
-OUT_DIR = REPO_DIR / "slamd/flatb"
+OUT_DIR = REPO_DIR / "slamd/flatb/flatb"
 
 
 def build_flatc(force: bool = False):

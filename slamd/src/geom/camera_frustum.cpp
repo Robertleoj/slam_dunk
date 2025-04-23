@@ -1,6 +1,6 @@
 #include <glm/glm.hpp>
 #include <slamd/geom/camera_frustum.hpp>
-#include <slamd/gmath/transforms.hpp>
+#include <slamd_common/gmath/transforms.hpp>
 
 namespace slamd {
 namespace _geom {

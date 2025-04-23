@@ -3,7 +3,7 @@
 namespace slamdw {
 namespace _geom {
 
-std::optional<gmath::AABB> Geometry::bounds() {
+std::optional<slamd::gmath::AABB> Geometry::bounds() {
     return std::nullopt;
 }
 

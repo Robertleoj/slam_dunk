@@ -1,5 +1,5 @@
 #pragma once
-#include <messages_generated.h>
+#include <flatb/messages_generated.h>
 #include <cstdint>
 #include <memory>
 

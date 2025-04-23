@@ -1,5 +1,5 @@
+#include <flatb/visualizer_generated.h>
 #include <spdlog/spdlog.h>
-#include <visualizer_generated.h>
 #include <asio.hpp>
 #include <iostream>
 #include <slamd_window/window.hpp>

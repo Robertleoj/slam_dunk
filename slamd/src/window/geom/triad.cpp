@@ -1,5 +1,5 @@
+#include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/geom/triad.hpp>
-#include <slamd_window/gmath/transforms.hpp>
 
 namespace slamdw {
 namespace _geom {
@@ -22,7 +22,7 @@ Triad::Triad(
     float thickness
 )
     : arrows(make_arrows(thickness)) {
-    this->scale_transform = gmath::scale(glm::vec3(scale, scale, scale));
+    this->scale_transform = slamd::gmath::scale(glm::vec3(scale, scale, scale));
 }
 
 void Triad::render(
@@ -45,4 +45,4 @@ TriadPtr triad(
 }
 }  // namespace geom
 
-}  // namespace slamd
+}  // namespace slamdw

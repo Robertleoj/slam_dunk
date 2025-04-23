@@ -1,8 +1,8 @@
 #include <chrono>
 #include <glm/glm.hpp>
-#include <slamd/gmath/angle.hpp>
-#include <slamd/gmath/transforms.hpp>
 #include <slamd/slamd.hpp>
+#include <slamd_common/gmath/angle.hpp>
+#include <slamd_common/gmath/transforms.hpp>
 #include <thread>
 
 int main() {

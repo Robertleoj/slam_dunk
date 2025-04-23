@@ -1,4 +1,5 @@
 #pragma once
+#include <flatb/visualizer_generated.h>
 #include <glm/glm.hpp>
 #include <map>
 #include <memory>
@@ -23,6 +24,10 @@ class Node {
 
    public:
     std::optional<std::shared_ptr<_geom::Geometry>> get_object() const;
+
+    flatbuffers::Offset<slamd::flatb::Node> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    );
 
     std::optional<glm::mat4> get_transform() const;
 

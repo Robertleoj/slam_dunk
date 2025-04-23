@@ -25,6 +25,45 @@ void Node::set_object(
     this->object.emplace(object);
 }
 
+flatbuffers::Offset<slamd::flatb::Node> Node::serialize(
+    flatbuffers::FlatBufferBuilder& builder
+) {
+    std::vector<flatbuffers::Offset<slamd::flatb::ChildEntry>> children;
+
+    for (const auto& [path_comp, child] : this->children) {
+        auto path_comp_fb = builder.CreateString(path_comp);
+
+        auto serialized_child = child->serialize(builder);
+
+        children.push_back(
+            slamd::flatb::CreateChildEntry(
+                builder,
+                path_comp_fb,
+                serialized_child
+            )
+        );
+    }
+
+    auto children_fb = builder.CreateVector(children);
+
+    slamd::flatb::Mat4 * transform_ptr = nullptr;
+    auto maybe_transform = this->get_transform();
+    // if(maybe_transform.has_value()) {
+
+
+    //     slamd::flatb::Mat4 transform_fb = {maybe_transform.value()};
+
+    //     transform_fb = builder.CreateStruct(
+
+    //     )
+    // }
+
+    // slamd::flatb::CreateNode(
+    //     builder,
+    //     children_fb,
+    // )
+}
+
 void Node::set_transform(
     glm::mat4 transform
 ) {

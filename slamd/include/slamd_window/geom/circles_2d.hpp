@@ -17,7 +17,7 @@ class Circles2D : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
-    std::optional<gmath::AABB> bounds() override;
+    std::optional<slamd::gmath::AABB> bounds() override;
 
     void update_positions(const std::vector<glm::vec2>& positions);
     void update_colors(const std::vector<glm::vec3>& colors);
@@ -31,7 +31,7 @@ class Circles2D : public Geometry {
         float thickness
     );
 
-    static gmath::AABB make_bounds(
+    static slamd::gmath::AABB make_bounds(
         const std::vector<glm::vec2>& positions,
         const std::vector<float>& radii
     );
@@ -43,7 +43,7 @@ class Circles2D : public Geometry {
 
    private:
     MonoInstanced circles_instanced;
-    gmath::AABB cached_bounds;
+    slamd::gmath::AABB cached_bounds;
 
     std::vector<glm::vec3> colors;
     std::vector<glm::vec2> positions;

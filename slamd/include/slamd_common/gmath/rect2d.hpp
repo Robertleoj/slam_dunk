@@ -1,6 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <slamd/gmath/aabb.hpp>
+#include <slamd_common/gmath/aabb.hpp>
 
 namespace slamd {
 namespace gmath {

@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
 #include <optional>
+#include <slamd_common/gmath/aabb.hpp>
 #include <slamd_window/data/image.hpp>
 #include <slamd_window/geom/geometry.hpp>
-#include <slamd_window/gmath/aabb.hpp>
 #include <slamd_window/image_texture.hpp>
 #include <slamd_window/shaders.hpp>
 #include <thread>
@@ -33,7 +33,7 @@ class Image : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
-    std::optional<gmath::AABB> bounds() override;
+    std::optional<slamd::gmath::AABB> bounds() override;
 
    private:
     void maybe_initialize();
@@ -54,4 +54,4 @@ ImagePtr image(data::Image&& image);
 
 }  // namespace geom2d
 
-}  // namespace slamd
+}  // namespace slamdw

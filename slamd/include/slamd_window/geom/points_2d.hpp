@@ -16,11 +16,11 @@ class Points2D : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
-    std::optional<gmath::AABB> bounds() override;
+    std::optional<slamd::gmath::AABB> bounds() override;
 
    private:
     Mesh mesh;
-    gmath::AABB cached_bounds;
+    slamd::gmath::AABB cached_bounds;
 };
 
 }  // namespace _geom

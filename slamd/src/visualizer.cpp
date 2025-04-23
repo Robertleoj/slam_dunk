@@ -1,9 +1,9 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
-#include <messages_generated.h>
+#include <flatb/messages_generated.h>
 #include <spdlog/spdlog.h>
-#include <visualizer_generated.h>
+#include <flatb/visualizer_generated.h>
 #include <asio.hpp>
 #include <set>
 #include <slamd/render_thread_job_queue.hpp>

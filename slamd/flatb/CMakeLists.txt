@@ -17,7 +17,7 @@ if (NOT TARGET flatbuffers)
 endif()
 
 # Grab all .cpp and .h/.hpp files in current dir
-file(GLOB FLATBUFFERS_SRC "*.cpp" "*.h" "*.hpp")
+file(GLOB_RECURSE FLATBUFFERS_SRC "*.cpp" "*.h" "*.hpp")
 
 # Make a static lib from 'em
 add_library(slamd_flatbuff STATIC ${FLATBUFFERS_SRC})

@@ -1,7 +1,7 @@
 
 #include <imgui.h>
 #include <spdlog/spdlog.h>
-#include <slamd_window/gmath/rect2d.hpp>
+#include <slamd_common/gmath/rect2d.hpp>
 #include <slamd_window/view/canvas_view.hpp>
 
 namespace slamdw {
@@ -11,7 +11,7 @@ CanvasView::CanvasView(
 )
     : tree(tree),
       frame_buffer(500, 500),
-      camera(gmath::Rect2D({0.0, 0.0}, {1.0, 1.0})),
+      camera(slamd::gmath::Rect2D({0.0, 0.0}, {1.0, 1.0})),
       manually_moved(false) {}
 
 void CanvasView::render_to_imgui() {
@@ -204,18 +204,18 @@ void CanvasView::handle_translation_input() {
 void CanvasView::set_default_pos() {
     auto maybe_bounds = this->tree->bounds();
 
-    gmath::AABB bounds = maybe_bounds.has_value()
-                             ? maybe_bounds.value()
-                             : gmath::AABB(
-                                   glm::vec3(0.0f, 0.0f, 0.0f),
-                                   glm::vec3(1.0f, 1.0f, 0.0f)
-                               );
+    slamd::gmath::AABB bounds = maybe_bounds.has_value()
+                                    ? maybe_bounds.value()
+                                    : slamd::gmath::AABB(
+                                          glm::vec3(0.0f, 0.0f, 0.0f),
+                                          glm::vec3(1.0f, 1.0f, 0.0f)
+                                      );
 
     float window_aspect = this->frame_buffer.aspect();
 
     this->camera.set_viewport(
-        gmath::Rect2D::center_cover(
-            gmath::Rect2D::from_aabb3d(bounds),
+        slamd::gmath::Rect2D::center_cover(
+            slamd::gmath::Rect2D::from_aabb3d(bounds),
             window_aspect
         )
     );
@@ -224,8 +224,8 @@ void CanvasView::set_default_pos() {
 void CanvasView::fix_view_aspect() {
     float window_aspect = this->frame_buffer.aspect();
     this->camera.set_viewport(
-        gmath::Rect2D::center_cover(this->camera.viewport, window_aspect)
+        slamd::gmath::Rect2D::center_cover(this->camera.viewport, window_aspect)
     );
 }
 
-}  // namespace slamd
+}  // namespace slamdw

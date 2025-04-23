@@ -1,10 +1,10 @@
 #pragma once
-#include <visualizer_generated.h>
+#include <flatb/visualizer_generated.h>
 #include <glm/glm.hpp>
 #include <slamd/geom/geometry.hpp>
-#include <slamd/gmath/aabb.hpp>
 #include <slamd/tree/node.hpp>
 #include <slamd/tree/tree_path.hpp>
+#include <slamd_common/gmath/aabb.hpp>
 
 namespace slamd {
 namespace _tree {

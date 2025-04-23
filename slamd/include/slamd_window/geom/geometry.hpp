@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <optional>
-#include <slamd_window/gmath/aabb.hpp>
+#include <slamd_common/gmath/aabb.hpp>
 
 namespace slamdw {
 namespace _geom {
@@ -13,7 +13,7 @@ class Geometry {
 
     virtual ~Geometry() = default;
 
-    virtual std::optional<gmath::AABB> bounds();
+    virtual std::optional<slamd::gmath::AABB> bounds();
 };
 
 }  // namespace _geom

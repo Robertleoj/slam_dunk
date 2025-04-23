@@ -3,9 +3,9 @@
 #include <optional>
 #include <slamd/data/image.hpp>
 #include <slamd/geom/geometry.hpp>
-#include <slamd/gmath/aabb.hpp>
 #include <slamd/image_texture.hpp>
 #include <slamd/shaders.hpp>
+#include <slamd_common/gmath/aabb.hpp>
 #include <thread>
 
 namespace slamd {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <slamd/gmath/rect2d.hpp>
+#include <slamd_common/gmath/rect2d.hpp>
 
 namespace slamd {
 

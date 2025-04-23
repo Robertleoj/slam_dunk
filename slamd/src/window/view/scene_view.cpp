@@ -1,7 +1,7 @@
 #include <imgui.h>
 #include <spdlog/spdlog.h>
 #include <numbers>
-#include <slamd_window/gmath/angle.hpp>
+#include <slamd_common/gmath/angle.hpp>
 #include <slamd_window/view/scene_view.hpp>
 
 namespace slamdw {
@@ -119,8 +119,8 @@ void SceneView::handle_mouse_input() {
                 static_cast<float>(mouse_drag_delta_y) * scale_factor;
 
             this->arcball.rotate(
-                -gmath::Angle::rad(x_angle_diff),
-                -gmath::Angle::rad(y_angle_diff)
+                -slamd::gmath::Angle::rad(x_angle_diff),
+                -slamd::gmath::Angle::rad(y_angle_diff)
             );
             this->arcball_indicator.interact();
         }

@@ -1,0 +1,11 @@
+namespace slamd.flatb;
+
+
+union GeometryUnion {
+
+}
+
+table Geometry {
+    geometry: GeometryUnion;
+}
+

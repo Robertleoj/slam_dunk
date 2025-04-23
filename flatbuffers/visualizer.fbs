@@ -1,10 +1,21 @@
-// monster.fbs
+include "geometry.fbs";
+include "gmath.fbs";
+
 namespace slamd.flatb;
 
+table ChildEntry {
+    key: string;
+    value: Node;
+}
 
+table Node {
+    transform: Mat4;
+    children: [ChildEntry];
+}
 
 table Tree {
     id: ulong;
+    root: Node;
 }
 
 enum ViewType: byte {

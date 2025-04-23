@@ -5,7 +5,7 @@
 namespace slamdw {
 
 Camera2D::Camera2D(
-    const gmath::Rect2D& viewport
+    const slamd::gmath::Rect2D& viewport
 )
     : viewport(viewport) {}
 
@@ -22,9 +22,9 @@ glm::mat4 Camera2D::get_projection_matrix() const {
 }
 
 void Camera2D::set_viewport(
-    const gmath::Rect2D& viewport
+    const slamd::gmath::Rect2D& viewport
 ) {
-    this->viewport = gmath::Rect2D(viewport);
+    this->viewport = slamd::gmath::Rect2D(viewport);
 }
 
 void Camera2D::translate_relative(
@@ -58,7 +58,8 @@ void Camera2D::zoom_relative(
     glm::vec2 new_top_left =
         mouse_world * (1.0f - zoom_factor) + current_top_left * zoom_factor;
 
-    this->viewport = gmath::Rect2D(new_top_left, new_top_left + new_size);
+    this->viewport =
+        slamd::gmath::Rect2D(new_top_left, new_top_left + new_size);
 }
 
 void Camera2D::translate_normalized(
@@ -74,4 +75,4 @@ glm::vec2 Camera2D::get_world_coords(
     return this->viewport.unnormalize(normalized_mouse_pos);
 }
 
-}  // namespace slamd
+}  // namespace slamdw

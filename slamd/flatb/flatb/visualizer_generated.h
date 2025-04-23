@@ -13,8 +13,17 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 25 &&
               FLATBUFFERS_VERSION_REVISION == 10,
              "Non-compatible flatbuffers version included");
 
+#include "geometry_generated.h"
+#include "gmath_generated.h"
+
 namespace slamd {
 namespace flatb {
+
+struct ChildEntry;
+struct ChildEntryBuilder;
+
+struct Node;
+struct NodeBuilder;
 
 struct Tree;
 struct TreeBuilder;
@@ -58,17 +67,151 @@ inline const char *EnumNameViewType(ViewType e) {
   return EnumNamesViewType()[index];
 }
 
+struct ChildEntry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef ChildEntryBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_KEY = 4,
+    VT_VALUE = 6
+  };
+  const ::flatbuffers::String *key() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_KEY);
+  }
+  const slamd::flatb::Node *value() const {
+    return GetPointer<const slamd::flatb::Node *>(VT_VALUE);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_KEY) &&
+           verifier.VerifyString(key()) &&
+           VerifyOffset(verifier, VT_VALUE) &&
+           verifier.VerifyTable(value()) &&
+           verifier.EndTable();
+  }
+};
+
+struct ChildEntryBuilder {
+  typedef ChildEntry Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_key(::flatbuffers::Offset<::flatbuffers::String> key) {
+    fbb_.AddOffset(ChildEntry::VT_KEY, key);
+  }
+  void add_value(::flatbuffers::Offset<slamd::flatb::Node> value) {
+    fbb_.AddOffset(ChildEntry::VT_VALUE, value);
+  }
+  explicit ChildEntryBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<ChildEntry> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<ChildEntry>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<ChildEntry> CreateChildEntry(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> key = 0,
+    ::flatbuffers::Offset<slamd::flatb::Node> value = 0) {
+  ChildEntryBuilder builder_(_fbb);
+  builder_.add_value(value);
+  builder_.add_key(key);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<ChildEntry> CreateChildEntryDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const char *key = nullptr,
+    ::flatbuffers::Offset<slamd::flatb::Node> value = 0) {
+  auto key__ = key ? _fbb.CreateString(key) : 0;
+  return slamd::flatb::CreateChildEntry(
+      _fbb,
+      key__,
+      value);
+}
+
+struct Node FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef NodeBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_TRANSFORM = 4,
+    VT_CHILDREN = 6
+  };
+  const slamd::flatb::Mat4 *transform() const {
+    return GetStruct<const slamd::flatb::Mat4 *>(VT_TRANSFORM);
+  }
+  const ::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>> *children() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>> *>(VT_CHILDREN);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<slamd::flatb::Mat4>(verifier, VT_TRANSFORM, 4) &&
+           VerifyOffset(verifier, VT_CHILDREN) &&
+           verifier.VerifyVector(children()) &&
+           verifier.VerifyVectorOfTables(children()) &&
+           verifier.EndTable();
+  }
+};
+
+struct NodeBuilder {
+  typedef Node Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_transform(const slamd::flatb::Mat4 *transform) {
+    fbb_.AddStruct(Node::VT_TRANSFORM, transform);
+  }
+  void add_children(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>>> children) {
+    fbb_.AddOffset(Node::VT_CHILDREN, children);
+  }
+  explicit NodeBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<Node> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<Node>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<Node> CreateNode(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const slamd::flatb::Mat4 *transform = nullptr,
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>>> children = 0) {
+  NodeBuilder builder_(_fbb);
+  builder_.add_children(children);
+  builder_.add_transform(transform);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<Node> CreateNodeDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const slamd::flatb::Mat4 *transform = nullptr,
+    const std::vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>> *children = nullptr) {
+  auto children__ = children ? _fbb.CreateVector<::flatbuffers::Offset<slamd::flatb::ChildEntry>>(*children) : 0;
+  return slamd::flatb::CreateNode(
+      _fbb,
+      transform,
+      children__);
+}
+
 struct Tree FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TreeBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_ID = 4
+    VT_ID = 4,
+    VT_ROOT = 6
   };
   uint64_t id() const {
     return GetField<uint64_t>(VT_ID, 0);
   }
+  const slamd::flatb::Node *root() const {
+    return GetPointer<const slamd::flatb::Node *>(VT_ROOT);
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_ID, 8) &&
+           VerifyOffset(verifier, VT_ROOT) &&
+           verifier.VerifyTable(root()) &&
            verifier.EndTable();
   }
 };
@@ -79,6 +222,9 @@ struct TreeBuilder {
   ::flatbuffers::uoffset_t start_;
   void add_id(uint64_t id) {
     fbb_.AddElement<uint64_t>(Tree::VT_ID, id, 0);
+  }
+  void add_root(::flatbuffers::Offset<slamd::flatb::Node> root) {
+    fbb_.AddOffset(Tree::VT_ROOT, root);
   }
   explicit TreeBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -93,9 +239,11 @@ struct TreeBuilder {
 
 inline ::flatbuffers::Offset<Tree> CreateTree(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    uint64_t id = 0) {
+    uint64_t id = 0,
+    ::flatbuffers::Offset<slamd::flatb::Node> root = 0) {
   TreeBuilder builder_(_fbb);
   builder_.add_id(id);
+  builder_.add_root(root);
   return builder_.Finish();
 }
 

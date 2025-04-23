@@ -1,7 +1,7 @@
 #include <numbers>
 #include <ranges>
+#include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/geom/circles_2d.hpp>
-#include <slamd_window/gmath/transforms.hpp>
 
 namespace slamdw {
 
@@ -30,7 +30,7 @@ void Circles2D::render(
     this->circles_instanced.render(model, view, projection);
 }
 
-std::optional<gmath::AABB> Circles2D::bounds() {
+std::optional<slamd::gmath::AABB> Circles2D::bounds() {
     return this->cached_bounds;
 }
 
@@ -140,14 +140,14 @@ std::vector<glm::mat4> Circles2D::make_transforms(
 
     for(const auto &[pos, rad]: std::views::zip(positions, radii)) {
         transforms.push_back(
-            gmath::t3D(glm::vec3(pos, 0.0f)) * gmath::scale_xy(glm::vec2(rad, rad))
+            slamd::gmath::t3D(glm::vec3(pos, 0.0f)) * slamd::gmath::scale_xy(glm::vec2(rad, rad))
         );
     }
 
     return transforms;
 }
 
-gmath::AABB Circles2D::make_bounds(
+slamd::gmath::AABB Circles2D::make_bounds(
     const std::vector<glm::vec2>& positions,
     const std::vector<float>& radii
 ) {
@@ -169,7 +169,7 @@ gmath::AABB Circles2D::make_bounds(
         max_y = std::fmax(pos.y + rad, max_y);
     }
 
-    return gmath::AABB(
+    return slamd::gmath::AABB(
         glm::vec3(min_x, min_y, 0.0f),
         glm::vec3(max_x, max_y, 0.0f)
     );

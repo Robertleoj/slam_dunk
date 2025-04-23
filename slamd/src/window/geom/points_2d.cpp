@@ -58,7 +58,7 @@ Mesh make_mesh(
     return Mesh(mesh_data, 1.0f);
 }
 
-gmath::AABB make_bounds(
+slamd::gmath::AABB make_bounds(
     const std::vector<glm::vec2>& positions,
     const std::vector<float>& radii
 ) {
@@ -74,7 +74,7 @@ gmath::AABB make_bounds(
         max_y = std::fmax(pos.y + rad, max_y);
     }
 
-    return gmath::AABB(
+    return slamd::gmath::AABB(
         glm::vec3(min_x, min_y, 0.0f),
         glm::vec3(max_x, max_y, 0.0f)
     );
@@ -96,7 +96,7 @@ void Points2D::render(
     this->mesh.render(model, view, projection);
 }
 
-std::optional<gmath::AABB> Points2D::bounds() {
+std::optional<slamd::gmath::AABB> Points2D::bounds() {
     return this->cached_bounds;
 }
 

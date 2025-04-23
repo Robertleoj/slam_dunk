@@ -1,5 +1,5 @@
 #include <spdlog/spdlog.h>
-#include <slamd/gmath/rect2d.hpp>
+#include <slamd_common/gmath/rect2d.hpp>
 
 namespace slamd {
 namespace gmath {

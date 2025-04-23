@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <optional>
-#include <slamd/gmath/aabb.hpp>
+#include <slamd_common/gmath/aabb.hpp>
 
 namespace slamd {
 namespace _geom {

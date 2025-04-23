@@ -1,8 +1,8 @@
 #include <slamd/assert.hpp>
 #include <slamd/gen/shader_sources.hpp>
 #include <slamd/geom/image.hpp>
-#include <slamd/gmath/transforms.hpp>
 #include <slamd/paths.hpp>
+#include <slamd_common/gmath/transforms.hpp>
 
 namespace slamd {
 namespace _geom {

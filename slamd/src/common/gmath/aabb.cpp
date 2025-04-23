@@ -1,4 +1,4 @@
-#include <slamd/gmath/aabb.hpp>
+#include <slamd_common/gmath/aabb.hpp>
 #include <stdexcept>
 
 namespace slamd {

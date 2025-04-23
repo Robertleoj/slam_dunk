@@ -71,6 +71,34 @@ add_subdirectory(${LIB_DIR}/glm)
 
 add_subdirectory(flatb)
 
+add_library(slamd_common STATIC)
+target_sources(
+    slamd_common
+
+    PRIVATE
+        src/common/gmath/aabb.cpp
+        src/common/gmath/rect2d.cpp
+        src/common/gmath/angle.cpp
+        src/common/gmath/transforms.cpp
+)
+
+target_include_directories(
+    slamd_common
+
+    PUBLIC
+        ${LIB_DIR}/glm
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+
+target_link_libraries(
+    slamd_common
+
+    PRIVATE
+        spdlog::spdlog
+)
+
+
 add_library(slamd STATIC)
 add_library(slamd::slamd ALIAS slamd)
 
@@ -98,11 +126,6 @@ target_sources(
         src/tree/tree.cpp
         src/tree/node.cpp
         src/tree/tree_path.cpp
-
-        src/gmath/aabb.cpp
-        src/gmath/rect2d.cpp
-        src/gmath/angle.cpp
-        src/gmath/transforms.cpp
 
         src/geom/utils.cpp
         src/geom/points_2d.cpp
@@ -144,6 +167,7 @@ target_link_libraries(
         glbinding::glbinding-aux
         imgui::imgui
         slamd_flatbuff
+        slamd_common
 )
 
 
@@ -179,11 +203,6 @@ target_sources(
 
         src/window/view/scene_view.cpp
         src/window/view/canvas_view.cpp
-
-        src/window/gmath/aabb.cpp
-        src/window/gmath/rect2d.cpp
-        src/window/gmath/angle.cpp
-        src/window/gmath/transforms.cpp
 
         src/window/geom/utils.cpp
         src/window/geom/points_2d.cpp
@@ -225,6 +244,7 @@ target_link_libraries(
         glbinding::glbinding
         glbinding::glbinding-aux
         imgui::imgui
+        slamd_common
 )
 
 

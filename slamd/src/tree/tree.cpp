@@ -1,6 +1,6 @@
 #include <spdlog/spdlog.h>
-#include <slamd/gmath/transforms.hpp>
 #include <slamd/tree/tree.hpp>
+#include <slamd_common/gmath/transforms.hpp>
 
 namespace slamd {
 
@@ -230,6 +230,5 @@ float Canvas::new_depth() {
 std::shared_ptr<Canvas> canvas() {
     return std::make_shared<Canvas>();
 }
-
 
 }  // namespace slamd

@@ -17,7 +17,7 @@ class PolyLine2D : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
-    std::optional<gmath::AABB> bounds() override;
+    std::optional<slamd::gmath::AABB> bounds() override;
 
    private:
     static Mesh make_mesh(
@@ -28,7 +28,7 @@ class PolyLine2D : public Geometry {
 
    private:
     Mesh line_mesh;
-    gmath::AABB cached_bounds;
+    slamd::gmath::AABB cached_bounds;
 };
 
 }  // namespace _geom

@@ -4,8 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <numbers>
+#include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/arcball.hpp>
-#include <slamd_window/gmath/transforms.hpp>
 
 namespace slamdw {
 
@@ -16,8 +16,8 @@ Arcball::Arcball()
       center(Arcball::default_center) {}
 
 void Arcball::rotate(
-    gmath::Angle delta_theta,
-    gmath::Angle delta_phi
+    slamd::gmath::Angle delta_theta,
+    slamd::gmath::Angle delta_phi
 ) {
     // we rotate x angles around the z axis of
     this->theta = (this->theta + delta_theta);
@@ -26,8 +26,8 @@ void Arcball::rotate(
 
     this->phi = (this->phi + delta_phi)
                     .clamp(
-                        gmath::Angle::rad(-vertical_range),
-                        gmath::Angle::rad(vertical_range)
+                        slamd::gmath::Angle::rad(-vertical_range),
+                        slamd::gmath::Angle::rad(vertical_range)
                     );
 }
 
@@ -40,7 +40,7 @@ void Arcball::translate_relative(
 
     glm::mat4 camera_in_world = this->center * camera_in_center;
 
-    glm::mat4 moved_camera = camera_in_world * gmath::t3D(amount);
+    glm::mat4 moved_camera = camera_in_world * slamd::gmath::t3D(amount);
 
     glm::mat4 new_center_in_world = moved_camera * center_in_camera;
 
@@ -55,8 +55,8 @@ void Arcball::zoom(
 
 glm::mat4 Arcball::camera_in_center() const {
     // start at x = 1
-    glm::vec4 point_in_center_homo = gmath::rz3D(this->theta) *
-                                     gmath::ry3D(this->phi) *
+    glm::vec4 point_in_center_homo = slamd::gmath::rz3D(this->theta) *
+                                     slamd::gmath::ry3D(this->phi) *
                                      glm::vec4(1.0, 0.0, 0.0, 1.0);
 
     glm::vec3 z_axis = glm::vec3(point_in_center_homo);
@@ -89,4 +89,4 @@ void Arcball::reset() {
     this->phi = Arcball::default_phi;
 }
 
-}  // namespace slamd
+}  // namespace slamdw

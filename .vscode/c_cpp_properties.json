@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/vcpkg_installed/x64-linux/include",
-                "${workspaceFolder}/vendored_deps/"
+                "${workspaceFolder}/vendored_deps/",
+                "${workspaceFolder}/slamd/include"
             ],
             "defines": [],
             "cStandard": "c17",

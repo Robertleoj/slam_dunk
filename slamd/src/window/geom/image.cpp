@@ -1,7 +1,7 @@
+#include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/assert.hpp>
 #include <slamd_window/gen/shader_sources.hpp>
 #include <slamd_window/geom/image.hpp>
-#include <slamd_window/gmath/transforms.hpp>
 #include <slamd_window/paths.hpp>
 
 namespace slamdw {
@@ -133,7 +133,10 @@ void Image::render(
     gl::glBindVertexArray(gl_data.vao_id);
 
     gl_data.shader.use();
-    gl_data.shader.set_uniform("model", model * gmath::scale_xy(this->scale));
+    gl_data.shader.set_uniform(
+        "model",
+        model * slamd::gmath::scale_xy(this->scale)
+    );
     gl_data.shader.set_uniform("view", view);
     gl_data.shader.set_uniform("projection", projection);
 
@@ -144,14 +147,14 @@ void Image::render(
     gl::glBindVertexArray(0);
 };
 
-std::optional<gmath::AABB> Image::bounds() {
+std::optional<slamd::gmath::AABB> Image::bounds() {
     float x_min = 0.0f;
     float x_max = this->scale.x;
 
     float y_min = 0.0;
     float y_max = this->scale.y;
 
-    return gmath::AABB(
+    return slamd::gmath::AABB(
         glm::vec3(x_min, y_min, 0.0),
         glm::vec3(x_max, y_max, 0.0f)
     );
@@ -178,4 +181,4 @@ ImagePtr image(
 
 }  // namespace geom2d
 
-}  // namespace slamd
+}  // namespace slamdw

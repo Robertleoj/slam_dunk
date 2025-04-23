@@ -1,5 +1,5 @@
+#include <flatb/visualizer_generated.h>
 #include <spdlog/spdlog.h>
-#include <visualizer_generated.h>
 #include <asio.hpp>
 #include <slamd_window/state_manager.hpp>
 #include <slamd_window/view/canvas_view.hpp>
