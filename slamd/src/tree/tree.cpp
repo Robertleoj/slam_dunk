@@ -31,7 +31,11 @@ void Tree::set_object(
 flatbuffers::Offset<slamd::flatb::Tree> Tree::serialize(
     flatbuffers::FlatBufferBuilder& builder
 ) {
-    return slamd::flatb::CreateTree(builder, this->id);
+    return slamd::flatb::CreateTree(
+        builder,
+        this->id,
+        this->root->serialize(builder)
+    );
 }
 
 void Tree::render(

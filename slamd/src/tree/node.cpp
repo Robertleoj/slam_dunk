@@ -1,4 +1,5 @@
 #include <slamd/tree/node.hpp>
+#include <slamd_common/gmath/serialization.hpp>
 #include <stdexcept>
 
 namespace slamd {
@@ -46,22 +47,17 @@ flatbuffers::Offset<slamd::flatb::Node> Node::serialize(
 
     auto children_fb = builder.CreateVector(children);
 
-    slamd::flatb::Mat4 * transform_ptr = nullptr;
+    slamd::flatb::NodeBuilder node_builder(builder);
+
     auto maybe_transform = this->get_transform();
-    // if(maybe_transform.has_value()) {
+    if(maybe_transform.has_value()) {
+        slamd::flatb::Mat4 transform_fb = gmath::serialize_mat4(maybe_transform.value());
+        node_builder.add_transform(&transform_fb);
+    }
 
+    node_builder.add_children(children_fb);
 
-    //     slamd::flatb::Mat4 transform_fb = {maybe_transform.value()};
-
-    //     transform_fb = builder.CreateStruct(
-
-    //     )
-    // }
-
-    // slamd::flatb::CreateNode(
-    //     builder,
-    //     children_fb,
-    // )
+    return node_builder.Finish();
 }
 
 void Node::set_transform(

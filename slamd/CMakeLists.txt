@@ -96,6 +96,7 @@ target_link_libraries(
 
     PRIVATE
         spdlog::spdlog
+        slamd_flatbuff
 )
 
 
