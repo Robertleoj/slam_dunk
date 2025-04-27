@@ -10,6 +10,7 @@ table ChildEntry {
 
 table Node {
     transform: Mat4;
+    geometry: Geometry;
     children: [ChildEntry];
 }
 

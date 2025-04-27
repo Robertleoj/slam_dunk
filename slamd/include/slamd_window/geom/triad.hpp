@@ -1,4 +1,5 @@
 #pragma once
+#include <flatb/geometry_generated.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd_window/geom/arrows.hpp>
@@ -12,6 +13,10 @@ class Triad : public Geometry {
     Triad(float scale, float thickness);
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
+
+    static std::shared_ptr<Triad> deserialize(
+        const slamd::flatb::Triad* triad_fb
+    );
 
    private:
     Arrows arrows;
@@ -28,4 +33,4 @@ TriadPtr triad(float scale = 1.0, float thickness = 0.1);
 
 }  // namespace geom
 
-}  // namespace slamd
+}  // namespace slamdw

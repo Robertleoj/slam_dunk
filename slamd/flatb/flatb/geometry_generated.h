@@ -16,32 +16,38 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 25 &&
 namespace slamd {
 namespace flatb {
 
+struct Triad;
+struct TriadBuilder;
+
 struct Geometry;
 struct GeometryBuilder;
 
 enum GeometryUnion : uint8_t {
   GeometryUnion_NONE = 0,
+  GeometryUnion_triad = 1,
   GeometryUnion_MIN = GeometryUnion_NONE,
-  GeometryUnion_MAX = GeometryUnion_NONE
+  GeometryUnion_MAX = GeometryUnion_triad
 };
 
-inline const GeometryUnion (&EnumValuesGeometryUnion())[1] {
+inline const GeometryUnion (&EnumValuesGeometryUnion())[2] {
   static const GeometryUnion values[] = {
-    GeometryUnion_NONE
+    GeometryUnion_NONE,
+    GeometryUnion_triad
   };
   return values;
 }
 
 inline const char * const *EnumNamesGeometryUnion() {
-  static const char * const names[2] = {
+  static const char * const names[3] = {
     "NONE",
+    "triad",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameGeometryUnion(GeometryUnion e) {
-  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_NONE)) return "";
+  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_triad)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesGeometryUnion()[index];
 }
@@ -50,8 +56,63 @@ template<typename T> struct GeometryUnionTraits {
   static const GeometryUnion enum_value = GeometryUnion_NONE;
 };
 
+template<> struct GeometryUnionTraits<slamd::flatb::Triad> {
+  static const GeometryUnion enum_value = GeometryUnion_triad;
+};
+
 bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *obj, GeometryUnion type);
 bool VerifyGeometryUnionVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<uint8_t> *types);
+
+struct Triad FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef TriadBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_SCALE = 4,
+    VT_THICKNESS = 6
+  };
+  float scale() const {
+    return GetField<float>(VT_SCALE, 0.0f);
+  }
+  float thickness() const {
+    return GetField<float>(VT_THICKNESS, 0.0f);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<float>(verifier, VT_SCALE, 4) &&
+           VerifyField<float>(verifier, VT_THICKNESS, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct TriadBuilder {
+  typedef Triad Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_scale(float scale) {
+    fbb_.AddElement<float>(Triad::VT_SCALE, scale, 0.0f);
+  }
+  void add_thickness(float thickness) {
+    fbb_.AddElement<float>(Triad::VT_THICKNESS, thickness, 0.0f);
+  }
+  explicit TriadBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<Triad> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<Triad>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<Triad> CreateTriad(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    float scale = 0.0f,
+    float thickness = 0.0f) {
+  TriadBuilder builder_(_fbb);
+  builder_.add_thickness(thickness);
+  builder_.add_scale(scale);
+  return builder_.Finish();
+}
 
 struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GeometryBuilder Builder;
@@ -66,6 +127,9 @@ struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     return GetPointer<const void *>(VT_GEOMETRY);
   }
   template<typename T> const T *geometry_as() const;
+  const slamd::flatb::Triad *geometry_as_triad() const {
+    return geometry_type() == slamd::flatb::GeometryUnion_triad ? static_cast<const slamd::flatb::Triad *>(geometry()) : nullptr;
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_GEOMETRY_TYPE, 1) &&
@@ -74,6 +138,10 @@ struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            verifier.EndTable();
   }
 };
+
+template<> inline const slamd::flatb::Triad *Geometry::geometry_as<slamd::flatb::Triad>() const {
+  return geometry_as_triad();
+}
 
 struct GeometryBuilder {
   typedef Geometry Table;
@@ -110,6 +178,10 @@ inline bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *o
   switch (type) {
     case GeometryUnion_NONE: {
       return true;
+    }
+    case GeometryUnion_triad: {
+      auto ptr = reinterpret_cast<const slamd::flatb::Triad *>(obj);
+      return verifier.VerifyTable(ptr);
     }
     default: return true;
   }

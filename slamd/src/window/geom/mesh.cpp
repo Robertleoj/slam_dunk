@@ -14,6 +14,11 @@ namespace _geom {
 thread_local std::optional<ShaderProgram> Mesh::shader;
 
 void Mesh::initialize() {
+    if (!Mesh::shader.has_value()) {
+        Mesh::shader.emplace(
+            ShaderProgram(shader_source::mesh::vert, shader_source::mesh::frag)
+        );
+    }
 
     // create the vertex array object
     gl::glGenVertexArrays(1, &this->vao_id);
@@ -173,8 +178,8 @@ Mesh::Mesh(
 )
     : mesh_data(mesh_data),
       min_brightness(min_brightness) {
-        this->initialize();
-      }
+    this->initialize();
+}
 
 Mesh::Mesh(
     data::MeshData&& mesh_data,
@@ -182,21 +187,20 @@ Mesh::Mesh(
 )
     : mesh_data(std::move(mesh_data)),
       min_brightness(min_brightness) {
-        this->initialize();
-      }
+    this->initialize();
+}
 
 void Mesh::render(
     glm::mat4 model,
     glm::mat4 view,
     glm::mat4 projection
 ) {
-
     gl::glBindVertexArray(this->vao_id);
 
     this->handle_updates();
 
     if (!Mesh::shader.has_value()) {
-        throw std::runtime_error("Shader not initialized!");
+        throw std::runtime_error("Mesh shader not initialized!");
     }
 
     auto& shader = Mesh::shader.value();
@@ -258,4 +262,4 @@ MeshPtr mesh(
 
 }  // namespace geom
 
-}  // namespace slamd
+}  // namespace slamdw

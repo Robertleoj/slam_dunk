@@ -50,9 +50,16 @@ flatbuffers::Offset<slamd::flatb::Node> Node::serialize(
     slamd::flatb::NodeBuilder node_builder(builder);
 
     auto maybe_transform = this->get_transform();
-    if(maybe_transform.has_value()) {
-        slamd::flatb::Mat4 transform_fb = gmath::serialize_mat4(maybe_transform.value());
+    if (maybe_transform.has_value()) {
+        slamd::flatb::Mat4 transform_fb =
+            gmath::serialize_mat4(maybe_transform.value());
         node_builder.add_transform(&transform_fb);
+    }
+
+    auto maybe_geom = this->get_object();
+    if (maybe_geom.has_value()) {
+        auto geom_fb = maybe_geom.value()->serialize(builder);
+        node_builder.add_geometry(geom_fb);
     }
 
     node_builder.add_children(children_fb);

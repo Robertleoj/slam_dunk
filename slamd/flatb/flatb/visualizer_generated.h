@@ -135,10 +135,14 @@ struct Node FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef NodeBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_TRANSFORM = 4,
-    VT_CHILDREN = 6
+    VT_GEOMETRY = 6,
+    VT_CHILDREN = 8
   };
   const slamd::flatb::Mat4 *transform() const {
     return GetStruct<const slamd::flatb::Mat4 *>(VT_TRANSFORM);
+  }
+  const slamd::flatb::Geometry *geometry() const {
+    return GetPointer<const slamd::flatb::Geometry *>(VT_GEOMETRY);
   }
   const ::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>> *children() const {
     return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>> *>(VT_CHILDREN);
@@ -146,6 +150,8 @@ struct Node FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<slamd::flatb::Mat4>(verifier, VT_TRANSFORM, 4) &&
+           VerifyOffset(verifier, VT_GEOMETRY) &&
+           verifier.VerifyTable(geometry()) &&
            VerifyOffset(verifier, VT_CHILDREN) &&
            verifier.VerifyVector(children()) &&
            verifier.VerifyVectorOfTables(children()) &&
@@ -159,6 +165,9 @@ struct NodeBuilder {
   ::flatbuffers::uoffset_t start_;
   void add_transform(const slamd::flatb::Mat4 *transform) {
     fbb_.AddStruct(Node::VT_TRANSFORM, transform);
+  }
+  void add_geometry(::flatbuffers::Offset<slamd::flatb::Geometry> geometry) {
+    fbb_.AddOffset(Node::VT_GEOMETRY, geometry);
   }
   void add_children(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>>> children) {
     fbb_.AddOffset(Node::VT_CHILDREN, children);
@@ -177,9 +186,11 @@ struct NodeBuilder {
 inline ::flatbuffers::Offset<Node> CreateNode(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const slamd::flatb::Mat4 *transform = nullptr,
+    ::flatbuffers::Offset<slamd::flatb::Geometry> geometry = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>>> children = 0) {
   NodeBuilder builder_(_fbb);
   builder_.add_children(children);
+  builder_.add_geometry(geometry);
   builder_.add_transform(transform);
   return builder_.Finish();
 }
@@ -187,11 +198,13 @@ inline ::flatbuffers::Offset<Node> CreateNode(
 inline ::flatbuffers::Offset<Node> CreateNodeDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const slamd::flatb::Mat4 *transform = nullptr,
+    ::flatbuffers::Offset<slamd::flatb::Geometry> geometry = 0,
     const std::vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>> *children = nullptr) {
   auto children__ = children ? _fbb.CreateVector<::flatbuffers::Offset<slamd::flatb::ChildEntry>>(*children) : 0;
   return slamd::flatb::CreateNode(
       _fbb,
       transform,
+      geometry,
       children__);
 }
 

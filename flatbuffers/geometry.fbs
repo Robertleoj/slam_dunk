@@ -1,8 +1,12 @@
 namespace slamd.flatb;
 
+table Triad {
+    scale: float;
+    thickness: float;
+}
 
 union GeometryUnion {
-
+    triad: Triad
 }
 
 table Geometry {

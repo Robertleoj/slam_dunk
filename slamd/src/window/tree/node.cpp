@@ -1,6 +1,7 @@
 #include <spdlog/spdlog.h>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/stringify.hpp>
+#include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/tree/node.hpp>
 #include <stdexcept>
 
@@ -40,12 +41,17 @@ std::unique_ptr<Node> Node::deserialize(
     std::unique_ptr<Node> node = std::make_unique<Node>();
 
     auto transform_fb = node_fb->transform();
-    if (transform_fb) {
+    if (transform_fb != nullptr) {
         glm::mat4 transform = slamd::gmath::deserialize_mat4(transform_fb);
 
         spdlog::debug("Found transform {}", slamd::gmath::stringify(transform));
 
         node->set_transform(transform);
+    }
+
+    auto geom_fb = node_fb->geometry();
+    if (geom_fb != nullptr) {
+        node->set_object(_geom::Geometry::deserialize(geom_fb));
     }
 
     auto children_fb = node_fb->children();

@@ -1,5 +1,7 @@
 #pragma once
+#include <flatb/geometry_generated.h>
 #include <glm/glm.hpp>
+#include <memory>
 #include <optional>
 #include <slamd_common/gmath/aabb.hpp>
 
@@ -14,7 +16,11 @@ class Geometry {
     virtual ~Geometry() = default;
 
     virtual std::optional<slamd::gmath::AABB> bounds();
+
+    static std::shared_ptr<Geometry> deserialize(
+        const slamd::flatb::Geometry* geom_fb
+    );
 };
 
 }  // namespace _geom
-}  // namespace slamd
+}  // namespace slamdw

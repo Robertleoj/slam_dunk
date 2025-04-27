@@ -192,6 +192,7 @@ target_sources(
         src/window/geom/utils.cpp
         src/window/geom/points_2d.cpp
         src/window/geom/geometry.cpp
+        src/window/geom/deserialize.cpp
         src/window/geom/box.cpp
         src/window/geom/mesh.cpp
         src/window/geom/arrows.cpp

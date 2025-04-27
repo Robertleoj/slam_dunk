@@ -4,6 +4,12 @@
 namespace slamdw {
 namespace _geom {
 
+std::shared_ptr<Triad> Triad::deserialize(
+    const slamd::flatb::Triad* triad_fb
+) {
+    return std::make_shared<Triad>(triad_fb->scale(), triad_fb->thickness());
+}
+
 Arrows make_arrows(
     float thickness
 ) {
