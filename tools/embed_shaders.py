@@ -50,7 +50,9 @@ def render_header(shaders: list[Shader], template_path: Path, output_path: Path)
 
 def embed_shaders():
     shader_dir = repo_root() / Path("slamd/shaders")
-    output_file = repo_root() / Path("slamd/include/slamd/gen/shader_sources.hpp")
+    output_file = repo_root() / Path(
+        "slamd/include/slamd_window/gen/shader_sources.hpp"
+    )
     template_file = repo_root() / Path("templates/shader_template.hpp.j2")
 
     shader_data = collect_shaders(shader_dir)

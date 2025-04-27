@@ -38,13 +38,6 @@ flatbuffers::Offset<slamd::flatb::Tree> Tree::serialize(
     );
 }
 
-void Tree::render(
-    const glm::mat4& view,
-    const glm::mat4& projection
-) const {
-    this->render_recursive(this->root.get(), glm::mat4(1.0), view, projection);
-}
-
 void Tree::set_transform_mat4(
     const std::string& path,
     const glm::mat4& transform
@@ -76,30 +69,6 @@ std::optional<Node*> Tree::traverse(
     }
 
     return current_node;
-}
-
-void Tree::render_recursive(
-    const Node* node,
-    const glm::mat4& current_transform,
-    const glm::mat4& view,
-    const glm::mat4& projection
-) const {
-    glm::mat4 next_transform = current_transform;
-    auto node_transform = node->get_transform();
-
-    if (node_transform.has_value()) {
-        next_transform = current_transform * node_transform.value();
-    }
-
-    const auto node_object = node->get_object();
-
-    if (node_object.has_value()) {
-        node_object.value()->render(next_transform, view, projection);
-    }
-
-    for (auto& [_, child] : node->children) {
-        this->render_recursive(child.get(), next_transform, view, projection);
-    }
 }
 
 Node* Tree::make_path(
@@ -134,48 +103,6 @@ Node* Tree::make_path(
     }
 
     return current_node;
-}
-
-std::optional<gmath::AABB> Tree::bounds_recursive(
-    const Node* node,
-    const glm::mat4& prev_transform
-) {
-    glm::mat4 current_transform = prev_transform;
-    auto node_transform = node->get_transform();
-
-    if (node_transform.has_value()) {
-        current_transform = prev_transform * node_transform.value();
-    }
-
-    const auto node_object = node->get_object();
-
-    std::vector<gmath::AABB> bounds;
-
-    if (node_object.has_value()) {
-        auto object_bounds = node_object.value()->bounds();
-        if (object_bounds.has_value()) {
-            bounds.push_back(object_bounds.value().transform(current_transform)
-            );
-        }
-    }
-
-    for (auto& [_, child] : node->children) {
-        // this->render_recursive(child.get(), next_transform, view,
-        // projection);
-
-        auto child_transform =
-            this->bounds_recursive(child.get(), current_transform);
-
-        if (child_transform.has_value()) {
-            bounds.push_back(child_transform.value());
-        }
-    }
-
-    return gmath::AABB::combine(bounds);
-}
-
-std::optional<gmath::AABB> Tree::bounds() {
-    return this->bounds_recursive(this->root.get(), glm::mat4(1.0f));
 }
 
 }  // namespace _tree

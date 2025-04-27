@@ -4,7 +4,6 @@
 #include <slamd/geom/geometry.hpp>
 #include <slamd/tree/node.hpp>
 #include <slamd/tree/tree_path.hpp>
-#include <slamd_common/gmath/aabb.hpp>
 
 namespace slamd {
 namespace _tree {
@@ -23,10 +22,6 @@ class Tree {
         std::shared_ptr<_geom::Geometry> object
     );
 
-    void render(const glm::mat4& view, const glm::mat4& projection) const;
-
-    std::optional<gmath::AABB> bounds();
-
     virtual flatbuffers::Offset<slamd::flatb::Tree> serialize(
         flatbuffers::FlatBufferBuilder& builder
     );
@@ -37,18 +32,6 @@ class Tree {
 
     std::optional<Node*> traverse(const TreePath& path);
     Node* make_path(TreePath path);
-
-   private:
-    void render_recursive(
-        const Node* node,
-        const glm::mat4& current_transform,
-        const glm::mat4& view,
-        const glm::mat4& projection
-    ) const;
-
-    std::optional<gmath::AABB>
-
-    bounds_recursive(const Node* node, const glm::mat4& prev_transform);
 };
 
 }  // namespace _tree

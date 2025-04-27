@@ -107,17 +107,10 @@ target_sources(
     slamd
 
     PRIVATE
-        src/camera_2d.cpp
         src/image_texture.cpp
-        src/glfw.cpp
-        src/frame_buffer.cpp
-        src/camera.cpp
         src/io.cpp
         src/shaders.cpp
-        src/arcball.cpp
-        src/frame_timer.cpp
         src/assert.cpp
-        src/render_thread_job_queue.cpp
         src/visualizer.cpp
         src/connection.cpp
 
@@ -137,8 +130,6 @@ target_sources(
         src/geom/sphere.cpp
         src/geom/triad.cpp
         src/geom/poly_line.cpp
-        src/geom/xy_grid.cpp
-        src/geom/arcball_indicator.cpp
         src/geom/image.cpp
         src/geom/point_cloud.cpp
         src/geom/camera_frustum.cpp

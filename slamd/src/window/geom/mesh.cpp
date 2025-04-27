@@ -14,9 +14,6 @@ namespace _geom {
 thread_local std::optional<ShaderProgram> Mesh::shader;
 
 void Mesh::initialize() {
-    if (!Mesh::shader.has_value()) {
-        shader.emplace(shader_source::mesh::vert, shader_source::mesh::frag);
-    }
 
     // create the vertex array object
     gl::glGenVertexArrays(1, &this->vao_id);

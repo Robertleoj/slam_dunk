@@ -9,11 +9,6 @@ namespace _geom {
 class Sphere : public Geometry {
    public:
     Sphere(float radius, glm::vec3 color);
-
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
-
-   private:
-    Mesh mesh;
 };
 
 }  // namespace _geom

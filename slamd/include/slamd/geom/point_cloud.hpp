@@ -19,45 +19,9 @@ class PointCloud : public Geometry {
         const std::vector<float>& radii
     );
 
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
-
     void update_positions(const std::vector<glm::vec3>& positions);
     void update_colors(const std::vector<glm::vec3>& colors);
     void update_radii(const std::vector<float>& radii);
-
-   private:
-    // SimpleMesh mesh;
-
-    void maybe_initialize();
-    std::tuple<size_t, uint, uint> initialize_sphere_mesh();
-    uint initialize_pos_buffer();
-    uint initialize_radii_buffer();
-    uint initialize_color_buffer();
-    void handle_updates();
-
-   private:
-    struct GLData {
-        ShaderProgram shader;
-        uint vao_id;
-        uint mesh_vbo_id;
-        uint mesh_eab_id;
-        uint pos_vbo_id;
-        uint radii_vbo_id;
-        uint colors_vbo_id;
-        size_t ball_vertex_count;
-    };
-
-    std::optional<GLData> gl_data;
-    std::optional<std::thread::id> render_thread_id;
-
-    std::vector<glm::vec3> positions;
-    bool pending_pos_update;
-
-    std::vector<glm::vec3> colors;
-    bool pending_colors_update;
-
-    std::vector<float> radii;
-    bool pending_radii_update;
 };
 
 }  // namespace _geom

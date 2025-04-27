@@ -10,12 +10,6 @@ namespace _geom {
 class Triad : public Geometry {
    public:
     Triad(float scale, float thickness);
-
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
-
-   private:
-    Arrows arrows;
-    glm::mat4 scale_transform;
 };
 
 }  // namespace _geom

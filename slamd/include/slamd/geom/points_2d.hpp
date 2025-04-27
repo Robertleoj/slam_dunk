@@ -13,14 +13,6 @@ class Points2D : public Geometry {
         const std::vector<glm::vec3>& colors,
         const std::vector<float>& radii
     );
-
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
-
-    std::optional<gmath::AABB> bounds() override;
-
-   private:
-    Mesh mesh;
-    gmath::AABB cached_bounds;
 };
 
 }  // namespace _geom

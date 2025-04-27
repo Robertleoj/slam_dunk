@@ -18,11 +18,6 @@ class Arrows : public Geometry {
         const std::vector<glm::vec3>& colors,
         float thickness
     );
-
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
-
-   private:
-    Mesh mesh;
 };
 
 }  // namespace _geom

@@ -17,11 +17,6 @@ class PolyLine : public Geometry {
         const glm::vec3& color,
         float min_brightness = _const::default_min_brightness
     );
-
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
-
-   private:
-    Mesh mesh;
 };
 
 }  // namespace _geom

@@ -6,7 +6,6 @@
 #include <memory>
 #include <mutex>
 #include <slamd/connection.hpp>
-#include <slamd/glfw.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd/view.hpp>
 #include <stop_token>
