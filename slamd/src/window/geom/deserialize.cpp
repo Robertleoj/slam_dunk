@@ -4,6 +4,7 @@
 #include <slamd_window/geom/circles_2d.hpp>
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/geom/image.hpp>
+#include <slamd_window/geom/mesh.hpp>
 #include <slamd_window/geom/point_cloud.hpp>
 #include <slamd_window/geom/points_2d.hpp>
 #include <slamd_window/geom/poly_line.hpp>
@@ -52,6 +53,9 @@ std::shared_ptr<Geometry> Geometry::deserialize(
         }
         case (slamd::flatb::GeometryUnion_poly_line_2d): {
             return PolyLine2D::deserialize(geom_fb->geometry_as_poly_line_2d());
+        }
+        case (slamd::flatb::GeometryUnion_mesh): {
+            return Mesh::deserialize(geom_fb->geometry_as_mesh());
         }
         default: {
             throw std::runtime_error("Unknown geometry type");

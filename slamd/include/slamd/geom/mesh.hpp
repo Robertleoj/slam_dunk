@@ -22,12 +22,20 @@ class Mesh : public Geometry {
         float min_brightness = _const::default_min_brightness
     );
 
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
+
     void update_positions(
         const std::vector<glm::vec3>& positions,
         bool recompute_normals = true
     );
     void update_colors(const std::vector<glm::vec3>& colors);
     void update_normals(const std::vector<glm::vec3>& normals);
+
+   private:
+    data::MeshData mesh_data;
+    float min_brightness;
 };
 
 }  // namespace _geom

@@ -11,6 +11,15 @@
 namespace slamdw {
 namespace _geom {
 
+std::shared_ptr<Mesh> Mesh::deserialize(
+    const slamd::flatb::Mesh* mesh_fb
+) {
+    return std::make_shared<Mesh>(
+        slamd::data::MeshData::deserialize(mesh_fb->data()),
+        mesh_fb->min_brightness()
+    );
+}
+
 thread_local std::optional<ShaderProgram> Mesh::shader;
 
 void Mesh::initialize() {

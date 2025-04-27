@@ -66,6 +66,11 @@ table PolyLine2D {
     thickness: float;
 }
 
+table Mesh {
+    data: MeshData;
+    min_brightness: float;
+}
+
 union GeometryUnion {
     triad: Triad,
     circles_2d: Circles2D,
@@ -77,7 +82,8 @@ union GeometryUnion {
     sphere: Sphere,
     arrows: Arrows,
     poly_line: PolyLine,
-    poly_line_2d: PolyLine2D
+    poly_line_2d: PolyLine2D,
+    mesh: Mesh
 }
 
 table Geometry {

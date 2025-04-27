@@ -1,5 +1,6 @@
 #pragma once
 
+#include <flatb/primitives_generated.h>
 #include <glm/glm.hpp>
 #include <optional>
 #include <vector>
@@ -26,6 +27,12 @@ class MeshData {
         const glm::vec3& color,
         const glm::vec3& normal
     );
+
+    flatbuffers::Offset<slamd::flatb::MeshData> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    );
+
+    static MeshData deserialize(const flatb::MeshData* meshdata_fb);
 
    public:
     std::vector<glm::vec3> positions;

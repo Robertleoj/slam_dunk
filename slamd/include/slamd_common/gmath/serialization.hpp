@@ -225,5 +225,24 @@ inline std::vector<uint8_t> deserialize_vector(
     return result;
 }
 
+// uint32
+inline flatbuffers::Offset<flatbuffers::Vector<uint32_t>> serialize_vector(
+    flatbuffers::FlatBufferBuilder& builder,
+    const std::vector<uint32_t>& elements_in
+) {
+    return builder.CreateVector(elements_in);
+}
+
+inline std::vector<uint32_t> deserialize_vector(
+    const flatbuffers::Vector<uint32_t>* vec_fb
+) {
+    std::vector<uint32_t> result;
+    result.reserve(vec_fb->size());
+    for (auto value : *vec_fb) {
+        result.push_back(value);
+    }
+    return result;
+}
+
 }  // namespace gmath
 }  // namespace slamd

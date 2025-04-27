@@ -51,6 +51,9 @@ struct PolyLineBuilder;
 struct PolyLine2D;
 struct PolyLine2DBuilder;
 
+struct Mesh;
+struct MeshBuilder;
+
 struct Geometry;
 struct GeometryBuilder;
 
@@ -67,11 +70,12 @@ enum GeometryUnion : uint8_t {
   GeometryUnion_arrows = 9,
   GeometryUnion_poly_line = 10,
   GeometryUnion_poly_line_2d = 11,
+  GeometryUnion_mesh = 12,
   GeometryUnion_MIN = GeometryUnion_NONE,
-  GeometryUnion_MAX = GeometryUnion_poly_line_2d
+  GeometryUnion_MAX = GeometryUnion_mesh
 };
 
-inline const GeometryUnion (&EnumValuesGeometryUnion())[12] {
+inline const GeometryUnion (&EnumValuesGeometryUnion())[13] {
   static const GeometryUnion values[] = {
     GeometryUnion_NONE,
     GeometryUnion_triad,
@@ -84,13 +88,14 @@ inline const GeometryUnion (&EnumValuesGeometryUnion())[12] {
     GeometryUnion_sphere,
     GeometryUnion_arrows,
     GeometryUnion_poly_line,
-    GeometryUnion_poly_line_2d
+    GeometryUnion_poly_line_2d,
+    GeometryUnion_mesh
   };
   return values;
 }
 
 inline const char * const *EnumNamesGeometryUnion() {
-  static const char * const names[13] = {
+  static const char * const names[14] = {
     "NONE",
     "triad",
     "circles_2d",
@@ -103,13 +108,14 @@ inline const char * const *EnumNamesGeometryUnion() {
     "arrows",
     "poly_line",
     "poly_line_2d",
+    "mesh",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameGeometryUnion(GeometryUnion e) {
-  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_poly_line_2d)) return "";
+  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_mesh)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesGeometryUnion()[index];
 }
@@ -160,6 +166,10 @@ template<> struct GeometryUnionTraits<slamd::flatb::PolyLine> {
 
 template<> struct GeometryUnionTraits<slamd::flatb::PolyLine2D> {
   static const GeometryUnion enum_value = GeometryUnion_poly_line_2d;
+};
+
+template<> struct GeometryUnionTraits<slamd::flatb::Mesh> {
+  static const GeometryUnion enum_value = GeometryUnion_mesh;
 };
 
 bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *obj, GeometryUnion type);
@@ -932,6 +942,58 @@ inline ::flatbuffers::Offset<PolyLine2D> CreatePolyLine2DDirect(
       thickness);
 }
 
+struct Mesh FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef MeshBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_DATA = 4,
+    VT_MIN_BRIGHTNESS = 6
+  };
+  const slamd::flatb::MeshData *data() const {
+    return GetPointer<const slamd::flatb::MeshData *>(VT_DATA);
+  }
+  float min_brightness() const {
+    return GetField<float>(VT_MIN_BRIGHTNESS, 0.0f);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_DATA) &&
+           verifier.VerifyTable(data()) &&
+           VerifyField<float>(verifier, VT_MIN_BRIGHTNESS, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct MeshBuilder {
+  typedef Mesh Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_data(::flatbuffers::Offset<slamd::flatb::MeshData> data) {
+    fbb_.AddOffset(Mesh::VT_DATA, data);
+  }
+  void add_min_brightness(float min_brightness) {
+    fbb_.AddElement<float>(Mesh::VT_MIN_BRIGHTNESS, min_brightness, 0.0f);
+  }
+  explicit MeshBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<Mesh> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<Mesh>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<Mesh> CreateMesh(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<slamd::flatb::MeshData> data = 0,
+    float min_brightness = 0.0f) {
+  MeshBuilder builder_(_fbb);
+  builder_.add_min_brightness(min_brightness);
+  builder_.add_data(data);
+  return builder_.Finish();
+}
+
 struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GeometryBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -977,6 +1039,9 @@ struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   const slamd::flatb::PolyLine2D *geometry_as_poly_line_2d() const {
     return geometry_type() == slamd::flatb::GeometryUnion_poly_line_2d ? static_cast<const slamd::flatb::PolyLine2D *>(geometry()) : nullptr;
+  }
+  const slamd::flatb::Mesh *geometry_as_mesh() const {
+    return geometry_type() == slamd::flatb::GeometryUnion_mesh ? static_cast<const slamd::flatb::Mesh *>(geometry()) : nullptr;
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1029,6 +1094,10 @@ template<> inline const slamd::flatb::PolyLine *Geometry::geometry_as<slamd::fla
 
 template<> inline const slamd::flatb::PolyLine2D *Geometry::geometry_as<slamd::flatb::PolyLine2D>() const {
   return geometry_as_poly_line_2d();
+}
+
+template<> inline const slamd::flatb::Mesh *Geometry::geometry_as<slamd::flatb::Mesh>() const {
+  return geometry_as_mesh();
 }
 
 struct GeometryBuilder {
@@ -1109,6 +1178,10 @@ inline bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *o
     }
     case GeometryUnion_poly_line_2d: {
       auto ptr = reinterpret_cast<const slamd::flatb::PolyLine2D *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case GeometryUnion_mesh: {
+      auto ptr = reinterpret_cast<const slamd::flatb::Mesh *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

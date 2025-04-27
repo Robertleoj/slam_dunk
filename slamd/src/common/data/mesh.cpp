@@ -1,4 +1,5 @@
 #include <slamd_common/data/mesh.hpp>
+#include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/utils/mesh.hpp>
 #include <stdexcept>
 
@@ -171,6 +172,29 @@ MeshData MeshDataBuilder::build() {
     data.normals = std::move(this->normals.value());
 
     return data;
+}
+
+flatbuffers::Offset<slamd::flatb::MeshData> MeshData::serialize(
+    flatbuffers::FlatBufferBuilder& builder
+) {
+    return flatb::CreateMeshData(
+        builder,
+        gmath::serialize_vector(builder, this->positions),
+        gmath::serialize_vector(builder, this->colors),
+        gmath::serialize_vector(builder, this->triangle_indices),
+        gmath::serialize_vector(builder, this->normals)
+    );
+}
+
+MeshData MeshData::deserialize(
+    const flatb::MeshData* meshdata_fb
+) {
+    return MeshData(
+        gmath::deserialize_vector(meshdata_fb->positions()),
+        gmath::deserialize_vector(meshdata_fb->colors()),
+        gmath::deserialize_vector(meshdata_fb->triangle_indices()),
+        gmath::deserialize_vector(meshdata_fb->normals())
+    );
 }
 
 }  // namespace data

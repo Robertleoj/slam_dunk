@@ -33,3 +33,10 @@ table ImageData {
     pixels: [ubyte];
 }
 
+table MeshData {
+    positions: [Vec3];
+    colors: [Vec3];
+    triangle_indices: [uint32];
+    normals: [Vec3];
+}
+

@@ -29,6 +29,9 @@ struct Mat4;
 struct ImageData;
 struct ImageDataBuilder;
 
+struct MeshData;
+struct MeshDataBuilder;
+
 FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Vec2 FLATBUFFERS_FINAL_CLASS {
  private:
   float x_;
@@ -223,6 +226,99 @@ inline ::flatbuffers::Offset<ImageData> CreateImageDataDirect(
       width,
       height,
       pixels__);
+}
+
+struct MeshData FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef MeshDataBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_POSITIONS = 4,
+    VT_COLORS = 6,
+    VT_TRIANGLE_INDICES = 8,
+    VT_NORMALS = 10
+  };
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *positions() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_POSITIONS);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *colors() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_COLORS);
+  }
+  const ::flatbuffers::Vector<uint32_t> *triangle_indices() const {
+    return GetPointer<const ::flatbuffers::Vector<uint32_t> *>(VT_TRIANGLE_INDICES);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *normals() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_NORMALS);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_POSITIONS) &&
+           verifier.VerifyVector(positions()) &&
+           VerifyOffset(verifier, VT_COLORS) &&
+           verifier.VerifyVector(colors()) &&
+           VerifyOffset(verifier, VT_TRIANGLE_INDICES) &&
+           verifier.VerifyVector(triangle_indices()) &&
+           VerifyOffset(verifier, VT_NORMALS) &&
+           verifier.VerifyVector(normals()) &&
+           verifier.EndTable();
+  }
+};
+
+struct MeshDataBuilder {
+  typedef MeshData Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_positions(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> positions) {
+    fbb_.AddOffset(MeshData::VT_POSITIONS, positions);
+  }
+  void add_colors(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors) {
+    fbb_.AddOffset(MeshData::VT_COLORS, colors);
+  }
+  void add_triangle_indices(::flatbuffers::Offset<::flatbuffers::Vector<uint32_t>> triangle_indices) {
+    fbb_.AddOffset(MeshData::VT_TRIANGLE_INDICES, triangle_indices);
+  }
+  void add_normals(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> normals) {
+    fbb_.AddOffset(MeshData::VT_NORMALS, normals);
+  }
+  explicit MeshDataBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<MeshData> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<MeshData>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<MeshData> CreateMeshData(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> positions = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<uint32_t>> triangle_indices = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> normals = 0) {
+  MeshDataBuilder builder_(_fbb);
+  builder_.add_normals(normals);
+  builder_.add_triangle_indices(triangle_indices);
+  builder_.add_colors(colors);
+  builder_.add_positions(positions);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<MeshData> CreateMeshDataDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<slamd::flatb::Vec3> *positions = nullptr,
+    const std::vector<slamd::flatb::Vec3> *colors = nullptr,
+    const std::vector<uint32_t> *triangle_indices = nullptr,
+    const std::vector<slamd::flatb::Vec3> *normals = nullptr) {
+  auto positions__ = positions ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*positions) : 0;
+  auto colors__ = colors ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*colors) : 0;
+  auto triangle_indices__ = triangle_indices ? _fbb.CreateVector<uint32_t>(*triangle_indices) : 0;
+  auto normals__ = normals ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*normals) : 0;
+  return slamd::flatb::CreateMeshData(
+      _fbb,
+      positions__,
+      colors__,
+      triangle_indices__,
+      normals__);
 }
 
 }  // namespace flatb
