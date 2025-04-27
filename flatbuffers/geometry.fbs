@@ -53,6 +53,13 @@ table Arrows {
     thickness: float;
 }
 
+table PolyLine {
+    points: [Vec3];
+    thickness: float;
+    color: Vec3;
+    min_brightness: float;
+}
+
 union GeometryUnion {
     triad: Triad,
     circles_2d: Circles2D,
@@ -62,7 +69,8 @@ union GeometryUnion {
     points_2d: Points2D,
     box: Box,
     sphere: Sphere,
-    arrows: Arrows
+    arrows: Arrows,
+    poly_line: PolyLine
 }
 
 table Geometry {

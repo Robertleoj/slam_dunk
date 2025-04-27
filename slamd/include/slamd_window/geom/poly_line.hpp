@@ -20,6 +20,10 @@ class PolyLine : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
+    static std::shared_ptr<PolyLine> deserialize(
+        const slamd::flatb::PolyLine* poly_line_fb
+    );
+
    private:
     Mesh mesh;
 };

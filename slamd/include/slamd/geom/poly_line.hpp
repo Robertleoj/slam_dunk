@@ -17,6 +17,16 @@ class PolyLine : public Geometry {
         const glm::vec3& color,
         float min_brightness = _const::default_min_brightness
     );
+
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
+
+   private:
+    std::vector<glm::vec3> points;
+    float thickness;
+    glm::vec3 color;
+    float min_brightness;
 };
 
 }  // namespace _geom

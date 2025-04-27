@@ -1,10 +1,22 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <numbers>
 #include <slamd_common/data/mesh.hpp>
+#include <slamd_common/gmath/serialization.hpp>
 #include <slamd_window/geom/poly_line.hpp>
 
 namespace slamdw {
 namespace _geom {
+
+std::shared_ptr<PolyLine> PolyLine::deserialize(
+    const slamd::flatb::PolyLine* poly_line_fb
+) {
+    return std::make_shared<PolyLine>(
+        slamd::gmath::deserialize_vector(poly_line_fb->points()),
+        poly_line_fb->thickness(),
+        slamd::gmath::deserialize(poly_line_fb->color()),
+        poly_line_fb->min_brightness()
+    );
+}
 
 Mesh make_poly_line_mesh(
     const std::vector<glm::vec3>& points,
