@@ -1,4 +1,5 @@
 #include <slamd_common/data/image.hpp>
+#include <slamd_common/gmath/serialization.hpp>
 
 namespace slamd {
 namespace data {
@@ -25,5 +26,28 @@ Image::Image(
       width(width),
       height(height),
       channels(channels) {}
+
+flatbuffers::Offset<slamd::flatb::Image> Image::serialize(
+    flatbuffers::FlatBufferBuilder& builder
+) {
+    return flatb::CreateImage(
+        builder,
+        this->width,
+        this->height,
+        gmath::serialize_vector(builder, this->data)
+    );
+}
+
+Image Image::deserialize(
+    const flatb::Image* image_fb
+) {
+    return Image(
+        gmath::deserialize_vector(image_fb->data()),
+        image_fb->width(),
+        image_fb->height(),
+        3
+    );
+}
+
 }  // namespace data
 }  // namespace slamd

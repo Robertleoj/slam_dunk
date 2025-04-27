@@ -1,3 +1,4 @@
+#include <slamd_window/geom/camera_frustum.hpp>
 #include <slamd_window/geom/circles_2d.hpp>
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/geom/triad.hpp>
@@ -14,6 +15,11 @@ std::shared_ptr<Geometry> Geometry::deserialize(
         }
         case (slamd::flatb::GeometryUnion_circles_2d): {
             return Circles2D::deserialize(geom_fb->geometry_as_circles_2d());
+        }
+        case (slamd::flatb::GeometryUnion_camera_frustum): {
+            return CameraFrustum::deserialize(
+                geom_fb->geometry_as_camera_frustum()
+            );
         }
         default: {
             throw std::runtime_error("Unknown geometry type");

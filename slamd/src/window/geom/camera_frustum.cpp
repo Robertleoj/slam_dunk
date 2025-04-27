@@ -1,9 +1,33 @@
 #include <glm/glm.hpp>
+#include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/geom/camera_frustum.hpp>
 
 namespace slamdw {
 namespace _geom {
+
+std::shared_ptr<CameraFrustum> CameraFrustum::deserialize(
+    const slamd::flatb::CameraFrustum* frustum_fb
+) {
+    auto intrinsics = slamd::gmath::deserialize(frustum_fb->intrinsics());
+
+    if (frustum_fb->image()) {
+        return std::make_shared<CameraFrustum>(
+            intrinsics,
+            frustum_fb->image_width(),
+            frustum_fb->image_height(),
+            slamd::data::Image::deserialize(frustum_fb->image()),
+            frustum_fb->scale()
+        );
+    } else {
+        return std::make_shared<CameraFrustum>(
+            intrinsics,
+            frustum_fb->image_width(),
+            frustum_fb->image_height(),
+            frustum_fb->scale()
+        );
+    }
+}
 
 CameraFrustum::CameraFrustum(
     glm::mat3 intrinsics_matrix,

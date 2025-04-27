@@ -1,4 +1,5 @@
 #pragma once
+#include <flatb/primitives_generated.h>
 #include <cstdint>
 #include <vector>
 
@@ -21,6 +22,12 @@ class Image {
         size_t height,
         size_t channels
     );
+
+    flatbuffers::Offset<slamd::flatb::Image> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    );
+
+    static Image deserialize(const flatb::Image* image_fb);
 
     std::vector<uint8_t> data;
     size_t width;

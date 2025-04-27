@@ -58,6 +58,58 @@ inline std::vector<glm::mat4> deserialize_vector(
     return result;
 }
 
+// mat3
+inline slamd::flatb::Mat3 serialize(
+    glm::mat3 mat
+) {
+    slamd::flatb::Mat3 mat3_fb;
+    std::memcpy(
+        (void*)mat3_fb.data()->data(),
+        glm::value_ptr(mat),
+        sizeof(float) * 9
+    );
+    return mat3_fb;
+}
+
+inline glm::mat3 deserialize(
+    const slamd::flatb::Mat3* mat3_fb
+) {
+    glm::mat3 mat;
+    std::memcpy(
+        glm::value_ptr(mat),
+        mat3_fb->data()->data(),
+        sizeof(float) * 9
+    );
+    return mat;
+}
+
+inline flatbuffers::Offset<flatbuffers::Vector<const slamd::flatb::Mat3*>>
+serialize_vector(
+    flatbuffers::FlatBufferBuilder& builder,
+    const std::vector<glm::mat3>& elements_in
+) {
+    std::vector<slamd::flatb::Mat3> elements_out;
+    elements_out.reserve(elements_in.size());
+
+    for (const auto& value : elements_in) {
+        elements_out.push_back(serialize(value));
+    }
+
+    return builder.CreateVectorOfStructs(elements_out);
+}
+
+inline std::vector<glm::mat3> deserialize_vector(
+    const flatbuffers::Vector<const slamd::flatb::Mat3*>* vec_fb
+) {
+    std::vector<glm::mat3> result;
+    result.reserve(vec_fb->size());
+    for (auto fb_elem : *vec_fb) {
+        result.push_back(deserialize(fb_elem));
+    }
+    return result;
+}
+
+
 // vec2
 inline slamd::flatb::Vec2 serialize(
     glm::vec2 vec
@@ -148,6 +200,25 @@ inline std::vector<float> deserialize_vector(
     const flatbuffers::Vector<float>* vec_fb
 ) {
     std::vector<float> result;
+    result.reserve(vec_fb->size());
+    for (auto value : *vec_fb) {
+        result.push_back(value);
+    }
+    return result;
+}
+
+// uint8
+inline flatbuffers::Offset<flatbuffers::Vector<uint8_t>> serialize_vector(
+    flatbuffers::FlatBufferBuilder& builder,
+    const std::vector<uint8_t>& elements_in
+) {
+    return builder.CreateVector(elements_in);
+}
+
+inline std::vector<uint8_t> deserialize_vector(
+    const flatbuffers::Vector<uint8_t>* vec_fb
+) {
+    std::vector<uint8_t> result;
     result.reserve(vec_fb->size());
     for (auto value : *vec_fb) {
         result.push_back(value);

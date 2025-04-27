@@ -26,6 +26,13 @@ class CameraFrustum : public Geometry {
     flatbuffers::Offset<slamd::flatb::Geometry> serialize(
         flatbuffers::FlatBufferBuilder& builder
     ) override;
+
+   private:
+    glm::mat3 intrinsics_matrix;
+    size_t image_width;
+    size_t image_height;
+    float scale;
+    std::optional<data::Image> img = std::nullopt;
 };
 }  // namespace _geom
 

@@ -26,6 +26,10 @@ class CameraFrustum : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
+    static std::shared_ptr<CameraFrustum> deserialize(
+        const slamd::flatb::CameraFrustum* frustum_fb
+    );
+
    private:
     struct Corners {
         glm::vec3 tl;
