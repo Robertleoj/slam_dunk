@@ -42,6 +42,9 @@ struct BoxBuilder;
 struct Sphere;
 struct SphereBuilder;
 
+struct Arrows;
+struct ArrowsBuilder;
+
 struct Geometry;
 struct GeometryBuilder;
 
@@ -55,11 +58,12 @@ enum GeometryUnion : uint8_t {
   GeometryUnion_points_2d = 6,
   GeometryUnion_box = 7,
   GeometryUnion_sphere = 8,
+  GeometryUnion_arrows = 9,
   GeometryUnion_MIN = GeometryUnion_NONE,
-  GeometryUnion_MAX = GeometryUnion_sphere
+  GeometryUnion_MAX = GeometryUnion_arrows
 };
 
-inline const GeometryUnion (&EnumValuesGeometryUnion())[9] {
+inline const GeometryUnion (&EnumValuesGeometryUnion())[10] {
   static const GeometryUnion values[] = {
     GeometryUnion_NONE,
     GeometryUnion_triad,
@@ -69,13 +73,14 @@ inline const GeometryUnion (&EnumValuesGeometryUnion())[9] {
     GeometryUnion_image,
     GeometryUnion_points_2d,
     GeometryUnion_box,
-    GeometryUnion_sphere
+    GeometryUnion_sphere,
+    GeometryUnion_arrows
   };
   return values;
 }
 
 inline const char * const *EnumNamesGeometryUnion() {
-  static const char * const names[10] = {
+  static const char * const names[11] = {
     "NONE",
     "triad",
     "circles_2d",
@@ -85,13 +90,14 @@ inline const char * const *EnumNamesGeometryUnion() {
     "points_2d",
     "box",
     "sphere",
+    "arrows",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameGeometryUnion(GeometryUnion e) {
-  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_sphere)) return "";
+  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_arrows)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesGeometryUnion()[index];
 }
@@ -130,6 +136,10 @@ template<> struct GeometryUnionTraits<slamd::flatb::Box> {
 
 template<> struct GeometryUnionTraits<slamd::flatb::Sphere> {
   static const GeometryUnion enum_value = GeometryUnion_sphere;
+};
+
+template<> struct GeometryUnionTraits<slamd::flatb::Arrows> {
+  static const GeometryUnion enum_value = GeometryUnion_arrows;
 };
 
 bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *obj, GeometryUnion type);
@@ -649,6 +659,97 @@ inline ::flatbuffers::Offset<Sphere> CreateSphere(
   return builder_.Finish();
 }
 
+struct Arrows FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef ArrowsBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_STARTS = 4,
+    VT_ENDS = 6,
+    VT_COLORS = 8,
+    VT_THICKNESS = 10
+  };
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *starts() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_STARTS);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *ends() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_ENDS);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *colors() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_COLORS);
+  }
+  float thickness() const {
+    return GetField<float>(VT_THICKNESS, 0.0f);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_STARTS) &&
+           verifier.VerifyVector(starts()) &&
+           VerifyOffset(verifier, VT_ENDS) &&
+           verifier.VerifyVector(ends()) &&
+           VerifyOffset(verifier, VT_COLORS) &&
+           verifier.VerifyVector(colors()) &&
+           VerifyField<float>(verifier, VT_THICKNESS, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct ArrowsBuilder {
+  typedef Arrows Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_starts(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> starts) {
+    fbb_.AddOffset(Arrows::VT_STARTS, starts);
+  }
+  void add_ends(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> ends) {
+    fbb_.AddOffset(Arrows::VT_ENDS, ends);
+  }
+  void add_colors(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors) {
+    fbb_.AddOffset(Arrows::VT_COLORS, colors);
+  }
+  void add_thickness(float thickness) {
+    fbb_.AddElement<float>(Arrows::VT_THICKNESS, thickness, 0.0f);
+  }
+  explicit ArrowsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<Arrows> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<Arrows>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<Arrows> CreateArrows(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> starts = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> ends = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors = 0,
+    float thickness = 0.0f) {
+  ArrowsBuilder builder_(_fbb);
+  builder_.add_thickness(thickness);
+  builder_.add_colors(colors);
+  builder_.add_ends(ends);
+  builder_.add_starts(starts);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<Arrows> CreateArrowsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<slamd::flatb::Vec3> *starts = nullptr,
+    const std::vector<slamd::flatb::Vec3> *ends = nullptr,
+    const std::vector<slamd::flatb::Vec3> *colors = nullptr,
+    float thickness = 0.0f) {
+  auto starts__ = starts ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*starts) : 0;
+  auto ends__ = ends ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*ends) : 0;
+  auto colors__ = colors ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*colors) : 0;
+  return slamd::flatb::CreateArrows(
+      _fbb,
+      starts__,
+      ends__,
+      colors__,
+      thickness);
+}
+
 struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GeometryBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -685,6 +786,9 @@ struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   const slamd::flatb::Sphere *geometry_as_sphere() const {
     return geometry_type() == slamd::flatb::GeometryUnion_sphere ? static_cast<const slamd::flatb::Sphere *>(geometry()) : nullptr;
+  }
+  const slamd::flatb::Arrows *geometry_as_arrows() const {
+    return geometry_type() == slamd::flatb::GeometryUnion_arrows ? static_cast<const slamd::flatb::Arrows *>(geometry()) : nullptr;
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -725,6 +829,10 @@ template<> inline const slamd::flatb::Box *Geometry::geometry_as<slamd::flatb::B
 
 template<> inline const slamd::flatb::Sphere *Geometry::geometry_as<slamd::flatb::Sphere>() const {
   return geometry_as_sphere();
+}
+
+template<> inline const slamd::flatb::Arrows *Geometry::geometry_as<slamd::flatb::Arrows>() const {
+  return geometry_as_arrows();
 }
 
 struct GeometryBuilder {
@@ -793,6 +901,10 @@ inline bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *o
     }
     case GeometryUnion_sphere: {
       auto ptr = reinterpret_cast<const slamd::flatb::Sphere *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case GeometryUnion_arrows: {
+      auto ptr = reinterpret_cast<const slamd::flatb::Arrows *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

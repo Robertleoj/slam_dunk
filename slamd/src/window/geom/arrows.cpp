@@ -1,8 +1,20 @@
+#include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/geom/arrows.hpp>
 
 namespace slamdw {
 namespace _geom {
+
+std::shared_ptr<Arrows> Arrows::deserialize(
+    const slamd::flatb::Arrows* arrows_fb
+) {
+    return std::make_shared<Arrows>(
+        slamd::gmath::deserialize_vector(arrows_fb->starts()),
+        slamd::gmath::deserialize_vector(arrows_fb->ends()),
+        slamd::gmath::deserialize_vector(arrows_fb->colors()),
+        arrows_fb->thickness()
+    );
+}
 
 constexpr uint segments = 12;
 struct ArrowMesh {

@@ -18,6 +18,16 @@ class Arrows : public Geometry {
         const std::vector<glm::vec3>& colors,
         float thickness
     );
+
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
+
+   private:
+    std::vector<glm::vec3> starts;
+    std::vector<glm::vec3> ends;
+    std::vector<glm::vec3> colors;
+    float thickness;
 };
 
 }  // namespace _geom

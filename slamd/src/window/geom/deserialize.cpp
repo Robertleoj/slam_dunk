@@ -1,3 +1,4 @@
+#include <slamd_window/geom/arrows.hpp>
 #include <slamd_window/geom/box.hpp>
 #include <slamd_window/geom/camera_frustum.hpp>
 #include <slamd_window/geom/circles_2d.hpp>
@@ -40,6 +41,9 @@ std::shared_ptr<Geometry> Geometry::deserialize(
         }
         case (slamd::flatb::GeometryUnion_sphere): {
             return Sphere::deserialize(geom_fb->geometry_as_sphere());
+        }
+        case (slamd::flatb::GeometryUnion_arrows): {
+            return Arrows::deserialize(geom_fb->geometry_as_arrows());
         }
         default: {
             throw std::runtime_error("Unknown geometry type");
