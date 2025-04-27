@@ -9,6 +9,14 @@ namespace _geom {
 class Image : public Geometry {
    public:
     Image(data::Image&& image, bool normalized = true);
+
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
+
+   private:
+    data::Image img;
+    bool normalized;
 };
 
 }  // namespace _geom

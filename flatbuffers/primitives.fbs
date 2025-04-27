@@ -27,9 +27,9 @@ struct Mat4 {
     data: [float:16];
 }
 
-table Image {
+table ImageData {
     width: uint32;
     height: uint32;
-    data: [ubyte];
+    pixels: [ubyte];
 }
 

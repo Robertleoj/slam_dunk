@@ -48,7 +48,11 @@ void Connection::job() {
 
             Message message(len);
 
-            asio::read(socket, asio::buffer(message.data(), len));
+            asio::read(
+                socket,
+                asio::buffer(message.data(), len),
+                asio::transfer_exactly(len)
+            );
 
             this->messages.push(std::move(message));
 

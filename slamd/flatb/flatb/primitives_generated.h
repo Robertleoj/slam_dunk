@@ -26,8 +26,8 @@ struct Mat3;
 
 struct Mat4;
 
-struct Image;
-struct ImageBuilder;
+struct ImageData;
+struct ImageDataBuilder;
 
 FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Vec2 FLATBUFFERS_FINAL_CLASS {
  private:
@@ -150,12 +150,12 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Mat4 FLATBUFFERS_FINAL_CLASS {
 };
 FLATBUFFERS_STRUCT_END(Mat4, 64);
 
-struct Image FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef ImageBuilder Builder;
+struct ImageData FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef ImageDataBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDTH = 4,
     VT_HEIGHT = 6,
-    VT_DATA = 8
+    VT_PIXELS = 8
   };
   uint32_t width() const {
     return GetField<uint32_t>(VT_WIDTH, 0);
@@ -163,66 +163,66 @@ struct Image FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   uint32_t height() const {
     return GetField<uint32_t>(VT_HEIGHT, 0);
   }
-  const ::flatbuffers::Vector<uint8_t> *data() const {
-    return GetPointer<const ::flatbuffers::Vector<uint8_t> *>(VT_DATA);
+  const ::flatbuffers::Vector<uint8_t> *pixels() const {
+    return GetPointer<const ::flatbuffers::Vector<uint8_t> *>(VT_PIXELS);
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_WIDTH, 4) &&
            VerifyField<uint32_t>(verifier, VT_HEIGHT, 4) &&
-           VerifyOffset(verifier, VT_DATA) &&
-           verifier.VerifyVector(data()) &&
+           VerifyOffset(verifier, VT_PIXELS) &&
+           verifier.VerifyVector(pixels()) &&
            verifier.EndTable();
   }
 };
 
-struct ImageBuilder {
-  typedef Image Table;
+struct ImageDataBuilder {
+  typedef ImageData Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
   void add_width(uint32_t width) {
-    fbb_.AddElement<uint32_t>(Image::VT_WIDTH, width, 0);
+    fbb_.AddElement<uint32_t>(ImageData::VT_WIDTH, width, 0);
   }
   void add_height(uint32_t height) {
-    fbb_.AddElement<uint32_t>(Image::VT_HEIGHT, height, 0);
+    fbb_.AddElement<uint32_t>(ImageData::VT_HEIGHT, height, 0);
   }
-  void add_data(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> data) {
-    fbb_.AddOffset(Image::VT_DATA, data);
+  void add_pixels(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> pixels) {
+    fbb_.AddOffset(ImageData::VT_PIXELS, pixels);
   }
-  explicit ImageBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ImageDataBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ::flatbuffers::Offset<Image> Finish() {
+  ::flatbuffers::Offset<ImageData> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<Image>(end);
+    auto o = ::flatbuffers::Offset<ImageData>(end);
     return o;
   }
 };
 
-inline ::flatbuffers::Offset<Image> CreateImage(
+inline ::flatbuffers::Offset<ImageData> CreateImageData(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     uint32_t width = 0,
     uint32_t height = 0,
-    ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> data = 0) {
-  ImageBuilder builder_(_fbb);
-  builder_.add_data(data);
+    ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> pixels = 0) {
+  ImageDataBuilder builder_(_fbb);
+  builder_.add_pixels(pixels);
   builder_.add_height(height);
   builder_.add_width(width);
   return builder_.Finish();
 }
 
-inline ::flatbuffers::Offset<Image> CreateImageDirect(
+inline ::flatbuffers::Offset<ImageData> CreateImageDataDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     uint32_t width = 0,
     uint32_t height = 0,
-    const std::vector<uint8_t> *data = nullptr) {
-  auto data__ = data ? _fbb.CreateVector<uint8_t>(*data) : 0;
-  return slamd::flatb::CreateImage(
+    const std::vector<uint8_t> *pixels = nullptr) {
+  auto pixels__ = pixels ? _fbb.CreateVector<uint8_t>(*pixels) : 0;
+  return slamd::flatb::CreateImageData(
       _fbb,
       width,
       height,
-      data__);
+      pixels__);
 }
 
 }  // namespace flatb

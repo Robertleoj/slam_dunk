@@ -30,6 +30,9 @@ struct CameraFrustumBuilder;
 struct PointCloud;
 struct PointCloudBuilder;
 
+struct Image;
+struct ImageBuilder;
+
 struct Geometry;
 struct GeometryBuilder;
 
@@ -39,35 +42,38 @@ enum GeometryUnion : uint8_t {
   GeometryUnion_circles_2d = 2,
   GeometryUnion_camera_frustum = 3,
   GeometryUnion_point_cloud = 4,
+  GeometryUnion_image = 5,
   GeometryUnion_MIN = GeometryUnion_NONE,
-  GeometryUnion_MAX = GeometryUnion_point_cloud
+  GeometryUnion_MAX = GeometryUnion_image
 };
 
-inline const GeometryUnion (&EnumValuesGeometryUnion())[5] {
+inline const GeometryUnion (&EnumValuesGeometryUnion())[6] {
   static const GeometryUnion values[] = {
     GeometryUnion_NONE,
     GeometryUnion_triad,
     GeometryUnion_circles_2d,
     GeometryUnion_camera_frustum,
-    GeometryUnion_point_cloud
+    GeometryUnion_point_cloud,
+    GeometryUnion_image
   };
   return values;
 }
 
 inline const char * const *EnumNamesGeometryUnion() {
-  static const char * const names[6] = {
+  static const char * const names[7] = {
     "NONE",
     "triad",
     "circles_2d",
     "camera_frustum",
     "point_cloud",
+    "image",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameGeometryUnion(GeometryUnion e) {
-  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_point_cloud)) return "";
+  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_image)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesGeometryUnion()[index];
 }
@@ -90,6 +96,10 @@ template<> struct GeometryUnionTraits<slamd::flatb::CameraFrustum> {
 
 template<> struct GeometryUnionTraits<slamd::flatb::PointCloud> {
   static const GeometryUnion enum_value = GeometryUnion_point_cloud;
+};
+
+template<> struct GeometryUnionTraits<slamd::flatb::Image> {
+  static const GeometryUnion enum_value = GeometryUnion_image;
 };
 
 bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *obj, GeometryUnion type);
@@ -258,8 +268,8 @@ struct CameraFrustum FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   float scale() const {
     return GetField<float>(VT_SCALE, 0.0f);
   }
-  const slamd::flatb::Image *image() const {
-    return GetPointer<const slamd::flatb::Image *>(VT_IMAGE);
+  const slamd::flatb::ImageData *image() const {
+    return GetPointer<const slamd::flatb::ImageData *>(VT_IMAGE);
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -289,7 +299,7 @@ struct CameraFrustumBuilder {
   void add_scale(float scale) {
     fbb_.AddElement<float>(CameraFrustum::VT_SCALE, scale, 0.0f);
   }
-  void add_image(::flatbuffers::Offset<slamd::flatb::Image> image) {
+  void add_image(::flatbuffers::Offset<slamd::flatb::ImageData> image) {
     fbb_.AddOffset(CameraFrustum::VT_IMAGE, image);
   }
   explicit CameraFrustumBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
@@ -309,7 +319,7 @@ inline ::flatbuffers::Offset<CameraFrustum> CreateCameraFrustum(
     uint32_t image_width = 0,
     uint32_t image_height = 0,
     float scale = 0.0f,
-    ::flatbuffers::Offset<slamd::flatb::Image> image = 0) {
+    ::flatbuffers::Offset<slamd::flatb::ImageData> image = 0) {
   CameraFrustumBuilder builder_(_fbb);
   builder_.add_image(image);
   builder_.add_scale(scale);
@@ -398,6 +408,58 @@ inline ::flatbuffers::Offset<PointCloud> CreatePointCloudDirect(
       radii__);
 }
 
+struct Image FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef ImageBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_IMG = 4,
+    VT_NORMALIZED = 6
+  };
+  const slamd::flatb::ImageData *img() const {
+    return GetPointer<const slamd::flatb::ImageData *>(VT_IMG);
+  }
+  bool normalized() const {
+    return GetField<uint8_t>(VT_NORMALIZED, 0) != 0;
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_IMG) &&
+           verifier.VerifyTable(img()) &&
+           VerifyField<uint8_t>(verifier, VT_NORMALIZED, 1) &&
+           verifier.EndTable();
+  }
+};
+
+struct ImageBuilder {
+  typedef Image Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_img(::flatbuffers::Offset<slamd::flatb::ImageData> img) {
+    fbb_.AddOffset(Image::VT_IMG, img);
+  }
+  void add_normalized(bool normalized) {
+    fbb_.AddElement<uint8_t>(Image::VT_NORMALIZED, static_cast<uint8_t>(normalized), 0);
+  }
+  explicit ImageBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<Image> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<Image>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<Image> CreateImage(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<slamd::flatb::ImageData> img = 0,
+    bool normalized = false) {
+  ImageBuilder builder_(_fbb);
+  builder_.add_img(img);
+  builder_.add_normalized(normalized);
+  return builder_.Finish();
+}
+
 struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GeometryBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -423,6 +485,9 @@ struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::PointCloud *geometry_as_point_cloud() const {
     return geometry_type() == slamd::flatb::GeometryUnion_point_cloud ? static_cast<const slamd::flatb::PointCloud *>(geometry()) : nullptr;
   }
+  const slamd::flatb::Image *geometry_as_image() const {
+    return geometry_type() == slamd::flatb::GeometryUnion_image ? static_cast<const slamd::flatb::Image *>(geometry()) : nullptr;
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_GEOMETRY_TYPE, 1) &&
@@ -446,6 +511,10 @@ template<> inline const slamd::flatb::CameraFrustum *Geometry::geometry_as<slamd
 
 template<> inline const slamd::flatb::PointCloud *Geometry::geometry_as<slamd::flatb::PointCloud>() const {
   return geometry_as_point_cloud();
+}
+
+template<> inline const slamd::flatb::Image *Geometry::geometry_as<slamd::flatb::Image>() const {
+  return geometry_as_image();
 }
 
 struct GeometryBuilder {
@@ -498,6 +567,10 @@ inline bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *o
     }
     case GeometryUnion_point_cloud: {
       auto ptr = reinterpret_cast<const slamd::flatb::PointCloud *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case GeometryUnion_image: {
+      auto ptr = reinterpret_cast<const slamd::flatb::Image *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

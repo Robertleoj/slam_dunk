@@ -83,17 +83,17 @@ auto random_points() {
 
 int main() {
     spdlog::set_level(spdlog::level::debug);
-    slamd::Window window("hello_canvas", 1000, 1000);
+    slamd::Visualizer vis("hello_canvas");
 
     auto canvas = slamd::canvas();
 
-    window.add_canvas("canvas", canvas);
+    vis.add_canvas("canvas", canvas);
 
     slamd::data::Image image = read_image();
 
     canvas->set_object("/image", slamd::geom2d::image(std::move(image)));
 
-    canvas->set_object("/points", random_points());
+    // canvas->set_object("/points", random_points());
 
-    window.wait_for_close();
+    vis.hang_forever();
 }

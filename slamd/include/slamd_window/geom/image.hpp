@@ -12,31 +12,29 @@ namespace slamdw {
 namespace _geom {
 
 class Image : public Geometry {
-   public:
-    struct GLData {
-        gl::GLuint vao_id;
-        gl::GLuint vbo_id;
-        gl::GLuint eab_id;
-        graphics::ImageTexture texture;
-        ShaderProgram shader;
-    };
-
-    std::optional<GLData> gl_data;
-    std::optional<std::thread::id> render_thread_id;
-
    private:
-    slamd::data::Image image;
     glm::vec2 scale;
 
    public:
-    Image(slamd::data::Image&& image, bool normalized = true);
+    gl::GLuint vao_id;
+    gl::GLuint vbo_id;
+    gl::GLuint eab_id;
+    graphics::ImageTexture texture;
+    ShaderProgram shader;
+
+   public:
+    Image(const slamd::data::Image& image, bool normalized = true);
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
+
+    static std::shared_ptr<Image> deserialize(
+        const slamd::flatb::Image* image_fb
+    );
 
     std::optional<slamd::gmath::AABB> bounds() override;
 
    private:
-    void maybe_initialize();
+    void initialize();
 };
 
 }  // namespace _geom

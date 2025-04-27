@@ -1,10 +1,12 @@
+#include <spdlog/spdlog.h>
+#include <format>
 #include <slamd_common/data/image.hpp>
 #include <slamd_common/gmath/serialization.hpp>
+#include <stdexcept>
 
 namespace slamd {
 namespace data {
 
-Image::Image() {}
 Image::Image(
     const std::vector<uint8_t>& data,
     size_t width,
@@ -14,7 +16,17 @@ Image::Image(
     : data(data),
       width(width),
       height(height),
-      channels(channels) {}
+      channels(channels) {
+    if (data.size() != width * height * channels) {
+        throw std::runtime_error(
+            std::format(
+                "Data should be {}, found {}",
+                width * height * channels,
+                data.size()
+            )
+        );
+    }
+}
 
 Image::Image(
     std::vector<uint8_t>&& data,
@@ -25,28 +37,35 @@ Image::Image(
     : data(data),
       width(width),
       height(height),
-      channels(channels) {}
+      channels(channels) {
+    if (data.size() != width * height * channels) {
+        throw std::runtime_error(
+            std::format(
+                "Data should be {}, found {}",
+                width * height * channels,
+                data.size()
+            )
+        );
+    }
+}
 
-flatbuffers::Offset<slamd::flatb::Image> Image::serialize(
+flatbuffers::Offset<slamd::flatb::ImageData> Image::serialize(
     flatbuffers::FlatBufferBuilder& builder
 ) {
-    return flatb::CreateImage(
+    auto data_serialized = gmath::serialize_vector(builder, this->data);
+    return flatb::CreateImageData(
         builder,
         this->width,
         this->height,
-        gmath::serialize_vector(builder, this->data)
+        data_serialized
     );
 }
 
 Image Image::deserialize(
-    const flatb::Image* image_fb
+    const flatb::ImageData* image_fb
 ) {
-    return Image(
-        gmath::deserialize_vector(image_fb->data()),
-        image_fb->width(),
-        image_fb->height(),
-        3
-    );
+    auto deserialized_vector = gmath::deserialize_vector(image_fb->pixels());
+    return Image(deserialized_vector, image_fb->width(), image_fb->height(), 3);
 }
 
 }  // namespace data

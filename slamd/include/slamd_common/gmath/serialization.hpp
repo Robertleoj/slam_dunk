@@ -109,7 +109,6 @@ inline std::vector<glm::mat3> deserialize_vector(
     return result;
 }
 
-
 // vec2
 inline slamd::flatb::Vec2 serialize(
     glm::vec2 vec

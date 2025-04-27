@@ -23,11 +23,11 @@ class Image {
         size_t channels
     );
 
-    flatbuffers::Offset<slamd::flatb::Image> serialize(
+    flatbuffers::Offset<slamd::flatb::ImageData> serialize(
         flatbuffers::FlatBufferBuilder& builder
     );
 
-    static Image deserialize(const flatb::Image* image_fb);
+    static Image deserialize(const flatb::ImageData* image_fb);
 
     std::vector<uint8_t> data;
     size_t width;

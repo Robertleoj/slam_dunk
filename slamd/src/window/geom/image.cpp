@@ -7,14 +7,16 @@
 namespace slamdw {
 namespace _geom {
 
-void Image::maybe_initialize() {
-    if (this->render_thread_id.has_value()) {
-        assert_thread(this->render_thread_id.value());
-        return;
-    }
+std::shared_ptr<Image> Image::deserialize(
+    const slamd::flatb::Image* image_fb
+) {
+    return std::make_shared<Image>(
+        slamd::data::Image::deserialize(image_fb->img()),
+        image_fb->normalized()
+    );
+}
 
-    this->render_thread_id = std::this_thread::get_id();
-
+void Image::initialize() {
     // clang-format off
     std::vector<float> verts = {
         // top left
@@ -42,15 +44,11 @@ void Image::maybe_initialize() {
     };
     // clang-format on
 
-    gl::GLuint vao_id;
-    gl::GLuint vbo_id;
-    gl::GLuint eab_id;
+    gl::glGenVertexArrays(1, &this->vao_id);
+    gl::glBindVertexArray(this->vao_id);
 
-    gl::glGenVertexArrays(1, &vao_id);
-    gl::glBindVertexArray(vao_id);
-
-    gl::glGenBuffers(1, &vbo_id);
-    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, vbo_id);
+    gl::glGenBuffers(1, &this->vbo_id);
+    gl::glBindBuffer(gl::GL_ARRAY_BUFFER, this->vbo_id);
 
     gl::glBufferData(
         gl::GL_ARRAY_BUFFER,
@@ -60,8 +58,8 @@ void Image::maybe_initialize() {
     );
 
     // make the element array buffer
-    gl::glGenBuffers(1, &eab_id);
-    gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, eab_id);
+    gl::glGenBuffers(1, &this->eab_id);
+    gl::glBindBuffer(gl::GL_ELEMENT_ARRAY_BUFFER, this->eab_id);
 
     gl::glBufferData(
         gl::GL_ELEMENT_ARRAY_BUFFER,
@@ -93,25 +91,16 @@ void Image::maybe_initialize() {
     gl::glEnableVertexAttribArray(1);
 
     gl::glBindVertexArray(0);
-
-    GLData gl_data = {
-        vao_id,
-        vbo_id,
-        eab_id,
-        graphics::ImageTexture(this->image),
-        ShaderProgram(shader_source::image::vert, shader_source::image::frag)
-    };
-
-    this->gl_data.emplace(gl_data);
 }
 
 Image::Image(
-    slamd::data::Image&& image,
+    const slamd::data::Image& image,
     bool normalized
 )
-    : image(image) {
-    float x_size = static_cast<float>(this->image.width);
-    float y_size = static_cast<float>(this->image.height);
+    : texture(image),
+      shader(shader_source::image::vert, shader_source::image::frag) {
+    float x_size = static_cast<float>(image.width);
+    float y_size = static_cast<float>(image.height);
 
     if (normalized) {
         const float bigger = std::fmax(x_size, y_size);
@@ -120,6 +109,7 @@ Image::Image(
     }
 
     this->scale = glm::vec2(x_size, y_size);
+    this->initialize();
 }
 
 void Image::render(
@@ -127,20 +117,17 @@ void Image::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    this->maybe_initialize();
-    auto& gl_data = this->gl_data.value();
+    gl::glBindVertexArray(this->vao_id);
 
-    gl::glBindVertexArray(gl_data.vao_id);
-
-    gl_data.shader.use();
-    gl_data.shader.set_uniform(
+    this->shader.use();
+    this->shader.set_uniform(
         "model",
         model * slamd::gmath::scale_xy(this->scale)
     );
-    gl_data.shader.set_uniform("view", view);
-    gl_data.shader.set_uniform("projection", projection);
+    this->shader.set_uniform("view", view);
+    this->shader.set_uniform("projection", projection);
 
-    gl_data.texture.bind();
+    this->texture.bind();
 
     gl::glDrawElements(gl::GL_TRIANGLES, 6, gl::GL_UNSIGNED_INT, 0);
 

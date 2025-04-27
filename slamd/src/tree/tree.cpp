@@ -31,11 +31,8 @@ void Tree::set_object(
 flatbuffers::Offset<slamd::flatb::Tree> Tree::serialize(
     flatbuffers::FlatBufferBuilder& builder
 ) {
-    return slamd::flatb::CreateTree(
-        builder,
-        this->id,
-        this->root->serialize(builder)
-    );
+    auto serialized_root = this->root->serialize(builder);
+    return slamd::flatb::CreateTree(builder, this->id, serialized_root);
 }
 
 void Tree::set_transform_mat4(

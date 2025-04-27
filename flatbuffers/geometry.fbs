@@ -19,7 +19,7 @@ table CameraFrustum {
     image_width: uint32;
     image_height: uint32;
     scale: float;
-    image: Image;
+    image: ImageData;
 }
 
 table PointCloud {
@@ -28,11 +28,17 @@ table PointCloud {
     radii: [float];
 }
 
+table Image {
+    img: ImageData;
+    normalized: bool;
+}
+
 union GeometryUnion {
     triad: Triad,
     circles_2d: Circles2D,
     camera_frustum: CameraFrustum,
-    point_cloud: PointCloud
+    point_cloud: PointCloud,
+    image: Image
 }
 
 table Geometry {

@@ -6,7 +6,24 @@ namespace _geom {
 Image::Image(
     data::Image&& image,
     bool normalized
-) {}
+)
+    : img(image),
+      normalized(normalized) {}
+
+flatbuffers::Offset<slamd::flatb::Geometry> Image::serialize(
+    flatbuffers::FlatBufferBuilder& builder
+) {
+    auto image_data_fb = this->img.serialize(builder);
+
+    auto image_fb =
+        flatb::CreateImage(builder, image_data_fb, this->normalized);
+
+    return flatb::CreateGeometry(
+        builder,
+        flatb::GeometryUnion_image,
+        image_fb.Union()
+    );
+}
 
 }  // namespace _geom
 
