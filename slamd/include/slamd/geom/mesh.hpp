@@ -2,12 +2,9 @@
 
 #include <glm/glm.hpp>
 #include <memory>
-#include <optional>
 #include <slamd/constants.hpp>
 #include <slamd/data/mesh.hpp>
 #include <slamd/geom/geometry.hpp>
-#include <slamd/shaders.hpp>
-#include <thread>
 #include <vector>
 
 namespace slamd {
@@ -31,17 +28,6 @@ class Mesh : public Geometry {
     );
     void update_colors(const std::vector<glm::vec3>& colors);
     void update_normals(const std::vector<glm::vec3>& normals);
-
-   private:
-    void handle_updates();
-
-   private:
-    data::MeshData mesh_data;
-    bool pos_update_pending = false;
-    bool color_update_pending = false;
-    bool normal_update_pending = false;
-
-    float min_brightness;
 };
 
 }  // namespace _geom

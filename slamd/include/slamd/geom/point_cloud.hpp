@@ -2,15 +2,13 @@
 
 #include <memory>
 #include <slamd/geom/geometry.hpp>
-#include <slamd/shaders.hpp>
-#include <thread>
 
 namespace slamd {
 namespace _geom {
 
 /**
  * TODO: refactor to use MonoInstanced
- */
+*/
 class PointCloud : public Geometry {
    public:
     PointCloud(

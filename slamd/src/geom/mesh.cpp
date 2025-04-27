@@ -10,58 +10,21 @@ namespace _geom {
 void Mesh::update_positions(
     const std::vector<glm::vec3>& positions,
     bool recompute_normals
-) {
-    if (positions.size() != this->mesh_data.positions.size()) {
-        throw std::invalid_argument(
-            "New positions must have the same size as original"
-        );
-    }
+) {};
 
-    this->mesh_data.positions = positions;
-    if (recompute_normals) {
-        this->mesh_data.recompute_normals();
-        this->normal_update_pending = true;
-    }
-    this->pos_update_pending = true;
-};
-void Mesh::update_colors(
-    const std::vector<glm::vec3>& colors
-) {
-    if (colors.size() != this->mesh_data.colors.size()) {
-        throw std::invalid_argument("Size of new colors should match existing");
-    }
+void Mesh::update_colors(const std::vector<glm::vec3>& colors) {};
 
-    this->mesh_data.colors = colors;
-    this->color_update_pending = true;
-};
-void Mesh::update_normals(
-    const std::vector<glm::vec3>& normals
-) {
-    if (normals.size() != this->mesh_data.normals.size()) {
-        throw std::invalid_argument("Size of new colors should match existing");
-    }
-
-    this->mesh_data.normals = normals;
-    this->normal_update_pending = true;
-};
-
-void Mesh::handle_updates() {
-    return;
-}
+void Mesh::update_normals(const std::vector<glm::vec3>& normals) {};
 
 Mesh::Mesh(
     const data::MeshData& mesh_data,
     float min_brightness
-)
-    : mesh_data(mesh_data),
-      min_brightness(min_brightness) {}
+) {}
 
 Mesh::Mesh(
     data::MeshData&& mesh_data,
     float min_brightness
-)
-    : mesh_data(std::move(mesh_data)),
-      min_brightness(min_brightness) {}
+) {}
 
 }  // namespace _geom
 

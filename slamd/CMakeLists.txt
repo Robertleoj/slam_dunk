@@ -107,9 +107,6 @@ target_sources(
     slamd
 
     PRIVATE
-        src/image_texture.cpp
-        src/io.cpp
-        src/shaders.cpp
         src/assert.cpp
         src/visualizer.cpp
         src/connection.cpp
