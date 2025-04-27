@@ -21,6 +21,10 @@ class PointCloud : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
+    static std::shared_ptr<PointCloud> deserialize(
+        const slamd::flatb::PointCloud* point_cloud_fb
+    );
+
     void update_positions(const std::vector<glm::vec3>& positions);
     void update_colors(const std::vector<glm::vec3>& colors);
     void update_radii(const std::vector<float>& radii);

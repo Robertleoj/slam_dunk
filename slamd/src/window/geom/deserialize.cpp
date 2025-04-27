@@ -1,6 +1,7 @@
 #include <slamd_window/geom/camera_frustum.hpp>
 #include <slamd_window/geom/circles_2d.hpp>
 #include <slamd_window/geom/geometry.hpp>
+#include <slamd_window/geom/point_cloud.hpp>
 #include <slamd_window/geom/triad.hpp>
 
 namespace slamdw {
@@ -20,6 +21,9 @@ std::shared_ptr<Geometry> Geometry::deserialize(
             return CameraFrustum::deserialize(
                 geom_fb->geometry_as_camera_frustum()
             );
+        }
+        case (slamd::flatb::GeometryUnion_point_cloud): {
+            return PointCloud::deserialize(geom_fb->geometry_as_point_cloud());
         }
         default: {
             throw std::runtime_error("Unknown geometry type");

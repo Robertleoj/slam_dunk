@@ -3,6 +3,7 @@
 #include <format>
 #include <ranges>
 #include <slamd_common/data/mesh.hpp>
+#include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/assert.hpp>
 #include <slamd_window/constants.hpp>
@@ -41,7 +42,16 @@ PointCloud::PointCloud(
     }
     this->initialize();
 }
-// : mesh(PointCloud::make_mesh(positions, colors, radii)) {}
+
+std::shared_ptr<PointCloud> PointCloud::deserialize(
+    const slamd::flatb::PointCloud* point_cloud_fb
+) {
+    return std::make_shared<PointCloud>(
+        slamd::gmath::deserialize_vector(point_cloud_fb->positions()),
+        slamd::gmath::deserialize_vector(point_cloud_fb->colors()),
+        slamd::gmath::deserialize_vector(point_cloud_fb->radii())
+    );
+}
 
 std::tuple<size_t, uint, uint> PointCloud::initialize_sphere_mesh() {
     // mesh first
