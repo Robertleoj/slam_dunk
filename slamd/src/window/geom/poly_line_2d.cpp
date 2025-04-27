@@ -1,8 +1,19 @@
+#include <slamd_common/gmath/serialization.hpp>
 #include <slamd_window/geom/poly_line_2d.hpp>
 #include <stdexcept>
 
 namespace slamdw {
 namespace _geom {
+
+std::shared_ptr<PolyLine2D> PolyLine2D::deserialize(
+    const slamd::flatb::PolyLine2D* poly_line_fb
+) {
+    return std::make_shared<PolyLine2D>(
+        slamd::gmath::deserialize_vector(poly_line_fb->points()),
+        slamd::gmath::deserialize(poly_line_fb->color()),
+        poly_line_fb->thickness()
+    );
+}
 
 Mesh PolyLine2D::make_mesh(
     const std::vector<glm::vec2>& points,

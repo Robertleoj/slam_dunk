@@ -7,6 +7,7 @@
 #include <slamd_window/geom/point_cloud.hpp>
 #include <slamd_window/geom/points_2d.hpp>
 #include <slamd_window/geom/poly_line.hpp>
+#include <slamd_window/geom/poly_line_2d.hpp>
 #include <slamd_window/geom/sphere.hpp>
 #include <slamd_window/geom/triad.hpp>
 
@@ -48,6 +49,9 @@ std::shared_ptr<Geometry> Geometry::deserialize(
         }
         case (slamd::flatb::GeometryUnion_poly_line): {
             return PolyLine::deserialize(geom_fb->geometry_as_poly_line());
+        }
+        case (slamd::flatb::GeometryUnion_poly_line_2d): {
+            return PolyLine2D::deserialize(geom_fb->geometry_as_poly_line_2d());
         }
         default: {
             throw std::runtime_error("Unknown geometry type");

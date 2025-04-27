@@ -14,6 +14,15 @@ class PolyLine2D : public Geometry {
         const glm::vec3& color,
         float thickness
     );
+
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
+
+   private:
+    std::vector<glm::vec2> points;
+    glm::vec3 color;
+    float thickness;
 };
 
 }  // namespace _geom

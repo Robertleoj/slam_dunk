@@ -17,6 +17,10 @@ class PolyLine2D : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
+    static std::shared_ptr<PolyLine2D> deserialize(
+        const slamd::flatb::PolyLine2D* poly_line_fb
+    );
+
     std::optional<slamd::gmath::AABB> bounds() override;
 
    private:

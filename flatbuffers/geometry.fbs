@@ -60,6 +60,12 @@ table PolyLine {
     min_brightness: float;
 }
 
+table PolyLine2D {
+    points: [Vec2];
+    color: Vec3;
+    thickness: float;
+}
+
 union GeometryUnion {
     triad: Triad,
     circles_2d: Circles2D,
@@ -70,7 +76,8 @@ union GeometryUnion {
     box: Box,
     sphere: Sphere,
     arrows: Arrows,
-    poly_line: PolyLine
+    poly_line: PolyLine,
+    poly_line_2d: PolyLine2D
 }
 
 table Geometry {
