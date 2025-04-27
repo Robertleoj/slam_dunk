@@ -12,6 +12,10 @@ class Sphere : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
+    static std::shared_ptr<Sphere> deserialize(
+        const slamd::flatb::Sphere* sphere_fb
+    );
+
    private:
     Mesh mesh;
 };

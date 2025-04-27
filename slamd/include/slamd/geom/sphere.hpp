@@ -9,6 +9,13 @@ namespace _geom {
 class Sphere : public Geometry {
    public:
     Sphere(float radius, glm::vec3 color);
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
+
+   private:
+    float radius;
+    glm::vec3 color;
 };
 
 }  // namespace _geom

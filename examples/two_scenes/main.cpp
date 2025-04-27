@@ -12,7 +12,7 @@ int main() {
 
     vis.add_scene("scene 2", scene2);
     scene2->set_object("/origin", slamd::geom::triad());
-    // scene2->set_object("/ball", slamd::geom::sphere(2.0f));
+    scene2->set_object("/ball", slamd::geom::sphere(2.0f));
 
     glm::mat4 sphere_transform(1.0);
     sphere_transform[3] += glm::vec4(5.0, 1.0, 2.0, 1.0);

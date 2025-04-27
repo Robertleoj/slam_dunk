@@ -1,6 +1,7 @@
 #include <glm/glm.hpp>
 #include <numbers>
 #include <ranges>
+#include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/geom/sphere.hpp>
 #include <vector>
@@ -26,6 +27,15 @@ Mesh make_sphere_mesh(
                          .build();
 
     return Mesh(std::move(mesh_data));
+}
+
+std::shared_ptr<Sphere> Sphere::deserialize(
+    const slamd::flatb::Sphere* sphere_fb
+) {
+    return std::make_shared<Sphere>(
+        sphere_fb->radius(),
+        slamd::gmath::deserialize(sphere_fb->color())
+    );
 }
 
 Sphere::Sphere(

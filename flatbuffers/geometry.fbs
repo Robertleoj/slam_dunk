@@ -41,6 +41,11 @@ table Points2D {
 
 table Box {}
 
+table Sphere {
+    radius: float;
+    color: Vec3;
+}
+
 union GeometryUnion {
     triad: Triad,
     circles_2d: Circles2D,
@@ -48,7 +53,8 @@ union GeometryUnion {
     point_cloud: PointCloud,
     image: Image,
     points_2d: Points2D,
-    box: Box
+    box: Box,
+    sphere: Sphere
 }
 
 table Geometry {

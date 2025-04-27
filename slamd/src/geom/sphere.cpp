@@ -3,6 +3,7 @@
 #include <ranges>
 #include <slamd/geom/sphere.hpp>
 #include <slamd_common/data/mesh.hpp>
+#include <slamd_common/gmath/serialization.hpp>
 #include <vector>
 
 namespace slamd {
@@ -11,7 +12,21 @@ namespace _geom {
 Sphere::Sphere(
     float radius,
     glm::vec3 color
-) {}
+)
+    : radius(radius),
+      color(color) {}
+
+flatbuffers::Offset<slamd::flatb::Geometry> Sphere::serialize(
+    flatbuffers::FlatBufferBuilder& builder
+) {
+    auto color_fb = gmath::serialize(this->color);
+    auto sphere_fb = flatb::CreateSphere(builder, this->radius, &color_fb);
+    return flatb::CreateGeometry(
+        builder,
+        flatb::GeometryUnion_sphere,
+        sphere_fb.Union()
+    );
+}
 
 }  // namespace _geom
 

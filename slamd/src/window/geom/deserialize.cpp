@@ -5,6 +5,7 @@
 #include <slamd_window/geom/image.hpp>
 #include <slamd_window/geom/point_cloud.hpp>
 #include <slamd_window/geom/points_2d.hpp>
+#include <slamd_window/geom/sphere.hpp>
 #include <slamd_window/geom/triad.hpp>
 
 namespace slamdw {
@@ -36,6 +37,9 @@ std::shared_ptr<Geometry> Geometry::deserialize(
         }
         case (slamd::flatb::GeometryUnion_box): {
             return Box::deserialize(geom_fb->geometry_as_box());
+        }
+        case (slamd::flatb::GeometryUnion_sphere): {
+            return Sphere::deserialize(geom_fb->geometry_as_sphere());
         }
         default: {
             throw std::runtime_error("Unknown geometry type");
