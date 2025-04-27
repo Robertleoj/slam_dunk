@@ -35,7 +35,7 @@ add_subdirectory(slamd)
 # FetchContent_MakeAvailable(slamd)
 
 add_subdirectory(hello_world)
-# add_subdirectory(two_scenes)
+add_subdirectory(two_scenes)
 # add_subdirectory(one_scene_two_views)
 # add_subdirectory(moving_box)
 add_subdirectory(hello_canvas)

@@ -97,6 +97,12 @@ void Box::render(
     this->box_mesh.render(model, view, projection);
 }
 
+std::shared_ptr<Box> Box::deserialize(
+    const slamd::flatb::Box* box_fb
+) {
+    return std::make_shared<Box>();
+}
+
 }  // namespace _geom
 
 namespace geom {

@@ -10,6 +10,8 @@ class Box : public Geometry {
     Box();
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
+    static std::shared_ptr<Box> deserialize(const slamd::flatb::Box* box_fb);
+
    private:
     Mesh box_mesh;
 };
@@ -23,4 +25,4 @@ using BoxPtr = std::shared_ptr<_geom::Box>;
 BoxPtr box();
 }  // namespace geom
 
-}  // namespace slamd
+}  // namespace slamdw

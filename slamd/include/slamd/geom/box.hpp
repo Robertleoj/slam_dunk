@@ -8,6 +8,10 @@ namespace _geom {
 class Box : public Geometry {
    public:
     Box();
+
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
 };
 
 }  // namespace _geom

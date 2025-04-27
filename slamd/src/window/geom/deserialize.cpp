@@ -1,3 +1,4 @@
+#include <slamd_window/geom/box.hpp>
 #include <slamd_window/geom/camera_frustum.hpp>
 #include <slamd_window/geom/circles_2d.hpp>
 #include <slamd_window/geom/geometry.hpp>
@@ -32,6 +33,9 @@ std::shared_ptr<Geometry> Geometry::deserialize(
         }
         case (slamd::flatb::GeometryUnion_points_2d): {
             return Points2D::deserialize(geom_fb->geometry_as_points_2d());
+        }
+        case (slamd::flatb::GeometryUnion_box): {
+            return Box::deserialize(geom_fb->geometry_as_box());
         }
         default: {
             throw std::runtime_error("Unknown geometry type");
