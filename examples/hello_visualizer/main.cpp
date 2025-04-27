@@ -15,6 +15,8 @@ int main() {
 
     auto scene2 = slamd::scene();
 
+    scene2->set_object("/origin/triad", slamd::geom::triad());
+
     vis.add_scene("scene2", scene2);
 
     auto canvas = slamd::canvas();
