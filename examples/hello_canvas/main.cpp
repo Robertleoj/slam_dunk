@@ -93,7 +93,7 @@ int main() {
 
     canvas->set_object("/image", slamd::geom2d::image(std::move(image)));
 
-    // canvas->set_object("/points", random_points());
+    canvas->set_object("/points", random_points());
 
     vis.hang_forever();
 }

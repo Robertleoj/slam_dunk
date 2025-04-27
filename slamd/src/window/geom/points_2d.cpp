@@ -1,9 +1,20 @@
 #include <numbers>
 #include <ranges>
+#include <slamd_common/gmath/serialization.hpp>
 #include <slamd_window/geom/points_2d.hpp>
 
 namespace slamdw {
 namespace _geom {
+
+std::shared_ptr<Points2D> Points2D::deserialize(
+    const slamd::flatb::Points2D* points2d_fb
+) {
+    return std::make_shared<Points2D>(
+        slamd::gmath::deserialize_vector(points2d_fb->positions()),
+        slamd::gmath::deserialize_vector(points2d_fb->colors()),
+        slamd::gmath::deserialize_vector(points2d_fb->radii())
+    );
+}
 
 Mesh make_mesh(
     const std::vector<glm::vec2>& positions,
@@ -101,4 +112,4 @@ std::optional<slamd::gmath::AABB> Points2D::bounds() {
 }
 
 }  // namespace _geom
-}  // namespace slamd
+}  // namespace slamdw

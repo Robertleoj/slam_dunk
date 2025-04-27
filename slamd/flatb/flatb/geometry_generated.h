@@ -33,6 +33,9 @@ struct PointCloudBuilder;
 struct Image;
 struct ImageBuilder;
 
+struct Points2D;
+struct Points2DBuilder;
+
 struct Geometry;
 struct GeometryBuilder;
 
@@ -43,37 +46,40 @@ enum GeometryUnion : uint8_t {
   GeometryUnion_camera_frustum = 3,
   GeometryUnion_point_cloud = 4,
   GeometryUnion_image = 5,
+  GeometryUnion_points_2d = 6,
   GeometryUnion_MIN = GeometryUnion_NONE,
-  GeometryUnion_MAX = GeometryUnion_image
+  GeometryUnion_MAX = GeometryUnion_points_2d
 };
 
-inline const GeometryUnion (&EnumValuesGeometryUnion())[6] {
+inline const GeometryUnion (&EnumValuesGeometryUnion())[7] {
   static const GeometryUnion values[] = {
     GeometryUnion_NONE,
     GeometryUnion_triad,
     GeometryUnion_circles_2d,
     GeometryUnion_camera_frustum,
     GeometryUnion_point_cloud,
-    GeometryUnion_image
+    GeometryUnion_image,
+    GeometryUnion_points_2d
   };
   return values;
 }
 
 inline const char * const *EnumNamesGeometryUnion() {
-  static const char * const names[7] = {
+  static const char * const names[8] = {
     "NONE",
     "triad",
     "circles_2d",
     "camera_frustum",
     "point_cloud",
     "image",
+    "points_2d",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameGeometryUnion(GeometryUnion e) {
-  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_image)) return "";
+  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_points_2d)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesGeometryUnion()[index];
 }
@@ -100,6 +106,10 @@ template<> struct GeometryUnionTraits<slamd::flatb::PointCloud> {
 
 template<> struct GeometryUnionTraits<slamd::flatb::Image> {
   static const GeometryUnion enum_value = GeometryUnion_image;
+};
+
+template<> struct GeometryUnionTraits<slamd::flatb::Points2D> {
+  static const GeometryUnion enum_value = GeometryUnion_points_2d;
 };
 
 bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *obj, GeometryUnion type);
@@ -460,6 +470,85 @@ inline ::flatbuffers::Offset<Image> CreateImage(
   return builder_.Finish();
 }
 
+struct Points2D FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef Points2DBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_POSITIONS = 4,
+    VT_COLORS = 6,
+    VT_RADII = 8
+  };
+  const ::flatbuffers::Vector<const slamd::flatb::Vec2 *> *positions() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec2 *> *>(VT_POSITIONS);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *colors() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_COLORS);
+  }
+  const ::flatbuffers::Vector<float> *radii() const {
+    return GetPointer<const ::flatbuffers::Vector<float> *>(VT_RADII);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_POSITIONS) &&
+           verifier.VerifyVector(positions()) &&
+           VerifyOffset(verifier, VT_COLORS) &&
+           verifier.VerifyVector(colors()) &&
+           VerifyOffset(verifier, VT_RADII) &&
+           verifier.VerifyVector(radii()) &&
+           verifier.EndTable();
+  }
+};
+
+struct Points2DBuilder {
+  typedef Points2D Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_positions(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec2 *>> positions) {
+    fbb_.AddOffset(Points2D::VT_POSITIONS, positions);
+  }
+  void add_colors(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors) {
+    fbb_.AddOffset(Points2D::VT_COLORS, colors);
+  }
+  void add_radii(::flatbuffers::Offset<::flatbuffers::Vector<float>> radii) {
+    fbb_.AddOffset(Points2D::VT_RADII, radii);
+  }
+  explicit Points2DBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<Points2D> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<Points2D>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<Points2D> CreatePoints2D(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec2 *>> positions = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<float>> radii = 0) {
+  Points2DBuilder builder_(_fbb);
+  builder_.add_radii(radii);
+  builder_.add_colors(colors);
+  builder_.add_positions(positions);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<Points2D> CreatePoints2DDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<slamd::flatb::Vec2> *positions = nullptr,
+    const std::vector<slamd::flatb::Vec3> *colors = nullptr,
+    const std::vector<float> *radii = nullptr) {
+  auto positions__ = positions ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec2>(*positions) : 0;
+  auto colors__ = colors ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*colors) : 0;
+  auto radii__ = radii ? _fbb.CreateVector<float>(*radii) : 0;
+  return slamd::flatb::CreatePoints2D(
+      _fbb,
+      positions__,
+      colors__,
+      radii__);
+}
+
 struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GeometryBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -488,6 +577,9 @@ struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::Image *geometry_as_image() const {
     return geometry_type() == slamd::flatb::GeometryUnion_image ? static_cast<const slamd::flatb::Image *>(geometry()) : nullptr;
   }
+  const slamd::flatb::Points2D *geometry_as_points_2d() const {
+    return geometry_type() == slamd::flatb::GeometryUnion_points_2d ? static_cast<const slamd::flatb::Points2D *>(geometry()) : nullptr;
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_GEOMETRY_TYPE, 1) &&
@@ -515,6 +607,10 @@ template<> inline const slamd::flatb::PointCloud *Geometry::geometry_as<slamd::f
 
 template<> inline const slamd::flatb::Image *Geometry::geometry_as<slamd::flatb::Image>() const {
   return geometry_as_image();
+}
+
+template<> inline const slamd::flatb::Points2D *Geometry::geometry_as<slamd::flatb::Points2D>() const {
+  return geometry_as_points_2d();
 }
 
 struct GeometryBuilder {
@@ -571,6 +667,10 @@ inline bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *o
     }
     case GeometryUnion_image: {
       auto ptr = reinterpret_cast<const slamd::flatb::Image *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case GeometryUnion_points_2d: {
+      auto ptr = reinterpret_cast<const slamd::flatb::Points2D *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

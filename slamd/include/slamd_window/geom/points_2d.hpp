@@ -18,6 +18,10 @@ class Points2D : public Geometry {
 
     std::optional<slamd::gmath::AABB> bounds() override;
 
+    static std::shared_ptr<Points2D> deserialize(
+        const slamd::flatb::Points2D* points2d_fb
+    );
+
    private:
     Mesh mesh;
     slamd::gmath::AABB cached_bounds;

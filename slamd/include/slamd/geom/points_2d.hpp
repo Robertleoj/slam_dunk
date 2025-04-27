@@ -13,6 +13,15 @@ class Points2D : public Geometry {
         const std::vector<glm::vec3>& colors,
         const std::vector<float>& radii
     );
+
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
+
+   private:
+    std::vector<glm::vec2> positions;
+    std::vector<glm::vec3> colors;
+    std::vector<float> radii;
 };
 
 }  // namespace _geom

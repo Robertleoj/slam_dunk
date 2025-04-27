@@ -33,12 +33,19 @@ table Image {
     normalized: bool;
 }
 
+table Points2D {
+    positions: [Vec2];
+    colors: [Vec3];
+    radii: [float];
+}
+
 union GeometryUnion {
     triad: Triad,
     circles_2d: Circles2D,
     camera_frustum: CameraFrustum,
     point_cloud: PointCloud,
-    image: Image
+    image: Image,
+    points_2d: Points2D
 }
 
 table Geometry {
