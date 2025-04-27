@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
-#include <slamd/data/mesh.hpp>
 #include <slamd/geom/geometry.hpp>
 #include <slamd/geom/mono_instanced.hpp>
+#include <slamd_common/data/mesh.hpp>
 
 namespace slamd {
 namespace _geom {

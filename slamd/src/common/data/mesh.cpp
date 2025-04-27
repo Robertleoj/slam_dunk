@@ -1,5 +1,5 @@
-#include <slamd/data/mesh.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_common/data/mesh.hpp>
+#include <slamd_common/utils/mesh.hpp>
 #include <stdexcept>
 
 namespace slamd {
@@ -33,7 +33,7 @@ void MeshData::add_vertex(
 
 void MeshData::recompute_normals() {
     this->normals =
-        _geom::compute_vertex_normals(this->positions, this->triangle_indices);
+        _utils::compute_vertex_normals(this->positions, this->triangle_indices);
 }
 
 MeshDataBuilder::MeshDataBuilder() = default;
@@ -118,7 +118,7 @@ MeshDataBuilder& MeshDataBuilder::compute_normals() {
         );
     }
 
-    this->normals = _geom::compute_vertex_normals(
+    this->normals = _utils::compute_vertex_normals(
         this->positions.value(),
         this->triangle_indices.value()
     );

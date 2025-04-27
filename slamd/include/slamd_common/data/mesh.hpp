@@ -67,4 +67,5 @@ class MeshDataBuilder {
 };
 
 }  // namespace data
+
 }  // namespace slamd

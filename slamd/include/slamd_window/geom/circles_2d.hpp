@@ -1,5 +1,5 @@
 #pragma once
-#include <slamd_window/data/mesh.hpp>
+#include <slamd_common/data/mesh.hpp>
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/geom/mono_instanced.hpp>
 
@@ -16,7 +16,7 @@ class Circles2D : public Geometry {
     );
 
     static std::shared_ptr<Circles2D> deserialize(
-        const slamd::flatb::Circles2D* circles_fb
+        const slamd::flatb::Circles2D* triad_fb
     );
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;

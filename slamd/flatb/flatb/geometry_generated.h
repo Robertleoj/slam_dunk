@@ -13,7 +13,7 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 25 &&
               FLATBUFFERS_VERSION_REVISION == 10,
              "Non-compatible flatbuffers version included");
 
-#include "gmath_generated.h"
+#include "primitives_generated.h"
 
 namespace slamd {
 namespace flatb {
@@ -24,6 +24,9 @@ struct TriadBuilder;
 struct Circles2D;
 struct Circles2DBuilder;
 
+struct CameraFrustum;
+struct CameraFrustumBuilder;
+
 struct Geometry;
 struct GeometryBuilder;
 
@@ -31,31 +34,34 @@ enum GeometryUnion : uint8_t {
   GeometryUnion_NONE = 0,
   GeometryUnion_triad = 1,
   GeometryUnion_circles_2d = 2,
+  GeometryUnion_camera_frustum = 3,
   GeometryUnion_MIN = GeometryUnion_NONE,
-  GeometryUnion_MAX = GeometryUnion_circles_2d
+  GeometryUnion_MAX = GeometryUnion_camera_frustum
 };
 
-inline const GeometryUnion (&EnumValuesGeometryUnion())[3] {
+inline const GeometryUnion (&EnumValuesGeometryUnion())[4] {
   static const GeometryUnion values[] = {
     GeometryUnion_NONE,
     GeometryUnion_triad,
-    GeometryUnion_circles_2d
+    GeometryUnion_circles_2d,
+    GeometryUnion_camera_frustum
   };
   return values;
 }
 
 inline const char * const *EnumNamesGeometryUnion() {
-  static const char * const names[4] = {
+  static const char * const names[5] = {
     "NONE",
     "triad",
     "circles_2d",
+    "camera_frustum",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameGeometryUnion(GeometryUnion e) {
-  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_circles_2d)) return "";
+  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_camera_frustum)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesGeometryUnion()[index];
 }
@@ -70,6 +76,10 @@ template<> struct GeometryUnionTraits<slamd::flatb::Triad> {
 
 template<> struct GeometryUnionTraits<slamd::flatb::Circles2D> {
   static const GeometryUnion enum_value = GeometryUnion_circles_2d;
+};
+
+template<> struct GeometryUnionTraits<slamd::flatb::CameraFrustum> {
+  static const GeometryUnion enum_value = GeometryUnion_camera_frustum;
 };
 
 bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *obj, GeometryUnion type);
@@ -217,6 +227,88 @@ inline ::flatbuffers::Offset<Circles2D> CreateCircles2DDirect(
       thickness);
 }
 
+struct CameraFrustum FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef CameraFrustumBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_INTRINSICS = 4,
+    VT_IMAGE_WIDTH = 6,
+    VT_IMAGE_HEIGHT = 8,
+    VT_SCALE = 10,
+    VT_IMAGE = 12
+  };
+  const slamd::flatb::Mat3 *intrinsics() const {
+    return GetStruct<const slamd::flatb::Mat3 *>(VT_INTRINSICS);
+  }
+  uint32_t image_width() const {
+    return GetField<uint32_t>(VT_IMAGE_WIDTH, 0);
+  }
+  uint32_t image_height() const {
+    return GetField<uint32_t>(VT_IMAGE_HEIGHT, 0);
+  }
+  float scale() const {
+    return GetField<float>(VT_SCALE, 0.0f);
+  }
+  const slamd::flatb::Image *image() const {
+    return GetPointer<const slamd::flatb::Image *>(VT_IMAGE);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<slamd::flatb::Mat3>(verifier, VT_INTRINSICS, 4) &&
+           VerifyField<uint32_t>(verifier, VT_IMAGE_WIDTH, 4) &&
+           VerifyField<uint32_t>(verifier, VT_IMAGE_HEIGHT, 4) &&
+           VerifyField<float>(verifier, VT_SCALE, 4) &&
+           VerifyOffset(verifier, VT_IMAGE) &&
+           verifier.VerifyTable(image()) &&
+           verifier.EndTable();
+  }
+};
+
+struct CameraFrustumBuilder {
+  typedef CameraFrustum Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_intrinsics(const slamd::flatb::Mat3 *intrinsics) {
+    fbb_.AddStruct(CameraFrustum::VT_INTRINSICS, intrinsics);
+  }
+  void add_image_width(uint32_t image_width) {
+    fbb_.AddElement<uint32_t>(CameraFrustum::VT_IMAGE_WIDTH, image_width, 0);
+  }
+  void add_image_height(uint32_t image_height) {
+    fbb_.AddElement<uint32_t>(CameraFrustum::VT_IMAGE_HEIGHT, image_height, 0);
+  }
+  void add_scale(float scale) {
+    fbb_.AddElement<float>(CameraFrustum::VT_SCALE, scale, 0.0f);
+  }
+  void add_image(::flatbuffers::Offset<slamd::flatb::Image> image) {
+    fbb_.AddOffset(CameraFrustum::VT_IMAGE, image);
+  }
+  explicit CameraFrustumBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<CameraFrustum> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<CameraFrustum>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<CameraFrustum> CreateCameraFrustum(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const slamd::flatb::Mat3 *intrinsics = nullptr,
+    uint32_t image_width = 0,
+    uint32_t image_height = 0,
+    float scale = 0.0f,
+    ::flatbuffers::Offset<slamd::flatb::Image> image = 0) {
+  CameraFrustumBuilder builder_(_fbb);
+  builder_.add_image(image);
+  builder_.add_scale(scale);
+  builder_.add_image_height(image_height);
+  builder_.add_image_width(image_width);
+  builder_.add_intrinsics(intrinsics);
+  return builder_.Finish();
+}
+
 struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GeometryBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -236,6 +328,9 @@ struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::Circles2D *geometry_as_circles_2d() const {
     return geometry_type() == slamd::flatb::GeometryUnion_circles_2d ? static_cast<const slamd::flatb::Circles2D *>(geometry()) : nullptr;
   }
+  const slamd::flatb::CameraFrustum *geometry_as_camera_frustum() const {
+    return geometry_type() == slamd::flatb::GeometryUnion_camera_frustum ? static_cast<const slamd::flatb::CameraFrustum *>(geometry()) : nullptr;
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_GEOMETRY_TYPE, 1) &&
@@ -251,6 +346,10 @@ template<> inline const slamd::flatb::Triad *Geometry::geometry_as<slamd::flatb:
 
 template<> inline const slamd::flatb::Circles2D *Geometry::geometry_as<slamd::flatb::Circles2D>() const {
   return geometry_as_circles_2d();
+}
+
+template<> inline const slamd::flatb::CameraFrustum *Geometry::geometry_as<slamd::flatb::CameraFrustum>() const {
+  return geometry_as_camera_frustum();
 }
 
 struct GeometryBuilder {
@@ -295,6 +394,10 @@ inline bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *o
     }
     case GeometryUnion_circles_2d: {
       auto ptr = reinterpret_cast<const slamd::flatb::Circles2D *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case GeometryUnion_camera_frustum: {
+      auto ptr = reinterpret_cast<const slamd::flatb::CameraFrustum *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

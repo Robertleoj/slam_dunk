@@ -1,4 +1,4 @@
-#include <slamd_window/data/image.hpp>
+#include <slamd_common/data/image.hpp>
 
 namespace slamdw {
 namespace data {

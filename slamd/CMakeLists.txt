@@ -76,6 +76,11 @@ target_sources(
     slamd_common
 
     PRIVATE
+        src/common/data/image.cpp
+        src/common/data/mesh.cpp
+
+        src/common/utils/mesh.cpp
+
         src/common/gmath/aabb.cpp
         src/common/gmath/rect2d.cpp
         src/common/gmath/angle.cpp
@@ -112,14 +117,10 @@ target_sources(
         src/visualizer.cpp
         src/connection.cpp
 
-        src/data/image.cpp
-        src/data/mesh.cpp
-
         src/tree/tree.cpp
         src/tree/node.cpp
         src/tree/tree_path.cpp
 
-        src/geom/utils.cpp
         src/geom/points_2d.cpp
         src/geom/geometry.cpp
         src/geom/box.cpp
@@ -180,9 +181,6 @@ target_sources(
         src/window/connection.cpp
         src/window/message.cpp
 
-        src/window/data/image.cpp
-        src/window/data/mesh.cpp
-
         src/window/tree/tree.cpp
         src/window/tree/node.cpp
         src/window/tree/tree_path.cpp
@@ -190,7 +188,6 @@ target_sources(
         src/window/view/scene_view.cpp
         src/window/view/canvas_view.cpp
 
-        src/window/geom/utils.cpp
         src/window/geom/points_2d.cpp
         src/window/geom/geometry.cpp
         src/window/geom/deserialize.cpp

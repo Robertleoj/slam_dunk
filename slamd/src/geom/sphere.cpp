@@ -2,7 +2,7 @@
 #include <numbers>
 #include <ranges>
 #include <slamd/geom/sphere.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_common/data/mesh.hpp>
 #include <vector>
 
 namespace slamd {

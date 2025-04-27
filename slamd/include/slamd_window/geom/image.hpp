@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
 #include <optional>
+#include <slamd_common/data/image.hpp>
 #include <slamd_common/gmath/aabb.hpp>
-#include <slamd_window/data/image.hpp>
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/image_texture.hpp>
 #include <slamd_window/shaders.hpp>
@@ -25,11 +25,11 @@ class Image : public Geometry {
     std::optional<std::thread::id> render_thread_id;
 
    private:
-    data::Image image;
+    slamd::data::Image image;
     glm::vec2 scale;
 
    public:
-    Image(data::Image&& image, bool normalized = true);
+    Image(slamd::data::Image&& image, bool normalized = true);
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
@@ -44,13 +44,13 @@ class Image : public Geometry {
 namespace geom {
 using ImagePtr = std::shared_ptr<_geom::Image>;
 
-ImagePtr image(data::Image&& image);
+ImagePtr image(slamd::data::Image&& image);
 }  // namespace geom
 
 namespace geom2d {
 using ImagePtr = std::shared_ptr<_geom::Image>;
 
-ImagePtr image(data::Image&& image);
+ImagePtr image(slamd::data::Image&& image);
 
 }  // namespace geom2d
 

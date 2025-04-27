@@ -1,14 +1,14 @@
 #pragma once
 
 #include <glbinding/gl/gl.h>
-#include <slamd_window/data/image.hpp>
+#include <slamd_common/data/image.hpp>
 
 namespace slamdw {
 namespace graphics {
 
 class ImageTexture {
    public:
-    ImageTexture(const data::Image& image);
+    ImageTexture(const slamd::data::Image& image);
 
     const size_t width;
     const size_t height;

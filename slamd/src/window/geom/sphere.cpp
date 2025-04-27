@@ -1,8 +1,8 @@
 #include <glm/glm.hpp>
 #include <numbers>
 #include <ranges>
+#include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/geom/sphere.hpp>
-#include <slamd_window/geom/utils.hpp>
 #include <vector>
 
 namespace slamdw {
@@ -16,14 +16,14 @@ Mesh make_sphere_mesh(
     std::vector<glm::vec3> normals;
     std::vector<uint32_t> indices;
 
-    generate_sphere(vertices, indices, normals, radius, 20, 20);
+    slamd::_utils::generate_sphere(vertices, indices, normals, radius, 20, 20);
 
-    data::MeshData mesh_data = data::MeshDataBuilder()
-                                   .set_positions(std::move(vertices))
-                                   .set_indices(std::move(indices))
-                                   .set_normals(std::move(normals))
-                                   .set_colors(color)
-                                   .build();
+    auto mesh_data = slamd::data::MeshDataBuilder()
+                         .set_positions(std::move(vertices))
+                         .set_indices(std::move(indices))
+                         .set_normals(std::move(normals))
+                         .set_colors(color)
+                         .build();
 
     return Mesh(std::move(mesh_data));
 }
@@ -54,4 +54,4 @@ SpherePtr sphere(
 }
 }  // namespace geom
 
-}  // namespace slamd
+}  // namespace slamdw

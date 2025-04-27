@@ -10,7 +10,7 @@ Mesh make_mesh(
     const std::vector<glm::vec3>& colors,
     const std::vector<float>& radii
 ) {
-    data::MeshData mesh_data;
+    slamd::data::MeshData mesh_data;
 
     uint32_t curr_idx = 0;
     size_t num_segments = 10;

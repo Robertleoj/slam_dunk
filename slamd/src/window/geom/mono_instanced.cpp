@@ -3,11 +3,11 @@
 #include <spdlog/spdlog.h>
 #include <format>
 #include <ranges>
+#include <slamd_common/data/mesh.hpp>
 #include <slamd_window/assert.hpp>
 #include <slamd_window/constants.hpp>
 #include <slamd_window/gen/shader_sources.hpp>
 #include <slamd_window/geom/mono_instanced.hpp>
-#include <slamd_window/geom/utils.hpp>
 
 namespace slamdw {
 namespace _geom {

@@ -1,4 +1,4 @@
-#include <slamd_window/data/image.hpp>
+#include <slamd_common/data/image.hpp>
 #include <slamd_window/geom/arrows.hpp>
 #include <slamd_window/geom/box.hpp>
 #include <slamd_window/geom/camera_frustum.hpp>

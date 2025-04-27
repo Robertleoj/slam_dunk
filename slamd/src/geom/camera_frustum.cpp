@@ -20,6 +20,12 @@ CameraFrustum::CameraFrustum(
     float scale
 ) {}
 
+flatbuffers::Offset<slamd::flatb::Geometry> CameraFrustum::serialize(
+    flatbuffers::FlatBufferBuilder& builder
+) {
+    
+}
+
 }  // namespace _geom
 
 namespace geom {

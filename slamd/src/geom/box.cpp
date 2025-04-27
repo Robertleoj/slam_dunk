@@ -1,6 +1,6 @@
 #include <ranges>
 #include <slamd/geom/box.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_common/data/mesh.hpp>
 
 namespace slamd {
 namespace _geom {

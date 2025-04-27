@@ -19,6 +19,7 @@ class Visualizer {
     ~Visualizer();
     void add_scene(std::string name, std::shared_ptr<Scene> scene);
     void add_canvas(std::string name, std::shared_ptr<Canvas> canvas);
+    void hang_forever();
 
    private:
     void server_job(std::stop_token& stop_token);

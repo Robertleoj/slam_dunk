@@ -63,12 +63,12 @@ Mesh PolyLine2D::make_mesh(
         indices.push_back(i3);
     }
 
-    data::MeshData mesh_data = data::MeshDataBuilder()
-                                   .set_positions(vertices)
-                                   .set_colors(color)
-                                   .set_normals(glm::vec3(0.0, 0.0, 1.0))
-                                   .set_indices(indices)
-                                   .build();
+    auto mesh_data = slamd::data::MeshDataBuilder()
+                         .set_positions(vertices)
+                         .set_colors(color)
+                         .set_normals(glm::vec3(0.0, 0.0, 1.0))
+                         .set_indices(indices)
+                         .build();
 
     return Mesh(mesh_data);
 }

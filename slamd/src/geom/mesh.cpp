@@ -2,7 +2,7 @@
 #include <slamd/assert.hpp>
 #include <slamd/constants.hpp>
 #include <slamd/geom/mesh.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_common/data/mesh.hpp>
 
 namespace slamd {
 namespace _geom {

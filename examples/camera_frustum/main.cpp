@@ -68,7 +68,7 @@ slamd::geom::CameraFrustumPtr get_frustum() {
 }
 
 int main() {
-    slamd::Window window("camera_frustum", 1000, 1000);
+    slamd::Visualizer vis("camera_frustum");
 
     auto scene = slamd::scene();
 
@@ -82,7 +82,7 @@ int main() {
         scene->set_transform(key, random_transform());
     }
 
-    window.add_scene("scene", scene);
+    vis.add_scene("scene", scene);
 
-    window.wait_for_close();
+    vis.hang_forever();
 }

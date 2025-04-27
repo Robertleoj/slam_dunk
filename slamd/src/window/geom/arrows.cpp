@@ -1,5 +1,5 @@
+#include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/geom/arrows.hpp>
-#include <slamd_window/geom/utils.hpp>
 
 namespace slamdw {
 namespace _geom {
@@ -166,12 +166,12 @@ Mesh make_arrows_mesh(
         index_offset += mesh.vertices.size();
     }
 
-    data::MeshData mesh_data = data::MeshDataBuilder()
-                                   .set_positions(vertices)
-                                   .set_colors(out_colors)
-                                   .set_indices(inds)
-                                   .compute_normals()
-                                   .build();
+    slamd::data::MeshData mesh_data = slamd::data::MeshDataBuilder()
+                                          .set_positions(vertices)
+                                          .set_colors(out_colors)
+                                          .set_indices(inds)
+                                          .compute_normals()
+                                          .build();
 
     return Mesh(mesh_data);
 }
@@ -205,4 +205,4 @@ ArrowsPtr arrows(
     return std::make_shared<_geom::Arrows>(starts, ends, colors, thickness);
 }
 }  // namespace geom
-}  // namespace slamd
+}  // namespace slamdw

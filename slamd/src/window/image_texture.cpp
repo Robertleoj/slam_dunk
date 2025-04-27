@@ -4,7 +4,7 @@ namespace slamdw {
 namespace graphics {
 
 ImageTexture::ImageTexture(
-    const data::Image& image
+    const slamd::data::Image& image
 )
     : texture_id(0),
       width(image.width),

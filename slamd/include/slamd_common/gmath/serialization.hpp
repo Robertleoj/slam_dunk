@@ -1,6 +1,6 @@
 #pragma once
 
-#include <flatb/gmath_generated.h>
+#include <flatb/primitives_generated.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 

@@ -1,11 +1,11 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <ranges>
+#include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/assert.hpp>
 #include <slamd_window/constants.hpp>
 #include <slamd_window/gen/shader_sources.hpp>
 #include <slamd_window/geom/mesh.hpp>
-#include <slamd_window/geom/utils.hpp>
 #include <slamd_window/paths.hpp>
 
 namespace slamdw {
@@ -173,7 +173,7 @@ void Mesh::handle_updates() {
 }
 
 Mesh::Mesh(
-    const data::MeshData& mesh_data,
+    const slamd::data::MeshData& mesh_data,
     float min_brightness
 )
     : mesh_data(mesh_data),
@@ -182,7 +182,7 @@ Mesh::Mesh(
 }
 
 Mesh::Mesh(
-    data::MeshData&& mesh_data,
+    slamd::data::MeshData&& mesh_data,
     float min_brightness
 )
     : mesh_data(std::move(mesh_data)),
@@ -225,7 +225,7 @@ void Mesh::render(
 namespace geom {
 
 MeshPtr mesh(
-    const data::MeshData& mesh_data
+    const slamd::data::MeshData& mesh_data
 ) {
     return std::make_shared<_geom::Mesh>(mesh_data);
 }

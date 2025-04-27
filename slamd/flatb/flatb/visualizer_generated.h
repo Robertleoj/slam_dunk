@@ -14,7 +14,7 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 25 &&
              "Non-compatible flatbuffers version included");
 
 #include "geometry_generated.h"
-#include "gmath_generated.h"
+#include "primitives_generated.h"
 
 namespace slamd {
 namespace flatb {

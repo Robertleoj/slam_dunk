@@ -1,5 +1,4 @@
-#include <slamd_window/data/mesh.hpp>
-#include <slamd_window/geom/utils.hpp>
+#include <slamd_common/data/mesh.hpp>
 #include <stdexcept>
 
 namespace slamdw {
@@ -174,4 +173,4 @@ MeshData MeshDataBuilder::build() {
 }
 
 }  // namespace data
-}  // namespace slamd
+}  // namespace slamdw

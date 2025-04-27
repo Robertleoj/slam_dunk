@@ -1,5 +1,5 @@
 #include <slamd/geom/arrows.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_common/data/mesh.hpp>
 
 namespace slamd {
 namespace _geom {
@@ -17,7 +17,6 @@ Arrows::Arrows(
     const std::vector<glm::vec3>& colors,
     float thickness
 ) {}
-
 
 }  // namespace _geom
 

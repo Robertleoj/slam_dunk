@@ -2,11 +2,12 @@
 #include <glbinding/glbinding.h>
 #include <format>
 #include <ranges>
+#include <slamd_common/data/mesh.hpp>
+#include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/assert.hpp>
 #include <slamd_window/constants.hpp>
 #include <slamd_window/gen/shader_sources.hpp>
 #include <slamd_window/geom/point_cloud.hpp>
-#include <slamd_window/geom/utils.hpp>
 
 namespace slamdw {
 namespace _geom {
@@ -48,7 +49,14 @@ std::tuple<size_t, uint, uint> PointCloud::initialize_sphere_mesh() {
     std::vector<uint32_t> mesh_indices;
     std::vector<glm::vec3> vertex_normals;
 
-    generate_sphere(mesh_vertices, mesh_indices, vertex_normals, 1.0f, 10, 10);
+    slamd::_utils::generate_sphere(
+        mesh_vertices,
+        mesh_indices,
+        vertex_normals,
+        1.0f,
+        10,
+        10
+    );
 
     // vertex buffer
     uint mesh_vbo_id;

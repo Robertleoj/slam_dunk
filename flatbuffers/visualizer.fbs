@@ -1,5 +1,5 @@
 include "geometry.fbs";
-include "gmath.fbs";
+include "primitives.fbs";
 
 namespace slamd.flatb;
 

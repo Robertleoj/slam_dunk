@@ -1,7 +1,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <numbers>
+#include <slamd_common/data/mesh.hpp>
 #include <slamd_window/geom/poly_line.hpp>
-#include <slamd_window/geom/utils.hpp>
 
 namespace slamdw {
 namespace _geom {
@@ -83,12 +83,12 @@ Mesh make_poly_line_mesh(
         }
     }
 
-    data::MeshData data = data::MeshDataBuilder()
-                              .set_positions(verts)
-                              .set_colors(color)
-                              .set_indices(indices)
-                              .compute_normals()
-                              .build();
+    auto data = slamd::data::MeshDataBuilder()
+                    .set_positions(verts)
+                    .set_colors(color)
+                    .set_indices(indices)
+                    .compute_normals()
+                    .build();
 
     return Mesh(data);
 }
@@ -121,4 +121,4 @@ PolyLinePtr poly_line(
     return std::make_shared<_geom::PolyLine>(points, thickness, color);
 }
 }  // namespace geom
-}  // namespace slamd
+}  // namespace slamdw

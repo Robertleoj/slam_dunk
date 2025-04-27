@@ -1,7 +1,7 @@
 #pragma once
 
-#include <slamd/data/mesh.hpp>
 #include <slamd/geom/geometry.hpp>
+#include <slamd_common/data/mesh.hpp>
 namespace slamd {
 namespace _geom {
 

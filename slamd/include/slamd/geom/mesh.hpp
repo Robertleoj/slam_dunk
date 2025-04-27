@@ -3,8 +3,8 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <slamd/constants.hpp>
-#include <slamd/data/mesh.hpp>
 #include <slamd/geom/geometry.hpp>
+#include <slamd_common/data/mesh.hpp>
 #include <vector>
 
 namespace slamd {

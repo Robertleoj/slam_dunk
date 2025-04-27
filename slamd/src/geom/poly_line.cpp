@@ -1,7 +1,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <numbers>
 #include <slamd/geom/poly_line.hpp>
-#include <slamd/geom/utils.hpp>
+#include <slamd_common/data/mesh.hpp>
 
 namespace slamd {
 namespace _geom {

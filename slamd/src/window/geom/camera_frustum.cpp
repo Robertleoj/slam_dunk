@@ -9,7 +9,7 @@ CameraFrustum::CameraFrustum(
     glm::mat3 intrinsics_matrix,
     size_t image_width,
     size_t image_height,
-    data::Image&& image,
+    slamd::data::Image&& image,
     float scale
 )
     : CameraFrustum(intrinsics_matrix, image_width, image_height, scale) {
@@ -129,7 +129,7 @@ CameraFrustumPtr camera_frustum(
     glm::mat3 intrinsics_matrix,
     size_t image_width,
     size_t image_height,
-    data::Image&& image,
+    slamd::data::Image&& image,
     float scale
 ) {
     return std::make_shared<_geom::CameraFrustum>(

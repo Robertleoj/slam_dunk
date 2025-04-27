@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <slamd_window/data/mesh.hpp>
+#include <slamd_common/data/mesh.hpp>
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/shaders.hpp>
 #include <thread>

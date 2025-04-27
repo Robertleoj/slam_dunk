@@ -106,7 +106,7 @@ void Image::maybe_initialize() {
 }
 
 Image::Image(
-    data::Image&& image,
+    slamd::data::Image&& image,
     bool normalized
 )
     : image(image) {
@@ -165,7 +165,7 @@ std::optional<slamd::gmath::AABB> Image::bounds() {
 namespace geom {
 
 ImagePtr image(
-    data::Image&& image
+    slamd::data::Image&& image
 ) {
     return std::make_shared<_geom::Image>(std::move(image), true);
 }
@@ -174,7 +174,7 @@ ImagePtr image(
 namespace geom2d {
 
 ImagePtr image(
-    data::Image&& image
+    slamd::data::Image&& image
 ) {
     return std::make_shared<_geom::Image>(std::move(image), false);
 }

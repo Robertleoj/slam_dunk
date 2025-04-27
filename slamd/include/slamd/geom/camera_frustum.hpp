@@ -22,6 +22,10 @@ class CameraFrustum : public Geometry {
         data::Image&& image,
         float scale = 1.0
     );
+
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
 };
 }  // namespace _geom
 

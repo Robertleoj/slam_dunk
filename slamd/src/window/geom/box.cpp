@@ -1,6 +1,6 @@
 #include <ranges>
+#include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/geom/box.hpp>
-#include <slamd_window/geom/utils.hpp>
 
 namespace slamdw {
 namespace _geom {
@@ -69,7 +69,7 @@ const std::vector<glm::vec3> vertex_normals = {{
 }};
 
 auto get_mesh_data() {
-    return data::MeshData(
+    return slamd::data::MeshData(
         box_corners,
         vertex_colors,
         box_indices,
@@ -81,7 +81,7 @@ auto get_mesh_data() {
 
 Box::Box()
     : box_mesh(
-          data::MeshData(
+          slamd::data::MeshData(
               box_corners,
               vertex_colors,
               box_indices,
@@ -105,4 +105,4 @@ BoxPtr box() {
 }
 
 }  // namespace geom
-}  // namespace slamd
+}  // namespace slamdw

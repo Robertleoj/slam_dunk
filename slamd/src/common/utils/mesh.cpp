@@ -1,9 +1,9 @@
 #include <numbers>
 #include <ranges>
-#include <slamd/geom/utils.hpp>
+#include <slamd_common/utils/mesh.hpp>
 
 namespace slamd {
-namespace _geom {
+namespace _utils {
 
 size_t generate_sphere(
     std::vector<glm::vec3>& vertices,
@@ -96,5 +96,5 @@ std::vector<glm::vec3> compute_vertex_normals(
     return normals;
 }
 
-}  // namespace _geom
+}  // namespace _utils
 }  // namespace slamd

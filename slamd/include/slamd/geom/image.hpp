@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
-#include <slamd/data/image.hpp>
 #include <slamd/geom/geometry.hpp>
+#include <slamd_common/data/image.hpp>
 
 namespace slamd {
 namespace _geom {
