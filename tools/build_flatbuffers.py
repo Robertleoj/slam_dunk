@@ -2,6 +2,8 @@ import subprocess
 from pathlib import Path
 import shutil
 import os
+import filecmp
+import tempfile
 
 REPO_DIR = Path(__file__).parent.parent
 
@@ -39,24 +41,34 @@ def build_flatc(force: bool = False):
 
 def compile_flatbuffers():
     """
-    Compile all .fbs files in schema_dir using flatc into out_dir
+    Compile all .fbs files in schema_dir using flatc into out_dir,
+    only overwriting if output differs.
     """
     build_flatc()
     os.makedirs(OUT_DIR, exist_ok=True)
 
     for fname in os.listdir(SCHEMA_DIR):
         if fname.endswith(".fbs"):
-            schema_file = os.path.join(SCHEMA_DIR, fname)
-            subprocess.run(
-                [
-                    FLATBUFFER_EXECUTABLE_PATH,
-                    "-o",
-                    OUT_DIR,
-                    "--cpp",  # change this if you want other output (e.g., --cpp, --go, etc.)
-                    schema_file,
-                ],
-                check=True,
-            )
+            schema_file = SCHEMA_DIR / fname
+            with tempfile.TemporaryDirectory() as tmpdir:
+                tmpdir_path = Path(tmpdir)
+                subprocess.run(
+                    [
+                        FLATBUFFER_EXECUTABLE_PATH,
+                        "-o",
+                        tmpdir_path,
+                        "--cpp",
+                        schema_file,
+                    ],
+                    check=True,
+                )
+
+                for gen_file in tmpdir_path.iterdir():
+                    out_file = OUT_DIR / gen_file.name
+                    if not out_file.exists() or not filecmp.cmp(
+                        gen_file, out_file, shallow=False
+                    ):
+                        shutil.copy2(gen_file, out_file)
 
 
 if __name__ == "__main__":
