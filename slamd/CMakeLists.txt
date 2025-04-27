@@ -149,12 +149,8 @@ target_link_libraries(
     slamd 
     
     PRIVATE
-        glfw
         spdlog::spdlog
     PUBLIC
-        glbinding::glbinding
-        glbinding::glbinding-aux
-        imgui::imgui
         slamd_flatbuff
         slamd_common
 )

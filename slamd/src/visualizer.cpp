@@ -1,8 +1,5 @@
 #include <flatb/messages_generated.h>
 #include <flatb/visualizer_generated.h>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 #include <spdlog/spdlog.h>
 #include <asio.hpp>
 #include <set>

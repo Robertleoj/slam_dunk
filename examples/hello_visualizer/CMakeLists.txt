@@ -5,4 +5,5 @@ target_link_libraries(
     PRIVATE
 
     slamd::slamd
+    spdlog::spdlog
 )

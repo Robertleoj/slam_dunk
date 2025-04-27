@@ -1,7 +1,6 @@
 #pragma once
 #include <asio.hpp>
 #include <cstddef>
-#include <filesystem>
 #include <list>
 #include <memory>
 #include <mutex>
@@ -13,8 +12,6 @@
 #include <vector>
 
 namespace slamd {
-
-namespace fs = std::filesystem;
 
 class Visualizer {
    public:
