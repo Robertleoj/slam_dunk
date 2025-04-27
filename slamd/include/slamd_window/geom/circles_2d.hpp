@@ -15,6 +15,10 @@ class Circles2D : public Geometry {
         float thickness
     );
 
+    static std::shared_ptr<Circles2D> deserialize(
+        const slamd::flatb::Circles2D* circles_fb
+    );
+
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
     std::optional<slamd::gmath::AABB> bounds() override;

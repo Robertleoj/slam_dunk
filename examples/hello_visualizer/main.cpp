@@ -2,7 +2,6 @@
 #include <chrono>
 #include <glm/glm.hpp>
 #include <slamd/slamd.hpp>
-#include <slamd/visualizer.hpp>
 #include <thread>
 
 int main() {

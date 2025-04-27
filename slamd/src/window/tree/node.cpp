@@ -42,7 +42,7 @@ std::unique_ptr<Node> Node::deserialize(
 
     auto transform_fb = node_fb->transform();
     if (transform_fb != nullptr) {
-        glm::mat4 transform = slamd::gmath::deserialize_mat4(transform_fb);
+        glm::mat4 transform = slamd::gmath::deserialize(transform_fb);
 
         spdlog::debug("Found transform {}", slamd::gmath::stringify(transform));
 

@@ -12,3 +12,4 @@
 #include <slamd/geom/sphere.hpp>
 #include <slamd/geom/triad.hpp>
 #include <slamd/tree/tree.hpp>
+#include <slamd/visualizer.hpp>

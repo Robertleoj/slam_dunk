@@ -80,6 +80,7 @@ target_sources(
         src/common/gmath/rect2d.cpp
         src/common/gmath/angle.cpp
         src/common/gmath/transforms.cpp
+        src/common/gmath/serialization.cpp
 )
 
 target_include_directories(

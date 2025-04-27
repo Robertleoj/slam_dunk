@@ -1,3 +1,4 @@
+#include <slamd_window/geom/circles_2d.hpp>
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/geom/triad.hpp>
 
@@ -10,6 +11,9 @@ std::shared_ptr<Geometry> Geometry::deserialize(
     switch (geom_fb->geometry_type()) {
         case (slamd::flatb::GeometryUnion_triad): {
             return Triad::deserialize(geom_fb->geometry_as_triad());
+        }
+        case (slamd::flatb::GeometryUnion_circles_2d): {
+            return Circles2D::deserialize(geom_fb->geometry_as_circles_2d());
         }
         default: {
             throw std::runtime_error("Unknown geometry type");

@@ -1,3 +1,5 @@
+include "gmath.fbs";
+
 namespace slamd.flatb;
 
 table Triad {
@@ -5,8 +7,16 @@ table Triad {
     thickness: float;
 }
 
+table Circles2D {
+    positions: [Vec2];
+    colors: [Vec3];
+    radii: [float];
+    thickness: float;
+}
+
 union GeometryUnion {
-    triad: Triad
+    triad: Triad,
+    circles_2d: Circles2D
 }
 
 table Geometry {

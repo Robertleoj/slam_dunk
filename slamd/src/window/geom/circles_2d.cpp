@@ -1,5 +1,6 @@
 #include <numbers>
 #include <ranges>
+#include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/geom/circles_2d.hpp>
 
@@ -20,6 +21,17 @@ Circles2D::Circles2D(
       positions(positions),
       radii(radii),
       cached_bounds(Circles2D::make_bounds(positions, radii)) {}
+
+std::shared_ptr<Circles2D> Circles2D::deserialize(
+    const slamd::flatb::Circles2D* circles_fb
+) {
+    return std::make_shared<Circles2D>(
+        slamd::gmath::deserialize_vector(circles_fb->positions()),
+        slamd::gmath::deserialize_vector(circles_fb->colors()),
+        slamd::gmath::deserialize_vector(circles_fb->radii()),
+        circles_fb->thickness()
+    );
+}
 
 void Circles2D::render(
     glm::mat4 model,

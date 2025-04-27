@@ -52,7 +52,7 @@ flatbuffers::Offset<slamd::flatb::Node> Node::serialize(
     auto maybe_transform = this->get_transform();
     if (maybe_transform.has_value()) {
         slamd::flatb::Mat4 transform_fb =
-            gmath::serialize_mat4(maybe_transform.value());
+            gmath::serialize(maybe_transform.value());
         node_builder.add_transform(&transform_fb);
     }
 

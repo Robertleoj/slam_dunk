@@ -13,11 +13,16 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 25 &&
               FLATBUFFERS_VERSION_REVISION == 10,
              "Non-compatible flatbuffers version included");
 
+#include "gmath_generated.h"
+
 namespace slamd {
 namespace flatb {
 
 struct Triad;
 struct TriadBuilder;
+
+struct Circles2D;
+struct Circles2DBuilder;
 
 struct Geometry;
 struct GeometryBuilder;
@@ -25,29 +30,32 @@ struct GeometryBuilder;
 enum GeometryUnion : uint8_t {
   GeometryUnion_NONE = 0,
   GeometryUnion_triad = 1,
+  GeometryUnion_circles_2d = 2,
   GeometryUnion_MIN = GeometryUnion_NONE,
-  GeometryUnion_MAX = GeometryUnion_triad
+  GeometryUnion_MAX = GeometryUnion_circles_2d
 };
 
-inline const GeometryUnion (&EnumValuesGeometryUnion())[2] {
+inline const GeometryUnion (&EnumValuesGeometryUnion())[3] {
   static const GeometryUnion values[] = {
     GeometryUnion_NONE,
-    GeometryUnion_triad
+    GeometryUnion_triad,
+    GeometryUnion_circles_2d
   };
   return values;
 }
 
 inline const char * const *EnumNamesGeometryUnion() {
-  static const char * const names[3] = {
+  static const char * const names[4] = {
     "NONE",
     "triad",
+    "circles_2d",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameGeometryUnion(GeometryUnion e) {
-  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_triad)) return "";
+  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_circles_2d)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesGeometryUnion()[index];
 }
@@ -58,6 +66,10 @@ template<typename T> struct GeometryUnionTraits {
 
 template<> struct GeometryUnionTraits<slamd::flatb::Triad> {
   static const GeometryUnion enum_value = GeometryUnion_triad;
+};
+
+template<> struct GeometryUnionTraits<slamd::flatb::Circles2D> {
+  static const GeometryUnion enum_value = GeometryUnion_circles_2d;
 };
 
 bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *obj, GeometryUnion type);
@@ -114,6 +126,97 @@ inline ::flatbuffers::Offset<Triad> CreateTriad(
   return builder_.Finish();
 }
 
+struct Circles2D FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef Circles2DBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_POSITIONS = 4,
+    VT_COLORS = 6,
+    VT_RADII = 8,
+    VT_THICKNESS = 10
+  };
+  const ::flatbuffers::Vector<const slamd::flatb::Vec2 *> *positions() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec2 *> *>(VT_POSITIONS);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *colors() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_COLORS);
+  }
+  const ::flatbuffers::Vector<float> *radii() const {
+    return GetPointer<const ::flatbuffers::Vector<float> *>(VT_RADII);
+  }
+  float thickness() const {
+    return GetField<float>(VT_THICKNESS, 0.0f);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_POSITIONS) &&
+           verifier.VerifyVector(positions()) &&
+           VerifyOffset(verifier, VT_COLORS) &&
+           verifier.VerifyVector(colors()) &&
+           VerifyOffset(verifier, VT_RADII) &&
+           verifier.VerifyVector(radii()) &&
+           VerifyField<float>(verifier, VT_THICKNESS, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct Circles2DBuilder {
+  typedef Circles2D Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_positions(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec2 *>> positions) {
+    fbb_.AddOffset(Circles2D::VT_POSITIONS, positions);
+  }
+  void add_colors(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors) {
+    fbb_.AddOffset(Circles2D::VT_COLORS, colors);
+  }
+  void add_radii(::flatbuffers::Offset<::flatbuffers::Vector<float>> radii) {
+    fbb_.AddOffset(Circles2D::VT_RADII, radii);
+  }
+  void add_thickness(float thickness) {
+    fbb_.AddElement<float>(Circles2D::VT_THICKNESS, thickness, 0.0f);
+  }
+  explicit Circles2DBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<Circles2D> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<Circles2D>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<Circles2D> CreateCircles2D(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec2 *>> positions = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<float>> radii = 0,
+    float thickness = 0.0f) {
+  Circles2DBuilder builder_(_fbb);
+  builder_.add_thickness(thickness);
+  builder_.add_radii(radii);
+  builder_.add_colors(colors);
+  builder_.add_positions(positions);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<Circles2D> CreateCircles2DDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<slamd::flatb::Vec2> *positions = nullptr,
+    const std::vector<slamd::flatb::Vec3> *colors = nullptr,
+    const std::vector<float> *radii = nullptr,
+    float thickness = 0.0f) {
+  auto positions__ = positions ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec2>(*positions) : 0;
+  auto colors__ = colors ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*colors) : 0;
+  auto radii__ = radii ? _fbb.CreateVector<float>(*radii) : 0;
+  return slamd::flatb::CreateCircles2D(
+      _fbb,
+      positions__,
+      colors__,
+      radii__,
+      thickness);
+}
+
 struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GeometryBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -130,6 +233,9 @@ struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::Triad *geometry_as_triad() const {
     return geometry_type() == slamd::flatb::GeometryUnion_triad ? static_cast<const slamd::flatb::Triad *>(geometry()) : nullptr;
   }
+  const slamd::flatb::Circles2D *geometry_as_circles_2d() const {
+    return geometry_type() == slamd::flatb::GeometryUnion_circles_2d ? static_cast<const slamd::flatb::Circles2D *>(geometry()) : nullptr;
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_GEOMETRY_TYPE, 1) &&
@@ -141,6 +247,10 @@ struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
 
 template<> inline const slamd::flatb::Triad *Geometry::geometry_as<slamd::flatb::Triad>() const {
   return geometry_as_triad();
+}
+
+template<> inline const slamd::flatb::Circles2D *Geometry::geometry_as<slamd::flatb::Circles2D>() const {
+  return geometry_as_circles_2d();
 }
 
 struct GeometryBuilder {
@@ -181,6 +291,10 @@ inline bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *o
     }
     case GeometryUnion_triad: {
       auto ptr = reinterpret_cast<const slamd::flatb::Triad *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case GeometryUnion_circles_2d: {
+      auto ptr = reinterpret_cast<const slamd::flatb::Circles2D *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

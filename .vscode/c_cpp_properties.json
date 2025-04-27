@@ -6,7 +6,8 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/vcpkg_installed/x64-linux/include",
                 "${workspaceFolder}/vendored_deps/",
-                "${workspaceFolder}/slamd/include"
+                "${workspaceFolder}/slamd/include",
+                "${workspaceFolder}/slamd/flatb"
             ],
             "defines": [],
             "cStandard": "c17",

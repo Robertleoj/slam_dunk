@@ -1,6 +1,7 @@
 #include <numbers>
 #include <ranges>
 #include <slamd/geom/circles_2d.hpp>
+#include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
 
 namespace slamd {
@@ -12,7 +13,28 @@ Circles2D::Circles2D(
     const std::vector<glm::vec3>& colors,
     const std::vector<float>& radii,
     float thickness
-) {}
+)
+    : positions(positions),
+      colors(colors),
+      radii(radii),
+      thickness(thickness) {}
+
+flatbuffers::Offset<slamd::flatb::Geometry> Circles2D::serialize(
+    flatbuffers::FlatBufferBuilder& builder
+) {
+    auto pos_fb = gmath::serialize_vector(builder, this->positions);
+    auto colors_fb = gmath::serialize_vector(builder, this->colors);
+    auto radii_fb = builder.CreateVector(this->radii);
+
+    auto circles_fb =
+        flatb::CreateCircles2D(builder, pos_fb, colors_fb, radii_fb, thickness);
+
+    return flatb::CreateGeometry(
+        builder,
+        flatb::GeometryUnion_circles_2d,
+        circles_fb.Union()
+    );
+}
 
 void Circles2D::update_positions(
     const std::vector<glm::vec2>& positions

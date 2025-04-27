@@ -16,9 +16,19 @@ class Circles2D : public Geometry {
         float thickness
     );
 
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
+
     void update_positions(const std::vector<glm::vec2>& positions);
     void update_colors(const std::vector<glm::vec3>& colors);
     void update_radii(const std::vector<float>& radii);
+
+   private:
+    std::vector<glm::vec2> positions;
+    std::vector<glm::vec3> colors;
+    std::vector<float> radii;
+    float thickness;
 };
 
 }  // namespace _geom

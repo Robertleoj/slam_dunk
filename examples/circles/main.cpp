@@ -2,7 +2,7 @@
 #include <slamd/slamd.hpp>
 
 int main() {
-    slamd::Window window("circles", 1000, 1000);
+    slamd::Visualizer window("circles");
 
     auto circles = slamd::geom2d::circles(
         {glm::vec2(0.0f, 0.0f)},
@@ -16,5 +16,7 @@ int main() {
 
     window.add_canvas("canvas", canvas);
 
-    window.wait_for_close();
+    while (true) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
 }
