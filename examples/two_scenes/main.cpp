@@ -11,7 +11,7 @@ int main() {
     scene1->set_object("/box", slamd::geom::box());
 
     vis.add_scene("scene 2", scene2);
-    // scene2->set_object("/origin", slamd::geom::triad());
+    scene2->set_object("/origin", slamd::geom::triad());
     // scene2->set_object("/ball", slamd::geom::sphere(2.0f));
 
     glm::mat4 sphere_transform(1.0);
