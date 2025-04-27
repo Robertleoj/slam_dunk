@@ -11,6 +11,29 @@ Tree::Tree(
     this->root = std::make_unique<Node>();
 }
 
+Tree::Tree(
+    uint64_t id,
+    std::unique_ptr<Node>&& root
+)
+    : id(id),
+      root(std::move(root)) {}
+
+std::shared_ptr<Tree> Tree::deserialize(
+    const slamd::flatb::Tree* serialized
+) {
+    uint64_t tree_id = serialized->id();
+
+    auto root_fb = serialized->root();
+
+    if (root_fb == nullptr) {
+        throw std::runtime_error("Root cannot be null!");
+    }
+
+    auto root = Node::deserialize(root_fb);
+
+    return std::make_shared<Tree>(tree_id, std::move(root));
+}
+
 void Tree::set_object(
     const std::string& path,
     std::shared_ptr<_geom::Geometry> object

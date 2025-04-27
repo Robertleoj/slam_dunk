@@ -25,26 +25,20 @@ void StateManager::handle_initial_state(
 
     this->name = full_state_fb->name()->str();
 
-    std::shared_ptr<Tree> tree;
-
     auto trees_fb = full_state_fb->trees();
 
-    spdlog::info("Found {} trees", trees_fb->size());
+    spdlog::debug("Found {} trees", trees_fb->size());
 
-    for (size_t i = 0; i < trees_fb->size(); i++) {
-        auto tree_fb = trees_fb->Get(i);
+    for (auto tree_fb : *trees_fb) {
         uint64_t tree_id = tree_fb->id();
 
-        tree = std::make_shared<Tree>(tree_id);
-        this->trees.insert({tree_id, tree});
+        this->trees.insert({tree_id, Tree::deserialize(tree_fb)});
     }
 
     auto views_fb = full_state_fb->views();
-    spdlog::info("Found {} views", views_fb->size());
+    spdlog::debug("Found {} views", views_fb->size());
 
-    for (size_t i = 0; i < views_fb->size(); i++) {
-        auto view_fb = views_fb->Get(i);
-
+    for (auto view_fb : *views_fb) {
         uint64_t tree_id = view_fb->tree_id();
         std::string view_name = view_fb->name()->str();
 
@@ -65,7 +59,7 @@ void StateManager::handle_initial_state(
 
         this->views.insert({view_name, std::move(view)});
     }
-    spdlog::info("loaded state");
+    spdlog::debug("loaded state");
 }
 
 void StateManager::apply_updates() {

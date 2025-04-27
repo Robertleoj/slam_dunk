@@ -1,4 +1,5 @@
 #pragma once
+#include <flatb/visualizer_generated.h>
 #include <glm/glm.hpp>
 #include <slamd_common/gmath/aabb.hpp>
 #include <slamd_window/geom/geometry.hpp>
@@ -14,6 +15,7 @@ class Tree {
 
    public:
     Tree(uint64_t id);
+    Tree(uint64_t id, std::unique_ptr<Node>&& root);
 
     virtual void set_object(
         const std::string& path,
@@ -21,6 +23,10 @@ class Tree {
     );
 
     void render(const glm::mat4& view, const glm::mat4& projection) const;
+
+    static std::shared_ptr<Tree> deserialize(
+        const slamd::flatb::Tree* serialized
+    );
 
     std::optional<slamd::gmath::AABB> bounds();
 

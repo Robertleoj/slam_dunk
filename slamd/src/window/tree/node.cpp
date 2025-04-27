@@ -1,3 +1,6 @@
+#include <spdlog/spdlog.h>
+#include <slamd_common/gmath/serialization.hpp>
+#include <slamd_common/gmath/stringify.hpp>
 #include <slamd_window/tree/node.hpp>
 #include <stdexcept>
 
@@ -31,4 +34,31 @@ void Node::set_transform(
     this->transform = transform;
 }
 
-}  // namespace slamd
+std::unique_ptr<Node> Node::deserialize(
+    const slamd::flatb::Node* node_fb
+) {
+    std::unique_ptr<Node> node = std::make_unique<Node>();
+
+    auto transform_fb = node_fb->transform();
+    if (transform_fb) {
+        glm::mat4 transform = slamd::gmath::deserialize_mat4(transform_fb);
+
+        spdlog::debug("Found transform {}", slamd::gmath::stringify(transform));
+
+        node->set_transform(transform);
+    }
+
+    auto children_fb = node_fb->children();
+    spdlog::debug("Found {} children", children_fb->size());
+
+    for (auto child_fb : *children_fb) {
+        std::string key = child_fb->key()->str();
+        auto child = Node::deserialize(child_fb->value());
+
+        node->children.insert({key, std::move(child)});
+    }
+
+    return node;
+}
+
+}  // namespace slamdw

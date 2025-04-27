@@ -1,5 +1,6 @@
 #include <spdlog/spdlog.h>
 #include <chrono>
+#include <glm/glm.hpp>
 #include <slamd/slamd.hpp>
 #include <slamd/visualizer.hpp>
 #include <thread>
@@ -16,6 +17,11 @@ int main() {
     auto scene2 = slamd::scene();
 
     scene2->set_object("/origin/triad", slamd::geom::triad());
+
+    glm::mat4 transform(1.0);
+    transform[3][0] = 10.0f;
+
+    scene2->set_transform("/origin", transform);
 
     vis.add_scene("scene2", scene2);
 

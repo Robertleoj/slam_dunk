@@ -1,4 +1,5 @@
 #pragma once
+#include <flatb/visualizer_generated.h>
 #include <glm/glm.hpp>
 #include <map>
 #include <memory>
@@ -11,6 +12,7 @@ namespace slamdw {
 
 class Node {
    public:
+    static std::unique_ptr<Node> deserialize(const slamd::flatb::Node* node_fb);
     std::map<std::string, std::unique_ptr<Node>> children;
 
    private:
@@ -30,4 +32,4 @@ class Node {
     void set_transform(glm::mat4 transform);
 };
 
-}  // namespace slamd
+}  // namespace slamdw
