@@ -10,6 +10,8 @@ Visualizer::Visualizer(
     std::string name
 )
     : name(name) {
+    this->client_set = std::make_shared<_net::ClientSet>();
+
     this->server_thread = std::jthread([this](std::stop_token st) {
         this->server_job(st);
     });
@@ -62,14 +64,12 @@ std::vector<uint8_t> Visualizer::get_state() {
 
     for (auto& [view_name, view] : this->view_name_to_view) {
         auto view_name_flatb = builder.CreateString(view_name);
-        view_vec.push_back(
-            slamd::flatb::CreateView(
-                builder,
-                view_name_flatb,
-                view.tree_id,
-                view.view_type
-            )
-        );
+        view_vec.push_back(slamd::flatb::CreateView(
+            builder,
+            view_name_flatb,
+            view.tree_id,
+            view.view_type
+        ));
     }
 
     auto views_fb = builder.CreateVector(view_vec);
@@ -108,9 +108,10 @@ void Visualizer::server_job(
         acceptor.async_accept([&](std::error_code ec,
                                   asio::ip::tcp::socket socket) {
             if (!ec) {
-                auto conn = std::make_shared<_net::Connection>(std::move(socket));
+                auto conn =
+                    std::make_shared<_net::Connection>(std::move(socket));
                 conn->write(this->get_state());
-                clients.add(conn);
+                this->client_set->add(conn);
             }
             accept_loop();  // keep accepting
         });
