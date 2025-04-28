@@ -1,6 +1,6 @@
 #pragma once
 #include <asio.hpp>
-#include <slamd/net/client_set.hpp>
+#include <slamd/net/clients.hpp>
 #include <memory>
 #include <mutex>
 #include <slamd/tree/tree.hpp>
@@ -30,7 +30,7 @@ class Visualizer {
 
     std::map<std::string, View> view_name_to_view;
     std::map<uint64_t, std::shared_ptr<_tree::Tree>> trees;
-    _net::ClientSet clients;
+    _net::Clients clients;
 };
 
 }  // namespace slamd

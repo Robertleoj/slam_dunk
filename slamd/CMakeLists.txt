@@ -117,7 +117,7 @@ target_sources(
         src/slamd/visualizer.cpp
 
         src/slamd/net/connection.cpp
-        src/slamd/net/client_set.cpp
+        src/slamd/net/clients.cpp
 
         src/slamd/tree/tree.cpp
         src/slamd/tree/node.cpp

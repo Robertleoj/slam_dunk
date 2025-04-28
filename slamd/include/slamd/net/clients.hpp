@@ -7,7 +7,7 @@
 namespace slamd {
 namespace _net {
 
-class ClientSet {
+class Clients {
    public:
     void add(std::shared_ptr<Connection> conn);
     void broadcast(std::vector<uint8_t>&& msg);
