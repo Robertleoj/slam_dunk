@@ -2,7 +2,10 @@
   "C_Cpp.default.compileCommands": [
     "${workspaceFolder}/examples/build/compile_commands.json"
   ],
-  "clangd.arguments": ["--compile-commands-dir=examples/build"],
+  "clangd.arguments": [
+    "--compile-commands-dir=examples/build",
+    "--function-arg-placeholders=false"
+  ],
   "files.associations": {
     "*.py": "python",
     "*.rmd": "markdown",
