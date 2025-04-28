@@ -115,8 +115,9 @@ target_sources(
     PRIVATE
         src/assert.cpp
         src/visualizer.cpp
-        src/connection.cpp
-        src/client_set.cpp
+
+        src/net/connection.cpp
+        src/net/client_set.cpp
 
         src/tree/tree.cpp
         src/tree/node.cpp

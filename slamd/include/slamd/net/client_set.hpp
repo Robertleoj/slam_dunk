@@ -2,7 +2,7 @@
 
 #include <list>
 #include <mutex>
-#include <slamd/connection.hpp>
+#include <slamd/net/connection.hpp>
 
 namespace slamd {
 namespace _net {

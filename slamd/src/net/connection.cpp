@@ -1,6 +1,6 @@
 #include <spdlog/spdlog.h>
 #include <chrono>
-#include <slamd/connection.hpp>
+#include <slamd/net/connection.hpp>
 
 namespace slamd {
 namespace _net {

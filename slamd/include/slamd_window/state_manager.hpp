@@ -1,6 +1,5 @@
 #pragma once
 
-#include <filesystem>
 #include <map>
 #include <memory>
 #include <slamd_window/connection.hpp>
@@ -9,8 +8,6 @@
 #include <string>
 
 namespace slamdw {
-
-namespace fs = std::filesystem;
 
 class StateManager {
    public:

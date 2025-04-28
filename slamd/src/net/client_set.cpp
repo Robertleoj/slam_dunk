@@ -1,4 +1,4 @@
-#include <slamd/client_set.hpp>
+#include <slamd/net/client_set.hpp>
 
 namespace slamd {
 namespace _net {

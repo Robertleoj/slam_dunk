@@ -1,13 +1,12 @@
 #pragma once
 #include <asio.hpp>
-#include <slamd/client_set.hpp>
+#include <slamd/net/client_set.hpp>
 #include <memory>
 #include <mutex>
 #include <slamd/tree/tree.hpp>
 #include <slamd/view.hpp>
 #include <stop_token>
 #include <thread>
-#include <vector>
 
 namespace slamd {
 

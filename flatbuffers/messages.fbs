@@ -2,6 +2,8 @@ include "visualizer.fbs";
 
 namespace slamd.flatb;
 
+
+
 union MessageUnion {
     initial_state: InitialState
 }
