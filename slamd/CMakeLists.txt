@@ -113,30 +113,30 @@ target_sources(
     slamd
 
     PRIVATE
-        src/assert.cpp
-        src/visualizer.cpp
+        src/slamd/assert.cpp
+        src/slamd/visualizer.cpp
 
-        src/net/connection.cpp
-        src/net/client_set.cpp
+        src/slamd/net/connection.cpp
+        src/slamd/net/client_set.cpp
 
-        src/tree/tree.cpp
-        src/tree/node.cpp
-        src/tree/tree_path.cpp
+        src/slamd/tree/tree.cpp
+        src/slamd/tree/node.cpp
+        src/slamd/tree/tree_path.cpp
 
-        src/geom/points_2d.cpp
-        src/geom/geometry.cpp
-        src/geom/box.cpp
-        src/geom/mesh.cpp
-        src/geom/arrows.cpp
-        src/geom/sphere.cpp
-        src/geom/triad.cpp
-        src/geom/poly_line.cpp
-        src/geom/image.cpp
-        src/geom/point_cloud.cpp
-        src/geom/camera_frustum.cpp
-        src/geom/poly_line_2d.cpp
-        src/geom/mono_instanced.cpp
-        src/geom/circles_2d.cpp
+        src/slamd/geom/points_2d.cpp
+        src/slamd/geom/geometry.cpp
+        src/slamd/geom/box.cpp
+        src/slamd/geom/mesh.cpp
+        src/slamd/geom/arrows.cpp
+        src/slamd/geom/sphere.cpp
+        src/slamd/geom/triad.cpp
+        src/slamd/geom/poly_line.cpp
+        src/slamd/geom/image.cpp
+        src/slamd/geom/point_cloud.cpp
+        src/slamd/geom/camera_frustum.cpp
+        src/slamd/geom/poly_line_2d.cpp
+        src/slamd/geom/mono_instanced.cpp
+        src/slamd/geom/circles_2d.cpp
 )
 
 target_include_directories(
