@@ -1,6 +1,5 @@
 #include <slamd/tree/node.hpp>
 #include <slamd_common/gmath/serialization.hpp>
-#include <stdexcept>
 
 namespace slamd {
 namespace _tree {

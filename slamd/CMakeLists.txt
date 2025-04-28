@@ -115,6 +115,7 @@ target_sources(
     PRIVATE
         src/slamd/assert.cpp
         src/slamd/visualizer.cpp
+        src/slamd/global_object_map.cpp
 
         src/slamd/net/connection.cpp
         src/slamd/net/client_set.cpp
