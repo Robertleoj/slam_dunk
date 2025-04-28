@@ -1,10 +1,8 @@
 #pragma once
 #include <asio.hpp>
-#include <cstddef>
-#include <list>
+#include <slamd/client_set.hpp>
 #include <memory>
 #include <mutex>
-#include <slamd/connection.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd/view.hpp>
 #include <stop_token>
@@ -23,7 +21,6 @@ class Visualizer {
 
    private:
     void server_job(std::stop_token& stop_token);
-    void connection_handler(asio::ip::tcp::socket socket);
     std::vector<uint8_t> get_state();
 
    private:
@@ -34,8 +31,7 @@ class Visualizer {
 
     std::map<std::string, View> view_name_to_view;
     std::map<uint64_t, std::shared_ptr<_tree::Tree>> trees;
-
-    std::list<Connection> open_connections;
+    _net::ClientSet clients;
 };
 
 }  // namespace slamd

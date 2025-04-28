@@ -2,7 +2,6 @@
 #include <flatb/visualizer_generated.h>
 #include <spdlog/spdlog.h>
 #include <asio.hpp>
-#include <set>
 #include <slamd/visualizer.hpp>
 
 namespace slamd {
@@ -105,15 +104,13 @@ void Visualizer::server_job(
         asio::ip::tcp::endpoint(asio::ip::tcp::v4(), 5555)
     );
 
-    std::set<std::shared_ptr<Connection>> clients;
-
     std::function<void(void)> accept_loop = [&]() {
         acceptor.async_accept([&](std::error_code ec,
                                   asio::ip::tcp::socket socket) {
             if (!ec) {
-                auto conn = std::make_shared<Connection>(std::move(socket));
+                auto conn = std::make_shared<_net::Connection>(std::move(socket));
                 conn->write(this->get_state());
-                clients.insert(conn);
+                clients.add(conn);
             }
             accept_loop();  // keep accepting
         });

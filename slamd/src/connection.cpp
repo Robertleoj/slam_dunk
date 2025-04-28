@@ -1,39 +1,78 @@
 #include <spdlog/spdlog.h>
-#include <iostream>
+#include <chrono>
 #include <slamd/connection.hpp>
 
 namespace slamd {
+namespace _net {
 
+bool Connection::is_alive() {
+    return this->alive;
+}
 Connection::Connection(
     asio::ip::tcp::socket socket
 )
-    : socket(std::move(socket)) {
+    : socket(std::move(socket)),
+      alive(true) {
     SPDLOG_INFO("Client connected");
+
+    this->worker = std::jthread([this](std::stop_token st) {
+        this->job(st);
+    });
 }
 
 void Connection::write(
     const std::vector<uint8_t>& msg
 ) {
-    auto shared_msg = std::make_shared<std::vector<uint8_t>>(msg);
-    auto shared_len = std::make_shared<uint32_t>(htonl(msg.size()));
-
-    std::vector<asio::const_buffer> buffers = {
-        asio::buffer(shared_len.get(), sizeof(uint32_t)),
-        asio::buffer(*shared_msg)
-    };
-
-    asio::async_write(
-        socket,
-        buffers,
-        [self = shared_from_this(),
-         shared_msg,
-         shared_len](std::error_code ec, std::size_t) {
-            if (ec) {
-                std::cerr << "Write failed: " << ec.message() << "\n";
-            }
-            // shared_msg and shared_len stay alive until here
-        }
-    );
+    auto msg_ptr = std::make_shared<std::vector<uint8_t>>(msg);
+    this->message_queue.push(msg_ptr);
 }
 
+void Connection::write(
+    std::shared_ptr<std::vector<uint8_t>> msg
+) {
+    this->message_queue.push(msg);
+}
+
+void Connection::job(
+    std::stop_token& st
+) {
+    while (!st.stop_requested()) {
+        auto maybe_buffer =
+            this->message_queue.timeout_pop(std::chrono::milliseconds(10));
+
+        if (!maybe_buffer.has_value()) {
+            if (!this->socket.is_open()) {
+                SPDLOG_INFO("Socket closed, closing connection");
+                this->alive = false;
+                return;
+            }
+
+            continue;
+        }
+
+        std::shared_ptr<std::vector<uint8_t>> data = maybe_buffer.value();
+
+        uint32_t len = htonl(data->size());
+
+        std::vector<asio::const_buffer> buffers = {
+            asio::buffer(&len, sizeof(len)),
+            asio::buffer(*data)
+        };
+
+        std::error_code ec;
+        asio::write(socket, buffers, ec);
+
+        if (ec) {
+            SPDLOG_INFO("Write failed: {}", ec.message());
+
+            SPDLOG_ERROR("Closing connection...");
+            socket.shutdown(asio::ip::tcp::socket::shutdown_both);
+            socket.close();
+            this->alive = false;
+            return;
+        }
+    }
+}
+
+}  // namespace _net
 }  // namespace slamd

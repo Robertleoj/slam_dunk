@@ -116,6 +116,7 @@ target_sources(
         src/assert.cpp
         src/visualizer.cpp
         src/connection.cpp
+        src/client_set.cpp
 
         src/tree/tree.cpp
         src/tree/node.cpp
