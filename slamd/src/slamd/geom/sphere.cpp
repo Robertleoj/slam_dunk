@@ -1,10 +1,8 @@
 #include <glm/glm.hpp>
-#include <numbers>
-#include <ranges>
 #include <slamd/geom/sphere.hpp>
+#include <slamd/global_object_map.hpp>
 #include <slamd_common/data/mesh.hpp>
 #include <slamd_common/gmath/serialization.hpp>
-#include <vector>
 
 namespace slamd {
 namespace _geom {
@@ -36,7 +34,9 @@ SpherePtr sphere(
     float radius,
     glm::vec3 color
 ) {
-    return std::make_shared<_geom::Sphere>(radius, color);
+    auto sphere = std::make_shared<_geom::Sphere>(radius, color);
+    _global::geometries.add(sphere->id, sphere);
+    return sphere;
 }
 }  // namespace geom
 

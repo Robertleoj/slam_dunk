@@ -1,6 +1,6 @@
 #include <slamd/geom/poly_line_2d.hpp>
+#include <slamd/global_object_map.hpp>
 #include <slamd_common/gmath/serialization.hpp>
-#include <stdexcept>
 
 namespace slamd {
 namespace _geom {
@@ -41,7 +41,9 @@ PolyLinePtr poly_line(
     const glm::vec3& color,
     float thickness
 ) {
-    return std::make_shared<_geom::PolyLine2D>(points, color, thickness);
+    auto line = std::make_shared<_geom::PolyLine2D>(points, color, thickness);
+    _global::geometries.add(line->id, line);
+    return line;
 }
 
 }  // namespace geom2d

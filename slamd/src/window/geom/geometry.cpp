@@ -8,4 +8,4 @@ std::optional<slamd::gmath::AABB> Geometry::bounds() {
 }
 
 }  // namespace _geom
-}  // namespace slamd
+}  // namespace slamdw

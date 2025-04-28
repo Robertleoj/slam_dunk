@@ -1,5 +1,5 @@
-#include <ranges>
 #include <slamd/geom/box.hpp>
+#include <slamd/global_object_map.hpp>
 #include <slamd_common/data/mesh.hpp>
 
 namespace slamd {
@@ -22,7 +22,9 @@ flatbuffers::Offset<slamd::flatb::Geometry> Box::serialize(
 
 namespace geom {
 BoxPtr box() {
-    return std::make_shared<_geom::Box>();
+    auto box = std::make_shared<_geom::Box>();
+    _global::geometries.add(box->id, box);
+    return box;
 }
 
 }  // namespace geom

@@ -7,7 +7,6 @@
 #include <slamd_window/geom/xy_grid.hpp>
 #include <slamd_window/tree/tree.hpp>
 #include <slamd_window/view/view.hpp>
-#include <thread>
 
 namespace slamdw {
 class SceneView : public View {

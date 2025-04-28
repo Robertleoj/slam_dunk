@@ -2,6 +2,7 @@
 
 #include <slamd/geom/geometry.hpp>
 #include <slamd/geom/mesh.hpp>
+#include <slamd/global_object_map.hpp>
 
 namespace slamd {
 namespace _geom {
@@ -52,11 +53,13 @@ PointsPtr points(
         final_radii = radii;
     }
 
-    return std::make_shared<_geom::Points2D>(
+    auto points_2d = std::make_shared<_geom::Points2D>(
         positions,
         std::move(final_colors),
         std::move(final_radii)
     );
+    _global::geometries.add(points_2d->id, points_2d);
+    return points_2d;
 }
 
 }  // namespace geom2d

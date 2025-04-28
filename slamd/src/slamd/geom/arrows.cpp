@@ -1,4 +1,5 @@
 #include <slamd/geom/arrows.hpp>
+#include <slamd/global_object_map.hpp>
 #include <slamd_common/data/mesh.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 
@@ -51,7 +52,10 @@ ArrowsPtr arrows(
     const std::vector<glm::vec3>& colors,
     float thickness
 ) {
-    return std::make_shared<_geom::Arrows>(starts, ends, colors, thickness);
+    auto arrows =
+        std::make_shared<_geom::Arrows>(starts, ends, colors, thickness);
+    _global::geometries.add(arrows->id, arrows);
+    return arrows;
 }
 }  // namespace geom
 }  // namespace slamd

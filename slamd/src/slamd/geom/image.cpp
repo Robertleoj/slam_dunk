@@ -1,4 +1,5 @@
 #include <slamd/geom/image.hpp>
+#include <slamd/global_object_map.hpp>
 
 namespace slamd {
 namespace _geom {
@@ -32,7 +33,10 @@ namespace geom {
 ImagePtr image(
     data::Image&& image
 ) {
-    return std::make_shared<_geom::Image>(std::move(image), true);
+    auto img = std::make_shared<_geom::Image>(std::move(image), true);
+
+    _global::geometries.add(img->id, img);
+    return img;
 }
 }  // namespace geom
 
@@ -41,7 +45,10 @@ namespace geom2d {
 ImagePtr image(
     data::Image&& image
 ) {
-    return std::make_shared<_geom::Image>(std::move(image), false);
+    auto img = std::make_shared<_geom::Image>(std::move(image), false);
+
+    _global::geometries.add(img->id, img);
+    return img;
 }
 
 }  // namespace geom2d

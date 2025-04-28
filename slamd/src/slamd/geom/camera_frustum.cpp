@@ -1,5 +1,6 @@
 #include <glm/glm.hpp>
 #include <slamd/geom/camera_frustum.hpp>
+#include <slamd/global_object_map.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
 
@@ -68,13 +69,16 @@ CameraFrustumPtr camera_frustum(
     data::Image&& image,
     float scale
 ) {
-    return std::make_shared<_geom::CameraFrustum>(
+    auto cam = std::make_shared<_geom::CameraFrustum>(
         intrinsics_matrix,
         image_width,
         image_height,
         std::move(image),
         scale
     );
+    _global::geometries.add(cam->id, cam);
+
+    return cam;
 }
 
 CameraFrustumPtr camera_frustum(
@@ -83,12 +87,15 @@ CameraFrustumPtr camera_frustum(
     size_t image_height,
     float scale
 ) {
-    return std::make_shared<_geom::CameraFrustum>(
+    auto cam = std::make_shared<_geom::CameraFrustum>(
         intrinsics_matrix,
         image_width,
         image_height,
         scale
     );
+    _global::geometries.add(cam->id, cam);
+
+    return cam;
 }
 
 }  // namespace geom

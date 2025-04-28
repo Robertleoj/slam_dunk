@@ -1,4 +1,5 @@
 #include <slamd/geom/triad.hpp>
+#include <slamd/global_object_map.hpp>
 #include <slamd_common/gmath/transforms.hpp>
 
 namespace slamd {
@@ -31,7 +32,9 @@ TriadPtr triad(
     float scale,
     float thickness
 ) {
-    return std::make_shared<_geom::Triad>(scale, thickness);
+    auto triad = std::make_shared<_geom::Triad>(scale, thickness);
+    _global::geometries.add(triad->id, triad);
+    return triad;
 }
 }  // namespace geom
 

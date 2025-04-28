@@ -1,8 +1,5 @@
-#include <numbers>
-#include <ranges>
 #include <slamd/geom/points_2d.hpp>
 #include <slamd_common/gmath/serialization.hpp>
-
 namespace slamd {
 namespace _geom {
 

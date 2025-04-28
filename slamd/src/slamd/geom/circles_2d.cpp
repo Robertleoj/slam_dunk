@@ -1,6 +1,5 @@
-#include <numbers>
-#include <ranges>
 #include <slamd/geom/circles_2d.hpp>
+#include <slamd/global_object_map.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
 
@@ -58,12 +57,10 @@ CirclesPtr circles(
     const std::vector<float>& radii,
     float thickness
 ) {
-    return std::make_shared<_geom::Circles2D>(
-        positions,
-        colors,
-        radii,
-        thickness
-    );
+    auto circles =
+        std::make_shared<_geom::Circles2D>(positions, colors, radii, thickness);
+    _global::geometries.add(circles->id, circles);
+    return circles;
 }
 }  // namespace geom2d
 }  // namespace slamd

@@ -1,7 +1,7 @@
-#include <ranges>
 #include <slamd/assert.hpp>
 #include <slamd/constants.hpp>
 #include <slamd/geom/mesh.hpp>
+#include <slamd/global_object_map.hpp>
 #include <slamd_common/data/mesh.hpp>
 
 namespace slamd {
@@ -51,38 +51,10 @@ namespace geom {
 MeshPtr mesh(
     const data::MeshData& mesh_data
 ) {
-    return std::make_shared<_geom::Mesh>(mesh_data);
+    auto mesh = std::make_shared<_geom::Mesh>(mesh_data);
+    _global::geometries.add(mesh->id, mesh);
+    return mesh;
 }
-
-// std::shared_ptr<Mesh> mesh(
-//     const std::vector<glm::vec3>& vertices,
-//     const std::vector<glm::vec3>& vertex_colors,
-//     const std::vector<uint32_t>& triangle_indices
-// ) {
-//     data::MeshData data = data::MeshDataBuilder()
-//                               .set_positions(vertices)
-//                               .set_colors(vertex_colors)
-//                               .set_indices(triangle_indices)
-//                               .compute_normals()
-//                               .build();
-
-//     return std::make_shared<Mesh>(data);
-// }
-// std::shared_ptr<Mesh> mesh(
-//     const std::vector<glm::vec3>& vertices,
-//     const std::vector<glm::vec3>& vertex_colors,
-//     const std::vector<uint32_t>& triangle_indices,
-//     const std::vector<glm::vec3>& normals
-// ) {
-//     data::MeshData data = data::MeshDataBuilder()
-//                               .set_positions(vertices)
-//                               .set_colors(vertex_colors)
-//                               .set_indices(triangle_indices)
-//                               .set_normals(normals)
-//                               .build();
-
-//     return std::make_shared<Mesh>(vertices, vertex_colors, triangle_indices);
-// }
 
 }  // namespace geom
 

@@ -1,4 +1,5 @@
 #include <spdlog/spdlog.h>
+#include <slamd/global_object_map.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd_common/gmath/transforms.hpp>
 
@@ -6,11 +7,10 @@ namespace slamd {
 
 namespace _tree {
 
-uint64_t Tree::id_counter = 1;
+std::atomic<uint64_t> Tree::id_counter = 1;
 
-Tree::Tree() {
-    this->id = Tree::id_counter++;
-
+Tree::Tree()
+    : id(Tree::id_counter++) {
     this->root = std::make_unique<Node>();
 }
 
@@ -112,7 +112,9 @@ void Scene::set_transform(
 }
 
 std::shared_ptr<Scene> scene() {
-    return std::make_shared<Scene>();
+    auto scene = std::make_shared<Scene>();
+    _global::trees.add(scene->id, scene);
+    return scene;
 }
 
 void Canvas::set_transform(
@@ -156,7 +158,9 @@ float Canvas::new_depth() {
 }
 
 std::shared_ptr<Canvas> canvas() {
-    return std::make_shared<Canvas>();
+    auto canvas = std::make_shared<Canvas>();
+    _global::trees.add(canvas->id, canvas);
+    return canvas;
 }
 
 }  // namespace slamd

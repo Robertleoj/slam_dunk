@@ -1,6 +1,7 @@
 #pragma once
 #include <flatb/visualizer_generated.h>
 #include <glm/glm.hpp>
+#include <memory>
 #include <slamd/geom/geometry.hpp>
 #include <slamd/tree/node.hpp>
 #include <slamd/tree/tree_path.hpp>
@@ -11,10 +12,10 @@ namespace _tree {
 class Tree {
    private:
     std::unique_ptr<Node> root;
-    static uint64_t id_counter;
+    static std::atomic<uint64_t> id_counter;
 
    public:
-    uint64_t id;
+    const uint64_t id;
     Tree();
 
     virtual void set_object(

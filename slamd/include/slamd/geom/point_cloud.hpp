@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <slamd/geom/geometry.hpp>
+#include <slamd/global_object_map.hpp>
 
 namespace slamd {
 namespace _geom {
@@ -59,11 +60,14 @@ PointCloudPtr point_cloud(
         final_radii = radii;
     }
 
-    return std::make_shared<_geom::PointCloud>(
+    auto pc = std::make_shared<_geom::PointCloud>(
         positions,
         std::move(final_colors),
         std::move(final_radii)
     );
+
+    _global::geometries.add(pc->id, pc);
+    return pc;
 }
 
 }  // namespace geom

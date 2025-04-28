@@ -27,11 +27,19 @@ class GlobalObjectMap {
         uint64_t id
     ) {
         std::lock_guard<std::mutex> lock(this->mutex);
+
         auto it = this->map.find(id);
-        if (it != this->map.end()) {
-            return it->second.lock();
+        if (it == this->map.end()) {
+            return std::nullopt;
         }
-        return std::nullopt;
+
+        auto ptr = it->second.lock();
+        if (!ptr) {
+            this->map.erase(it);
+            return std::nullopt;
+        }
+
+        return ptr;
     }
 
     void remove(
