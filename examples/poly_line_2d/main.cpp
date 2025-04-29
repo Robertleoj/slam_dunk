@@ -56,10 +56,10 @@ slamd::geom2d::PolyLinePtr make_trippy_polyline() {
 }
 
 int main() {
-    slamd::Visualizer vis("trippy_2d_polyline");
+    auto vis = slamd::visualizer("trippy_2d_polyline");
 
     auto canvas = slamd::canvas();
-    vis.add_canvas("canvas", canvas);
+    vis->add_canvas("canvas", canvas);
 
     // Drop a whole bundle of random 2D poly lines
     for (int i = 0; i < 10; ++i) {
@@ -67,5 +67,5 @@ int main() {
         canvas->set_object("/polyline_" + std::to_string(i), polyline);
     }
 
-    vis.hang_forever();
+    vis->hang_forever();
 }

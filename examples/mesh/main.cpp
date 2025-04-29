@@ -9,7 +9,10 @@
 std::random_device rd;
 std::mt19937 gen(rd());
 
-float random_float(float start, float end) {
+float random_float(
+    float start,
+    float end
+) {
     std::uniform_real_distribution<float> dist(start, end);
     return dist(gen);
 }
@@ -23,7 +26,7 @@ slamd::data::MeshData generate_trippy_ribbon_mesh() {
     int segments = 200;
     float width = 1.0f;
     float radius = 5.0f;
-    float twist = 5.0f; // number of twists
+    float twist = 5.0f;  // number of twists
 
     for (int i = 0; i <= segments; ++i) {
         float t = (float)i / (float)segments;
@@ -41,17 +44,28 @@ slamd::data::MeshData generate_trippy_ribbon_mesh() {
             10.0f * glm::cos(2.0f * glm::two_pi<float>() * t)
         ));
 
-        glm::vec3 normal = glm::normalize(glm::cross(tangent, glm::vec3(0, 0, 1)));
+        glm::vec3 normal =
+            glm::normalize(glm::cross(tangent, glm::vec3(0, 0, 1)));
         glm::vec3 binormal = glm::normalize(glm::cross(tangent, normal));
 
-        glm::vec3 offset1 = center + width * glm::cos(angle) * normal + width * glm::sin(angle) * binormal;
-        glm::vec3 offset2 = center - width * glm::cos(angle) * normal - width * glm::sin(angle) * binormal;
+        glm::vec3 offset1 = center + width * glm::cos(angle) * normal +
+                            width * glm::sin(angle) * binormal;
+        glm::vec3 offset2 = center - width * glm::cos(angle) * normal -
+                            width * glm::sin(angle) * binormal;
 
         positions.push_back(offset1);
         positions.push_back(offset2);
 
-        colors.emplace_back(random_float(0.4f, 1.0f), random_float(0.4f, 1.0f), random_float(0.4f, 1.0f));
-        colors.emplace_back(random_float(0.4f, 1.0f), random_float(0.4f, 1.0f), random_float(0.4f, 1.0f));
+        colors.emplace_back(
+            random_float(0.4f, 1.0f),
+            random_float(0.4f, 1.0f),
+            random_float(0.4f, 1.0f)
+        );
+        colors.emplace_back(
+            random_float(0.4f, 1.0f),
+            random_float(0.4f, 1.0f),
+            random_float(0.4f, 1.0f)
+        );
 
         normals.push_back(glm::normalize(offset1 - center));
         normals.push_back(glm::normalize(offset2 - center));
@@ -72,15 +86,15 @@ slamd::data::MeshData generate_trippy_ribbon_mesh() {
 }
 
 int main() {
-    slamd::Visualizer vis("trippy_ribbon");
+    auto vis = slamd::visualizer("trippy_ribbon");
 
     auto scene = slamd::scene();
-    vis.add_scene("scene", scene);
+    vis->add_scene("scene", scene);
 
     auto mesh_data = generate_trippy_ribbon_mesh();
     auto mesh = slamd::geom::mesh(mesh_data);
 
     scene->set_object("/trippy_ribbon", mesh);
 
-    vis.hang_forever();
+    vis->hang_forever();
 }

@@ -54,7 +54,7 @@ class GlobalObjectMap {
     std::mutex mutex;
 };
 
-extern GlobalObjectMap<Visualizer> visualizers;
+extern GlobalObjectMap<_vis::Visualizer> visualizers;
 extern GlobalObjectMap<_tree::Tree> trees;
 extern GlobalObjectMap<View> views;
 extern GlobalObjectMap<_geom::Geometry> geometries;

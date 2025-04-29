@@ -59,15 +59,15 @@ slamd::geom::PointCloudPtr cool_point_cloud() {
 }
 
 int main() {
-    slamd::Visualizer vis("point_cloud");
+    auto vis = slamd::visualizer("point_cloud");
 
     auto scene = slamd::scene();
 
-    vis.add_scene("scene", scene);
+    vis->add_scene("scene", scene);
 
     auto point_cloud = cool_point_cloud();
 
     scene->set_object("/point_cloud", point_cloud);
 
-    vis.hang_forever();
+    vis->hang_forever();
 }

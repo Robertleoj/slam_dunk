@@ -7,11 +7,11 @@
 int main() {
     spdlog::set_level(spdlog::level::debug);
 
-    slamd::Visualizer vis("hello viz");
+    auto vis = slamd::visualizer("hello viz");
 
     auto scene = slamd::scene();
 
-    vis.add_scene("scene1", scene);
+    vis->add_scene("scene1", scene);
 
     auto scene2 = slamd::scene();
 
@@ -22,11 +22,11 @@ int main() {
 
     scene2->set_transform("/origin", transform);
 
-    vis.add_scene("scene2", scene2);
+    vis->add_scene("scene2", scene2);
 
     auto canvas = slamd::canvas();
 
-    vis.add_canvas("canvas", canvas);
+    vis->add_canvas("canvas", canvas);
 
     while (true) {
         std::this_thread::sleep_for(std::chrono::seconds(1));

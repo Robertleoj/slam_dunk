@@ -2,14 +2,19 @@
 #include <flatb/visualizer_generated.h>
 #include <spdlog/spdlog.h>
 #include <asio.hpp>
+#include <slamd/global_object_map.hpp>
 #include <slamd/visualizer.hpp>
 
 namespace slamd {
+namespace _vis {
+
+std::atomic<uint64_t> Visualizer::id_counter;
 
 Visualizer::Visualizer(
     std::string name
 )
-    : name(name) {
+    : id(Visualizer::id_counter++),
+      name(name) {
     this->client_set = std::make_shared<_net::ClientSet>();
 
     this->server_thread = std::jthread([this](std::stop_token st) {
@@ -130,6 +135,17 @@ void Visualizer::hang_forever() {
     while (true) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+}
+}  // namespace _vis
+
+VisualizerPtr visualizer(
+    std::string name
+) {
+    auto visualizer = std::make_shared<_vis::Visualizer>(name);
+
+    _global::visualizers.add(visualizer->id, visualizer);
+
+    return visualizer;
 }
 
 }  // namespace slamd

@@ -83,11 +83,11 @@ auto random_points() {
 
 int main() {
     spdlog::set_level(spdlog::level::debug);
-    slamd::Visualizer vis("hello_canvas");
+    auto vis = slamd::visualizer("hello_canvas");
 
     auto canvas = slamd::canvas();
 
-    vis.add_canvas("canvas", canvas);
+    vis->add_canvas("canvas", canvas);
 
     slamd::data::Image image = read_image();
 
@@ -95,5 +95,5 @@ int main() {
 
     canvas->set_object("/points", random_points());
 
-    vis.hang_forever();
+    vis->hang_forever();
 }

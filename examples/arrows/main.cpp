@@ -36,7 +36,8 @@ slamd::geom::ArrowsPtr cool_arrows() {
             random_float(-1.f, 1.f)
         );
 
-        glm::vec3 end = start + glm::normalize(direction) * random_float(0.5f, 2.0f);
+        glm::vec3 end =
+            start + glm::normalize(direction) * random_float(0.5f, 2.0f);
 
         starts.push_back(start);
         ends.push_back(end);
@@ -53,15 +54,15 @@ slamd::geom::ArrowsPtr cool_arrows() {
 }
 
 int main() {
-    slamd::Visualizer vis("arrows");
+    auto vis = slamd::visualizer("arrows");
 
     auto scene = slamd::scene();
 
-    vis.add_scene("scene", scene);
+    vis->add_scene("scene", scene);
 
     auto arrows = cool_arrows();
 
     scene->set_object("/arrows", arrows);
 
-    vis.hang_forever();
+    vis->hang_forever();
 }

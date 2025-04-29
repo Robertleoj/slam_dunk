@@ -53,11 +53,11 @@ slamd::geom::PolyLinePtr trippy_poly_line() {
 }
 
 int main() {
-    slamd::Visualizer vis("trippy_poly_lines");
+    auto vis = slamd::visualizer("trippy_poly_lines");
 
     auto scene = slamd::scene();
 
-    vis.add_scene("scene", scene);
+    vis->add_scene("scene", scene);
 
     // Spawn a whole nebula of trippy lines
     int num_lines = 5;
@@ -69,5 +69,5 @@ int main() {
         scene->set_object(name, poly_line);
     }
 
-    vis.hang_forever();
+    vis->hang_forever();
 }

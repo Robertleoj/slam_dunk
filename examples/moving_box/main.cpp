@@ -6,7 +6,7 @@
 #include <thread>
 
 int main() {
-    slamd::Visualizer vis("moving_box");
+    auto vis = slamd::visualizer("moving_box");
 
     auto scene = slamd::scene();
 
@@ -16,7 +16,7 @@ int main() {
 
     glm::mat4 current_rot = glm::mat4(1.0);
 
-    vis.add_scene("scene", scene);
+    vis->add_scene("scene", scene);
 
     while (true) {
         // rotate by 1 degree every 10ms
