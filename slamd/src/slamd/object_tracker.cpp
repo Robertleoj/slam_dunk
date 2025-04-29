@@ -1,6 +1,17 @@
-#include <slamd/global_object_map.hpp>
+#include <slamd/object_tracker.hpp>
 
 namespace slamd {
+namespace _tracker {
+
+ObjectTracker& ObjectTracker::instance() {
+    static ObjectTracker instance;
+    return instance;
+}
+
+ObjectTracker::ObjectTracker() {}
+
+}  // namespace _tracker
+
 namespace _global {
 
 GlobalObjectMap<_vis::Visualizer> visualizers;

@@ -10,6 +10,28 @@
 #include <unordered_map>
 
 namespace slamd {
+namespace _tracker {
+
+class ObjectTracker {
+   public:
+    static ObjectTracker& instance();
+
+    // Delete copy and move constructors and assign ops
+    ObjectTracker(const ObjectTracker&) = delete;
+    ObjectTracker& operator=(const ObjectTracker&) = delete;
+    ObjectTracker(ObjectTracker&&) = delete;
+    ObjectTracker& operator=(ObjectTracker&&) = delete;
+
+    void enroll(std::shared_ptr<_vis::Visualizer> visualizer);
+    void enroll(std::shared_ptr<_view::View> view);
+    void enroll(std::shared_ptr<_tree::Tree> tree);
+    void enroll(std::shared_ptr<_geom::Geometry> geom);
+
+   private:
+    ObjectTracker();
+};
+}  // namespace _tracker
+
 namespace _global {
 
 // TODO: turn into ObjectTracker

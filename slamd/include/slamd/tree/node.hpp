@@ -7,7 +7,6 @@
 #include <optional>
 #include <slamd/geom/geometry.hpp>
 #include <string>
-
 namespace slamd {
 namespace _tree {
 
