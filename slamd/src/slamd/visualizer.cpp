@@ -30,7 +30,7 @@ void Visualizer::add_scene(
     }
 
     this->view_name_to_view.insert(
-        {name, {this, scene, slamd::flatb::ViewType_SCENE}}
+        {name, _view::View::create(this, scene, slamd::flatb::ViewType_SCENE)}
     );
 }
 
@@ -45,7 +45,7 @@ void Visualizer::add_canvas(
     }
 
     this->view_name_to_view.insert(
-        {name, {this, canvas, slamd::flatb::ViewType_CANVAS}}
+        {name, _view::View::create(this, canvas, slamd::flatb::ViewType_CANVAS)}
     );
 }
 
@@ -69,8 +69,8 @@ std::vector<uint8_t> Visualizer::get_state() {
         view_vec.push_back(slamd::flatb::CreateView(
             builder,
             view_name_flatb,
-            view.tree->id.value,
-            view.view_type
+            view->tree->id.value,
+            view->view_type
         ));
     }
 

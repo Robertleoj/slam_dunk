@@ -14,12 +14,19 @@ class Visualizer;
 namespace _view {
 class View {
    public:
-    View(
+    static std::shared_ptr<View> create(
         _vis::Visualizer*,
         std::shared_ptr<_tree::Tree> tree,
         slamd::flatb::ViewType view_type
     );
     ~View();
+
+   private:
+    View(
+        _vis::Visualizer*,
+        std::shared_ptr<_tree::Tree> tree,
+        slamd::flatb::ViewType view_type
+    );
 
    public:
     const std::shared_ptr<_tree::Tree> tree;

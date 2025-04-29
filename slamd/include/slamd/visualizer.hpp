@@ -36,7 +36,7 @@ class Visualizer {
 
     std::mutex view_map_mutex;
 
-    std::map<std::string, _view::View> view_name_to_view;
+    std::map<std::string, std::shared_ptr<_view::View>> view_name_to_view;
     std::map<_id::TreeID, std::shared_ptr<_tree::Tree>> trees;
     std::shared_ptr<_net::ClientSet> client_set;
 };
