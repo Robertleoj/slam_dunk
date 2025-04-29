@@ -33,7 +33,7 @@ TriadPtr triad(
     float thickness
 ) {
     auto triad = std::make_shared<_geom::Triad>(scale, thickness);
-    _global::geometries.add(triad->id, triad);
+    // _global::geometries.add(triad->id, triad);
     return triad;
 }
 }  // namespace geom

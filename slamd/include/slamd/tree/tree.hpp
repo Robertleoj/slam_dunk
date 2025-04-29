@@ -3,19 +3,23 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <slamd/geom/geometry.hpp>
+#include <slamd/id.hpp>
 #include <slamd/tree/node.hpp>
 #include <slamd/tree/tree_path.hpp>
 
 namespace slamd {
+namespace _id {
+struct TreeTag {};
+using TreeID = ID<TreeTag>;
+}  // namespace _id
 namespace _tree {
 
 class Tree {
    private:
     std::unique_ptr<Node> root;
-    static std::atomic<uint64_t> id_counter;
 
    public:
-    const uint64_t id;
+    const _id::TreeID id;
     Tree();
 
     virtual void set_object(

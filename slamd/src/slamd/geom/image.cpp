@@ -35,7 +35,7 @@ ImagePtr image(
 ) {
     auto img = std::make_shared<_geom::Image>(std::move(image), true);
 
-    _global::geometries.add(img->id, img);
+    // _global::geometries.add(img->id, img);
     return img;
 }
 }  // namespace geom
@@ -47,7 +47,7 @@ ImagePtr image(
 ) {
     auto img = std::make_shared<_geom::Image>(std::move(image), false);
 
-    _global::geometries.add(img->id, img);
+    // _global::geometries.add(img->id, img);
     return img;
 }
 

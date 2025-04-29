@@ -54,7 +54,7 @@ ArrowsPtr arrows(
 ) {
     auto arrows =
         std::make_shared<_geom::Arrows>(starts, ends, colors, thickness);
-    _global::geometries.add(arrows->id, arrows);
+    // _global::geometries.add(arrows->id, arrows);
     return arrows;
 }
 }  // namespace geom

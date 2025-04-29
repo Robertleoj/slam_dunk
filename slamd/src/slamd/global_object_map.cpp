@@ -5,7 +5,7 @@ namespace _global {
 
 GlobalObjectMap<_vis::Visualizer> visualizers;
 GlobalObjectMap<_tree::Tree> trees;
-GlobalObjectMap<View> views;
+GlobalObjectMap<_view::View> views;
 GlobalObjectMap<_geom::Geometry> geometries;
 
 }  // namespace _global

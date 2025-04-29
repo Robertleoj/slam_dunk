@@ -35,7 +35,7 @@ SpherePtr sphere(
     glm::vec3 color
 ) {
     auto sphere = std::make_shared<_geom::Sphere>(radius, color);
-    _global::geometries.add(sphere->id, sphere);
+    // _global::geometries.add(sphere->id, sphere);
     return sphere;
 }
 }  // namespace geom

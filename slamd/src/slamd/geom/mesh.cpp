@@ -52,7 +52,7 @@ MeshPtr mesh(
     const data::MeshData& mesh_data
 ) {
     auto mesh = std::make_shared<_geom::Mesh>(mesh_data);
-    _global::geometries.add(mesh->id, mesh);
+    // _global::geometries.add(mesh->id, mesh);
     return mesh;
 }
 

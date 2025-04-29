@@ -2,6 +2,7 @@
 #include <asio.hpp>
 #include <memory>
 #include <mutex>
+#include <slamd/id.hpp>
 #include <slamd/net/client_set.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd/view.hpp>
@@ -9,8 +10,13 @@
 #include <thread>
 
 namespace slamd {
+namespace _id {
+struct VisualizerTag {};
+using VisualizerID = ID<VisualizerTag>;
+}  // namespace _id
 
 namespace _vis {
+
 class Visualizer {
    public:
     Visualizer(std::string name);
@@ -18,10 +24,10 @@ class Visualizer {
     void add_scene(std::string name, std::shared_ptr<Scene> scene);
     void add_canvas(std::string name, std::shared_ptr<Canvas> canvas);
     void hang_forever();
-    const uint64_t id;
+
+    const _id::VisualizerID id;
 
    private:
-    static std::atomic<uint64_t> id_counter;
     void server_job(std::stop_token& stop_token);
     std::vector<uint8_t> get_state();
 
@@ -31,8 +37,8 @@ class Visualizer {
 
     std::mutex view_map_mutex;
 
-    std::map<std::string, View> view_name_to_view;
-    std::map<uint64_t, std::shared_ptr<_tree::Tree>> trees;
+    std::map<std::string, _view::View> view_name_to_view;
+    std::map<_id::TreeID, std::shared_ptr<_tree::Tree>> trees;
     std::shared_ptr<_net::ClientSet> client_set;
 };
 

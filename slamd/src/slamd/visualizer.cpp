@@ -8,12 +8,10 @@
 namespace slamd {
 namespace _vis {
 
-std::atomic<uint64_t> Visualizer::id_counter;
-
 Visualizer::Visualizer(
     std::string name
 )
-    : id(Visualizer::id_counter++),
+    : id(_id::VisualizerID::next()),
       name(name) {
     this->client_set = std::make_shared<_net::ClientSet>();
 
@@ -72,7 +70,7 @@ std::vector<uint8_t> Visualizer::get_state() {
         view_vec.push_back(slamd::flatb::CreateView(
             builder,
             view_name_flatb,
-            view.tree_id,
+            view.tree_id.value,
             view.view_type
         ));
     }
@@ -143,7 +141,7 @@ VisualizerPtr visualizer(
 ) {
     auto visualizer = std::make_shared<_vis::Visualizer>(name);
 
-    _global::visualizers.add(visualizer->id, visualizer);
+    // _global::visualizers.add(visualizer->id, visualizer);
 
     return visualizer;
 }

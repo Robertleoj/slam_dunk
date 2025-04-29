@@ -66,7 +66,7 @@ PointCloudPtr point_cloud(
         std::move(final_radii)
     );
 
-    _global::geometries.add(pc->id, pc);
+    // _global::geometries.add(pc->id, pc);
     return pc;
 }
 

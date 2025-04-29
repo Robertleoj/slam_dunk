@@ -76,7 +76,7 @@ CameraFrustumPtr camera_frustum(
         std::move(image),
         scale
     );
-    _global::geometries.add(cam->id, cam);
+    // _global::geometries.add(cam->id, cam);
 
     return cam;
 }
@@ -93,7 +93,7 @@ CameraFrustumPtr camera_frustum(
         image_height,
         scale
     );
-    _global::geometries.add(cam->id, cam);
+    // _global::geometries.add(cam->id, cam);
 
     return cam;
 }

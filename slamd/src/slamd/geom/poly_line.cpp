@@ -49,7 +49,7 @@ PolyLinePtr poly_line(
 ) {
     auto poly_line =
         std::make_shared<_geom::PolyLine>(points, thickness, color);
-    _global::geometries.add(poly_line->id, poly_line);
+    // _global::geometries.add(poly_line->id, poly_line);
     return poly_line;
 }
 }  // namespace geom

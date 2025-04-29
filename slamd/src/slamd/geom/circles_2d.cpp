@@ -59,7 +59,7 @@ CirclesPtr circles(
 ) {
     auto circles =
         std::make_shared<_geom::Circles2D>(positions, colors, radii, thickness);
-    _global::geometries.add(circles->id, circles);
+    // _global::geometries.add(circles->id, circles);
     return circles;
 }
 }  // namespace geom2d

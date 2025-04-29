@@ -4,10 +4,8 @@
 namespace slamd {
 namespace _geom {
 
-std::atomic<uint64_t> Geometry::id_counter = 1;
-
 Geometry::Geometry()
-    : id(Geometry::id_counter++) {}
+    : id(_id::GeometryID::next()) {}
 
 flatbuffers::Offset<slamd::flatb::Geometry> Geometry::serialize(
     flatbuffers::FlatBufferBuilder& builder

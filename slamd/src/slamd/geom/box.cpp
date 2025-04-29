@@ -23,7 +23,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> Box::serialize(
 namespace geom {
 BoxPtr box() {
     auto box = std::make_shared<_geom::Box>();
-    _global::geometries.add(box->id, box);
+    // _global::geometries.add(box->id, box);
     return box;
 }
 

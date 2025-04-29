@@ -42,7 +42,7 @@ PolyLinePtr poly_line(
     float thickness
 ) {
     auto line = std::make_shared<_geom::PolyLine2D>(points, color, thickness);
-    _global::geometries.add(line->id, line);
+    // _global::geometries.add(line->id, line);
     return line;
 }
 

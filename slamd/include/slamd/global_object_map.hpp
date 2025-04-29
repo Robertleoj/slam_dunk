@@ -12,6 +12,7 @@
 namespace slamd {
 namespace _global {
 
+// TODO: turn into ObjectTracker
 template <typename T>
 class GlobalObjectMap {
    public:
@@ -56,7 +57,7 @@ class GlobalObjectMap {
 
 extern GlobalObjectMap<_vis::Visualizer> visualizers;
 extern GlobalObjectMap<_tree::Tree> trees;
-extern GlobalObjectMap<View> views;
+extern GlobalObjectMap<_view::View> views;
 extern GlobalObjectMap<_geom::Geometry> geometries;
 
 }  // namespace _global

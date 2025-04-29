@@ -58,7 +58,7 @@ PointsPtr points(
         std::move(final_colors),
         std::move(final_radii)
     );
-    _global::geometries.add(points_2d->id, points_2d);
+    // _global::geometries.add(points_2d->id, points_2d);
     return points_2d;
 }
 

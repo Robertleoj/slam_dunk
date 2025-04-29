@@ -7,10 +7,8 @@ namespace slamd {
 
 namespace _tree {
 
-std::atomic<uint64_t> Tree::id_counter = 1;
-
 Tree::Tree()
-    : id(Tree::id_counter++) {
+    : id(_id::TreeID::next()) {
     this->root = std::make_unique<Node>();
 }
 
@@ -32,7 +30,7 @@ flatbuffers::Offset<slamd::flatb::Tree> Tree::serialize(
     flatbuffers::FlatBufferBuilder& builder
 ) {
     auto serialized_root = this->root->serialize(builder);
-    return slamd::flatb::CreateTree(builder, this->id, serialized_root);
+    return slamd::flatb::CreateTree(builder, this->id.value, serialized_root);
 }
 
 void Tree::set_transform_mat4(
@@ -113,7 +111,7 @@ void Scene::set_transform(
 
 std::shared_ptr<Scene> scene() {
     auto scene = std::make_shared<Scene>();
-    _global::trees.add(scene->id, scene);
+    // _global::trees.add(scene->id, scene);
     return scene;
 }
 
@@ -159,7 +157,7 @@ float Canvas::new_depth() {
 
 std::shared_ptr<Canvas> canvas() {
     auto canvas = std::make_shared<Canvas>();
-    _global::trees.add(canvas->id, canvas);
+    // _global::trees.add(canvas->id, canvas);
     return canvas;
 }
 
