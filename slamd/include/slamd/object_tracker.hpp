@@ -10,33 +10,10 @@
 #include <unordered_map>
 
 namespace slamd {
-namespace _tracker {
-
-class ObjectTracker {
-   public:
-    static ObjectTracker& instance();
-
-    // Delete copy and move constructors and assign ops
-    ObjectTracker(const ObjectTracker&) = delete;
-    ObjectTracker& operator=(const ObjectTracker&) = delete;
-    ObjectTracker(ObjectTracker&&) = delete;
-    ObjectTracker& operator=(ObjectTracker&&) = delete;
-
-    void enroll(std::shared_ptr<_vis::Visualizer> visualizer);
-    void enroll(std::shared_ptr<_view::View> view);
-    void enroll(std::shared_ptr<_tree::Tree> tree);
-    void enroll(std::shared_ptr<_geom::Geometry> geom);
-
-   private:
-    ObjectTracker();
-};
-}  // namespace _tracker
-
 namespace _global {
 
-// TODO: turn into ObjectTracker
 template <typename T>
-class GlobalObjectMap {
+class ObjectTracker {
    public:
     void add(
         uint64_t id,
@@ -77,10 +54,8 @@ class GlobalObjectMap {
     std::mutex mutex;
 };
 
-extern GlobalObjectMap<_vis::Visualizer> visualizers;
-extern GlobalObjectMap<_tree::Tree> trees;
-extern GlobalObjectMap<_view::View> views;
-extern GlobalObjectMap<_geom::Geometry> geometries;
+extern ObjectTracker<_tree::Node> nodes;
+extern ObjectTracker<_view::View> views;
 
 }  // namespace _global
 }  // namespace slamd

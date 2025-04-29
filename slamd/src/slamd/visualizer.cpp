@@ -5,13 +5,13 @@
 #include <slamd/visualizer.hpp>
 
 namespace slamd {
+
 namespace _vis {
 
 Visualizer::Visualizer(
     std::string name
 )
-    : id(_id::VisualizerID::next()),
-      name(name) {
+    : name(name) {
     this->client_set = std::make_shared<_net::ClientSet>();
 
     this->server_thread = std::jthread([this](std::stop_token st) {
@@ -29,7 +29,8 @@ void Visualizer::add_scene(
         this->trees.insert({scene->id, scene});
     }
 
-    this->view_name_to_view.insert({name, {scene, slamd::flatb::ViewType_SCENE}}
+    this->view_name_to_view.insert(
+        {name, {this, scene, slamd::flatb::ViewType_SCENE}}
     );
 }
 
@@ -44,7 +45,7 @@ void Visualizer::add_canvas(
     }
 
     this->view_name_to_view.insert(
-        {name, {canvas, slamd::flatb::ViewType_CANVAS}}
+        {name, {this, canvas, slamd::flatb::ViewType_CANVAS}}
     );
 }
 

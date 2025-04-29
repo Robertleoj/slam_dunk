@@ -10,10 +10,11 @@
 #include <thread>
 
 namespace slamd {
-namespace _id {
-struct VisualizerTag {};
-using VisualizerID = ID<VisualizerTag>;
-}  // namespace _id
+namespace _id {}  // namespace _id
+
+namespace _view {
+class View;
+}
 
 namespace _vis {
 
@@ -24,8 +25,6 @@ class Visualizer {
     void add_scene(std::string name, std::shared_ptr<Scene> scene);
     void add_canvas(std::string name, std::shared_ptr<Canvas> canvas);
     void hang_forever();
-
-    const _id::VisualizerID id;
 
    private:
     void server_job(std::stop_token& stop_token);
