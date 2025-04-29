@@ -15,7 +15,9 @@ class Tree;
 
 class Node {
    public:
-    Node(Tree* tree);
+    static std::shared_ptr<Node> create(Tree* tree);
+    ~Node();
+
     std::optional<std::shared_ptr<_geom::Geometry>> get_object() const;
 
     flatbuffers::Offset<slamd::flatb::Node> serialize(
@@ -28,10 +30,16 @@ class Node {
 
     void set_transform(glm::mat4 transform);
 
-    ~Node();
+    Node() = delete;
+    Node(const Node&) = delete;
+    Node(Node&&) = delete;
+    Node& operator=(const Node&) = delete;
+
+   private:
+    Node(Tree* tree);
 
    public:
-    std::map<std::string, std::unique_ptr<Node>> children;
+    std::map<std::string, std::shared_ptr<Node>> children;
     const _id::NodeID id;
 
    private:
@@ -48,7 +56,7 @@ class Node {
 
 class Tree {
    private:
-    std::unique_ptr<Node> root;
+    std::shared_ptr<Node> root;
 
    public:
     const _id::TreeID id;

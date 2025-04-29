@@ -12,19 +12,18 @@
 namespace slamd {
 namespace _global {
 
-template <typename T>
+template <typename IDType, typename T>
 class ObjectTracker {
    public:
     void add(
-        uint64_t id,
         std::shared_ptr<T> obj
     ) {
         std::lock_guard<std::mutex> lock(this->mutex);
-        this->map[id] = obj;
+        this->map[obj->id] = obj;
     }
 
     std::optional<std::shared_ptr<T>> get(
-        uint64_t id
+        IDType id
     ) {
         std::lock_guard<std::mutex> lock(this->mutex);
 
@@ -43,19 +42,19 @@ class ObjectTracker {
     }
 
     void remove(
-        uint64_t id
+        IDType id
     ) {
         std::lock_guard<std::mutex> lock(this->mutex);
         map.erase(id);
     }
 
    private:
-    std::unordered_map<uint64_t, std::weak_ptr<T>> map;
+    std::unordered_map<IDType, std::weak_ptr<T>> map;
     std::mutex mutex;
 };
 
-extern ObjectTracker<_tree::Node> nodes;
-extern ObjectTracker<_view::View> views;
+extern ObjectTracker<_id::NodeID, _tree::Node> nodes;
+extern ObjectTracker<_id::ViewID, _view::View> views;
 
 }  // namespace _global
 }  // namespace slamd

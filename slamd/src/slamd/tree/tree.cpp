@@ -1,5 +1,6 @@
 #include <spdlog/spdlog.h>
 
+#include <slamd/object_tracker.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
@@ -17,6 +18,16 @@ Node::~Node() {
     if (this->object.has_value()) {
         this->object.value()->attached_to.erase(this->id);
     }
+
+    _global::nodes.remove(this->id);
+}
+
+std::shared_ptr<Node> Node::create(
+    Tree* tree
+) {
+    auto node = std::shared_ptr<Node>(new Node(tree));
+    _global::nodes.add(node);
+    return node;
 }
 
 std::optional<std::shared_ptr<_geom::Geometry>> Node::get_object() const {
@@ -97,7 +108,7 @@ void Node::set_transform(
 }
 Tree::Tree()
     : id(_id::TreeID::next()) {
-    this->root = std::make_unique<Node>(this);
+    this->root = Node::create(this);
 }
 
 void Tree::set_object(
@@ -171,7 +182,9 @@ Node* Tree::make_path(
         if (child_iterator == current_node->children.end()) {
             // in this case, we want to create the path down to the target
             // node
-            std::unique_ptr<Node> new_node = std::make_unique<Node>(this);
+
+            auto new_node = Node::create(this);
+
             Node* new_node_ptr = new_node.get();
 
             // insert the new child
