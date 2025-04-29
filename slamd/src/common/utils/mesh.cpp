@@ -10,8 +10,8 @@ size_t generate_sphere(
     std::vector<uint32_t>& indices,
     std::vector<glm::vec3>& normals,  // ⬅️ Add this
     float radius,
-    uint sectorCount,
-    uint stackCount
+    uint32_t sectorCount,
+    uint32_t stackCount
 ) {
     float x, y, z, xy;
     float pi = std::numbers::pi;
@@ -22,12 +22,12 @@ size_t generate_sphere(
     size_t start_idx = vertices.size();
     size_t num_added = 0;
 
-    for (uint i = 0; i <= stackCount; ++i) {
+    for (uint32_t i = 0; i <= stackCount; ++i) {
         stackAngle = pi / 2 - i * stackStep;  // from pi/2 to -pi/2
         xy = radius * cosf(stackAngle);       // r * cos(u)
         z = radius * sinf(stackAngle);        // r * sin(u)
 
-        for (uint j = 0; j <= sectorCount; ++j) {
+        for (uint32_t j = 0; j <= sectorCount; ++j) {
             sectorAngle = j * sectorStep;
 
             x = xy * cosf(sectorAngle);  // r * cos(u) * cos(v)
@@ -43,12 +43,12 @@ size_t generate_sphere(
         }
     }
 
-    uint k1, k2;
-    for (uint i = 0; i < stackCount; ++i) {
+    uint32_t k1, k2;
+    for (uint32_t i = 0; i < stackCount; ++i) {
         k1 = i * (sectorCount + 1);
         k2 = k1 + sectorCount + 1;
 
-        for (uint j = 0; j < sectorCount; ++j, ++k1, ++k2) {
+        for (uint32_t j = 0; j < sectorCount; ++j, ++k1, ++k2) {
             if (i != 0) {
                 indices.push_back(start_idx + k1);
                 indices.push_back(start_idx + k2);

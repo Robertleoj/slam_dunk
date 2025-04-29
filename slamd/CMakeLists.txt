@@ -175,7 +175,6 @@ target_sources(
         src/window/glfw.cpp
         src/window/frame_buffer.cpp
         src/window/camera.cpp
-        src/window/io.cpp
         src/window/shaders.cpp
         src/window/arcball.cpp
         src/window/frame_timer.cpp

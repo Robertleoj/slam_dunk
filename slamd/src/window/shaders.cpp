@@ -4,7 +4,6 @@
 #include <format>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <slamd_window/io.hpp>
 #include <slamd_window/shaders.hpp>
 #include <stdexcept>
 

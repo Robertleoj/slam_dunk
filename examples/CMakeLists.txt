@@ -3,9 +3,6 @@ cmake_minimum_required(VERSION 3.22)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_C_COMPILER /usr/bin/gcc-13)
-set(CMAKE_CXX_COMPILER /usr/bin/g++-13)
-set(CMAKE_LINKER /usr/bin/ldd)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -13,11 +10,19 @@ project(slam_dunk_examples)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+if(APPLE)
+    message(STATUS "APPLE")
+    set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/arm64-osx")
+elseif(UNIX)
+    message(STATUS "UNIX")
+    set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-linux")
+endif()
 
 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
-set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-linux")
 
-find_package(spdlog CONFIG REQUIRED)
+find_path(Stb_INCLUDE_DIR "stb_image.h")
+
+# find_package(spdlog CONFIG REQUIRED)
 
 # to use as submodule
 add_subdirectory(slamd)

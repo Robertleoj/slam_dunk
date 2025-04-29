@@ -1,7 +1,6 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <optional>
 #include <slamd_common/data/mesh.hpp>
 #include <vector>
 
@@ -13,8 +12,8 @@ size_t generate_sphere(
     std::vector<uint32_t>& indices,
     std::vector<glm::vec3>& normals,
     float radius,
-    uint sectorCount,
-    uint stackCount
+    uint32_t sectorCount,
+    uint32_t stackCount
 );
 
 std::vector<glm::vec3> compute_vertex_normals(
