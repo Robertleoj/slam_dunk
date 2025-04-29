@@ -13,6 +13,12 @@ Node::Node(
 )
     : tree(tree) {}
 
+Node::~Node() {
+    if (this->object.has_value()) {
+        this->object.value()->attached_to.erase(this->id);
+    }
+}
+
 std::optional<std::shared_ptr<_geom::Geometry>> Node::get_object() const {
     std::scoped_lock l(this->object_mutex);
     if (!this->object.has_value()) {
@@ -31,7 +37,13 @@ void Node::set_object(
     std::shared_ptr<_geom::Geometry> object
 ) {
     std::scoped_lock l(this->object_mutex);
+
+    if (this->object.has_value()) {
+        this->object.value()->attached_to.erase(this->id);
+    }
     this->object.emplace(object);
+
+    object->attached_to.insert(this->id);
 }
 
 flatbuffers::Offset<slamd::flatb::Node> Node::serialize(

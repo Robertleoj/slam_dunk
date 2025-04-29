@@ -8,10 +8,6 @@
 #include <slamd/tree/tree_path.hpp>
 
 namespace slamd {
-namespace _id {
-struct TreeTag {};
-using TreeID = ID<TreeTag>;
-}  // namespace _id
 
 namespace _tree {
 
@@ -19,19 +15,7 @@ class Tree;
 
 class Node {
    public:
-    std::map<std::string, std::unique_ptr<Node>> children;
     Node(Tree* tree);
-
-   private:
-    std::optional<glm::mat4> transform;
-    std::optional<std::shared_ptr<_geom::Geometry>> object;
-
-    mutable std::mutex transform_mutex;
-    mutable std::mutex object_mutex;
-
-    const Tree* tree;
-
-   public:
     std::optional<std::shared_ptr<_geom::Geometry>> get_object() const;
 
     flatbuffers::Offset<slamd::flatb::Node> serialize(
@@ -43,6 +27,23 @@ class Node {
     void set_object(std::shared_ptr<_geom::Geometry> object);
 
     void set_transform(glm::mat4 transform);
+
+    ~Node();
+
+   public:
+    std::map<std::string, std::unique_ptr<Node>> children;
+    const _id::NodeID id;
+
+   private:
+    std::optional<glm::mat4> transform;
+    std::optional<std::shared_ptr<_geom::Geometry>> object;
+
+    mutable std::mutex transform_mutex;
+    mutable std::mutex object_mutex;
+
+    // we use a raw tree pointer here as the lifetime of the node
+    // is tied to the tree.
+    const Tree* tree;
 };
 
 class Tree {
@@ -61,6 +62,8 @@ class Tree {
     virtual flatbuffers::Offset<slamd::flatb::Tree> serialize(
         flatbuffers::FlatBufferBuilder& builder
     );
+
+    std::set<_id::ViewID> attached_to;
 
    protected:
     void

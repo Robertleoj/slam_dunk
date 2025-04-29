@@ -6,10 +6,6 @@
 
 namespace slamd {
 
-namespace _id {
-struct GeometryTag {};
-using GeometryID = ID<GeometryTag>;
-}  // namespace _id
 namespace _geom {
 
 class Geometry {
@@ -21,7 +17,9 @@ class Geometry {
 
     virtual ~Geometry() = default;
 
+   public:
     const _id::GeometryID id;
+    std::set<_id::NodeID> attached_to;
 };
 
 }  // namespace _geom

@@ -7,6 +7,9 @@ namespace _id {
 
 template <typename Tag>
 struct ID {
+    ID()
+        : value(counter++) {}
+
     const uint64_t value;
 
     static std::atomic<uint64_t> counter;  // Declare static member
@@ -39,6 +42,16 @@ struct ID {
 template <typename Tag>
 std::atomic<uint64_t> ID<Tag>::counter{1};
 
+struct ViewTag {};
+struct TreeTag {};
+struct NodeTag {};
+struct GeometryTag {};
+
+using ViewID = ID<ViewTag>;
+using TreeID = ID<TreeTag>;
+using NodeID = ID<NodeTag>;
+using GeometryID = ID<GeometryTag>;
+
 }  // namespace _id
 }  // namespace slamd
 
@@ -51,4 +64,5 @@ struct hash<slamd::_id::ID<Tag>> {
         return hash<uint64_t>()(id.value);
     }
 };
+
 }  // namespace std

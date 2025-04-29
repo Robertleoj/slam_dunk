@@ -6,21 +6,17 @@
 
 namespace slamd {
 
-namespace _id {
-struct ViewTag {};
-using ViewID = ID<ViewTag>;
-}  // namespace _id
 namespace _view {
-
 class View : std::enable_shared_from_this<View> {
    public:
-    View(_id::TreeID tree_id, slamd::flatb::ViewType view_type);
-    const _id::TreeID tree_id;
+    View(std::shared_ptr<_tree::Tree> tree, slamd::flatb::ViewType view_type);
+    ~View();
+
+   public:
+    const std::shared_ptr<_tree::Tree> tree;
     slamd::flatb::ViewType view_type;
 
     const _id::ViewID id;
-
-   private:
 };
 
 }  // namespace _view

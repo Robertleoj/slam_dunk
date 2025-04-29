@@ -7,12 +7,18 @@ namespace _view {
 //     : id(id_counter++) {}
 
 View::View(
-    _id::TreeID tree_id,
+    std::shared_ptr<_tree::Tree> tree,
     slamd::flatb::ViewType view_type
 )
     : id(_id::ViewID::next()),
-      tree_id(tree_id),
-      view_type(view_type) {}
+      tree(tree),
+      view_type(view_type) {
+    tree->attached_to.insert(this->id);
+}
+
+View::~View(){
+    this->tree->attached_to.erase(this->id);
+}
 
 }  // namespace _view
 }  // namespace slamd
