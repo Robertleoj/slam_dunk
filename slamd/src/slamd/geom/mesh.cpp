@@ -1,7 +1,7 @@
 #include <slamd/assert.hpp>
 #include <slamd/constants.hpp>
 #include <slamd/geom/mesh.hpp>
-#include <slamd/global_object_map.hpp>
+
 #include <slamd_common/data/mesh.hpp>
 
 namespace slamd {

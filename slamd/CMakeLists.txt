@@ -115,7 +115,7 @@ target_sources(
     PRIVATE
         src/slamd/assert.cpp
         src/slamd/visualizer.cpp
-        src/slamd/global_object_map.cpp
+        src/slamd/object_tracker.cpp
         src/slamd/view.cpp
 
         src/slamd/net/connection.cpp
@@ -123,7 +123,6 @@ target_sources(
         src/slamd/net/broadcaster.cpp
 
         src/slamd/tree/tree.cpp
-        src/slamd/tree/node.cpp
         src/slamd/tree/tree_path.cpp
 
         src/slamd/geom/points_2d.cpp

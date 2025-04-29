@@ -1,6 +1,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd/geom/poly_line.hpp>
-#include <slamd/global_object_map.hpp>
+
 #include <slamd_common/data/mesh.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 

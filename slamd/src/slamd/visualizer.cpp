@@ -2,7 +2,6 @@
 #include <flatb/visualizer_generated.h>
 #include <spdlog/spdlog.h>
 #include <asio.hpp>
-#include <slamd/global_object_map.hpp>
 #include <slamd/visualizer.hpp>
 
 namespace slamd {

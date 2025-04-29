@@ -1,6 +1,5 @@
 #include <glm/glm.hpp>
 #include <slamd/geom/camera_frustum.hpp>
-#include <slamd/global_object_map.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
 

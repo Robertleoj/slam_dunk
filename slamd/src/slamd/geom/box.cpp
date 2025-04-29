@@ -1,5 +1,4 @@
 #include <slamd/geom/box.hpp>
-#include <slamd/global_object_map.hpp>
 #include <slamd_common/data/mesh.hpp>
 
 namespace slamd {

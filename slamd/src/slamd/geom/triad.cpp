@@ -1,5 +1,5 @@
 #include <slamd/geom/triad.hpp>
-#include <slamd/global_object_map.hpp>
+
 #include <slamd_common/gmath/transforms.hpp>
 
 namespace slamd {

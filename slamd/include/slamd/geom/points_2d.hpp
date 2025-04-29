@@ -2,7 +2,6 @@
 
 #include <slamd/geom/geometry.hpp>
 #include <slamd/geom/mesh.hpp>
-#include <slamd/global_object_map.hpp>
 
 namespace slamd {
 namespace _geom {

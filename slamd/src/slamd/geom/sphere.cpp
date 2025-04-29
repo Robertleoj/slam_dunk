@@ -1,6 +1,6 @@
 #include <glm/glm.hpp>
 #include <slamd/geom/sphere.hpp>
-#include <slamd/global_object_map.hpp>
+
 #include <slamd_common/data/mesh.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 

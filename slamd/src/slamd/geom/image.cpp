@@ -1,5 +1,4 @@
 #include <slamd/geom/image.hpp>
-#include <slamd/global_object_map.hpp>
 
 namespace slamd {
 namespace _geom {

@@ -1,5 +1,5 @@
 #include <slamd/geom/poly_line_2d.hpp>
-#include <slamd/global_object_map.hpp>
+
 #include <slamd_common/gmath/serialization.hpp>
 
 namespace slamd {
