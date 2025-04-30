@@ -115,7 +115,6 @@ target_sources(
     PRIVATE
         src/slamd/assert.cpp
         src/slamd/visualizer.cpp
-        src/slamd/object_tracker.cpp
         src/slamd/view.cpp
 
         src/slamd/net/connection.cpp

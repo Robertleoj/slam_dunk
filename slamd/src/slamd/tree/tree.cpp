@@ -1,6 +1,5 @@
 #include <spdlog/spdlog.h>
 
-#include <slamd/object_tracker.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
@@ -10,24 +9,16 @@ namespace slamd {
 namespace _tree {
 
 Node::Node(
-    Tree* tree
+    Tree* tree,
+    TreePath path
 )
-    : tree(tree) {}
+    : tree(tree),
+      path(path) {}
 
 Node::~Node() {
     if (this->object.has_value()) {
         this->object.value()->attached_to.erase(this->id);
     }
-
-    _global::nodes.remove(this->id);
-}
-
-std::shared_ptr<Node> Node::create(
-    Tree* tree
-) {
-    auto node = std::shared_ptr<Node>(new Node(tree));
-    _global::nodes.add(node);
-    return node;
 }
 
 std::optional<std::shared_ptr<_geom::Geometry>> Node::get_object() const {
@@ -54,7 +45,7 @@ void Node::set_object(
     }
     this->object.emplace(object);
 
-    object->attached_to.insert(this->id);
+    object->attached_to.insert({this->id, this->shared_from_this()});
 }
 
 void Tree::add_all_geometries_rec(
@@ -139,7 +130,7 @@ void Node::set_transform(
 }
 Tree::Tree()
     : id(_id::TreeID::next()) {
-    this->root = Node::create(this);
+    this->root = std::make_shared<Node>(this, TreePath());
 }
 
 void Tree::set_object(
@@ -204,9 +195,11 @@ Node* Tree::make_path(
     }
 
     Node* current_node = root.get();
+    TreePath curr_path;
 
     for (size_t i = 0; i < path.components.size(); i++) {
         auto& component = path.components[i];
+        curr_path = curr_path / component;
 
         auto child_iterator = current_node->children.find(component);
 
@@ -214,7 +207,7 @@ Node* Tree::make_path(
             // in this case, we want to create the path down to the target
             // node
 
-            auto new_node = Node::create(this);
+            auto new_node = std::make_shared<Node>(this, curr_path);
 
             Node* new_node_ptr = new_node.get();
 

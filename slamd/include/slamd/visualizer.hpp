@@ -16,6 +16,12 @@ namespace _view {
 class View;
 }
 
+namespace _tree {
+class Tree;
+}
+class Scene;
+class Canvas;
+
 namespace _vis {
 
 class Visualizer {

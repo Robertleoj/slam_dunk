@@ -1,6 +1,5 @@
 #include <slamd/view.hpp>
 
-#include <slamd/object_tracker.hpp>
 namespace slamd {
 namespace _view {
 
@@ -10,7 +9,7 @@ std::shared_ptr<View> View::create(
     slamd::flatb::ViewType view_type
 ) {
     auto view = std::shared_ptr<View>(new View(vis, tree, view_type));
-    _global::views.add(view);
+    tree->attached_to.insert({view->id, view->shared_from_this()});
 
     return view;
 }
@@ -22,14 +21,10 @@ View::View(
 )
     : tree(tree),
       view_type(view_type),
-      vis(vis) {
-    tree->attached_to.insert(this->id);
-}
+      vis(vis) {}
 
 View::~View() {
     this->tree->attached_to.erase(this->id);
-
-    _global::views.remove(this->id);
 }
 
 }  // namespace _view

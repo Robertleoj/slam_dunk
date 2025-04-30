@@ -42,6 +42,13 @@ std::vector<std::string> split_path(
     return components;
 }
 
+TreePath::TreePath() {}
+
+TreePath::TreePath(
+    const TreePath& other
+)
+    : components(other.components) {}
+
 TreePath::TreePath(
     const std::string& path_string
 )

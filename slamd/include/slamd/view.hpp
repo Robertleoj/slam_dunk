@@ -11,8 +11,12 @@ namespace _vis {
 class Visualizer;
 }
 
+namespace _tree {
+class Tree;
+}
+
 namespace _view {
-class View {
+class View : public std::enable_shared_from_this<View> {
    public:
     static std::shared_ptr<View> create(
         _vis::Visualizer*,
