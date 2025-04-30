@@ -53,6 +53,10 @@ class Node : public std::enable_shared_from_this<Node> {
     std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
     find_visualizers();
 
+   private:
+    void detach_object();
+    void attach_object();
+
    public:
     std::map<std::string, std::shared_ptr<Node>> children;
     const _id::NodeID id;

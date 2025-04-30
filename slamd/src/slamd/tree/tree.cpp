@@ -48,6 +48,24 @@ void Node::set_object(
     this->object.emplace(object);
 
     object->attach(this->shared_from_this());
+
+    // broadcast the attach
+    flatbuffers::FlatBufferBuilder builder;
+
+    auto path_fb = builder.CreateString(this->path.string());
+    auto set_object_fb = flatb::CreateSetObject(
+        builder,
+        this->tree->id.value,
+        path_fb,
+        object->id.value
+    );
+    auto message_fb = flatb::CreateMessage(
+        builder,
+        flatb::MessageUnion_set_object,
+        set_object_fb.Union()
+    );
+    builder.Finish(message_fb);
+    this->broadcast(_utils::builder_buffer(builder));
 }
 
 void Tree::add_all_geometries_rec(

@@ -23,6 +23,9 @@ namespace flatb {
 struct SetTransform;
 struct SetTransformBuilder;
 
+struct SetObject;
+struct SetObjectBuilder;
+
 struct AddGeometry;
 struct AddGeometryBuilder;
 
@@ -36,17 +39,19 @@ enum MessageUnion : uint8_t {
   MessageUnion_NONE = 0,
   MessageUnion_initial_state = 1,
   MessageUnion_set_transform = 2,
-  MessageUnion_add_geometry = 3,
-  MessageUnion_remove_geometry = 4,
+  MessageUnion_set_object = 3,
+  MessageUnion_add_geometry = 4,
+  MessageUnion_remove_geometry = 5,
   MessageUnion_MIN = MessageUnion_NONE,
   MessageUnion_MAX = MessageUnion_remove_geometry
 };
 
-inline const MessageUnion (&EnumValuesMessageUnion())[5] {
+inline const MessageUnion (&EnumValuesMessageUnion())[6] {
   static const MessageUnion values[] = {
     MessageUnion_NONE,
     MessageUnion_initial_state,
     MessageUnion_set_transform,
+    MessageUnion_set_object,
     MessageUnion_add_geometry,
     MessageUnion_remove_geometry
   };
@@ -54,10 +59,11 @@ inline const MessageUnion (&EnumValuesMessageUnion())[5] {
 }
 
 inline const char * const *EnumNamesMessageUnion() {
-  static const char * const names[6] = {
+  static const char * const names[7] = {
     "NONE",
     "initial_state",
     "set_transform",
+    "set_object",
     "add_geometry",
     "remove_geometry",
     nullptr
@@ -81,6 +87,10 @@ template<> struct MessageUnionTraits<slamd::flatb::InitialState> {
 
 template<> struct MessageUnionTraits<slamd::flatb::SetTransform> {
   static const MessageUnion enum_value = MessageUnion_set_transform;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::SetObject> {
+  static const MessageUnion enum_value = MessageUnion_set_object;
 };
 
 template<> struct MessageUnionTraits<slamd::flatb::AddGeometry> {
@@ -167,6 +177,81 @@ inline ::flatbuffers::Offset<SetTransform> CreateSetTransformDirect(
       tree_id,
       tree_path__,
       transform);
+}
+
+struct SetObject FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef SetObjectBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_TREE_ID = 4,
+    VT_TREE_PATH = 6,
+    VT_GEOMETRY_ID = 8
+  };
+  uint64_t tree_id() const {
+    return GetField<uint64_t>(VT_TREE_ID, 0);
+  }
+  const ::flatbuffers::String *tree_path() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_TREE_PATH);
+  }
+  uint64_t geometry_id() const {
+    return GetField<uint64_t>(VT_GEOMETRY_ID, 0);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_TREE_ID, 8) &&
+           VerifyOffset(verifier, VT_TREE_PATH) &&
+           verifier.VerifyString(tree_path()) &&
+           VerifyField<uint64_t>(verifier, VT_GEOMETRY_ID, 8) &&
+           verifier.EndTable();
+  }
+};
+
+struct SetObjectBuilder {
+  typedef SetObject Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_tree_id(uint64_t tree_id) {
+    fbb_.AddElement<uint64_t>(SetObject::VT_TREE_ID, tree_id, 0);
+  }
+  void add_tree_path(::flatbuffers::Offset<::flatbuffers::String> tree_path) {
+    fbb_.AddOffset(SetObject::VT_TREE_PATH, tree_path);
+  }
+  void add_geometry_id(uint64_t geometry_id) {
+    fbb_.AddElement<uint64_t>(SetObject::VT_GEOMETRY_ID, geometry_id, 0);
+  }
+  explicit SetObjectBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<SetObject> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<SetObject>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<SetObject> CreateSetObject(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t tree_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> tree_path = 0,
+    uint64_t geometry_id = 0) {
+  SetObjectBuilder builder_(_fbb);
+  builder_.add_geometry_id(geometry_id);
+  builder_.add_tree_id(tree_id);
+  builder_.add_tree_path(tree_path);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<SetObject> CreateSetObjectDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t tree_id = 0,
+    const char *tree_path = nullptr,
+    uint64_t geometry_id = 0) {
+  auto tree_path__ = tree_path ? _fbb.CreateString(tree_path) : 0;
+  return slamd::flatb::CreateSetObject(
+      _fbb,
+      tree_id,
+      tree_path__,
+      geometry_id);
 }
 
 struct AddGeometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
@@ -271,6 +356,9 @@ struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::SetTransform *message_as_set_transform() const {
     return message_type() == slamd::flatb::MessageUnion_set_transform ? static_cast<const slamd::flatb::SetTransform *>(message()) : nullptr;
   }
+  const slamd::flatb::SetObject *message_as_set_object() const {
+    return message_type() == slamd::flatb::MessageUnion_set_object ? static_cast<const slamd::flatb::SetObject *>(message()) : nullptr;
+  }
   const slamd::flatb::AddGeometry *message_as_add_geometry() const {
     return message_type() == slamd::flatb::MessageUnion_add_geometry ? static_cast<const slamd::flatb::AddGeometry *>(message()) : nullptr;
   }
@@ -292,6 +380,10 @@ template<> inline const slamd::flatb::InitialState *Message::message_as<slamd::f
 
 template<> inline const slamd::flatb::SetTransform *Message::message_as<slamd::flatb::SetTransform>() const {
   return message_as_set_transform();
+}
+
+template<> inline const slamd::flatb::SetObject *Message::message_as<slamd::flatb::SetObject>() const {
+  return message_as_set_object();
 }
 
 template<> inline const slamd::flatb::AddGeometry *Message::message_as<slamd::flatb::AddGeometry>() const {
@@ -344,6 +436,10 @@ inline bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *ob
     }
     case MessageUnion_set_transform: {
       auto ptr = reinterpret_cast<const slamd::flatb::SetTransform *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_set_object: {
+      auto ptr = reinterpret_cast<const slamd::flatb::SetObject *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageUnion_add_geometry: {

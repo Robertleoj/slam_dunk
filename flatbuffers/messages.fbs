@@ -11,6 +11,12 @@ table SetTransform {
     transform: Mat4;
 }
 
+table SetObject {
+    tree_id: ulong;
+    tree_path: string;
+    geometry_id: ulong;
+}
+
 table AddGeometry {
     geometry: Geometry;
 }
@@ -22,6 +28,7 @@ table RemoveGeometry {
 union MessageUnion {
     initial_state: InitialState,
     set_transform: SetTransform,
+    set_object: SetObject,
     add_geometry: AddGeometry,
     remove_geometry: RemoveGeometry
 }

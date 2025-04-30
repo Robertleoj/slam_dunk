@@ -89,6 +89,37 @@ void StateManager::handle_set_transform(
     tree->set_transform(path, transform);
 }
 
+void StateManager::handle_set_object(
+    const slamd::flatb::SetObject* set_object_fb
+) {
+    auto obj =
+        this->geometries.at(_id::GeometryID(set_object_fb->geometry_id()));
+
+    TreePath path(set_object_fb->tree_path()->str());
+    auto tree_id = set_object_fb->tree_id();
+
+    auto tree = this->trees.at(_id::TreeID(tree_id));
+
+    tree->set_object(path, obj);
+}
+
+void StateManager::handle_add_geometry(
+    const slamd::flatb::AddGeometry* add_geometry_fb
+) {
+    auto geometry = _geom::Geometry::deserialize(add_geometry_fb->geometry());
+    auto geometry_id =
+        _id::GeometryID(add_geometry_fb->geometry()->geometry_id());
+
+    this->geometries.insert({geometry_id, geometry});
+}
+
+void StateManager::handle_remove_geometry(
+    const slamd::flatb::RemoveGeometry* remove_geometry_fb
+) {
+    auto geometry_id = _id::GeometryID(remove_geometry_fb->geometry_id());
+    this->geometries.erase(geometry_id);
+}
+
 void StateManager::apply_updates() {
     if (!this->connection.has_value()) {
         return;
@@ -117,6 +148,22 @@ void StateManager::apply_updates() {
                 ));
                 break;
             }
+            case (slamd::flatb::MessageUnion_set_object): {
+                this->handle_set_object(message_fb->message_as_set_object());
+                break;
+            }
+            case (slamd::flatb::MessageUnion_add_geometry): {
+                this->handle_add_geometry(message_fb->message_as_add_geometry()
+                );
+                break;
+            }
+            case (slamd::flatb::MessageUnion_remove_geometry): {
+                this->handle_remove_geometry(
+                    message_fb->message_as_remove_geometry()
+                );
+                break;
+            }
+
             default: {
                 spdlog::info(
                     "Unknown message type {}",

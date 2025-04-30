@@ -37,16 +37,14 @@ std::shared_ptr<Tree> Tree::deserialize(
 }
 
 void Tree::set_object(
-    const std::string& path,
+    const TreePath& path,
     std::shared_ptr<_geom::Geometry> object
 ) {
-    TreePath treepath(path);
-
-    if (treepath.is_root()) {
+    if (path.is_root()) {
         throw std::runtime_error("Setting root object is not allowed");
     }
 
-    Node* node = this->make_path(treepath);
+    Node* node = this->make_path(path);
     node->set_object(object);
 }
 

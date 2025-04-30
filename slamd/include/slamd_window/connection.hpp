@@ -3,6 +3,7 @@
 #include <asio.hpp>
 #include <slamd_window/message.hpp>
 #include <slamd_window/message_queue.hpp>
+#include <thread>
 
 namespace slamd {
 
