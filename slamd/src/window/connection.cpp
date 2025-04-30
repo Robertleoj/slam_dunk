@@ -36,15 +36,9 @@ void Connection::job() {
 
     while (connected) {
         try {
-            // // === Placeholder: slap in your message reading here ===
-            // // std::vector<uint8_t> msg = read_message(socket);
-            // // messages.push(msg);
-            // spdlog::debug("Waiting for message...");
-
             uint32_t len_net;
             asio::read(socket, asio::buffer(&len_net, 4));
             uint32_t len = ntohl(len_net);
-            spdlog::info("Reading {} bytes", len);
 
             Message message(len);
 

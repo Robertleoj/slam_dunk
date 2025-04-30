@@ -27,12 +27,6 @@ class Node : public std::enable_shared_from_this<Node> {
     ~Node();
     Node(Tree* tree, TreePath path);
 
-    std::optional<std::shared_ptr<_geom::Geometry>> get_object() const;
-
-    flatbuffers::Offset<slamd::flatb::Node> serialize(
-        flatbuffers::FlatBufferBuilder& builder
-    );
-
     std::optional<glm::mat4> get_transform() const;
 
     void set_object(std::shared_ptr<_geom::Geometry> object);
@@ -43,6 +37,15 @@ class Node : public std::enable_shared_from_this<Node> {
     Node(const Node&) = delete;
     Node(Node&&) = delete;
     Node& operator=(const Node&) = delete;
+
+    // should not be in public API
+    std::optional<std::shared_ptr<_geom::Geometry>> get_object() const;
+
+    flatbuffers::Offset<slamd::flatb::Node> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    );
+
+    void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
 
    public:
     std::map<std::string, std::shared_ptr<Node>> children;
@@ -57,7 +60,7 @@ class Node : public std::enable_shared_from_this<Node> {
 
     // we use a raw tree pointer here as the lifetime of the node
     // is tied to the tree.
-    const Tree* tree;
+    Tree* tree;
     const TreePath path;
 };
 
@@ -77,6 +80,8 @@ class Tree {
     void add_all_geometries(
         std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>& initial_map
     );
+
+    void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
 
    protected:
     void

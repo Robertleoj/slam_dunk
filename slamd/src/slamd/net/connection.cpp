@@ -66,8 +66,11 @@ void Connection::job(
             SPDLOG_INFO("Write failed: {}", ec.message());
 
             SPDLOG_ERROR("Closing connection...");
-            socket.shutdown(asio::ip::tcp::socket::shutdown_both);
-            socket.close();
+            try {
+                socket.shutdown(asio::ip::tcp::socket::shutdown_both);
+                socket.close();
+            } catch (...) {
+            }
             this->alive = false;
             return;
         }

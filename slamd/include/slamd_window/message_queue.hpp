@@ -2,7 +2,7 @@
 
 #include <mutex>
 #include <queue>
-#include <thread>
+#include <optional>
 
 namespace slamd {
 
@@ -35,6 +35,7 @@ class MessageQueue {
         }
 
         T element = std::move(this->queue.front());
+
         this->queue.pop();
 
         return element;

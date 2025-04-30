@@ -1,11 +1,17 @@
 include "visualizer.fbs";
+include "primitives.fbs";
 
 namespace slamd.flatb;
 
-
+table SetTransform {
+    tree_id: ulong;
+    tree_path: string;
+    transform: Mat4;
+}
 
 union MessageUnion {
-    initial_state: InitialState
+    initial_state: InitialState,
+    set_transform: SetTransform
 }
 
 table Message {

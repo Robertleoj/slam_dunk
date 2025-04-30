@@ -32,6 +32,8 @@ class Visualizer {
     void add_canvas(std::string name, std::shared_ptr<Canvas> canvas);
     void hang_forever();
 
+    void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
+
    private:
     void server_job(std::stop_token& stop_token);
     std::vector<uint8_t> get_state();

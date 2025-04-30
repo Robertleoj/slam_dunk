@@ -25,6 +25,8 @@ class View : public std::enable_shared_from_this<View> {
     );
     ~View();
 
+    void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
+
    private:
     View(
         _vis::Visualizer*,

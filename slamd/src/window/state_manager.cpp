@@ -1,6 +1,8 @@
 #include <flatb/visualizer_generated.h>
 #include <spdlog/spdlog.h>
 #include <asio.hpp>
+#include <slamd_common/gmath/serialization.hpp>
+#include <slamd_common/gmath/stringify.hpp>
 #include <slamd_window/state_manager.hpp>
 #include <slamd_window/view/canvas_view.hpp>
 #include <slamd_window/view/scene_view.hpp>
@@ -73,6 +75,20 @@ void StateManager::handle_initial_state(
     spdlog::debug("loaded state");
 }
 
+void StateManager::handle_set_transform(
+    const slamd::flatb::SetTransform* set_transform_fb
+) {
+    auto tree_id = _id::TreeID(set_transform_fb->tree_id());
+
+    auto tree = this->trees.at(tree_id);
+
+    TreePath path(set_transform_fb->tree_path()->str());
+
+    auto transform = gmath::deserialize(set_transform_fb->transform());
+
+    tree->set_transform(path, transform);
+}
+
 void StateManager::apply_updates() {
     if (!this->connection.has_value()) {
         return;
@@ -93,6 +109,11 @@ void StateManager::apply_updates() {
         switch (message_fb->message_type()) {
             case (slamd::flatb::MessageUnion_initial_state): {
                 this->handle_initial_state(message_fb->message_as_initial_state(
+                ));
+                break;
+            }
+            case (slamd::flatb::MessageUnion_set_transform): {
+                this->handle_set_transform(message_fb->message_as_set_transform(
                 ));
                 break;
             }

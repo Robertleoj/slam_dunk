@@ -31,11 +31,9 @@ class Tree {
     );
 
     std::optional<slamd::gmath::AABB> bounds();
+    void set_transform(const TreePath& path, const glm::mat4& transform);
 
    protected:
-    void
-    set_transform_mat4(const std::string& path, const glm::mat4& transform);
-
     std::optional<Node*> traverse(const TreePath& path);
     Node* make_path(TreePath path);
 

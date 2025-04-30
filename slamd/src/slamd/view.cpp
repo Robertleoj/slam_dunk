@@ -14,6 +14,12 @@ std::shared_ptr<View> View::create(
     return view;
 }
 
+void View::broadcast(
+    std::shared_ptr<std::vector<uint8_t>> message_buffer
+) {
+    this->vis->broadcast(message_buffer);
+}
+
 View::View(
     _vis::Visualizer* vis,
     std::shared_ptr<_tree::Tree> tree,

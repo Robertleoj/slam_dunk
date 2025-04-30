@@ -1,5 +1,6 @@
 #pragma once
 
+#include <spdlog/spdlog.h>
 #include <condition_variable>
 #include <mutex>
 #include <optional>

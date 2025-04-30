@@ -1,3 +1,4 @@
+#include <spdlog/spdlog.h>
 #include <chrono>
 #include <glm/glm.hpp>
 #include <slamd/slamd.hpp>

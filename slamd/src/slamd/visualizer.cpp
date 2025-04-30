@@ -68,6 +68,11 @@ Visualizer::get_geometries_fb(
     return geoms_fb;
 }
 
+
+void Visualizer::broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer) {
+    this->client_set->broadcast(message_buffer);
+}
+
 std::vector<uint8_t> Visualizer::get_state() {
     flatbuffers::FlatBufferBuilder builder(1024);
 

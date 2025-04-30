@@ -57,16 +57,15 @@ void Tree::render(
     this->render_recursive(this->root.get(), glm::mat4(1.0), view, projection);
 }
 
-void Tree::set_transform_mat4(
-    const std::string& path,
+void Tree::set_transform(
+    const TreePath& path,
     const glm::mat4& transform
 ) {
-    TreePath treepath(path);
-    if (treepath.is_root()) {
+    if (path.is_root()) {
         throw std::runtime_error("Setting root transform is not allowed");
     }
 
-    Node* node = this->make_path(treepath);
+    Node* node = this->make_path(path);
     node->set_transform(transform);
 }
 

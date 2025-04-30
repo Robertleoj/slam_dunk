@@ -13,10 +13,14 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 25 &&
               FLATBUFFERS_VERSION_REVISION == 10,
              "Non-compatible flatbuffers version included");
 
+#include "primitives_generated.h"
 #include "visualizer_generated.h"
 
 namespace slamd {
 namespace flatb {
+
+struct SetTransform;
+struct SetTransformBuilder;
 
 struct Message;
 struct MessageBuilder;
@@ -24,29 +28,32 @@ struct MessageBuilder;
 enum MessageUnion : uint8_t {
   MessageUnion_NONE = 0,
   MessageUnion_initial_state = 1,
+  MessageUnion_set_transform = 2,
   MessageUnion_MIN = MessageUnion_NONE,
-  MessageUnion_MAX = MessageUnion_initial_state
+  MessageUnion_MAX = MessageUnion_set_transform
 };
 
-inline const MessageUnion (&EnumValuesMessageUnion())[2] {
+inline const MessageUnion (&EnumValuesMessageUnion())[3] {
   static const MessageUnion values[] = {
     MessageUnion_NONE,
-    MessageUnion_initial_state
+    MessageUnion_initial_state,
+    MessageUnion_set_transform
   };
   return values;
 }
 
 inline const char * const *EnumNamesMessageUnion() {
-  static const char * const names[3] = {
+  static const char * const names[4] = {
     "NONE",
     "initial_state",
+    "set_transform",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameMessageUnion(MessageUnion e) {
-  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_initial_state)) return "";
+  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_set_transform)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesMessageUnion()[index];
 }
@@ -59,8 +66,87 @@ template<> struct MessageUnionTraits<slamd::flatb::InitialState> {
   static const MessageUnion enum_value = MessageUnion_initial_state;
 };
 
+template<> struct MessageUnionTraits<slamd::flatb::SetTransform> {
+  static const MessageUnion enum_value = MessageUnion_set_transform;
+};
+
 bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *obj, MessageUnion type);
 bool VerifyMessageUnionVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<uint8_t> *types);
+
+struct SetTransform FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef SetTransformBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_TREE_ID = 4,
+    VT_TREE_PATH = 6,
+    VT_TRANSFORM = 8
+  };
+  uint64_t tree_id() const {
+    return GetField<uint64_t>(VT_TREE_ID, 0);
+  }
+  const ::flatbuffers::String *tree_path() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_TREE_PATH);
+  }
+  const slamd::flatb::Mat4 *transform() const {
+    return GetStruct<const slamd::flatb::Mat4 *>(VT_TRANSFORM);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_TREE_ID, 8) &&
+           VerifyOffset(verifier, VT_TREE_PATH) &&
+           verifier.VerifyString(tree_path()) &&
+           VerifyField<slamd::flatb::Mat4>(verifier, VT_TRANSFORM, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct SetTransformBuilder {
+  typedef SetTransform Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_tree_id(uint64_t tree_id) {
+    fbb_.AddElement<uint64_t>(SetTransform::VT_TREE_ID, tree_id, 0);
+  }
+  void add_tree_path(::flatbuffers::Offset<::flatbuffers::String> tree_path) {
+    fbb_.AddOffset(SetTransform::VT_TREE_PATH, tree_path);
+  }
+  void add_transform(const slamd::flatb::Mat4 *transform) {
+    fbb_.AddStruct(SetTransform::VT_TRANSFORM, transform);
+  }
+  explicit SetTransformBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<SetTransform> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<SetTransform>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<SetTransform> CreateSetTransform(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t tree_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> tree_path = 0,
+    const slamd::flatb::Mat4 *transform = nullptr) {
+  SetTransformBuilder builder_(_fbb);
+  builder_.add_tree_id(tree_id);
+  builder_.add_transform(transform);
+  builder_.add_tree_path(tree_path);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<SetTransform> CreateSetTransformDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t tree_id = 0,
+    const char *tree_path = nullptr,
+    const slamd::flatb::Mat4 *transform = nullptr) {
+  auto tree_path__ = tree_path ? _fbb.CreateString(tree_path) : 0;
+  return slamd::flatb::CreateSetTransform(
+      _fbb,
+      tree_id,
+      tree_path__,
+      transform);
+}
 
 struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef MessageBuilder Builder;
@@ -78,6 +164,9 @@ struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::InitialState *message_as_initial_state() const {
     return message_type() == slamd::flatb::MessageUnion_initial_state ? static_cast<const slamd::flatb::InitialState *>(message()) : nullptr;
   }
+  const slamd::flatb::SetTransform *message_as_set_transform() const {
+    return message_type() == slamd::flatb::MessageUnion_set_transform ? static_cast<const slamd::flatb::SetTransform *>(message()) : nullptr;
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_MESSAGE_TYPE, 1) &&
@@ -89,6 +178,10 @@ struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
 
 template<> inline const slamd::flatb::InitialState *Message::message_as<slamd::flatb::InitialState>() const {
   return message_as_initial_state();
+}
+
+template<> inline const slamd::flatb::SetTransform *Message::message_as<slamd::flatb::SetTransform>() const {
+  return message_as_set_transform();
 }
 
 struct MessageBuilder {
@@ -129,6 +222,10 @@ inline bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *ob
     }
     case MessageUnion_initial_state: {
       auto ptr = reinterpret_cast<const slamd::flatb::InitialState *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_set_transform: {
+      auto ptr = reinterpret_cast<const slamd::flatb::SetTransform *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

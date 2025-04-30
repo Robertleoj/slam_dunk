@@ -1,8 +1,10 @@
 #include <spdlog/spdlog.h>
 
+#include <flatb/messages_generated.h>
 #include <slamd/tree/tree.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
+#include <slamd_common/utils/serialization.hpp>
 
 namespace slamd {
 
@@ -127,10 +129,54 @@ void Node::set_transform(
 ) {
     std::scoped_lock l(this->transform_mutex);
     this->transform = transform;
+
+    flatbuffers::FlatBufferBuilder builder;
+
+    auto path_fb = builder.CreateString(this->path.string());
+    auto transform_fb = gmath::serialize(transform);
+    ;
+
+    auto set_transform_fb = flatb::CreateSetTransform(
+        builder,
+        this->tree->id.value,
+        path_fb,
+        &transform_fb
+    );
+
+    auto message_fb = flatb::CreateMessage(
+        builder,
+        flatb::MessageUnion_set_transform,
+        set_transform_fb.Union()
+    );
+
+    builder.Finish(message_fb);
+
+    auto message_buffer = _utils::builder_buffer(builder);
+    this->broadcast(message_buffer);
 }
+
+void Node::broadcast(
+    std::shared_ptr<std::vector<uint8_t>> message_buffer
+) {
+    this->tree->broadcast(message_buffer);
+}
+
 Tree::Tree()
     : id(_id::TreeID::next()) {
     this->root = std::make_shared<Node>(this, TreePath());
+}
+
+void Tree::broadcast(
+    std::shared_ptr<std::vector<uint8_t>> message_buffer
+) {
+    for (auto it = this->attached_to.begin(); it != this->attached_to.end();) {
+        if (auto view = it->second.lock()) {
+            view->broadcast(message_buffer);
+            it++;
+        } else {
+            it = attached_to.erase(it);
+        }
+    }
 }
 
 void Tree::set_object(

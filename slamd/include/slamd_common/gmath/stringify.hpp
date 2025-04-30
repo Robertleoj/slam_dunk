@@ -8,7 +8,7 @@
 namespace slamd {
 namespace gmath {
 
-std::string stringify(
+inline std::string stringify(
     const glm::mat4& mat
 ) {
     std::ostringstream oss;

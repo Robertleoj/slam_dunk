@@ -100,6 +100,9 @@ target_include_directories(
 target_link_libraries(
     slamd_common
 
+    PUBLIC
+        spdlog::spdlog
+
     PRIVATE
         spdlog::spdlog
         slamd_flatbuff

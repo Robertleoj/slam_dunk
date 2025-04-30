@@ -20,6 +20,8 @@ class StateManager {
 
    private:
     void handle_initial_state(const slamd::flatb::InitialState* initial_state);
+    void handle_set_transform(const slamd::flatb::SetTransform* set_transform_fb
+    );
 
     // fs::path layout_path();
 

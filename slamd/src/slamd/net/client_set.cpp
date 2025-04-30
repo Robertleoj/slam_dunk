@@ -40,6 +40,7 @@ void ClientSet::broadcast(
             it = this->clients.erase(it);
         } else {
             (*it)->write(msg);
+            it++;
         }
     }
 }
