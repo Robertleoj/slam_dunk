@@ -24,7 +24,7 @@ class Canvas;
 
 namespace _vis {
 
-class Visualizer {
+class Visualizer : public std::enable_shared_from_this<Visualizer> {
    public:
     Visualizer(std::string name);
     ~Visualizer();
@@ -40,6 +40,9 @@ class Visualizer {
     flatbuffers::Offset<
         flatbuffers::Vector<flatbuffers::Offset<flatb::Geometry>>>
     get_geometries_fb(flatbuffers::FlatBufferBuilder& builder);
+
+   public:
+    _id::VisualizerID id;
 
    private:
     std::string name;

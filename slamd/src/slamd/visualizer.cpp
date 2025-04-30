@@ -30,7 +30,12 @@ void Visualizer::add_scene(
     }
 
     this->view_name_to_view.insert(
-        {name, _view::View::create(this, scene, slamd::flatb::ViewType_SCENE)}
+        {name,
+         _view::View::create(
+             this->shared_from_this(),
+             scene,
+             slamd::flatb::ViewType_SCENE
+         )}
     );
 }
 
@@ -45,7 +50,12 @@ void Visualizer::add_canvas(
     }
 
     this->view_name_to_view.insert(
-        {name, _view::View::create(this, canvas, slamd::flatb::ViewType_CANVAS)}
+        {name,
+         _view::View::create(
+             this->shared_from_this(),
+             canvas,
+             slamd::flatb::ViewType_CANVAS
+         )}
     );
 }
 flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatb::Geometry>>>
@@ -68,8 +78,9 @@ Visualizer::get_geometries_fb(
     return geoms_fb;
 }
 
-
-void Visualizer::broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer) {
+void Visualizer::broadcast(
+    std::shared_ptr<std::vector<uint8_t>> message_buffer
+) {
     this->client_set->broadcast(message_buffer);
 }
 

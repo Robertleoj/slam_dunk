@@ -19,7 +19,7 @@ Node::Node(
 
 Node::~Node() {
     if (this->object.has_value()) {
-        this->object.value()->attached_to.erase(this->id);
+        this->object.value()->detach(this);
     }
 }
 
@@ -43,11 +43,11 @@ void Node::set_object(
     std::scoped_lock l(this->object_mutex);
 
     if (this->object.has_value()) {
-        this->object.value()->attached_to.erase(this->id);
+        this->object.value()->detach(this);
     }
     this->object.emplace(object);
 
-    object->attached_to.insert({this->id, this->shared_from_this()});
+    object->attach(this->shared_from_this());
 }
 
 void Tree::add_all_geometries_rec(
@@ -73,6 +73,28 @@ void Tree::add_all_geometries_rec(
     }
 
     initial_map.insert({geom->id, geom});
+}
+
+std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
+Node::find_visualizers() {
+    return this->tree->find_visualizers();
+}
+
+std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
+Tree::find_visualizers() {
+    std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>> map;
+
+    for (auto it = this->attached_to.begin(); it != this->attached_to.end();) {
+        if (auto view = it->second.lock()) {
+            auto view_vis_map = view->find_visualizers();
+            map.insert(view_vis_map.begin(), view_vis_map.end());
+            it++;
+        } else {
+            it = attached_to.erase(it);
+        }
+    }
+
+    return map;
 }
 
 void Tree::add_all_geometries(

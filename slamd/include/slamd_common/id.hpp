@@ -47,12 +47,14 @@ struct ViewTag {};
 struct TreeTag {};
 struct NodeTag {};
 struct GeometryTag {};
+struct VisualizerTag {};
 }  // namespace _tags
 
 using ViewID = ID<_tags::ViewTag>;
 using TreeID = ID<_tags::TreeTag>;
 using NodeID = ID<_tags::NodeTag>;
 using GeometryID = ID<_tags::GeometryTag>;
+using VisualizerID = ID<_tags::VisualizerTag>;
 
 }  // namespace _id
 }  // namespace slamd

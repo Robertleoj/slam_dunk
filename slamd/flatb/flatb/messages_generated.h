@@ -13,6 +13,7 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 25 &&
               FLATBUFFERS_VERSION_REVISION == 10,
              "Non-compatible flatbuffers version included");
 
+#include "geometry_generated.h"
 #include "primitives_generated.h"
 #include "visualizer_generated.h"
 
@@ -22,6 +23,12 @@ namespace flatb {
 struct SetTransform;
 struct SetTransformBuilder;
 
+struct AddGeometry;
+struct AddGeometryBuilder;
+
+struct RemoveGeometry;
+struct RemoveGeometryBuilder;
+
 struct Message;
 struct MessageBuilder;
 
@@ -29,31 +36,37 @@ enum MessageUnion : uint8_t {
   MessageUnion_NONE = 0,
   MessageUnion_initial_state = 1,
   MessageUnion_set_transform = 2,
+  MessageUnion_add_geometry = 3,
+  MessageUnion_remove_geometry = 4,
   MessageUnion_MIN = MessageUnion_NONE,
-  MessageUnion_MAX = MessageUnion_set_transform
+  MessageUnion_MAX = MessageUnion_remove_geometry
 };
 
-inline const MessageUnion (&EnumValuesMessageUnion())[3] {
+inline const MessageUnion (&EnumValuesMessageUnion())[5] {
   static const MessageUnion values[] = {
     MessageUnion_NONE,
     MessageUnion_initial_state,
-    MessageUnion_set_transform
+    MessageUnion_set_transform,
+    MessageUnion_add_geometry,
+    MessageUnion_remove_geometry
   };
   return values;
 }
 
 inline const char * const *EnumNamesMessageUnion() {
-  static const char * const names[4] = {
+  static const char * const names[6] = {
     "NONE",
     "initial_state",
     "set_transform",
+    "add_geometry",
+    "remove_geometry",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameMessageUnion(MessageUnion e) {
-  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_set_transform)) return "";
+  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_remove_geometry)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesMessageUnion()[index];
 }
@@ -68,6 +81,14 @@ template<> struct MessageUnionTraits<slamd::flatb::InitialState> {
 
 template<> struct MessageUnionTraits<slamd::flatb::SetTransform> {
   static const MessageUnion enum_value = MessageUnion_set_transform;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::AddGeometry> {
+  static const MessageUnion enum_value = MessageUnion_add_geometry;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::RemoveGeometry> {
+  static const MessageUnion enum_value = MessageUnion_remove_geometry;
 };
 
 bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *obj, MessageUnion type);
@@ -148,6 +169,89 @@ inline ::flatbuffers::Offset<SetTransform> CreateSetTransformDirect(
       transform);
 }
 
+struct AddGeometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef AddGeometryBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_GEOMETRY = 4
+  };
+  const slamd::flatb::Geometry *geometry() const {
+    return GetPointer<const slamd::flatb::Geometry *>(VT_GEOMETRY);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_GEOMETRY) &&
+           verifier.VerifyTable(geometry()) &&
+           verifier.EndTable();
+  }
+};
+
+struct AddGeometryBuilder {
+  typedef AddGeometry Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_geometry(::flatbuffers::Offset<slamd::flatb::Geometry> geometry) {
+    fbb_.AddOffset(AddGeometry::VT_GEOMETRY, geometry);
+  }
+  explicit AddGeometryBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<AddGeometry> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<AddGeometry>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<AddGeometry> CreateAddGeometry(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<slamd::flatb::Geometry> geometry = 0) {
+  AddGeometryBuilder builder_(_fbb);
+  builder_.add_geometry(geometry);
+  return builder_.Finish();
+}
+
+struct RemoveGeometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef RemoveGeometryBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_GEOMETRY_ID = 4
+  };
+  uint64_t geometry_id() const {
+    return GetField<uint64_t>(VT_GEOMETRY_ID, 0);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_GEOMETRY_ID, 8) &&
+           verifier.EndTable();
+  }
+};
+
+struct RemoveGeometryBuilder {
+  typedef RemoveGeometry Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_geometry_id(uint64_t geometry_id) {
+    fbb_.AddElement<uint64_t>(RemoveGeometry::VT_GEOMETRY_ID, geometry_id, 0);
+  }
+  explicit RemoveGeometryBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<RemoveGeometry> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<RemoveGeometry>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<RemoveGeometry> CreateRemoveGeometry(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t geometry_id = 0) {
+  RemoveGeometryBuilder builder_(_fbb);
+  builder_.add_geometry_id(geometry_id);
+  return builder_.Finish();
+}
+
 struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef MessageBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -167,6 +271,12 @@ struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::SetTransform *message_as_set_transform() const {
     return message_type() == slamd::flatb::MessageUnion_set_transform ? static_cast<const slamd::flatb::SetTransform *>(message()) : nullptr;
   }
+  const slamd::flatb::AddGeometry *message_as_add_geometry() const {
+    return message_type() == slamd::flatb::MessageUnion_add_geometry ? static_cast<const slamd::flatb::AddGeometry *>(message()) : nullptr;
+  }
+  const slamd::flatb::RemoveGeometry *message_as_remove_geometry() const {
+    return message_type() == slamd::flatb::MessageUnion_remove_geometry ? static_cast<const slamd::flatb::RemoveGeometry *>(message()) : nullptr;
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_MESSAGE_TYPE, 1) &&
@@ -182,6 +292,14 @@ template<> inline const slamd::flatb::InitialState *Message::message_as<slamd::f
 
 template<> inline const slamd::flatb::SetTransform *Message::message_as<slamd::flatb::SetTransform>() const {
   return message_as_set_transform();
+}
+
+template<> inline const slamd::flatb::AddGeometry *Message::message_as<slamd::flatb::AddGeometry>() const {
+  return message_as_add_geometry();
+}
+
+template<> inline const slamd::flatb::RemoveGeometry *Message::message_as<slamd::flatb::RemoveGeometry>() const {
+  return message_as_remove_geometry();
 }
 
 struct MessageBuilder {
@@ -226,6 +344,14 @@ inline bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *ob
     }
     case MessageUnion_set_transform: {
       auto ptr = reinterpret_cast<const slamd::flatb::SetTransform *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_add_geometry: {
+      auto ptr = reinterpret_cast<const slamd::flatb::AddGeometry *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_remove_geometry: {
+      auto ptr = reinterpret_cast<const slamd::flatb::RemoveGeometry *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

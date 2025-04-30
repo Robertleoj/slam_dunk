@@ -12,6 +12,10 @@ namespace _tree {
 class Node;
 }
 
+namespace _vis {
+class Visualizer;
+}
+
 namespace _geom {
 
 class Geometry {
@@ -22,6 +26,14 @@ class Geometry {
     );
 
     virtual ~Geometry() = default;
+
+    // should not be in public api
+    void attach(std::shared_ptr<_tree::Node> node);
+    void detach(_tree::Node* node);
+
+   private:
+    std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
+    find_visualizers();
 
    public:
     const _id::GeometryID id;

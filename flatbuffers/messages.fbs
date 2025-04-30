@@ -1,5 +1,7 @@
 include "visualizer.fbs";
 include "primitives.fbs";
+include "geometry.fbs";
+
 
 namespace slamd.flatb;
 
@@ -9,9 +11,19 @@ table SetTransform {
     transform: Mat4;
 }
 
+table AddGeometry {
+    geometry: Geometry;
+}
+
+table RemoveGeometry {
+    geometry_id: ulong;
+}
+
 union MessageUnion {
     initial_state: InitialState,
-    set_transform: SetTransform
+    set_transform: SetTransform,
+    add_geometry: AddGeometry,
+    remove_geometry: RemoveGeometry
 }
 
 table Message {

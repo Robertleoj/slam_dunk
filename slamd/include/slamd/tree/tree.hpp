@@ -10,6 +10,9 @@
 
 namespace slamd {
 
+namespace _vis {
+class Visualizer;
+}
 namespace _view {
 class View;
 }
@@ -47,6 +50,9 @@ class Node : public std::enable_shared_from_this<Node> {
 
     void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
 
+    std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
+    find_visualizers();
+
    public:
     std::map<std::string, std::shared_ptr<Node>> children;
     const _id::NodeID id;
@@ -82,6 +88,8 @@ class Tree {
     );
 
     void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
+    std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
+    find_visualizers();
 
    protected:
     void

@@ -4,7 +4,7 @@ namespace slamd {
 namespace _view {
 
 std::shared_ptr<View> View::create(
-    _vis::Visualizer* vis,
+    std::shared_ptr<_vis::Visualizer> vis,
     std::shared_ptr<_tree::Tree> tree,
     slamd::flatb::ViewType view_type
 ) {
@@ -17,11 +17,26 @@ std::shared_ptr<View> View::create(
 void View::broadcast(
     std::shared_ptr<std::vector<uint8_t>> message_buffer
 ) {
-    this->vis->broadcast(message_buffer);
+    auto vis = this->vis.lock();
+    if (!vis) {
+        throw std::runtime_error("Visualizer not valid! Should never happen.");
+    }
+
+    vis->broadcast(message_buffer);
+}
+
+std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
+View::find_visualizers() {
+    auto vis = this->vis.lock();
+    if (!vis) {
+        throw std::runtime_error("Visualizer not valid! Should never happen.");
+    }
+
+    return {{vis->id, vis}};
 }
 
 View::View(
-    _vis::Visualizer* vis,
+    std::shared_ptr<_vis::Visualizer> vis,
     std::shared_ptr<_tree::Tree> tree,
     slamd::flatb::ViewType view_type
 )
