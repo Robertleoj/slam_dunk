@@ -28,6 +28,8 @@ def build(debug: bool) -> None:
 
     if debug:
         compile_cmd.append("-DCMAKE_BUILD_TYPE=Debug")
+    else:
+        compile_cmd.append("-DCMAKE_BUILD_TYPE=Release")
 
     subprocess.run(
         compile_cmd,

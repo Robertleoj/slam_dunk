@@ -1,49 +1,70 @@
 #pragma once
 
-#include <mutex>
-#include <queue>
+#include <atomic>
 #include <optional>
+#include <vector>
 
 namespace slamd {
 
+// TODO: use linked list, not circular buffer to avoid capacity limit
 template <typename T>
 class MessageQueue {
    public:
-    MessageQueue() {}
+    explicit MessageQueue(
+        size_t capacity
+    )
+        : buffer(capacity),
+          capacity(capacity),
+          head(0),
+          tail(0) {}
 
-    void push(
+    bool push(
         const T& value
     ) {
-        std::scoped_lock l(this->mutex);
+        size_t current_tail = tail.load(std::memory_order_relaxed);
+        size_t next_tail = (current_tail + 1) % capacity;
 
-        this->queue.push(value);
+        if (next_tail == head.load(std::memory_order_acquire)) {
+            return false;  // Queue full
+        }
+
+        buffer[current_tail] = value;
+        tail.store(next_tail, std::memory_order_release);
+        return true;
     }
 
-    void push(
+    bool push(
         T&& value
     ) {
-        std::scoped_lock l(this->mutex);
+        size_t current_tail = tail.load(std::memory_order_relaxed);
+        size_t next_tail = (current_tail + 1) % capacity;
 
-        this->queue.push(std::move(value));
+        if (next_tail == head.load(std::memory_order_acquire)) {
+            return false;  // Queue full
+        }
+
+        buffer[current_tail] = std::move(value);
+        tail.store(next_tail, std::memory_order_release);
+        return true;
     }
 
     std::optional<T> try_pop() {
-        std::scoped_lock l(this->mutex);
+        size_t current_head = head.load(std::memory_order_relaxed);
 
-        if (this->queue.empty()) {
-            return std::nullopt;
+        if (current_head == tail.load(std::memory_order_acquire)) {
+            return std::nullopt;  // Queue empty
         }
 
-        T element = std::move(this->queue.front());
-
-        this->queue.pop();
-
-        return element;
+        T value = std::move(buffer[current_head]);
+        head.store((current_head + 1) % capacity, std::memory_order_release);
+        return value;
     }
 
    private:
-    std::mutex mutex;
-    std::queue<T> queue;
+    std::vector<T> buffer;
+    const size_t capacity;
+    std::atomic<size_t> head;
+    std::atomic<size_t> tail;
 };
 
 }  // namespace slamd

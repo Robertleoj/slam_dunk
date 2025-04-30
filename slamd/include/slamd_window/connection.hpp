@@ -15,7 +15,7 @@ class Connection {
     const std::string ip;
     const ushort port;
     bool connected = false;
-    MessageQueue<Message> messages;
+    MessageQueue<std::unique_ptr<Message>> messages;
 
    private:
     void job();

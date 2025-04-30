@@ -8,7 +8,6 @@ namespace slamd {
 class Message {
    public:
     Message(size_t bytes);
-    Message(Message&& other);
 
     uint8_t* data();
     const slamd::flatb::Message* msg();

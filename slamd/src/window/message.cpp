@@ -8,11 +8,11 @@ Message::Message(
     this->buffer = std::unique_ptr<uint8_t[]>(new uint8_t[bytes]);
 }
 
-Message::Message(
-    Message&& other
-) {
-    this->buffer = std::move(other.buffer);
-}
+// Message::Message(
+//     Message&& other
+// ) {
+//     this->buffer = std::move(other.buffer);
+// }
 
 uint8_t* Message::data() {
     return this->buffer.get();

@@ -133,9 +133,9 @@ void StateManager::apply_updates() {
         if (!maybe_message.has_value()) {
             return;
         }
-        auto& message = maybe_message.value();
+        auto message = std::move(maybe_message.value());
 
-        auto message_fb = message.msg();
+        auto message_fb = message->msg();
 
         switch (message_fb->message_type()) {
             case (slamd::flatb::MessageUnion_initial_state): {

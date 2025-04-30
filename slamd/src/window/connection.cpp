@@ -11,7 +11,8 @@ Connection::Connection(
     ushort port
 )
     : ip(ip),
-      port(port) {
+      port(port),
+      messages(1024) {
     this->job_thread = std::jthread(&Connection::job, this);
 }
 
@@ -40,11 +41,11 @@ void Connection::job() {
             asio::read(socket, asio::buffer(&len_net, 4));
             uint32_t len = ntohl(len_net);
 
-            Message message(len);
+            auto message = std::make_unique<Message>(len);
 
             asio::read(
                 socket,
-                asio::buffer(message.data(), len),
+                asio::buffer(message->data(), len),
                 asio::transfer_exactly(len)
             );
 
