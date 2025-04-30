@@ -57,6 +57,37 @@ void Node::set_object(
     object->attached_to.insert(this->id);
 }
 
+void Tree::add_all_geometries_rec(
+    Node* node,
+    std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>& initial_map
+) {
+    for (auto& [_, child] : node->children) {
+        this->add_all_geometries_rec(child.get(), initial_map);
+    }
+
+    auto geom_opt = node->get_object();
+
+    if (!geom_opt.has_value()) {
+        return;
+    }
+
+    auto geom = geom_opt.value();
+
+    auto it = initial_map.find(geom->id);
+
+    if (it != initial_map.end()) {
+        return;
+    }
+
+    initial_map.insert({geom->id, geom});
+}
+
+void Tree::add_all_geometries(
+    std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>& initial_map
+) {
+    this->add_all_geometries_rec(this->root.get(), initial_map);
+}
+
 flatbuffers::Offset<slamd::flatb::Node> Node::serialize(
     flatbuffers::FlatBufferBuilder& builder
 ) {
@@ -77,15 +108,15 @@ flatbuffers::Offset<slamd::flatb::Node> Node::serialize(
     auto children_fb = builder.CreateVector(children);
 
     auto maybe_geom = this->get_object();
-    std::optional<flatbuffers::Offset<flatb::Geometry>> maybe_geom_fb =
-        std::nullopt;
+    std::optional<uint64_t> maybe_geom_id_fb = std::nullopt;
+
     if (maybe_geom.has_value()) {
-        maybe_geom_fb = maybe_geom.value()->serialize(builder);
+        maybe_geom_id_fb = maybe_geom.value()->id.value;
     }
 
     slamd::flatb::NodeBuilder node_builder(builder);
-    if (maybe_geom_fb.has_value()) {
-        node_builder.add_geometry(maybe_geom_fb.value());
+    if (maybe_geom_id_fb.has_value()) {
+        node_builder.add_geometry_id(maybe_geom_id_fb.value());
     }
 
     auto maybe_transform = this->get_transform();

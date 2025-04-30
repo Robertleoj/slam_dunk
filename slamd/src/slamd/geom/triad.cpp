@@ -19,6 +19,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> Triad::serialize(
 
     return flatb::CreateGeometry(
         builder,
+        this->id.value,
         flatb::GeometryUnion_triad,
         triad_fb.Union()
     );

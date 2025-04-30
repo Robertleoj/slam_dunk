@@ -4,7 +4,7 @@
 #include <slamd_window/glfw.hpp>
 #include <stdexcept>
 
-namespace slamdw {
+namespace slamd {
 namespace glutils {
 
 GLFWwindow* make_window(

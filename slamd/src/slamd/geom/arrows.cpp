@@ -36,6 +36,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> Arrows::serialize(
 
     return flatb::CreateGeometry(
         builder,
+        this->id.value,
         flatb::GeometryUnion_arrows,
         arrows_fb.Union()
     );

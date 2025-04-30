@@ -13,7 +13,7 @@
 #include <thread>
 #include <vector>
 
-namespace slamdw {
+namespace slamd {
 
 namespace fs = std::filesystem;
 
@@ -37,4 +37,4 @@ class Visualizer {
     std::list<Connection> open_connections;
 };
 
-}  // namespace slamdw
+}  // namespace slamd

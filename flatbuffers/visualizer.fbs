@@ -10,7 +10,8 @@ table ChildEntry {
 
 table Node {
     transform: Mat4;
-    geometry: Geometry;
+    // 0 means no geometry is associated
+    geometry_id: ulong = 0;
     children: [ChildEntry];
 }
 
@@ -35,6 +36,7 @@ table InitialState {
     name: string;
     views: [View];
     trees: [Tree];
+    geometries: [Geometry];
 }
 
 root_type InitialState;

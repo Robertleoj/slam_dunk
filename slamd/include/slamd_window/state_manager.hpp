@@ -2,12 +2,13 @@
 
 #include <map>
 #include <memory>
+#include <slamd_common/id.hpp>
 #include <slamd_window/connection.hpp>
 #include <slamd_window/tree/tree.hpp>
 #include <slamd_window/view/view.hpp>
 #include <string>
 
-namespace slamdw {
+namespace slamd {
 
 class StateManager {
    public:
@@ -26,9 +27,10 @@ class StateManager {
     bool loaded = false;
     std::string name;
     std::map<std::string, std::unique_ptr<View>> views;
-    std::map<uint64_t, std::shared_ptr<Tree>> trees;
+    std::map<_id::TreeID, std::shared_ptr<Tree>> trees;
+    std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>> geometries;
 
    private:
     std::optional<Connection> connection;
 };
-}  // namespace slamdw
+}  // namespace slamd

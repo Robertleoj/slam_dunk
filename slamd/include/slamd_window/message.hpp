@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <memory>
 
-namespace slamdw {
+namespace slamd {
 
 class Message {
    public:
@@ -17,4 +17,4 @@ class Message {
     std::unique_ptr<uint8_t[]> buffer;
 };
 
-}  // namespace slamdw
+}  // namespace slamd

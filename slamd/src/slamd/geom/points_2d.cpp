@@ -24,6 +24,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> Points2D::serialize(
 
     return flatb::CreateGeometry(
         builder,
+        this->id.value,
         flatb::GeometryUnion_points_2d,
         points_2d_fb.Union()
     );

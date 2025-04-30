@@ -3,7 +3,7 @@
 #include <optional>
 #include <thread>
 
-namespace slamdw {
+namespace slamd {
 
 class FrameBuffer {
    private:

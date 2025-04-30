@@ -39,6 +39,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> Mesh::serialize(
 
     return flatb::CreateGeometry(
         builder,
+        this->id.value,
         flatb::GeometryUnion_mesh,
         mesh_fb.Union()
     );

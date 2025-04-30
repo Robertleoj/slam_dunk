@@ -1,6 +1,6 @@
 #pragma once
 
-namespace slamdw {
+namespace slamd {
 
 class View {
    public:
@@ -8,4 +8,4 @@ class View {
     virtual ~View() = default;  // virtual dtor for safe polymorphic deletion
 };
 
-}  // namespace slamdw
+}  // namespace slamd

@@ -27,6 +27,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> PolyLine2D::serialize(
 
     return flatb::CreateGeometry(
         builder,
+        this->id.value,
         flatb::GeometryUnion_poly_line_2d,
         poly_line2d_fb.Union()
     );

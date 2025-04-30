@@ -4,7 +4,7 @@
 #include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/geom/circles_2d.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 namespace _geom {
 

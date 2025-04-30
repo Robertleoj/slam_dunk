@@ -7,7 +7,7 @@
 #include <slamd_window/geom/arcball_indicator.hpp>
 #include <slamd_window/paths.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 void ArcballIndicator::initialize() {
@@ -126,4 +126,4 @@ void ArcballIndicator::set_arcball_zoom(
 }
 
 }  // namespace _geom
-}  // namespace slamdw
+}  // namespace slamd

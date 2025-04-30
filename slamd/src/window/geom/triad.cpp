@@ -1,7 +1,7 @@
 #include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/geom/triad.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 std::shared_ptr<Triad> Triad::deserialize(
@@ -51,4 +51,4 @@ TriadPtr triad(
 }
 }  // namespace geom
 
-}  // namespace slamdw
+}  // namespace slamd

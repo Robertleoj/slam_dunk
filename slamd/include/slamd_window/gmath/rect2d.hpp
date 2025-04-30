@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 #include <slamd_common/gmath/aabb.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace gmath {
 
 class Rect2D {

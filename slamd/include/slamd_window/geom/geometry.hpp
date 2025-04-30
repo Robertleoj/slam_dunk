@@ -5,7 +5,7 @@
 #include <optional>
 #include <slamd_common/gmath/aabb.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 class Geometry {
@@ -23,4 +23,4 @@ class Geometry {
 };
 
 }  // namespace _geom
-}  // namespace slamdw
+}  // namespace slamd

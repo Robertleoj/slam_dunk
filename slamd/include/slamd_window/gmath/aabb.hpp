@@ -3,7 +3,7 @@
 #include <optional>
 #include <vector>
 
-namespace slamdw {
+namespace slamd {
 namespace gmath {
 
 class AABB {

@@ -1,6 +1,6 @@
 #include <slamd_common/gmath/transforms.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace gmath {
 
 glm::mat4 rot3D(

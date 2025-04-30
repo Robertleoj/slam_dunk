@@ -997,9 +997,13 @@ inline ::flatbuffers::Offset<Mesh> CreateMesh(
 struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GeometryBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_GEOMETRY_TYPE = 4,
-    VT_GEOMETRY = 6
+    VT_GEOMETRY_ID = 4,
+    VT_GEOMETRY_TYPE = 6,
+    VT_GEOMETRY = 8
   };
+  uint64_t geometry_id() const {
+    return GetField<uint64_t>(VT_GEOMETRY_ID, 0);
+  }
   slamd::flatb::GeometryUnion geometry_type() const {
     return static_cast<slamd::flatb::GeometryUnion>(GetField<uint8_t>(VT_GEOMETRY_TYPE, 0));
   }
@@ -1045,6 +1049,7 @@ struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_GEOMETRY_ID, 8) &&
            VerifyField<uint8_t>(verifier, VT_GEOMETRY_TYPE, 1) &&
            VerifyOffset(verifier, VT_GEOMETRY) &&
            VerifyGeometryUnion(verifier, geometry(), geometry_type()) &&
@@ -1104,6 +1109,9 @@ struct GeometryBuilder {
   typedef Geometry Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
+  void add_geometry_id(uint64_t geometry_id) {
+    fbb_.AddElement<uint64_t>(Geometry::VT_GEOMETRY_ID, geometry_id, 0);
+  }
   void add_geometry_type(slamd::flatb::GeometryUnion geometry_type) {
     fbb_.AddElement<uint8_t>(Geometry::VT_GEOMETRY_TYPE, static_cast<uint8_t>(geometry_type), 0);
   }
@@ -1123,9 +1131,11 @@ struct GeometryBuilder {
 
 inline ::flatbuffers::Offset<Geometry> CreateGeometry(
     ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t geometry_id = 0,
     slamd::flatb::GeometryUnion geometry_type = slamd::flatb::GeometryUnion_NONE,
     ::flatbuffers::Offset<void> geometry = 0) {
   GeometryBuilder builder_(_fbb);
+  builder_.add_geometry_id(geometry_id);
   builder_.add_geometry(geometry);
   builder_.add_geometry_type(geometry_type);
   return builder_.Finish();

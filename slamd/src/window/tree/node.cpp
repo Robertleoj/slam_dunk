@@ -3,9 +3,8 @@
 #include <slamd_common/gmath/stringify.hpp>
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/tree/node.hpp>
-#include <stdexcept>
 
-namespace slamdw {
+namespace slamd {
 
 std::optional<std::shared_ptr<_geom::Geometry>> Node::get_object() const {
     std::scoped_lock l(this->object_mutex);
@@ -36,7 +35,9 @@ void Node::set_transform(
 }
 
 std::unique_ptr<Node> Node::deserialize(
-    const slamd::flatb::Node* node_fb
+    const slamd::flatb::Node* node_fb,
+    std::map<slamd::_id::GeometryID, std::shared_ptr<_geom::Geometry>>&
+        geometries
 ) {
     std::unique_ptr<Node> node = std::make_unique<Node>();
 
@@ -49,9 +50,9 @@ std::unique_ptr<Node> Node::deserialize(
         node->set_transform(transform);
     }
 
-    auto geom_fb = node_fb->geometry();
-    if (geom_fb != nullptr) {
-        node->set_object(_geom::Geometry::deserialize(geom_fb));
+    auto geom_id_fb = node_fb->geometry_id();
+    if (geom_id_fb != 0) {
+        node->set_object(geometries[_id::GeometryID(geom_id_fb)]);
     }
 
     auto children_fb = node_fb->children();
@@ -59,7 +60,7 @@ std::unique_ptr<Node> Node::deserialize(
 
     for (auto child_fb : *children_fb) {
         std::string key = child_fb->key()->str();
-        auto child = Node::deserialize(child_fb->value());
+        auto child = Node::deserialize(child_fb->value(), geometries);
 
         node->children.insert({key, std::move(child)});
     }
@@ -67,4 +68,4 @@ std::unique_ptr<Node> Node::deserialize(
     return node;
 }
 
-}  // namespace slamdw
+}  // namespace slamd

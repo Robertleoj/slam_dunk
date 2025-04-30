@@ -1,8 +1,8 @@
 #pragma once
 #include <flatb/geometry_generated.h>
 #include <glm/glm.hpp>
-#include <slamd/id.hpp>
 #include <slamd_common/gmath/aabb.hpp>
+#include <slamd_common/id.hpp>
 
 namespace slamd {
 

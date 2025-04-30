@@ -10,7 +10,7 @@
 #include <slamd_window/gen/shader_sources.hpp>
 #include <slamd_window/geom/point_cloud.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 PointCloud::PointCloud(
@@ -30,15 +30,13 @@ PointCloud::PointCloud(
       ) {
     if (!((positions.size() == colors.size()) && (colors.size() == radii.size())
         )) {
-        throw std::invalid_argument(
-            std::format(
-                "number of positions, colors, and radii must be the same, got "
-                "{} positions, {} colors, {} radii",
-                positions.size(),
-                colors.size(),
-                radii.size()
-            )
-        );
+        throw std::invalid_argument(std::format(
+            "number of positions, colors, and radii must be the same, got "
+            "{} positions, {} colors, {} radii",
+            positions.size(),
+            colors.size(),
+            radii.size()
+        ));
     }
     this->initialize();
 }
@@ -314,4 +312,4 @@ void PointCloud::render(
 }
 
 }  // namespace _geom
-}  // namespace slamdw
+}  // namespace slamd

@@ -3,7 +3,7 @@
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_window/geom/points_2d.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 std::shared_ptr<Points2D> Points2D::deserialize(
@@ -112,4 +112,4 @@ std::optional<slamd::gmath::AABB> Points2D::bounds() {
 }
 
 }  // namespace _geom
-}  // namespace slamdw
+}  // namespace slamd

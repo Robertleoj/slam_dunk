@@ -7,7 +7,7 @@
 #include <slamd_window/tree/tree.hpp>
 #include <slamd_window/view/view.hpp>
 
-namespace slamdw {
+namespace slamd {
 class CanvasView : public View {
    public:
     std::shared_ptr<Tree> tree;
@@ -33,4 +33,4 @@ class CanvasView : public View {
     glm::vec2 get_normalized_mouse_pos();
 };
 
-}  // namespace slamdw
+}  // namespace slamd

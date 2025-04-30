@@ -10,7 +10,7 @@
 #include <thread>
 #include <vector>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 class Mesh : public Geometry {
@@ -25,9 +25,7 @@ class Mesh : public Geometry {
         float min_brightness = _const::default_min_brightness
     );
 
-    static std::shared_ptr<Mesh> deserialize(
-        const slamd::flatb::Mesh* mesh_fb
-    );
+    static std::shared_ptr<Mesh> deserialize(const slamd::flatb::Mesh* mesh_fb);
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
@@ -68,4 +66,4 @@ using MeshPtr = std::shared_ptr<_geom::Mesh>;
 MeshPtr mesh(const slamd::data::MeshData& mesh_data);
 
 }  // namespace geom
-}  // namespace slamdw
+}  // namespace slamd

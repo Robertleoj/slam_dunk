@@ -1,6 +1,6 @@
 #pragma once
 
-namespace slamdw {
+namespace slamd {
 namespace gmath {
 class Angle {
    public:

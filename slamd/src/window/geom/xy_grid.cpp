@@ -7,7 +7,7 @@
 #include <slamd_window/geom/xy_grid.hpp>
 #include <slamd_window/paths.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 glm::mat4 get_scale_mat(
@@ -150,4 +150,4 @@ void GridXYPlane::set_arcball_zoom(
 
 }  // namespace _geom
 
-}  // namespace slamdw
+}  // namespace slamd

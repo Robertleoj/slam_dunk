@@ -5,7 +5,7 @@
 #include <slamd_window/shaders.hpp>
 #include <thread>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 class ArcballIndicator : public Geometry {
    public:

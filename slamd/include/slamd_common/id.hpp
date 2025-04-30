@@ -42,15 +42,17 @@ struct ID {
 template <typename Tag>
 std::atomic<uint64_t> ID<Tag>::counter{1};
 
+namespace _tags {
 struct ViewTag {};
 struct TreeTag {};
 struct NodeTag {};
 struct GeometryTag {};
+}  // namespace _tags
 
-using ViewID = ID<ViewTag>;
-using TreeID = ID<TreeTag>;
-using NodeID = ID<NodeTag>;
-using GeometryID = ID<GeometryTag>;
+using ViewID = ID<_tags::ViewTag>;
+using TreeID = ID<_tags::TreeTag>;
+using NodeID = ID<_tags::NodeTag>;
+using GeometryID = ID<_tags::GeometryTag>;
 
 }  // namespace _id
 }  // namespace slamd

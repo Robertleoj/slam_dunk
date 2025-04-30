@@ -52,6 +52,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> CameraFrustum::serialize(
 
     return flatb::CreateGeometry(
         builder,
+        this->id.value,
         flatb::GeometryUnion_camera_frustum,
         frustum_fb.Union()
     );

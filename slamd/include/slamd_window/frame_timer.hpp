@@ -1,7 +1,7 @@
 #pragma once
 #include <chrono>
 
-namespace slamdw {
+namespace slamd {
 
 class FrameTimer {
    public:

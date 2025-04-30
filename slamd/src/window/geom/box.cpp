@@ -2,7 +2,7 @@
 #include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/geom/box.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 // clang-format off
@@ -80,14 +80,12 @@ auto get_mesh_data() {
 // clang-format on
 
 Box::Box()
-    : box_mesh(
-          slamd::data::MeshData(
-              box_corners,
-              vertex_colors,
-              box_indices,
-              vertex_normals
-          )
-      ) {}
+    : box_mesh(slamd::data::MeshData(
+          box_corners,
+          vertex_colors,
+          box_indices,
+          vertex_normals
+      )) {}
 
 void Box::render(
     glm::mat4 model,
@@ -111,4 +109,4 @@ BoxPtr box() {
 }
 
 }  // namespace geom
-}  // namespace slamdw
+}  // namespace slamd

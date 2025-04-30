@@ -4,7 +4,7 @@
 #include <queue>
 #include <thread>
 
-namespace slamdw {
+namespace slamd {
 
 template <typename T>
 class MessageQueue {
@@ -45,4 +45,4 @@ class MessageQueue {
     std::queue<T> queue;
 };
 
-}  // namespace slamdw
+}  // namespace slamd

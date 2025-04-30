@@ -1,7 +1,7 @@
 #include <glm/glm.hpp>
 #include <slamd_common/gmath/angle.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace gmath {
 
 Angle::Angle(

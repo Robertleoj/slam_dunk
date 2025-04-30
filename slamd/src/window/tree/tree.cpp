@@ -2,7 +2,7 @@
 #include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/tree/tree.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 Tree::Tree(
     uint64_t id
@@ -19,7 +19,9 @@ Tree::Tree(
       root(std::move(root)) {}
 
 std::shared_ptr<Tree> Tree::deserialize(
-    const slamd::flatb::Tree* serialized
+    const slamd::flatb::Tree* serialized,
+    std::map<slamd::_id::GeometryID, std::shared_ptr<_geom::Geometry>>&
+        geometries
 ) {
     uint64_t tree_id = serialized->id();
 
@@ -29,7 +31,7 @@ std::shared_ptr<Tree> Tree::deserialize(
         throw std::runtime_error("Root cannot be null!");
     }
 
-    auto root = Node::deserialize(root_fb);
+    auto root = Node::deserialize(root_fb, geometries);
 
     return std::make_shared<Tree>(tree_id, std::move(root));
 }
@@ -188,4 +190,4 @@ std::optional<slamd::gmath::AABB> Tree::bounds() {
     return this->bounds_recursive(this->root.get(), glm::mat4(1.0f));
 }
 
-}  // namespace slamdw
+}  // namespace slamd

@@ -3,7 +3,7 @@
 #include <glbinding/gl/gl.h>
 #include <slamd_common/data/image.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace graphics {
 
 class ImageTexture {

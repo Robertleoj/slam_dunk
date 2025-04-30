@@ -1,7 +1,7 @@
 #include <slamd_common/gmath/aabb.hpp>
 #include <stdexcept>
 
-namespace slamdw {
+namespace slamd {
 namespace gmath {
 
 AABB::AABB(

@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <slamd_common/gmath/rect2d.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 class Camera2D {
    public:

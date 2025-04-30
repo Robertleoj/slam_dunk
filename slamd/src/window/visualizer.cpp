@@ -7,7 +7,7 @@
 #include <slamd_window/render_thread_job_queue.hpp>
 #include <slamd_window/visualizer.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 Visualizer::Visualizer(
     std::string name
@@ -79,4 +79,4 @@ Visualizer::~Visualizer() {
     this->server_thread.request_stop();
 }
 
-}  // namespace slamdw
+}  // namespace slamd

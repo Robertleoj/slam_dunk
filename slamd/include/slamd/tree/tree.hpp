@@ -4,8 +4,8 @@
 #include <map>
 #include <memory>
 #include <slamd/geom/geometry.hpp>
-#include <slamd/id.hpp>
 #include <slamd/tree/tree_path.hpp>
+#include <slamd_common/id.hpp>
 
 namespace slamd {
 
@@ -71,6 +71,10 @@ class Tree {
         flatbuffers::FlatBufferBuilder& builder
     );
 
+    void add_all_geometries(
+        std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>& initial_map
+    );
+
     std::set<_id::ViewID> attached_to;
 
    protected:
@@ -79,6 +83,12 @@ class Tree {
 
     std::optional<Node*> traverse(const TreePath& path);
     Node* make_path(TreePath path);
+
+   private:
+    void add_all_geometries_rec(
+        Node* node,
+        std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>& initial_map
+    );
 };
 
 }  // namespace _tree

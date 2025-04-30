@@ -135,14 +135,14 @@ struct Node FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef NodeBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_TRANSFORM = 4,
-    VT_GEOMETRY = 6,
+    VT_GEOMETRY_ID = 6,
     VT_CHILDREN = 8
   };
   const slamd::flatb::Mat4 *transform() const {
     return GetStruct<const slamd::flatb::Mat4 *>(VT_TRANSFORM);
   }
-  const slamd::flatb::Geometry *geometry() const {
-    return GetPointer<const slamd::flatb::Geometry *>(VT_GEOMETRY);
+  uint64_t geometry_id() const {
+    return GetField<uint64_t>(VT_GEOMETRY_ID, 0);
   }
   const ::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>> *children() const {
     return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>> *>(VT_CHILDREN);
@@ -150,8 +150,7 @@ struct Node FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<slamd::flatb::Mat4>(verifier, VT_TRANSFORM, 4) &&
-           VerifyOffset(verifier, VT_GEOMETRY) &&
-           verifier.VerifyTable(geometry()) &&
+           VerifyField<uint64_t>(verifier, VT_GEOMETRY_ID, 8) &&
            VerifyOffset(verifier, VT_CHILDREN) &&
            verifier.VerifyVector(children()) &&
            verifier.VerifyVectorOfTables(children()) &&
@@ -166,8 +165,8 @@ struct NodeBuilder {
   void add_transform(const slamd::flatb::Mat4 *transform) {
     fbb_.AddStruct(Node::VT_TRANSFORM, transform);
   }
-  void add_geometry(::flatbuffers::Offset<slamd::flatb::Geometry> geometry) {
-    fbb_.AddOffset(Node::VT_GEOMETRY, geometry);
+  void add_geometry_id(uint64_t geometry_id) {
+    fbb_.AddElement<uint64_t>(Node::VT_GEOMETRY_ID, geometry_id, 0);
   }
   void add_children(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>>> children) {
     fbb_.AddOffset(Node::VT_CHILDREN, children);
@@ -186,11 +185,11 @@ struct NodeBuilder {
 inline ::flatbuffers::Offset<Node> CreateNode(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const slamd::flatb::Mat4 *transform = nullptr,
-    ::flatbuffers::Offset<slamd::flatb::Geometry> geometry = 0,
+    uint64_t geometry_id = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>>> children = 0) {
   NodeBuilder builder_(_fbb);
+  builder_.add_geometry_id(geometry_id);
   builder_.add_children(children);
-  builder_.add_geometry(geometry);
   builder_.add_transform(transform);
   return builder_.Finish();
 }
@@ -198,13 +197,13 @@ inline ::flatbuffers::Offset<Node> CreateNode(
 inline ::flatbuffers::Offset<Node> CreateNodeDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const slamd::flatb::Mat4 *transform = nullptr,
-    ::flatbuffers::Offset<slamd::flatb::Geometry> geometry = 0,
+    uint64_t geometry_id = 0,
     const std::vector<::flatbuffers::Offset<slamd::flatb::ChildEntry>> *children = nullptr) {
   auto children__ = children ? _fbb.CreateVector<::flatbuffers::Offset<slamd::flatb::ChildEntry>>(*children) : 0;
   return slamd::flatb::CreateNode(
       _fbb,
       transform,
-      geometry,
+      geometry_id,
       children__);
 }
 
@@ -340,7 +339,8 @@ struct InitialState FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NAME = 4,
     VT_VIEWS = 6,
-    VT_TREES = 8
+    VT_TREES = 8,
+    VT_GEOMETRIES = 10
   };
   const ::flatbuffers::String *name() const {
     return GetPointer<const ::flatbuffers::String *>(VT_NAME);
@@ -350,6 +350,9 @@ struct InitialState FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   const ::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::Tree>> *trees() const {
     return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::Tree>> *>(VT_TREES);
+  }
+  const ::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::Geometry>> *geometries() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::Geometry>> *>(VT_GEOMETRIES);
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -361,6 +364,9 @@ struct InitialState FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyOffset(verifier, VT_TREES) &&
            verifier.VerifyVector(trees()) &&
            verifier.VerifyVectorOfTables(trees()) &&
+           VerifyOffset(verifier, VT_GEOMETRIES) &&
+           verifier.VerifyVector(geometries()) &&
+           verifier.VerifyVectorOfTables(geometries()) &&
            verifier.EndTable();
   }
 };
@@ -378,6 +384,9 @@ struct InitialStateBuilder {
   void add_trees(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::Tree>>> trees) {
     fbb_.AddOffset(InitialState::VT_TREES, trees);
   }
+  void add_geometries(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::Geometry>>> geometries) {
+    fbb_.AddOffset(InitialState::VT_GEOMETRIES, geometries);
+  }
   explicit InitialStateBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -393,8 +402,10 @@ inline ::flatbuffers::Offset<InitialState> CreateInitialState(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     ::flatbuffers::Offset<::flatbuffers::String> name = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::View>>> views = 0,
-    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::Tree>>> trees = 0) {
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::Tree>>> trees = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<slamd::flatb::Geometry>>> geometries = 0) {
   InitialStateBuilder builder_(_fbb);
+  builder_.add_geometries(geometries);
   builder_.add_trees(trees);
   builder_.add_views(views);
   builder_.add_name(name);
@@ -405,15 +416,18 @@ inline ::flatbuffers::Offset<InitialState> CreateInitialStateDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *name = nullptr,
     const std::vector<::flatbuffers::Offset<slamd::flatb::View>> *views = nullptr,
-    const std::vector<::flatbuffers::Offset<slamd::flatb::Tree>> *trees = nullptr) {
+    const std::vector<::flatbuffers::Offset<slamd::flatb::Tree>> *trees = nullptr,
+    const std::vector<::flatbuffers::Offset<slamd::flatb::Geometry>> *geometries = nullptr) {
   auto name__ = name ? _fbb.CreateString(name) : 0;
   auto views__ = views ? _fbb.CreateVector<::flatbuffers::Offset<slamd::flatb::View>>(*views) : 0;
   auto trees__ = trees ? _fbb.CreateVector<::flatbuffers::Offset<slamd::flatb::Tree>>(*trees) : 0;
+  auto geometries__ = geometries ? _fbb.CreateVector<::flatbuffers::Offset<slamd::flatb::Geometry>>(*geometries) : 0;
   return slamd::flatb::CreateInitialState(
       _fbb,
       name__,
       views__,
-      trees__);
+      trees__,
+      geometries__);
 }
 
 inline const slamd::flatb::InitialState *GetInitialState(const void *buf) {

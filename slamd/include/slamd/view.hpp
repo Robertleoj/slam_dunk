@@ -1,9 +1,9 @@
 #pragma once
 #include <flatb/visualizer_generated.h>
 #include <memory>
-#include <slamd/id.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd/visualizer.hpp>
+#include <slamd_common/id.hpp>
 
 namespace slamd {
 

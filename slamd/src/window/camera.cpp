@@ -1,7 +1,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd_window/camera.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 Camera::Camera(
     double fov,
@@ -23,4 +23,4 @@ glm::mat4 Camera::get_projection_matrix(
     );
 }
 
-}  // namespace slamdw
+}  // namespace slamd

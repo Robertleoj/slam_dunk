@@ -9,7 +9,7 @@
 #include <slamd_window/gen/shader_sources.hpp>
 #include <slamd_window/geom/mono_instanced.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 MonoInstanced::MonoInstanced(
@@ -31,23 +31,19 @@ MonoInstanced::MonoInstanced(
           shader_source::mono_instanced::frag
       ) {
     if (!(vertices.size() == normals.size())) {
-        throw std::invalid_argument(
-            std::format(
-                "number of vertices {}, number of normals {}",
-                vertices.size(),
-                normals.size()
-            )
-        );
+        throw std::invalid_argument(std::format(
+            "number of vertices {}, number of normals {}",
+            vertices.size(),
+            normals.size()
+        ));
     }
     if (!((transforms.size() == colors.size()))) {
-        throw std::invalid_argument(
-            std::format(
-                "number of transforms, and colors got "
-                "{} transforms and {} colors",
-                transforms.size(),
-                colors.size()
-            )
-        );
+        throw std::invalid_argument(std::format(
+            "number of transforms, and colors got "
+            "{} transforms and {} colors",
+            transforms.size(),
+            colors.size()
+        ));
     }
     this->initialize();
 }
@@ -253,4 +249,4 @@ void MonoInstanced::render(
 }
 
 }  // namespace _geom
-}  // namespace slamdw
+}  // namespace slamd

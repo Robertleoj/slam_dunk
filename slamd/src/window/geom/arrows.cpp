@@ -2,7 +2,7 @@
 #include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/geom/arrows.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 std::shared_ptr<Arrows> Arrows::deserialize(
@@ -217,4 +217,4 @@ ArrowsPtr arrows(
     return std::make_shared<_geom::Arrows>(starts, ends, colors, thickness);
 }
 }  // namespace geom
-}  // namespace slamdw
+}  // namespace slamd

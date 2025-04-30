@@ -2,7 +2,7 @@
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/geom/mesh.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 class Box : public Geometry {
@@ -25,4 +25,4 @@ using BoxPtr = std::shared_ptr<_geom::Box>;
 BoxPtr box();
 }  // namespace geom
 
-}  // namespace slamdw
+}  // namespace slamd

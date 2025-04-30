@@ -48,6 +48,25 @@ void Visualizer::add_canvas(
         {name, _view::View::create(this, canvas, slamd::flatb::ViewType_CANVAS)}
     );
 }
+flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatb::Geometry>>>
+Visualizer::get_geometries_fb(
+    flatbuffers::FlatBufferBuilder& builder
+) {
+    std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>> geom_map;
+    for (auto [_, tree] : this->trees) {
+        tree->add_all_geometries(geom_map);
+    }
+
+    std::vector<flatbuffers::Offset<flatb::Geometry>> geoms;
+
+    for (auto& [_, geom] : geom_map) {
+        geoms.push_back(geom->serialize(builder));
+    }
+
+    auto geoms_fb = builder.CreateVector(geoms);
+
+    return geoms_fb;
+}
 
 std::vector<uint8_t> Visualizer::get_state() {
     flatbuffers::FlatBufferBuilder builder(1024);
@@ -76,11 +95,14 @@ std::vector<uint8_t> Visualizer::get_state() {
 
     auto views_fb = builder.CreateVector(view_vec);
 
+    auto geometries_fb = this->get_geometries_fb(builder);
+
     auto state_fb = slamd::flatb::CreateInitialState(
         builder,
         vis_name_fb,
         views_fb,
-        trees_fb
+        trees_fb,
+        geometries_fb
     );
 
     auto message_fb = slamd::flatb::CreateMessage(

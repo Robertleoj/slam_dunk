@@ -8,7 +8,7 @@
 #include <slamd_window/geom/mesh.hpp>
 #include <slamd_window/paths.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 std::shared_ptr<Mesh> Mesh::deserialize(
@@ -271,4 +271,4 @@ MeshPtr mesh(
 
 }  // namespace geom
 
-}  // namespace slamdw
+}  // namespace slamd

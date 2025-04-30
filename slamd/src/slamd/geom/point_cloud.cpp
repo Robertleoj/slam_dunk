@@ -15,15 +15,13 @@ PointCloud::PointCloud(
       radii(radii) {
     if (!((positions.size() == colors.size()) && (colors.size() == radii.size())
         )) {
-        throw std::invalid_argument(
-            std::format(
-                "number of positions, colors, and radii must be the same, got "
-                "{} positions, {} colors, {} radii",
-                positions.size(),
-                colors.size(),
-                radii.size()
-            )
-        );
+        throw std::invalid_argument(std::format(
+            "number of positions, colors, and radii must be the same, got "
+            "{} positions, {} colors, {} radii",
+            positions.size(),
+            colors.size(),
+            radii.size()
+        ));
     }
 }
 
@@ -39,6 +37,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> PointCloud::serialize(
 
     return flatb::CreateGeometry(
         builder,
+        this->id.value,
         flatb::GeometryUnion_point_cloud,
         point_cloud_fb.Union()
     );

@@ -21,6 +21,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> Sphere::serialize(
     auto sphere_fb = flatb::CreateSphere(builder, this->radius, &color_fb);
     return flatb::CreateGeometry(
         builder,
+        this->id.value,
         flatb::GeometryUnion_sphere,
         sphere_fb.Union()
     );

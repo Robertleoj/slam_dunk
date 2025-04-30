@@ -7,7 +7,7 @@
 #include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/arcball.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 Arcball::Arcball()
     : theta(Arcball::default_theta),
@@ -89,4 +89,4 @@ void Arcball::reset() {
     this->phi = Arcball::default_phi;
 }
 
-}  // namespace slamdw
+}  // namespace slamd

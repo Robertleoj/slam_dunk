@@ -2,7 +2,7 @@
 #include <slamd_window/geom/poly_line_2d.hpp>
 #include <stdexcept>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 std::shared_ptr<PolyLine2D> PolyLine2D::deserialize(
@@ -117,4 +117,4 @@ PolyLinePtr poly_line(
 }
 
 }  // namespace geom2d
-}  // namespace slamdw
+}  // namespace slamd

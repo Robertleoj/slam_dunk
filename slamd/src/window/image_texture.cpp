@@ -1,6 +1,6 @@
 #include <slamd_window/image_texture.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace graphics {
 
 ImageTexture::ImageTexture(
@@ -59,4 +59,4 @@ void ImageTexture::bind() {
 
 }  // namespace graphics
 
-}  // namespace slamdw
+}  // namespace slamd

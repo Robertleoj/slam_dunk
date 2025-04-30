@@ -6,7 +6,7 @@
 #include <slamd_window/shaders.hpp>
 #include <thread>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 class MonoInstanced : public Geometry {

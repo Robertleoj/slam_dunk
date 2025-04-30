@@ -1,7 +1,7 @@
 #include <spdlog/spdlog.h>
 #include <slamd_common/gmath/rect2d.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace gmath {
 
 Rect2D::Rect2D(

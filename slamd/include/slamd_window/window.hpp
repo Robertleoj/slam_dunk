@@ -11,7 +11,7 @@
 #include <thread>
 #include <vector>
 
-namespace slamdw {
+namespace slamd {
 
 namespace fs = std::filesystem;
 
@@ -33,4 +33,4 @@ class Window {
     // bool loaded_layout;
 };
 
-}  // namespace slamdw
+}  // namespace slamd

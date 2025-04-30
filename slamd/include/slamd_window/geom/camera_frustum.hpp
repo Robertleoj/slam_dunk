@@ -4,7 +4,7 @@
 #include <slamd_window/geom/image.hpp>
 #include <slamd_window/geom/poly_line.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 class CameraFrustum : public Geometry {
@@ -72,4 +72,4 @@ CameraFrustumPtr camera_frustum(
 );
 
 }  // namespace geom
-}  // namespace slamdw
+}  // namespace slamd

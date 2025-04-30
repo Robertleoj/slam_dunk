@@ -6,7 +6,7 @@
 #include <slamd_window/geom/mesh.hpp>
 #include <vector>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 class PolyLine : public Geometry {

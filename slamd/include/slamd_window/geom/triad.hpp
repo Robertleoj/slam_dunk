@@ -5,7 +5,7 @@
 #include <slamd_window/geom/arrows.hpp>
 #include <slamd_window/geom/geometry.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 class Triad : public Geometry {
@@ -33,4 +33,4 @@ TriadPtr triad(float scale = 1.0, float thickness = 0.1);
 
 }  // namespace geom
 
-}  // namespace slamdw
+}  // namespace slamd

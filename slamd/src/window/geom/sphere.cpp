@@ -6,7 +6,7 @@
 #include <slamd_window/geom/sphere.hpp>
 #include <vector>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 Mesh make_sphere_mesh(
@@ -64,4 +64,4 @@ SpherePtr sphere(
 }
 }  // namespace geom
 
-}  // namespace slamdw
+}  // namespace slamd

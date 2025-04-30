@@ -12,6 +12,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> Box::serialize(
     auto box_fb = flatb::CreateBox(builder);
     return flatb::CreateGeometry(
         builder,
+        this->id.value,
         flatb::GeometryUnion_box,
         box_fb.Union()
     );

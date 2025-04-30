@@ -2,7 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd_window/camera_2d.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 Camera2D::Camera2D(
     const slamd::gmath::Rect2D& viewport
@@ -75,4 +75,4 @@ glm::vec2 Camera2D::get_world_coords(
     return this->viewport.unnormalize(normalized_mouse_pos);
 }
 
-}  // namespace slamdw
+}  // namespace slamd

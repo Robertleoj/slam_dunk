@@ -29,6 +29,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> Circles2D::serialize(
 
     return flatb::CreateGeometry(
         builder,
+        this->id.value,
         flatb::GeometryUnion_circles_2d,
         circles_fb.Union()
     );

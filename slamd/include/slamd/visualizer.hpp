@@ -2,10 +2,10 @@
 #include <asio.hpp>
 #include <memory>
 #include <mutex>
-#include <slamd/id.hpp>
 #include <slamd/net/client_set.hpp>
 #include <slamd/tree/tree.hpp>
 #include <slamd/view.hpp>
+#include <slamd_common/id.hpp>
 #include <stop_token>
 #include <thread>
 
@@ -29,6 +29,9 @@ class Visualizer {
    private:
     void server_job(std::stop_token& stop_token);
     std::vector<uint8_t> get_state();
+    flatbuffers::Offset<
+        flatbuffers::Vector<flatbuffers::Offset<flatb::Geometry>>>
+    get_geometries_fb(flatbuffers::FlatBufferBuilder& builder);
 
    private:
     std::string name;

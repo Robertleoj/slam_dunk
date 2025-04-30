@@ -7,7 +7,7 @@
 int main() {
     spdlog::set_level(spdlog::level::debug);
 
-    slamdw::Window window{};
+    slamd::Window window{};
     window.state_manager.try_connect("127.0.0.1", 5555);
 
     window.run();

@@ -3,7 +3,7 @@
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/geom/mono_instanced.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 class Circles2D : public Geometry {

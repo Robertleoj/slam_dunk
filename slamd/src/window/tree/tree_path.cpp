@@ -3,7 +3,7 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace slamdw {
+namespace slamd {
 
 std::vector<std::string> split_path(
     const std::string& path

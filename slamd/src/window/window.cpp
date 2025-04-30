@@ -4,7 +4,7 @@
 #include <spdlog/spdlog.h>
 #include <slamd_window/window.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 void framebuffer_size_callback(
     GLFWwindow* window,
@@ -89,4 +89,4 @@ void Window::run() {
 
 Window::~Window() {}
 
-}  // namespace slamdw
+}  // namespace slamd

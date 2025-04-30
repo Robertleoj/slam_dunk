@@ -1,6 +1,6 @@
 #include <slamd_window/message.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 Message::Message(
     size_t bytes
@@ -22,4 +22,4 @@ const slamd::flatb::Message* Message::msg() {
     return slamd::flatb::GetMessage(this->data());
 }
 
-}  // namespace slamdw
+}  // namespace slamd

@@ -4,7 +4,7 @@
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_window/geom/poly_line.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 std::shared_ptr<PolyLine> PolyLine::deserialize(
@@ -133,4 +133,4 @@ PolyLinePtr poly_line(
     return std::make_shared<_geom::PolyLine>(points, thickness, color);
 }
 }  // namespace geom
-}  // namespace slamdw
+}  // namespace slamd

@@ -20,6 +20,7 @@ flatbuffers::Offset<slamd::flatb::Geometry> Image::serialize(
 
     return flatb::CreateGeometry(
         builder,
+        this->id.value,
         flatb::GeometryUnion_image,
         image_fb.Union()
     );

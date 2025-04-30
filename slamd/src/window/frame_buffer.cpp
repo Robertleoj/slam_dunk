@@ -4,7 +4,7 @@
 #include <slamd_window/assert.hpp>
 #include <slamd_window/frame_buffer.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 void FrameBuffer::initialize() {
     gl::glGenFramebuffers(1, &this->frame_buffer_object_id);
@@ -169,4 +169,4 @@ size_t FrameBuffer::height() const {
     return this->current_height;
 }
 
-}  // namespace slamdw
+}  // namespace slamd

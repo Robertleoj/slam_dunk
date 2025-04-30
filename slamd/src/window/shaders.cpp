@@ -7,7 +7,7 @@
 #include <slamd_window/shaders.hpp>
 #include <stdexcept>
 
-namespace slamdw {
+namespace slamd {
 
 const std::size_t info_buffer_size = 512;
 
@@ -26,12 +26,10 @@ void ensure_shader_compiled(
             nullptr,
             info_log_buf
         );
-        throw std::runtime_error(
-            std::format(
-                "Couldn't compile shader: {}",
-                std::string(info_log_buf)
-            )
-        );
+        throw std::runtime_error(std::format(
+            "Couldn't compile shader: {}",
+            std::string(info_log_buf)
+        ));
     }
 }
 
@@ -220,4 +218,4 @@ int ShaderProgram::get_uniform_location(
     return gl::glGetUniformLocation(id, name.c_str());
 }
 
-}  // namespace slamdw
+}  // namespace slamd

@@ -3,7 +3,7 @@
 #include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/geom/camera_frustum.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 std::shared_ptr<CameraFrustum> CameraFrustum::deserialize(
@@ -180,4 +180,4 @@ CameraFrustumPtr camera_frustum(
 }
 
 }  // namespace geom
-}  // namespace slamdw
+}  // namespace slamd

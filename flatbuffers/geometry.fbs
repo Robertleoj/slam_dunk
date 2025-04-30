@@ -87,6 +87,7 @@ union GeometryUnion {
 }
 
 table Geometry {
+    geometry_id: ulong;
     geometry: GeometryUnion;
 }
 

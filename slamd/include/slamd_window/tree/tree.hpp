@@ -6,7 +6,7 @@
 #include <slamd_window/tree/node.hpp>
 #include <slamd_window/tree/tree_path.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 class Tree {
    private:
@@ -25,7 +25,9 @@ class Tree {
     void render(const glm::mat4& view, const glm::mat4& projection) const;
 
     static std::shared_ptr<Tree> deserialize(
-        const slamd::flatb::Tree* serialized
+        const slamd::flatb::Tree* serialized,
+        std::map<slamd::_id::GeometryID, std::shared_ptr<_geom::Geometry>>&
+            geometries
     );
 
     std::optional<slamd::gmath::AABB> bounds();
@@ -50,4 +52,4 @@ class Tree {
     bounds_recursive(const Node* node, const glm::mat4& prev_transform);
 };
 
-}  // namespace slamdw
+}  // namespace slamd

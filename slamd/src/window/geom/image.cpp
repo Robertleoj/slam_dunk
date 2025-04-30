@@ -4,7 +4,7 @@
 #include <slamd_window/geom/image.hpp>
 #include <slamd_window/paths.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 std::shared_ptr<Image> Image::deserialize(
@@ -168,4 +168,4 @@ ImagePtr image(
 
 }  // namespace geom2d
 
-}  // namespace slamdw
+}  // namespace slamd

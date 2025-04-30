@@ -4,7 +4,7 @@
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/geom/mesh.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 /**

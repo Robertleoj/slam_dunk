@@ -4,7 +4,7 @@
 #include <slamd_window/message.hpp>
 #include <thread>
 
-namespace slamdw {
+namespace slamd {
 
 Connection::Connection(
     std::string ip,
@@ -68,4 +68,4 @@ void Connection::job() {
     spdlog::info("Connection job ended for {}:{}", ip, port);
 }
 
-}  // namespace slamdw
+}  // namespace slamd

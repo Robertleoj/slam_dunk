@@ -8,7 +8,7 @@
 #include <slamd_window/shaders.hpp>
 #include <thread>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 class Image : public Geometry {
@@ -52,4 +52,4 @@ ImagePtr image(slamd::data::Image&& image);
 
 }  // namespace geom2d
 
-}  // namespace slamdw
+}  // namespace slamd

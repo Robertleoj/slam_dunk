@@ -8,7 +8,7 @@
 #include <slamd_window/tree/tree.hpp>
 #include <slamd_window/view/view.hpp>
 
-namespace slamdw {
+namespace slamd {
 class SceneView : public View {
    public:
     std::shared_ptr<Tree> tree;
@@ -33,4 +33,4 @@ class SceneView : public View {
     void render_to_frame_buffer();
 };
 
-}  // namespace slamdw
+}  // namespace slamd

@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <slamd_common/gmath/angle.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 class Arcball {
    public:
@@ -30,4 +30,4 @@ class Arcball {
     inline static const float default_radius = 10.0f;
 };
 
-}  // namespace slamdw
+}  // namespace slamd

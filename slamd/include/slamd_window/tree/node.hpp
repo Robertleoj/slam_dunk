@@ -5,14 +5,19 @@
 #include <memory>
 #include <mutex>
 #include <optional>
+#include <slamd_common/id.hpp>
 #include <slamd_window/geom/geometry.hpp>
 #include <string>
 
-namespace slamdw {
+namespace slamd {
 
 class Node {
    public:
-    static std::unique_ptr<Node> deserialize(const slamd::flatb::Node* node_fb);
+    static std::unique_ptr<Node> deserialize(
+        const slamd::flatb::Node* node_fb,
+        std::map<slamd::_id::GeometryID, std::shared_ptr<_geom::Geometry>>&
+            geometries
+    );
     std::map<std::string, std::unique_ptr<Node>> children;
 
    private:
@@ -32,4 +37,4 @@ class Node {
     void set_transform(glm::mat4 transform);
 };
 
-}  // namespace slamdw
+}  // namespace slamd

@@ -12,7 +12,7 @@
 #include <slamd_window/geom/sphere.hpp>
 #include <slamd_window/geom/triad.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 std::shared_ptr<Geometry> Geometry::deserialize(
@@ -64,4 +64,4 @@ std::shared_ptr<Geometry> Geometry::deserialize(
 }
 
 }  // namespace _geom
-}  // namespace slamdw
+}  // namespace slamd

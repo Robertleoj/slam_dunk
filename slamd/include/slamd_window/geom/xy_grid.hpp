@@ -5,7 +5,7 @@
 #include <thread>
 #include <vector>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 class GridXYPlane : public Geometry {

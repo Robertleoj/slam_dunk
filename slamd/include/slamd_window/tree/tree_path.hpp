@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-namespace slamdw {
+namespace slamd {
 
 class TreePath {
    public:

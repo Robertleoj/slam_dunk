@@ -4,7 +4,7 @@
 #include <slamd_common/gmath/rect2d.hpp>
 #include <slamd_window/view/canvas_view.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 CanvasView::CanvasView(
     std::shared_ptr<Tree> tree
@@ -213,12 +213,10 @@ void CanvasView::set_default_pos() {
 
     float window_aspect = this->frame_buffer.aspect();
 
-    this->camera.set_viewport(
-        slamd::gmath::Rect2D::center_cover(
-            slamd::gmath::Rect2D::from_aabb3d(bounds),
-            window_aspect
-        )
-    );
+    this->camera.set_viewport(slamd::gmath::Rect2D::center_cover(
+        slamd::gmath::Rect2D::from_aabb3d(bounds),
+        window_aspect
+    ));
 }
 
 void CanvasView::fix_view_aspect() {
@@ -228,4 +226,4 @@ void CanvasView::fix_view_aspect() {
     );
 }
 
-}  // namespace slamdw
+}  // namespace slamd

@@ -3,7 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <slamd_common/gmath/angle.hpp>
 
-namespace slamdw {
+namespace slamd {
 namespace gmath {
 
 glm::mat4 rot3D(const Angle& angle, glm::vec3 axis);

@@ -4,7 +4,7 @@
 #include <slamd_common/gmath/angle.hpp>
 #include <slamd_window/view/scene_view.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 glm::vec3 make_background_color(
     const glm::mat4& view

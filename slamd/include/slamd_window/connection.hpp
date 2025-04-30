@@ -1,10 +1,10 @@
 #pragma once
 
 #include <asio.hpp>
-#include <slamd_window/message_queue.hpp>
 #include <slamd_window/message.hpp>
+#include <slamd_window/message_queue.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 class Connection {
    public:
@@ -22,4 +22,4 @@ class Connection {
     std::jthread job_thread;
 };
 
-}  // namespace slamdw
+}  // namespace slamd

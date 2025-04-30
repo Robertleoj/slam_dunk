@@ -5,7 +5,7 @@
 #include <slamd_window/shaders.hpp>
 #include <thread>
 
-namespace slamdw {
+namespace slamd {
 namespace _geom {
 
 /**
@@ -95,4 +95,4 @@ PointCloudPtr point_cloud(
 }
 
 }  // namespace geom
-}  // namespace slamdw
+}  // namespace slamd

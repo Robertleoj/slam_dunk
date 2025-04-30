@@ -6,7 +6,7 @@
 #include <slamd_window/view/scene_view.hpp>
 #include <slamd_window/view/view.hpp>
 
-namespace slamdw {
+namespace slamd {
 
 StateManager::StateManager() {}
 
@@ -29,17 +29,25 @@ void StateManager::handle_initial_state(
 
     spdlog::debug("Found {} trees", trees_fb->size());
 
-    for (auto tree_fb : *trees_fb) {
-        uint64_t tree_id = tree_fb->id();
+    for (auto geom_fb : *full_state_fb->geometries()) {
+        auto geom = _geom::Geometry::deserialize(geom_fb);
+        this->geometries.insert({_id::GeometryID(geom_fb->geometry_id()), geom}
+        );
+    }
 
-        this->trees.insert({tree_id, Tree::deserialize(tree_fb)});
+    for (auto tree_fb : *trees_fb) {
+        auto tree_id = _id::TreeID(tree_fb->id());
+
+        this->trees.insert(
+            {tree_id, Tree::deserialize(tree_fb, this->geometries)}
+        );
     }
 
     auto views_fb = full_state_fb->views();
     spdlog::debug("Found {} views", views_fb->size());
 
     for (auto view_fb : *views_fb) {
-        uint64_t tree_id = view_fb->tree_id();
+        auto tree_id = _id::TreeID(view_fb->tree_id());
         std::string view_name = view_fb->name()->str();
 
         auto tree = this->trees.at(tree_id);
@@ -54,6 +62,9 @@ void StateManager::handle_initial_state(
             case (slamd::flatb::ViewType_SCENE): {
                 view = std::make_unique<SceneView>(tree);
                 break;
+            }
+            default: {
+                throw std::runtime_error("Invalid geometry type");
             }
         }
 
@@ -95,4 +106,4 @@ void StateManager::apply_updates() {
     }
 }
 
-}  // namespace slamdw
+}  // namespace slamd

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace slamdw {
+namespace slamd {
 
 void ensure_shader_compiled(uint32_t shader_id);
 
@@ -16,7 +16,8 @@ uint32_t make_shader_program(
 
 uint32_t compile_fragment_shader(std::string source);
 
-uint32_t make_shader_program(uint32_t vertex_shader_id, uint32_t fragment_shader_id);
+uint32_t
+make_shader_program(uint32_t vertex_shader_id, uint32_t fragment_shader_id);
 
 class ShaderProgram {
    public:
