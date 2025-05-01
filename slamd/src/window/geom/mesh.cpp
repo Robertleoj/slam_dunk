@@ -1,6 +1,5 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
-#include <ranges>
 #include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/assert.hpp>
 #include <slamd_window/constants.hpp>
@@ -228,6 +227,14 @@ void Mesh::render(
     );
     gl::glBindVertexArray(0);
 };
+
+Mesh::~Mesh() {
+    gl::glDeleteBuffers(1, &eab_id);
+    gl::glDeleteBuffers(1, &pos_vbo_id);
+    gl::glDeleteBuffers(1, &color_vbo_id);
+    gl::glDeleteBuffers(1, &normal_vbo_id);
+    gl::glDeleteVertexArrays(1, &vao_id);
+}
 
 }  // namespace _geom
 

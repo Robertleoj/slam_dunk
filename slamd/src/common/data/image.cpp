@@ -7,6 +7,8 @@
 namespace slamd {
 namespace data {
 
+Image::Image() {}
+
 Image::Image(
     const std::vector<uint8_t>& data,
     size_t width,
@@ -18,13 +20,11 @@ Image::Image(
       height(height),
       channels(channels) {
     if (data.size() != width * height * channels) {
-        throw std::runtime_error(
-            std::format(
-                "Data should be {}, found {}",
-                width * height * channels,
-                data.size()
-            )
-        );
+        throw std::runtime_error(std::format(
+            "Data should be {}, found {}",
+            width * height * channels,
+            data.size()
+        ));
     }
 }
 
@@ -39,13 +39,11 @@ Image::Image(
       height(height),
       channels(channels) {
     if (data.size() != width * height * channels) {
-        throw std::runtime_error(
-            std::format(
-                "Data should be {}, found {}",
-                width * height * channels,
-                data.size()
-            )
-        );
+        throw std::runtime_error(std::format(
+            "Data should be {}, found {}",
+            width * height * channels,
+            data.size()
+        ));
     }
 }
 

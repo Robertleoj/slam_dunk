@@ -1,10 +1,8 @@
 #pragma once
 
-#include <memory>
 #include <slamd_common/data/mesh.hpp>
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/shaders.hpp>
-#include <thread>
 
 namespace slamd {
 namespace _geom {
@@ -18,6 +16,7 @@ class MonoInstanced : public Geometry {
         const std::vector<glm::mat4>& transforms,
         const std::vector<glm::vec3>& colors
     );
+    ~MonoInstanced();
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 

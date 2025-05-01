@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(LIB_DIR vendored_deps)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF)
 
@@ -62,15 +63,18 @@ target_include_directories(
     bindings
 
     PRIVATE
-
         ${LIB_DIR}/glm
         ${LIB_DIR}/glbinding/include
         ${LIB_DIR}/glfw/include
 )
 
 target_link_libraries(bindings 
-    PRIVATE 
+    PUBLIC
         slamd::slamd
+        slamd_common
+        slamd_flatbuff
+
+    PRIVATE 
         imgui::imgui
         glfw
         glbinding::glbinding

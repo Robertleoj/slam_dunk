@@ -147,6 +147,21 @@ std::optional<slamd::gmath::AABB> Image::bounds() {
     );
 }
 
+Image::~Image() {
+    if (eab_id) {
+        gl::glDeleteBuffers(1, &eab_id);
+        eab_id = 0;
+    }
+    if (vbo_id) {
+        gl::glDeleteBuffers(1, &vbo_id);
+        vbo_id = 0;
+    }
+    if (vao_id) {
+        gl::glDeleteVertexArrays(1, &vao_id);
+        vao_id = 0;
+    }
+}
+
 }  // namespace _geom
 
 namespace geom {

@@ -1,7 +1,6 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <format>
-#include <ranges>
 #include <slamd_common/data/mesh.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/utils/mesh.hpp>
@@ -309,6 +308,15 @@ void PointCloud::render(
     );
 
     gl::glBindVertexArray(0);
+}
+
+PointCloud::~PointCloud() {
+    gl::glDeleteBuffers(1, &mesh_vbo_id);
+    gl::glDeleteBuffers(1, &mesh_eab_id);
+    gl::glDeleteBuffers(1, &pos_vbo_id);
+    gl::glDeleteBuffers(1, &radii_vbo_id);
+    gl::glDeleteBuffers(1, &colors_vbo_id);
+    gl::glDeleteVertexArrays(1, &vao_id);
 }
 
 }  // namespace _geom

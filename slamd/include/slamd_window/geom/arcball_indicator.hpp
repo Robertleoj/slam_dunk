@@ -10,6 +10,7 @@ namespace _geom {
 class ArcballIndicator : public Geometry {
    public:
     ArcballIndicator();
+    ~ArcballIndicator();
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
     void set_arcball_zoom(float zoom);

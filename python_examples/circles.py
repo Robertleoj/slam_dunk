@@ -4,9 +4,9 @@ import time
 
 
 def main():
-    window = slamd.Window("🌀 Slamd Circle Rave — Juiced Edition 🌀", 1000, 1000)
+    vis = slamd.Visualizer("🌀 Slamd Circle Rave — Juiced Edition 🌀")
     canvas = slamd.Canvas()
-    window.add_canvas("canvas", canvas)
+    vis.add_canvas("canvas", canvas)
 
     # Fewer, beefier circles
     n = 500

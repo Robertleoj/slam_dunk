@@ -1,9 +1,6 @@
 {
-  "C_Cpp.default.compileCommands": [
-    "${workspaceFolder}/examples/build/compile_commands.json"
-  ],
   "clangd.arguments": [
-    "--compile-commands-dir=examples/build",
+    "--compile-commands-dir=python_examples/build",
     "--function-arg-placeholders=false"
   ],
   "files.associations": {

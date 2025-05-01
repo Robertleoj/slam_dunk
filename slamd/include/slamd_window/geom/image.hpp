@@ -6,7 +6,6 @@
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/image_texture.hpp>
 #include <slamd_window/shaders.hpp>
-#include <thread>
 
 namespace slamd {
 namespace _geom {
@@ -24,6 +23,7 @@ class Image : public Geometry {
 
    public:
     Image(const slamd::data::Image& image, bool normalized = true);
+    ~Image();
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 

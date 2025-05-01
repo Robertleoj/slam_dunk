@@ -25,6 +25,8 @@ class Mesh : public Geometry {
         float min_brightness = _const::default_min_brightness
     );
 
+    ~Mesh();
+
     static std::shared_ptr<Mesh> deserialize(const slamd::flatb::Mesh* mesh_fb);
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;

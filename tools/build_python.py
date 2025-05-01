@@ -8,8 +8,11 @@ import subprocess
 from functools import partial
 from pathlib import Path
 from embed_shaders import embed_shaders
+from build_flatbuffers import compile_flatbuffers
 
 from fire import Fire
+
+from build_config import CMAKE_FLAGS
 
 BUILD_DIR = "build"
 
@@ -22,23 +25,12 @@ DEST_PATH = Path("./src/slamd/") / TARGET_NAME
 def build(debug: bool) -> None:
     """(Re)build the C++ backend."""
     embed_shaders()
+    compile_flatbuffers()
 
     build_path = Path("build")
     build_path.mkdir(exist_ok=True)
 
-    compile_cmd = [
-        "cmake",
-        "-B",
-        str(build_path),
-        "-G",
-        "Ninja",
-        "-DCMAKE_EXPORT_COMPILE_COMMANDS=1",
-        "-DCMAKE_C_COMPILER=/usr/bin/gcc-13",
-        "-DCMAKE_CXX_COMPILER=/usr/bin/g++-13",
-        '-DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"',
-        '-DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld"',
-        '-DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"',
-    ]
+    compile_cmd = ["cmake", "-B", str(build_path), "-G", "Ninja", *CMAKE_FLAGS]
 
     if debug:
         compile_cmd.append("-DCMAKE_BUILD_TYPE=Debug")

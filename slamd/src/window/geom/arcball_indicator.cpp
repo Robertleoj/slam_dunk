@@ -125,5 +125,16 @@ void ArcballIndicator::set_arcball_zoom(
     this->arcball_zoom = zoom;
 }
 
+ArcballIndicator::~ArcballIndicator() {
+    if (this->vbo_id) {
+        gl::glDeleteBuffers(1, &this->vbo_id);
+        this->vbo_id = 0;
+    }
+    if (this->vao_id) {
+        gl::glDeleteVertexArrays(1, &this->vao_id);
+        this->vao_id = 0;
+    }
+}
+
 }  // namespace _geom
 }  // namespace slamd

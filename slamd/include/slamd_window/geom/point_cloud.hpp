@@ -3,7 +3,6 @@
 #include <memory>
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/shaders.hpp>
-#include <thread>
 
 namespace slamd {
 namespace _geom {
@@ -18,6 +17,7 @@ class PointCloud : public Geometry {
         const std::vector<glm::vec3>& colors,
         const std::vector<float>& radii
     );
+    ~PointCloud();
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 

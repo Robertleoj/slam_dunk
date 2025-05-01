@@ -104,10 +104,10 @@ target_link_libraries(
 
     PUBLIC
         spdlog::spdlog
+        slamd_flatbuff
 
     PRIVATE
         spdlog::spdlog
-        slamd_flatbuff
 )
 
 
@@ -178,11 +178,11 @@ target_link_libraries(
         glfw
         spdlog::spdlog
         slamd_flatbuff
+        slamd_common
     PUBLIC
         glbinding::glbinding
         glbinding::glbinding-aux
         imgui::imgui
-        slamd_common
 )
 
 # SLAMD
@@ -244,6 +244,7 @@ target_link_libraries(
     
     PRIVATE
         spdlog::spdlog
+
     PUBLIC
         slamd_flatbuff
         slamd_common

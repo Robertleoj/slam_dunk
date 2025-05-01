@@ -2,7 +2,6 @@
 #include <glbinding/glbinding.h>
 #include <spdlog/spdlog.h>
 #include <format>
-#include <ranges>
 #include <slamd_common/data/mesh.hpp>
 #include <slamd_window/assert.hpp>
 #include <slamd_window/constants.hpp>
@@ -246,6 +245,14 @@ void MonoInstanced::render(
     );
 
     gl::glBindVertexArray(0);
+}
+
+MonoInstanced::~MonoInstanced() {
+    gl::glDeleteBuffers(1, &mesh_vbo_id);
+    gl::glDeleteBuffers(1, &mesh_eab_id);
+    gl::glDeleteBuffers(1, &trans_vbo_id);
+    gl::glDeleteBuffers(1, &colors_vbo_id);
+    gl::glDeleteVertexArrays(1, &vao_id);
 }
 
 }  // namespace _geom
