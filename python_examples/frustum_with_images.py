@@ -37,19 +37,19 @@ def get_camera_intrinsics_and_image():
 
 
 if __name__ == "__main__":
-    window = slamd.Window("camera and image", 1000, 1000)
+    vis = slamd.Visualizer("camera and image")
 
     scene = slamd.Scene()
     scene.set_object("/origin", slamd.geom.Triad())
 
-    window.add_scene("scene", scene)
+    vis.add_scene("scene", scene)
 
     K, width, height, img = get_camera_intrinsics_and_image()
 
     frustum = slamd.geom.CameraFrustum(K, width, height, img, 1.0)
 
-    scene.set_object("/rot1/tr/rot2/cam/frustum", frustum)
     scene.set_object("/rot1/tr/rot2/cam/triad", slamd.geom.Triad(0.5))
+    scene.set_object("/rot1/tr/rot2/cam/frustum", frustum)
 
     rot2 = np.eye(4)
     rot2[:3, :3] = Rotation.from_euler("x", -90.0, degrees=True).as_matrix()
@@ -60,11 +60,12 @@ if __name__ == "__main__":
     tr[1, 3] = -5.0
 
     scene.set_transform("/rot1/tr", tr)
+    vis.hang_forever()
 
-    t = 0.0
-    while True:
-        rot1 = np.eye(4)
-        rot1[:3, :3] = Rotation.from_euler("z", t).as_matrix()
-        scene.set_transform("/rot1", rot1)
-        t += 0.01
-        time.sleep(10 / 1000)
+    # t = 0.0
+    # while True:
+    #     rot1 = np.eye(4)
+    #     rot1[:3, :3] = Rotation.from_euler("z", t).as_matrix()
+    #     scene.set_transform("/rot1", rot1)
+    #     t += 0.01
+    #     time.sleep(10 / 1000)

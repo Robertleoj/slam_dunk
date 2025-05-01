@@ -1,12 +1,12 @@
 import slamd
 
 if __name__ == "__main__":
-    window = slamd.Window("Hello world", 1000, 1000)
+    vis = slamd.Visualizer("Hello world")
 
     scene = slamd.Scene()
 
     scene.set_object("/origin", slamd.geom.Triad())
 
-    window.add_scene("scene", scene)
+    vis.add_scene("scene", scene)
 
-    window.wait_for_close()
+    vis.hang_forever()

@@ -14,11 +14,11 @@ def cool_spiral(n: int, t: float) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    window = slamd.Window("3d_spiral", 1000, 1000)
+    vis = slamd.Visualizer("3d_spiral")
 
     scene = slamd.Scene()
 
-    window.add_scene("scene", scene)
+    vis.add_scene("scene", scene)
 
     pink = np.array([212, 13, 125]) / 255
 

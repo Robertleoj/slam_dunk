@@ -33,6 +33,12 @@ CameraFrustum::CameraFrustum(
 flatbuffers::Offset<slamd::flatb::Geometry> CameraFrustum::serialize(
     flatbuffers::FlatBufferBuilder& builder
 ) {
+    std::optional<flatbuffers::Offset<slamd::flatb::ImageData>> maybe_image_fb =
+        std::nullopt;
+    if (this->img.has_value()) {
+        maybe_image_fb = this->img.value().serialize(builder);
+    }
+
     auto frustum_builder = flatb::CameraFrustumBuilder(builder);
 
     auto intrinsics_fb = gmath::serialize(this->intrinsics_matrix);
@@ -43,9 +49,8 @@ flatbuffers::Offset<slamd::flatb::Geometry> CameraFrustum::serialize(
 
     frustum_builder.add_scale(this->scale);
 
-    if (this->img.has_value()) {
-        auto img_fb = this->img.value().serialize(builder);
-        frustum_builder.add_image(img_fb);
+    if (maybe_image_fb.has_value()) {
+        frustum_builder.add_image(maybe_image_fb.value());
     }
 
     auto frustum_fb = frustum_builder.Finish();

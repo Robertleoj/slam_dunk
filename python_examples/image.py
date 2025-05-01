@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 def main():
-    window = slamd.Window("image", 1000, 1000)
+    vis = slamd.Visualizer("image")
 
     canvas = slamd.Canvas()
 
@@ -14,9 +14,9 @@ def main():
 
     canvas.set_object("/image", slamd.geom2d.Image(image))
 
-    window.add_canvas("canvas", canvas)
+    vis.add_canvas("canvas", canvas)
 
-    window.wait_for_close()
+    vis.hang_forever()
 
 
 if __name__ == "__main__":
