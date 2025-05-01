@@ -41,14 +41,14 @@ class CameraFrustum : public Geometry {
     Corners corners;
 
     struct CameraImage {
-        Image image_geometry;
+        std::unique_ptr<Image> image_geometry;
         // transform to put the image into the frustum
         glm::mat4 transform;
     };
+    std::vector<std::unique_ptr<PolyLine>> poly_lines;
 
     glm::mat4 scale_transform;
     std::optional<CameraImage> cam_image;
-    std::vector<PolyLine> poly_lines;
 };
 }  // namespace _geom
 

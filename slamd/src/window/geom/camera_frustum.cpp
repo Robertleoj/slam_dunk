@@ -42,6 +42,7 @@ CameraFrustum::CameraFrustum(
     // so we just need to scale it by a single number
     // we can just use the larger
 
+    spdlog::info("Configured (wh) {} {}", image_width, image_height);
     spdlog::info("Got image of shape (wh) {}, {}", image.width, image.height);
     spdlog::info(
         "Expecting {} pixels, got {}",
@@ -60,7 +61,7 @@ CameraFrustum::CameraFrustum(
     glm::mat4 translate = slamd::gmath::t3D(this->corners.tl);
 
     this->cam_image.emplace(
-        Image(std::move(image), true),
+        std::make_unique<Image>(std::move(image), true),
         translate * scale_transform
     );
 }
@@ -129,12 +130,12 @@ CameraFrustum::CameraFrustum(
     segments.push_back({notch_right, notch_left});
 
     for (const auto& [start, end] : segments) {
-        this->poly_lines.emplace_back(
+        this->poly_lines.emplace_back(std::make_unique<PolyLine>(
             std::vector<glm::vec3>{start, end},
             thickness,
             color,
             min_brightness
-        );
+        ));
     }
 
     this->scale_transform = slamd::gmath::scale_all(scale);
@@ -147,13 +148,13 @@ void CameraFrustum::render(
 ) {
     model = model * this->scale_transform;
     for (auto& polyline : poly_lines) {
-        polyline.render(model, view, projection);
+        polyline->render(model, view, projection);
     }
 
     if (this->cam_image.has_value()) {
         auto& img = this->cam_image.value().image_geometry;
         auto& transform = this->cam_image.value().transform;
-        img.render(model * transform, view, projection);
+        img->render(model * transform, view, projection);
     }
 }
 }  // namespace _geom

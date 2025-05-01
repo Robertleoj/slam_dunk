@@ -7,7 +7,6 @@
 #include <slamd_window/constants.hpp>
 #include <slamd_window/geom/geometry.hpp>
 #include <slamd_window/shaders.hpp>
-#include <thread>
 #include <vector>
 
 namespace slamd {

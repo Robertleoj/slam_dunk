@@ -13,7 +13,7 @@ class Box : public Geometry {
     static std::shared_ptr<Box> deserialize(const slamd::flatb::Box* box_fb);
 
    private:
-    Mesh box_mesh;
+    std::unique_ptr<Mesh> box_mesh;
 };
 
 }  // namespace _geom

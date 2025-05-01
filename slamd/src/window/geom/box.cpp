@@ -1,4 +1,3 @@
-#include <ranges>
 #include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/geom/box.hpp>
 
@@ -79,20 +78,21 @@ auto get_mesh_data() {
 
 // clang-format on
 
-Box::Box()
-    : box_mesh(slamd::data::MeshData(
-          box_corners,
-          vertex_colors,
-          box_indices,
-          vertex_normals
-      )) {}
+Box::Box() {
+    this->box_mesh = std::make_unique<Mesh>(slamd::data::MeshData(
+        box_corners,
+        vertex_colors,
+        box_indices,
+        vertex_normals
+    ));
+}
 
 void Box::render(
     glm::mat4 model,
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    this->box_mesh.render(model, view, projection);
+    this->box_mesh->render(model, view, projection);
 }
 
 std::shared_ptr<Box> Box::deserialize(

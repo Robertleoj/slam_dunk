@@ -2,6 +2,7 @@
 #include <flatb/geometry_generated.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <memory>
 #include <slamd_window/geom/arrows.hpp>
 #include <slamd_window/geom/geometry.hpp>
 
@@ -19,7 +20,7 @@ class Triad : public Geometry {
     );
 
    private:
-    Arrows arrows;
+    std::unique_ptr<Arrows> arrows;
     glm::mat4 scale_transform;
 };
 

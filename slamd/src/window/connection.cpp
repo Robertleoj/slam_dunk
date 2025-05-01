@@ -12,7 +12,7 @@ Connection::Connection(
 )
     : ip(ip),
       port(port),
-      messages(1024) {
+      messages() {
     this->job_thread = std::jthread(&Connection::job, this);
 }
 
@@ -38,7 +38,11 @@ void Connection::job() {
     while (connected) {
         try {
             uint32_t len_net;
-            asio::read(socket, asio::buffer(&len_net, 4));
+            asio::read(
+                socket,
+                asio::buffer(&len_net, 4),
+                asio::transfer_exactly(4)
+            );
             uint32_t len = ntohl(len_net);
 
             auto message = std::make_unique<Message>(len);

@@ -10,17 +10,17 @@ std::shared_ptr<Triad> Triad::deserialize(
     return std::make_shared<Triad>(triad_fb->scale(), triad_fb->thickness());
 }
 
-Arrows make_arrows(
+std::unique_ptr<Arrows> make_arrows(
     float thickness
 ) {
     glm::vec3 origin(0.0, 0.0, 0.0);
 
-    return Arrows(
+    return std::unique_ptr<Arrows>(new Arrows(
         {origin, origin, origin},
         {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}},
         {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}},
         thickness
-    );
+    ));
 }
 
 Triad::Triad(
@@ -36,7 +36,7 @@ void Triad::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    this->arrows.render(model * this->scale_transform, view, projection);
+    this->arrows->render(model * this->scale_transform, view, projection);
 }
 
 }  // namespace _geom

@@ -16,7 +16,7 @@ std::shared_ptr<Points2D> Points2D::deserialize(
     );
 }
 
-Mesh make_mesh(
+std::unique_ptr<Mesh> make_mesh(
     const std::vector<glm::vec2>& positions,
     const std::vector<glm::vec3>& colors,
     const std::vector<float>& radii
@@ -28,9 +28,11 @@ Mesh make_mesh(
     float segment_size =
         std::numbers::pi * 2.0f / static_cast<float>(num_segments);
 
-    for (const auto& [pos, col, rad] :
-         std::views::zip(positions, colors, radii)) {
+    for (size_t i = 0; i < positions.size(); i++) {
         // the center of the circle
+        auto& pos = positions[i];
+        auto& col = colors[i];
+        auto rad = radii[i];
         mesh_data
             .add_vertex(glm::vec3(pos, 0.0f), col, glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -66,7 +68,7 @@ Mesh make_mesh(
         curr_idx += num_segments + 1;
     }
 
-    return Mesh(mesh_data, 1.0f);
+    return std::make_unique<Mesh>(mesh_data, 1.0f);
 }
 
 slamd::gmath::AABB make_bounds(
@@ -78,7 +80,9 @@ slamd::gmath::AABB make_bounds(
     float min_y = positions[0].y - radii[0];
     float max_y = positions[0].y + radii[0];
 
-    for (const auto& [pos, rad] : std::views::zip(positions, radii)) {
+    for (size_t i = 0; i < positions.size(); i++) {
+        auto& pos = positions[i];
+        auto rad = radii[i];
         min_x = std::fmin(pos.x - rad, min_x);
         max_x = std::fmax(pos.x + rad, max_x);
         min_y = std::fmin(pos.y - rad, min_y);
@@ -96,15 +100,16 @@ Points2D::Points2D(
     const std::vector<glm::vec3>& colors,
     const std::vector<float>& radii
 )
-    : mesh(make_mesh(positions, colors, radii)),
-      cached_bounds(make_bounds(positions, radii)) {}
+    : cached_bounds(make_bounds(positions, radii)) {
+    this->mesh = make_mesh(positions, colors, radii);
+}
 
 void Points2D::render(
     glm::mat4 model,
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    this->mesh.render(model, view, projection);
+    this->mesh->render(model, view, projection);
 }
 
 std::optional<slamd::gmath::AABB> Points2D::bounds() {

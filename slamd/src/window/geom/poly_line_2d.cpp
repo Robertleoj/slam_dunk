@@ -15,7 +15,7 @@ std::shared_ptr<PolyLine2D> PolyLine2D::deserialize(
     );
 }
 
-Mesh PolyLine2D::make_mesh(
+std::unique_ptr<Mesh> PolyLine2D::make_mesh(
     const std::vector<glm::vec2>& points,
     const glm::vec3& color,
     float thickness
@@ -81,7 +81,7 @@ Mesh PolyLine2D::make_mesh(
                          .set_indices(indices)
                          .build();
 
-    return Mesh(mesh_data);
+    return std::make_unique<Mesh>(mesh_data);
 }
 
 PolyLine2D::PolyLine2D(
@@ -89,15 +89,16 @@ PolyLine2D::PolyLine2D(
     const glm::vec3& color,
     float thickness
 )
-    : line_mesh(PolyLine2D::make_mesh(points, color, thickness)),
-      cached_bounds(slamd::gmath::AABB::around_points(points)) {}
+    : cached_bounds(slamd::gmath::AABB::around_points(points)) {
+    this->line_mesh = PolyLine2D::make_mesh(points, color, thickness);
+}
 
 void PolyLine2D::render(
     glm::mat4 model,
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    this->line_mesh.render(model, view, projection);
+    this->line_mesh->render(model, view, projection);
 }
 
 std::optional<slamd::gmath::AABB> PolyLine2D::bounds() {

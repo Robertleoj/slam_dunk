@@ -23,7 +23,7 @@ class Points2D : public Geometry {
     );
 
    private:
-    Mesh mesh;
+    std::unique_ptr<Mesh> mesh;
     slamd::gmath::AABB cached_bounds;
 };
 

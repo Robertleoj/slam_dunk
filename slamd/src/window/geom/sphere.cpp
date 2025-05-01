@@ -1,6 +1,4 @@
 #include <glm/glm.hpp>
-#include <numbers>
-#include <ranges>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/utils/mesh.hpp>
 #include <slamd_window/geom/sphere.hpp>
@@ -9,7 +7,7 @@
 namespace slamd {
 namespace _geom {
 
-Mesh make_sphere_mesh(
+std::unique_ptr<Mesh> make_sphere_mesh(
     float radius,
     glm::vec3 color
 ) {
@@ -26,7 +24,7 @@ Mesh make_sphere_mesh(
                          .set_colors(color)
                          .build();
 
-    return Mesh(std::move(mesh_data));
+    return std::make_unique<Mesh>(std::move(mesh_data));
 }
 
 std::shared_ptr<Sphere> Sphere::deserialize(
@@ -41,15 +39,16 @@ std::shared_ptr<Sphere> Sphere::deserialize(
 Sphere::Sphere(
     float radius,
     glm::vec3 color
-)
-    : mesh(make_sphere_mesh(radius, color)) {}
+) {
+    this->mesh = make_sphere_mesh(radius, color);
+}
 
 void Sphere::render(
     glm::mat4 model,
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    this->mesh.render(model, view, projection);
+    this->mesh->render(model, view, projection);
 };
 
 }  // namespace _geom

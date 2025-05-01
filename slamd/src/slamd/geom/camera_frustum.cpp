@@ -39,9 +39,10 @@ flatbuffers::Offset<slamd::flatb::Geometry> CameraFrustum::serialize(
         maybe_image_fb = this->img.value().serialize(builder);
     }
 
+    auto intrinsics_fb = gmath::serialize(this->intrinsics_matrix);
+
     auto frustum_builder = flatb::CameraFrustumBuilder(builder);
 
-    auto intrinsics_fb = gmath::serialize(this->intrinsics_matrix);
     frustum_builder.add_intrinsics(&intrinsics_fb);
 
     frustum_builder.add_image_height(this->image_height);

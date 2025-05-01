@@ -1,8 +1,8 @@
 #pragma once
 
 #include <asio.hpp>
+#include <slamd_common/utils/thread_safe_queue.hpp>
 #include <slamd_window/message.hpp>
-#include <slamd_window/message_queue.hpp>
 #include <thread>
 
 namespace slamd {
@@ -15,7 +15,7 @@ class Connection {
     const std::string ip;
     const ushort port;
     bool connected = false;
-    MessageQueue<std::unique_ptr<Message>> messages;
+    _utils::ThreadSafeQueue<std::unique_ptr<Message>> messages;
 
    private:
     void job();

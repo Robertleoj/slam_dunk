@@ -18,7 +18,7 @@ class Image : public Geometry {
     gl::GLuint vao_id;
     gl::GLuint vbo_id;
     gl::GLuint eab_id;
-    graphics::ImageTexture texture;
+    std::unique_ptr<graphics::ImageTexture> texture;
     ShaderProgram shader;
 
    public:

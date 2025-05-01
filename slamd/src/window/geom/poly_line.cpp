@@ -18,7 +18,7 @@ std::shared_ptr<PolyLine> PolyLine::deserialize(
     );
 }
 
-Mesh make_poly_line_mesh(
+std::unique_ptr<Mesh> make_poly_line_mesh(
     const std::vector<glm::vec3>& points,
     float thickness,
     const glm::vec3& color,
@@ -102,7 +102,7 @@ Mesh make_poly_line_mesh(
                     .compute_normals()
                     .build();
 
-    return Mesh(data);
+    return std::make_unique<Mesh>(data);
 }
 
 PolyLine::PolyLine(
@@ -118,7 +118,7 @@ void PolyLine::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    mesh.render(model, view, projection);
+    mesh->render(model, view, projection);
 }
 
 }  // namespace _geom

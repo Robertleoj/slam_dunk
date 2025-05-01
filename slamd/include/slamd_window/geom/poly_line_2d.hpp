@@ -24,14 +24,14 @@ class PolyLine2D : public Geometry {
     std::optional<slamd::gmath::AABB> bounds() override;
 
    private:
-    static Mesh make_mesh(
+    static std::unique_ptr<Mesh> make_mesh(
         const std::vector<glm::vec2>& points,
         const glm::vec3& color,
         float thickness
     );
 
    private:
-    Mesh line_mesh;
+    std::unique_ptr<Mesh> line_mesh;
     slamd::gmath::AABB cached_bounds;
 };
 

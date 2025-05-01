@@ -28,7 +28,7 @@ class Circles2D : public Geometry {
     void update_radii(const std::vector<float>& radii);
 
    private:
-    static MonoInstanced make_mono_instanced(
+    static std::unique_ptr<MonoInstanced> make_mono_instanced(
         const std::vector<glm::vec2>& positions,
         const std::vector<glm::vec3>& colors,
         const std::vector<float>& radii,
@@ -46,7 +46,7 @@ class Circles2D : public Geometry {
     void handle_updates();
 
    private:
-    MonoInstanced circles_instanced;
+    std::unique_ptr<MonoInstanced> circles_instanced;
     slamd::gmath::AABB cached_bounds;
 
     std::vector<glm::vec3> colors;

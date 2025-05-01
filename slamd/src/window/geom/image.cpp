@@ -97,8 +97,9 @@ Image::Image(
     const slamd::data::Image& image,
     bool normalized
 )
-    : texture(image),
-      shader(shader_source::image::vert, shader_source::image::frag) {
+    : shader(shader_source::image::vert, shader_source::image::frag) {
+    this->texture = std::make_unique<graphics::ImageTexture>(image);
+
     float x_size = static_cast<float>(image.width);
     float y_size = static_cast<float>(image.height);
 
@@ -127,7 +128,7 @@ void Image::render(
     this->shader.set_uniform("view", view);
     this->shader.set_uniform("projection", projection);
 
-    this->texture.bind();
+    this->texture->bind();
 
     gl::glDrawElements(gl::GL_TRIANGLES, 6, gl::GL_UNSIGNED_INT, 0);
 

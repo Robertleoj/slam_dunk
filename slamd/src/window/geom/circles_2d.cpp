@@ -14,13 +14,13 @@ Circles2D::Circles2D(
     const std::vector<float>& radii,
     float thickness
 )
-    : circles_instanced(
-          Circles2D::make_mono_instanced(positions, colors, radii, thickness)
-      ),
-      colors(colors),
+    : colors(colors),
       positions(positions),
       radii(radii),
-      cached_bounds(Circles2D::make_bounds(positions, radii)) {}
+      cached_bounds(Circles2D::make_bounds(positions, radii)) {
+    this->circles_instanced =
+        Circles2D::make_mono_instanced(positions, colors, radii, thickness);
+}
 
 std::shared_ptr<Circles2D> Circles2D::deserialize(
     const slamd::flatb::Circles2D* circles_fb
@@ -39,14 +39,14 @@ void Circles2D::render(
     glm::mat4 projection
 ) {
     this->handle_updates();
-    this->circles_instanced.render(model, view, projection);
+    this->circles_instanced->render(model, view, projection);
 }
 
 std::optional<slamd::gmath::AABB> Circles2D::bounds() {
     return this->cached_bounds;
 }
 
-MonoInstanced Circles2D::make_mono_instanced(
+std::unique_ptr<MonoInstanced> Circles2D::make_mono_instanced(
     const std::vector<glm::vec2>& positions,
     const std::vector<glm::vec3>& colors,
     const std::vector<float>& radii,
@@ -91,7 +91,7 @@ MonoInstanced Circles2D::make_mono_instanced(
 
     }
 
-    return MonoInstanced(
+    return std::make_unique<MonoInstanced>(
         vertices,
         normals,
         indices,
@@ -127,7 +127,7 @@ void Circles2D::update_radii(
 
 void Circles2D::handle_updates() {
     if (this->pending_trans_update) {
-        this->circles_instanced.update_transforms(
+        this->circles_instanced->update_transforms(
             Circles2D::make_transforms(
                 this->positions,
                 this->radii
@@ -137,22 +137,26 @@ void Circles2D::handle_updates() {
     }
 
     if (this->pending_color_update) {
-        this->circles_instanced.update_colors(this->colors);
+        this->circles_instanced->update_colors(this->colors);
         this->pending_color_update = false;
     }
 }
+
 
 std::vector<glm::mat4> Circles2D::make_transforms(
     std::vector<glm::vec2> positions,
     std::vector<float> radii
 ) {
     std::vector<glm::mat4> transforms;
-
     transforms.reserve(positions.size());
 
-    for(const auto &[pos, rad]: std::views::zip(positions, radii)) {
+    for (std::size_t i = 0; i < positions.size(); ++i) {
+        glm::vec2 pos = positions[i];
+        float rad = radii[i];
+
         transforms.push_back(
-            slamd::gmath::t3D(glm::vec3(pos, 0.0f)) * slamd::gmath::scale_xy(glm::vec2(rad, rad))
+            slamd::gmath::t3D(glm::vec3(pos, 0.0f)) * 
+            slamd::gmath::scale_xy(glm::vec2(rad, rad))
         );
     }
 
@@ -167,16 +171,16 @@ slamd::gmath::AABB Circles2D::make_bounds(
     float rad_0 = radii[0];
 
     float min_x = pos_0.x - rad_0;
-
     float max_x = pos_0.x + rad_0;
-
     float min_y = pos_0.y - rad_0;
     float max_y = pos_0.y + rad_0;
 
-    for (const auto& [pos, rad] : std::views::zip(positions, radii)) {
+    for (std::size_t i = 1; i < positions.size(); ++i) {
+        glm::vec2 pos = positions[i];
+        float rad = radii[i];
+
         min_x = std::fmin(pos.x - rad, min_x);
         max_x = std::fmax(pos.x + rad, max_x);
-
         min_y = std::fmin(pos.y - rad, min_y);
         max_y = std::fmax(pos.y + rad, max_y);
     }
@@ -186,6 +190,7 @@ slamd::gmath::AABB Circles2D::make_bounds(
         glm::vec3(max_x, max_y, 0.0f)
     );
 }
+
 
 }  // namespace _geom
 

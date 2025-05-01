@@ -150,7 +150,7 @@ ArrowMesh generate_arrow(
     return mesh;
 }
 
-Mesh make_arrows_mesh(
+std::unique_ptr<Mesh> make_arrows_mesh(
     const std::vector<glm::vec3>& starts,
     const std::vector<glm::vec3>& ends,
     const std::vector<glm::vec3>& colors,
@@ -185,7 +185,7 @@ Mesh make_arrows_mesh(
                                           .compute_normals()
                                           .build();
 
-    return Mesh(mesh_data);
+    return std::make_unique<Mesh>(mesh_data);
 }
 
 Arrows::Arrows(
@@ -201,7 +201,7 @@ void Arrows::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    mesh.render(model, view, projection);
+    mesh->render(model, view, projection);
 }
 
 }  // namespace _geom

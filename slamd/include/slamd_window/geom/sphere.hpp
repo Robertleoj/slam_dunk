@@ -17,7 +17,7 @@ class Sphere : public Geometry {
     );
 
    private:
-    Mesh mesh;
+    std::unique_ptr<Mesh> mesh;
 };
 
 }  // namespace _geom
