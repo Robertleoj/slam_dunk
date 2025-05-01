@@ -138,6 +138,7 @@ target_sources(
         src/window/tree/node.cpp
         src/window/tree/tree_path.cpp
 
+        src/window/view/view.cpp
         src/window/view/scene_view.cpp
         src/window/view/canvas_view.cpp
 

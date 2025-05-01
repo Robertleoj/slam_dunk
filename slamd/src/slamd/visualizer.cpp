@@ -10,8 +10,7 @@ namespace slamd {
 namespace _vis {
 
 Visualizer::Visualizer(
-    std::string name,
-    bool spawn
+    std::string name
 )
     : name(name) {
     this->client_set = std::make_shared<_net::ClientSet>();
@@ -19,10 +18,33 @@ Visualizer::Visualizer(
     this->server_thread = std::jthread([this](std::stop_token st) {
         this->server_job(st);
     });
+}
 
-    if (spawn) {
-        slamd::spawn_window();
+void Visualizer::send_tree(
+    std::shared_ptr<_tree::Tree> tree
+) {
+    // find all current geometries
+    std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>
+        current_geometries;
+
+    for (auto& [_, existing_tree] : this->trees) {
+        existing_tree->add_all_geometries(current_geometries);
     }
+
+    // get all geometries in tree
+    std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>> tree_geometries;
+    tree->add_all_geometries(tree_geometries);
+
+    // get all new geometries
+    for (auto& [gid, geom] : tree_geometries) {
+        if (current_geometries.find(gid) == current_geometries.end()) {
+            this->broadcast(geom->get_add_geometry_message());
+        }
+    }
+
+    // send tree itself
+    auto add_tree_msg = tree->get_add_tree_message();
+    this->broadcast(add_tree_msg);
 }
 
 void Visualizer::add_scene(
@@ -32,17 +54,19 @@ void Visualizer::add_scene(
     std::scoped_lock l(this->view_map_mutex);
 
     if (this->trees.find(scene->id) == this->trees.end()) {
+        this->send_tree(scene);
         this->trees.insert({scene->id, scene});
     }
 
-    this->view_name_to_view.insert(
-        {name,
-         _view::View::create(
-             this->shared_from_this(),
-             scene,
-             slamd::flatb::ViewType_SCENE
-         )}
+    auto view = _view::View::create(
+        name,
+        this->shared_from_this(),
+        scene,
+        slamd::flatb::ViewType_SCENE
     );
+
+    this->view_name_to_view.insert({name, view});
+    this->broadcast(view->get_add_view_message());
 }
 
 void Visualizer::add_canvas(
@@ -52,17 +76,20 @@ void Visualizer::add_canvas(
     std::scoped_lock l(this->view_map_mutex);
 
     if (this->trees.find(canvas->id) == this->trees.end()) {
+        this->send_tree(canvas);
         this->trees.insert({canvas->id, canvas});
     }
 
-    this->view_name_to_view.insert(
-        {name,
-         _view::View::create(
-             this->shared_from_this(),
-             canvas,
-             slamd::flatb::ViewType_CANVAS
-         )}
+    auto view = _view::View::create(
+        name,
+        this->shared_from_this(),
+        canvas,
+        slamd::flatb::ViewType_CANVAS
     );
+
+    this->view_name_to_view.insert({name, view});
+
+    this->broadcast(view->get_add_view_message());
 }
 flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatb::Geometry>>>
 Visualizer::get_geometries_fb(
@@ -98,7 +125,8 @@ std::vector<uint8_t> Visualizer::get_state() {
     std::vector<flatbuffers::Offset<slamd::flatb::Tree>> tree_vec;
 
     for (auto& [_, tree] : this->trees) {
-        tree_vec.push_back(tree->serialize(builder));
+        auto tree_fb = tree->serialize(builder);
+        tree_vec.push_back(tree_fb);
     }
 
     auto trees_fb = builder.CreateVector(tree_vec);
@@ -106,13 +134,8 @@ std::vector<uint8_t> Visualizer::get_state() {
     std::vector<flatbuffers::Offset<slamd::flatb::View>> view_vec;
 
     for (auto& [view_name, view] : this->view_name_to_view) {
-        auto view_name_flatb = builder.CreateString(view_name);
-        view_vec.push_back(slamd::flatb::CreateView(
-            builder,
-            view_name_flatb,
-            view->tree->id.value,
-            view->view_type
-        ));
+        auto view_fb = view->serialize(builder);
+        view_vec.push_back(view_fb);
     }
 
     auto views_fb = builder.CreateVector(view_vec);
@@ -180,11 +203,14 @@ void Visualizer::hang_forever() {
 }  // namespace _vis
 
 VisualizerPtr visualizer(
-    std::string name
+    std::string name,
+    bool spawn
 ) {
     auto visualizer = std::make_shared<_vis::Visualizer>(name);
 
-    // _global::visualizers.add(visualizer->id, visualizer);
+    if (spawn) {
+        slamd::spawn_window();
+    }
 
     return visualizer;
 }

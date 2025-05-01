@@ -29,13 +29,18 @@ table AddTree {
     tree: Tree;
 }
 
+table AddView {
+    view: View;
+}
+
 union MessageUnion {
     initial_state: InitialState,
     set_transform: SetTransform,
     set_object: SetObject,
     add_geometry: AddGeometry,
     remove_geometry: RemoveGeometry,
-    add_tree: Tree
+    add_tree: AddTree,
+    add_view: AddView
 }
 
 table Message {

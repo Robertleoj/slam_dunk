@@ -91,6 +91,8 @@ class Tree {
         std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>& initial_map
     );
 
+    std::shared_ptr<std::vector<uint8_t>> get_add_tree_message();
+
     void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
     std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
     find_visualizers();

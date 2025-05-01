@@ -54,21 +54,7 @@ void StateManager::handle_initial_state(
 
         auto tree = this->trees.at(tree_id);
 
-        std::unique_ptr<View> view;
-
-        switch (view_fb->view_type()) {
-            case (slamd::flatb::ViewType_CANVAS): {
-                view = std::make_unique<CanvasView>(tree);
-                break;
-            }
-            case (slamd::flatb::ViewType_SCENE): {
-                view = std::make_unique<SceneView>(tree);
-                break;
-            }
-            default: {
-                throw std::runtime_error("Invalid geometry type");
-            }
-        }
+        auto view = View::deserialize(view_fb, tree);
 
         this->views.insert({view_name, std::move(view)});
     }
@@ -120,6 +106,27 @@ void StateManager::handle_remove_geometry(
     this->geometries.erase(geometry_id);
 }
 
+void StateManager::handle_add_tree(
+    const slamd::flatb::AddTree* add_tree_fb
+) {
+    auto tree = Tree::deserialize(add_tree_fb->tree(), this->geometries);
+
+    this->trees.insert({_id::TreeID(add_tree_fb->tree()->id()), tree});
+}
+void StateManager::handle_add_view(
+    const slamd::flatb::AddView* add_view_fb
+) {
+    auto view_fb = add_view_fb->view();
+    auto tree_id = _id::TreeID(view_fb->tree_id());
+
+    auto tree = this->trees.at(tree_id);
+
+    auto view = View::deserialize(view_fb, tree);
+    auto view_name = view_fb->name()->str();
+
+    this->views.insert({view_name, std::move(view)});
+}
+
 void StateManager::apply_updates() {
     if (!this->connection.has_value()) {
         return;
@@ -161,6 +168,14 @@ void StateManager::apply_updates() {
                 this->handle_remove_geometry(
                     message_fb->message_as_remove_geometry()
                 );
+                break;
+            }
+            case (slamd::flatb::MessageUnion_add_tree): {
+                this->handle_add_tree(message_fb->message_as_add_tree());
+                break;
+            }
+            case (slamd::flatb::MessageUnion_add_view): {
+                this->handle_add_view(message_fb->message_as_add_view());
                 break;
             }
 

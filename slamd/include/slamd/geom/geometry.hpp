@@ -30,6 +30,7 @@ class Geometry {
     // should not be in public api
     void attach(std::shared_ptr<_tree::Node> node);
     void detach(_tree::Node* node);
+    std::shared_ptr<std::vector<uint8_t>> get_add_geometry_message();
 
    private:
     std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>

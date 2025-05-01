@@ -14,6 +14,21 @@ flatbuffers::Offset<slamd::flatb::Geometry> Geometry::serialize(
     throw std::runtime_error("Serialization not implemented");
 }
 
+std::shared_ptr<std::vector<uint8_t>> Geometry::get_add_geometry_message() {
+    // tell the visualizer to register this object
+    flatbuffers::FlatBufferBuilder builder;
+    auto this_fb = this->serialize(builder);
+    auto add_geometry_fb = flatb::CreateAddGeometry(builder, this_fb);
+    auto message_fb = flatb::CreateMessage(
+        builder,
+        flatb::MessageUnion_add_geometry,
+        add_geometry_fb.Union()
+    );
+
+    builder.Finish(message_fb);
+    return _utils::builder_buffer(builder);
+}
+
 void Geometry::attach(
     std::shared_ptr<_tree::Node> node
 ) {
@@ -22,19 +37,7 @@ void Geometry::attach(
 
     for (auto& [key, vis] : node_vis) {
         if (vis_before.find(key) == vis_before.end()) {
-            // tell the visualizer to register this object
-            flatbuffers::FlatBufferBuilder builder;
-            auto this_fb = this->serialize(builder);
-            auto add_geometry_fb = flatb::CreateAddGeometry(builder, this_fb);
-            auto message_fb = flatb::CreateMessage(
-                builder,
-                flatb::MessageUnion_add_geometry,
-                add_geometry_fb.Union()
-            );
-
-            builder.Finish(message_fb);
-
-            vis->broadcast(_utils::builder_buffer(builder));
+            vis->broadcast(this->get_add_geometry_message());
         }
     }
 

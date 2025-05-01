@@ -26,7 +26,7 @@ namespace _vis {
 
 class Visualizer : public std::enable_shared_from_this<Visualizer> {
    public:
-    Visualizer(std::string name, bool spawn = true);
+    Visualizer(std::string name);
     ~Visualizer();
     void add_scene(std::string name, std::shared_ptr<Scene> scene);
     void add_canvas(std::string name, std::shared_ptr<Canvas> canvas);
@@ -40,6 +40,8 @@ class Visualizer : public std::enable_shared_from_this<Visualizer> {
     flatbuffers::Offset<
         flatbuffers::Vector<flatbuffers::Offset<flatb::Geometry>>>
     get_geometries_fb(flatbuffers::FlatBufferBuilder& builder);
+
+    void send_tree(std::shared_ptr<_tree::Tree> tree);
 
    public:
     _id::VisualizerID id;
@@ -59,6 +61,6 @@ class Visualizer : public std::enable_shared_from_this<Visualizer> {
 
 using VisualizerPtr = std::shared_ptr<_vis::Visualizer>;
 
-VisualizerPtr visualizer(std::string name);
+VisualizerPtr visualizer(std::string name, bool spawn = true);
 
 }  // namespace slamd

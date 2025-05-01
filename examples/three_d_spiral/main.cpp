@@ -31,6 +31,7 @@ std::vector<glm::vec3> cool_spiral(
 
 int main() {
     auto vis = slamd::visualizer("3d_spiral");
+
     auto scene = slamd::scene();
     vis->add_scene("scene", scene);
 

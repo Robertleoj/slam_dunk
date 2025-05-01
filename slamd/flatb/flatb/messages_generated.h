@@ -35,6 +35,9 @@ struct RemoveGeometryBuilder;
 struct AddTree;
 struct AddTreeBuilder;
 
+struct AddView;
+struct AddViewBuilder;
+
 struct Message;
 struct MessageBuilder;
 
@@ -46,11 +49,12 @@ enum MessageUnion : uint8_t {
   MessageUnion_add_geometry = 4,
   MessageUnion_remove_geometry = 5,
   MessageUnion_add_tree = 6,
+  MessageUnion_add_view = 7,
   MessageUnion_MIN = MessageUnion_NONE,
-  MessageUnion_MAX = MessageUnion_add_tree
+  MessageUnion_MAX = MessageUnion_add_view
 };
 
-inline const MessageUnion (&EnumValuesMessageUnion())[7] {
+inline const MessageUnion (&EnumValuesMessageUnion())[8] {
   static const MessageUnion values[] = {
     MessageUnion_NONE,
     MessageUnion_initial_state,
@@ -58,13 +62,14 @@ inline const MessageUnion (&EnumValuesMessageUnion())[7] {
     MessageUnion_set_object,
     MessageUnion_add_geometry,
     MessageUnion_remove_geometry,
-    MessageUnion_add_tree
+    MessageUnion_add_tree,
+    MessageUnion_add_view
   };
   return values;
 }
 
 inline const char * const *EnumNamesMessageUnion() {
-  static const char * const names[8] = {
+  static const char * const names[9] = {
     "NONE",
     "initial_state",
     "set_transform",
@@ -72,13 +77,14 @@ inline const char * const *EnumNamesMessageUnion() {
     "add_geometry",
     "remove_geometry",
     "add_tree",
+    "add_view",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameMessageUnion(MessageUnion e) {
-  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_add_tree)) return "";
+  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_add_view)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesMessageUnion()[index];
 }
@@ -107,8 +113,12 @@ template<> struct MessageUnionTraits<slamd::flatb::RemoveGeometry> {
   static const MessageUnion enum_value = MessageUnion_remove_geometry;
 };
 
-template<> struct MessageUnionTraits<slamd::flatb::Tree> {
+template<> struct MessageUnionTraits<slamd::flatb::AddTree> {
   static const MessageUnion enum_value = MessageUnion_add_tree;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::AddView> {
+  static const MessageUnion enum_value = MessageUnion_add_view;
 };
 
 bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *obj, MessageUnion type);
@@ -389,6 +399,48 @@ inline ::flatbuffers::Offset<AddTree> CreateAddTree(
   return builder_.Finish();
 }
 
+struct AddView FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef AddViewBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_VIEW = 4
+  };
+  const slamd::flatb::View *view() const {
+    return GetPointer<const slamd::flatb::View *>(VT_VIEW);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_VIEW) &&
+           verifier.VerifyTable(view()) &&
+           verifier.EndTable();
+  }
+};
+
+struct AddViewBuilder {
+  typedef AddView Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_view(::flatbuffers::Offset<slamd::flatb::View> view) {
+    fbb_.AddOffset(AddView::VT_VIEW, view);
+  }
+  explicit AddViewBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<AddView> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<AddView>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<AddView> CreateAddView(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<slamd::flatb::View> view = 0) {
+  AddViewBuilder builder_(_fbb);
+  builder_.add_view(view);
+  return builder_.Finish();
+}
+
 struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef MessageBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -417,8 +469,11 @@ struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::RemoveGeometry *message_as_remove_geometry() const {
     return message_type() == slamd::flatb::MessageUnion_remove_geometry ? static_cast<const slamd::flatb::RemoveGeometry *>(message()) : nullptr;
   }
-  const slamd::flatb::Tree *message_as_add_tree() const {
-    return message_type() == slamd::flatb::MessageUnion_add_tree ? static_cast<const slamd::flatb::Tree *>(message()) : nullptr;
+  const slamd::flatb::AddTree *message_as_add_tree() const {
+    return message_type() == slamd::flatb::MessageUnion_add_tree ? static_cast<const slamd::flatb::AddTree *>(message()) : nullptr;
+  }
+  const slamd::flatb::AddView *message_as_add_view() const {
+    return message_type() == slamd::flatb::MessageUnion_add_view ? static_cast<const slamd::flatb::AddView *>(message()) : nullptr;
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -449,8 +504,12 @@ template<> inline const slamd::flatb::RemoveGeometry *Message::message_as<slamd:
   return message_as_remove_geometry();
 }
 
-template<> inline const slamd::flatb::Tree *Message::message_as<slamd::flatb::Tree>() const {
+template<> inline const slamd::flatb::AddTree *Message::message_as<slamd::flatb::AddTree>() const {
   return message_as_add_tree();
+}
+
+template<> inline const slamd::flatb::AddView *Message::message_as<slamd::flatb::AddView>() const {
+  return message_as_add_view();
 }
 
 struct MessageBuilder {
@@ -510,7 +569,11 @@ inline bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *ob
       return verifier.VerifyTable(ptr);
     }
     case MessageUnion_add_tree: {
-      auto ptr = reinterpret_cast<const slamd::flatb::Tree *>(obj);
+      auto ptr = reinterpret_cast<const slamd::flatb::AddTree *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_add_view: {
+      auto ptr = reinterpret_cast<const slamd::flatb::AddView *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

@@ -27,6 +27,8 @@ class StateManager {
     void handle_remove_geometry(
         const slamd::flatb::RemoveGeometry* remove_geometry_fb
     );
+    void handle_add_tree(const slamd::flatb::AddTree* add_tree_fb);
+    void handle_add_view(const slamd::flatb::AddView* add_view_fb);
 
     // fs::path layout_path();
 

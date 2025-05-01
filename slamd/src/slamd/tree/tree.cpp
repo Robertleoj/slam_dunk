@@ -68,6 +68,24 @@ void Node::set_object(
     this->broadcast(_utils::builder_buffer(builder));
 }
 
+std::shared_ptr<std::vector<uint8_t>> Tree::get_add_tree_message() {
+    flatbuffers::FlatBufferBuilder builder;
+
+    auto tree_fb = this->serialize(builder);
+
+    auto add_tree_fb = flatb::CreateAddTree(builder, tree_fb);
+
+    auto message_fb = flatb::CreateMessage(
+        builder,
+        flatb::MessageUnion_add_tree,
+        add_tree_fb.Union()
+    );
+
+    builder.Finish(message_fb);
+
+    return _utils::builder_buffer(builder);
+}
+
 void Tree::add_all_geometries_rec(
     Node* node,
     std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>& initial_map
