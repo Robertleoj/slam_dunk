@@ -25,12 +25,17 @@ table RemoveGeometry {
     geometry_id: ulong;
 }
 
+table AddTree {
+    tree: Tree;
+}
+
 union MessageUnion {
     initial_state: InitialState,
     set_transform: SetTransform,
     set_object: SetObject,
     add_geometry: AddGeometry,
-    remove_geometry: RemoveGeometry
+    remove_geometry: RemoveGeometry,
+    add_tree: Tree
 }
 
 table Message {

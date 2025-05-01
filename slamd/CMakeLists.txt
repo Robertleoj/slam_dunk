@@ -71,6 +71,8 @@ add_subdirectory(${LIB_DIR}/glm)
 
 add_subdirectory(flatb)
 
+
+# COMMON
 add_library(slamd_common STATIC)
 target_sources(
     slamd_common
@@ -109,61 +111,7 @@ target_link_libraries(
 )
 
 
-add_library(slamd STATIC)
-add_library(slamd::slamd ALIAS slamd)
-
-target_sources(
-    slamd
-
-    PRIVATE
-        src/slamd/assert.cpp
-        src/slamd/visualizer.cpp
-        src/slamd/view.cpp
-
-        src/slamd/net/connection.cpp
-        src/slamd/net/client_set.cpp
-        src/slamd/net/broadcaster.cpp
-
-        src/slamd/tree/tree.cpp
-        src/slamd/tree/tree_path.cpp
-
-        src/slamd/geom/points_2d.cpp
-        src/slamd/geom/geometry.cpp
-        src/slamd/geom/box.cpp
-        src/slamd/geom/mesh.cpp
-        src/slamd/geom/arrows.cpp
-        src/slamd/geom/sphere.cpp
-        src/slamd/geom/triad.cpp
-        src/slamd/geom/poly_line.cpp
-        src/slamd/geom/image.cpp
-        src/slamd/geom/point_cloud.cpp
-        src/slamd/geom/camera_frustum.cpp
-        src/slamd/geom/poly_line_2d.cpp
-        src/slamd/geom/mono_instanced.cpp
-        src/slamd/geom/circles_2d.cpp
-)
-
-target_include_directories(
-    slamd
-
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-        ${LIB_DIR}/glm
-        ${LIB_DIR}/asio/asio/include
-)
-
-target_link_libraries(
-    slamd 
-    
-    PRIVATE
-        spdlog::spdlog
-    PUBLIC
-        slamd_flatbuff
-        slamd_common
-)
-
-
+# WINDOW
 add_executable(slamd_window)
 
 target_sources(
@@ -235,6 +183,72 @@ target_link_libraries(
         imgui::imgui
         slamd_common
 )
+
+# SLAMD
+add_library(slamd STATIC)
+add_library(slamd::slamd ALIAS slamd)
+
+# pass the path of the window executable into the lib
+
+target_compile_definitions(
+    slamd
+
+    PRIVATE
+        EXEC_PATH=\"$<TARGET_FILE:slamd_window>\"
+)
+
+target_sources(
+    slamd
+
+    PRIVATE
+        src/slamd/assert.cpp
+        src/slamd/visualizer.cpp
+        src/slamd/view.cpp
+
+        src/slamd/net/connection.cpp
+        src/slamd/net/client_set.cpp
+        src/slamd/net/broadcaster.cpp
+
+        src/slamd/tree/tree.cpp
+        src/slamd/tree/tree_path.cpp
+
+        src/slamd/geom/points_2d.cpp
+        src/slamd/geom/geometry.cpp
+        src/slamd/geom/box.cpp
+        src/slamd/geom/mesh.cpp
+        src/slamd/geom/arrows.cpp
+        src/slamd/geom/sphere.cpp
+        src/slamd/geom/triad.cpp
+        src/slamd/geom/poly_line.cpp
+        src/slamd/geom/image.cpp
+        src/slamd/geom/point_cloud.cpp
+        src/slamd/geom/camera_frustum.cpp
+        src/slamd/geom/poly_line_2d.cpp
+        src/slamd/geom/mono_instanced.cpp
+        src/slamd/geom/circles_2d.cpp
+)
+
+target_include_directories(
+    slamd
+
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+        ${LIB_DIR}/glm
+        ${LIB_DIR}/asio/asio/include
+)
+
+target_link_libraries(
+    slamd 
+    
+    PRIVATE
+        spdlog::spdlog
+    PUBLIC
+        slamd_flatbuff
+        slamd_common
+)
+
+
 
 
 # only install if this is the top-level dir

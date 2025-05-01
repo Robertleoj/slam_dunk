@@ -30,9 +30,9 @@ std::vector<glm::vec3> cool_spiral(
 }
 
 int main() {
-    auto window = slamd::visualizer("3d_spiral");
+    auto vis = slamd::visualizer("3d_spiral");
     auto scene = slamd::scene();
-    window->add_scene("scene", scene);
+    vis->add_scene("scene", scene);
 
     glm::vec3 pink(212.0f / 255.0f, 13.0f / 255.0f, 125.0f / 255.0f);
 
@@ -48,6 +48,4 @@ int main() {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
         t += 0.05f;
     }
-
-    return 0;
 }

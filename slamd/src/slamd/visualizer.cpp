@@ -2,6 +2,7 @@
 #include <flatb/visualizer_generated.h>
 #include <spdlog/spdlog.h>
 #include <asio.hpp>
+#include <slamd/spawn_window.hpp>
 #include <slamd/visualizer.hpp>
 
 namespace slamd {
@@ -9,7 +10,8 @@ namespace slamd {
 namespace _vis {
 
 Visualizer::Visualizer(
-    std::string name
+    std::string name,
+    bool spawn
 )
     : name(name) {
     this->client_set = std::make_shared<_net::ClientSet>();
@@ -17,6 +19,10 @@ Visualizer::Visualizer(
     this->server_thread = std::jthread([this](std::stop_token st) {
         this->server_job(st);
     });
+
+    if (spawn) {
+        slamd::spawn_window();
+    }
 }
 
 void Visualizer::add_scene(

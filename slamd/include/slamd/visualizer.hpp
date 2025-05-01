@@ -26,7 +26,7 @@ namespace _vis {
 
 class Visualizer : public std::enable_shared_from_this<Visualizer> {
    public:
-    Visualizer(std::string name);
+    Visualizer(std::string name, bool spawn = true);
     ~Visualizer();
     void add_scene(std::string name, std::shared_ptr<Scene> scene);
     void add_canvas(std::string name, std::shared_ptr<Canvas> canvas);
