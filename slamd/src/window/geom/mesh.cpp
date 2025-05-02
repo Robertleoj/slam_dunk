@@ -108,8 +108,7 @@ void Mesh::initialize() {
 }
 
 void Mesh::update_positions(
-    const std::vector<glm::vec3>& positions,
-    bool recompute_normals
+    const std::vector<glm::vec3>& positions
 ) {
     if (positions.size() != this->mesh_data.positions.size()) {
         throw std::invalid_argument(
@@ -118,10 +117,6 @@ void Mesh::update_positions(
     }
 
     this->mesh_data.positions = positions;
-    if (recompute_normals) {
-        this->mesh_data.recompute_normals();
-        this->normal_update_pending = true;
-    }
     this->pos_update_pending = true;
 };
 void Mesh::update_colors(

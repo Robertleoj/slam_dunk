@@ -36,6 +36,9 @@ class Geometry {
     std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
     find_visualizers();
 
+   protected:
+    void broadcast(std::shared_ptr<std::vector<uint8_t>> buff);
+
    public:
     const _id::GeometryID id;
     std::map<_id::NodeID, std::weak_ptr<_tree::Node>> attached_to;

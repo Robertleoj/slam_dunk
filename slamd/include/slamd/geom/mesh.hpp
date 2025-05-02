@@ -34,6 +34,10 @@ class Mesh : public Geometry {
     void update_normals(const std::vector<glm::vec3>& normals);
 
    private:
+    void
+    update_normals_internal(const std::vector<glm::vec3>& normals, bool assign);
+
+   private:
     data::MeshData mesh_data;
     float min_brightness;
 };

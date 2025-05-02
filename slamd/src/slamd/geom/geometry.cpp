@@ -70,6 +70,16 @@ void Geometry::detach(
     }
 }
 
+void Geometry::broadcast(
+    std::shared_ptr<std::vector<uint8_t>> buff
+) {
+    auto visualizers = this->find_visualizers();
+
+    for (auto& [key, vis] : visualizers) {
+        vis->broadcast(buff);
+    }
+}
+
 std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
 Geometry::find_visualizers() {
     std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>> map;

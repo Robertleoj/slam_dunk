@@ -20,6 +20,15 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 25 &&
 namespace slamd {
 namespace flatb {
 
+struct UpdateMeshPositions;
+struct UpdateMeshPositionsBuilder;
+
+struct UpdateMeshColors;
+struct UpdateMeshColorsBuilder;
+
+struct UpdateMeshNormals;
+struct UpdateMeshNormalsBuilder;
+
 struct SetTransform;
 struct SetTransformBuilder;
 
@@ -50,11 +59,14 @@ enum MessageUnion : uint8_t {
   MessageUnion_remove_geometry = 5,
   MessageUnion_add_tree = 6,
   MessageUnion_add_view = 7,
+  MessageUnion_update_mesh_positions = 8,
+  MessageUnion_update_mesh_colors = 9,
+  MessageUnion_update_mesh_normals = 10,
   MessageUnion_MIN = MessageUnion_NONE,
-  MessageUnion_MAX = MessageUnion_add_view
+  MessageUnion_MAX = MessageUnion_update_mesh_normals
 };
 
-inline const MessageUnion (&EnumValuesMessageUnion())[8] {
+inline const MessageUnion (&EnumValuesMessageUnion())[11] {
   static const MessageUnion values[] = {
     MessageUnion_NONE,
     MessageUnion_initial_state,
@@ -63,13 +75,16 @@ inline const MessageUnion (&EnumValuesMessageUnion())[8] {
     MessageUnion_add_geometry,
     MessageUnion_remove_geometry,
     MessageUnion_add_tree,
-    MessageUnion_add_view
+    MessageUnion_add_view,
+    MessageUnion_update_mesh_positions,
+    MessageUnion_update_mesh_colors,
+    MessageUnion_update_mesh_normals
   };
   return values;
 }
 
 inline const char * const *EnumNamesMessageUnion() {
-  static const char * const names[9] = {
+  static const char * const names[12] = {
     "NONE",
     "initial_state",
     "set_transform",
@@ -78,13 +93,16 @@ inline const char * const *EnumNamesMessageUnion() {
     "remove_geometry",
     "add_tree",
     "add_view",
+    "update_mesh_positions",
+    "update_mesh_colors",
+    "update_mesh_normals",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameMessageUnion(MessageUnion e) {
-  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_add_view)) return "";
+  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_update_mesh_normals)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesMessageUnion()[index];
 }
@@ -121,8 +139,209 @@ template<> struct MessageUnionTraits<slamd::flatb::AddView> {
   static const MessageUnion enum_value = MessageUnion_add_view;
 };
 
+template<> struct MessageUnionTraits<slamd::flatb::UpdateMeshPositions> {
+  static const MessageUnion enum_value = MessageUnion_update_mesh_positions;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::UpdateMeshColors> {
+  static const MessageUnion enum_value = MessageUnion_update_mesh_colors;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::UpdateMeshNormals> {
+  static const MessageUnion enum_value = MessageUnion_update_mesh_normals;
+};
+
 bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *obj, MessageUnion type);
 bool VerifyMessageUnionVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<uint8_t> *types);
+
+struct UpdateMeshPositions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UpdateMeshPositionsBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_OBJECT_ID = 4,
+    VT_POSITIONS = 6
+  };
+  uint64_t object_id() const {
+    return GetField<uint64_t>(VT_OBJECT_ID, 0);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *positions() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_POSITIONS);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_OBJECT_ID, 8) &&
+           VerifyOffset(verifier, VT_POSITIONS) &&
+           verifier.VerifyVector(positions()) &&
+           verifier.EndTable();
+  }
+};
+
+struct UpdateMeshPositionsBuilder {
+  typedef UpdateMeshPositions Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_object_id(uint64_t object_id) {
+    fbb_.AddElement<uint64_t>(UpdateMeshPositions::VT_OBJECT_ID, object_id, 0);
+  }
+  void add_positions(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> positions) {
+    fbb_.AddOffset(UpdateMeshPositions::VT_POSITIONS, positions);
+  }
+  explicit UpdateMeshPositionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UpdateMeshPositions> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UpdateMeshPositions>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UpdateMeshPositions> CreateUpdateMeshPositions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> positions = 0) {
+  UpdateMeshPositionsBuilder builder_(_fbb);
+  builder_.add_object_id(object_id);
+  builder_.add_positions(positions);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<UpdateMeshPositions> CreateUpdateMeshPositionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    const std::vector<slamd::flatb::Vec3> *positions = nullptr) {
+  auto positions__ = positions ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*positions) : 0;
+  return slamd::flatb::CreateUpdateMeshPositions(
+      _fbb,
+      object_id,
+      positions__);
+}
+
+struct UpdateMeshColors FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UpdateMeshColorsBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_OBJECT_ID = 4,
+    VT_COLORS = 6
+  };
+  uint64_t object_id() const {
+    return GetField<uint64_t>(VT_OBJECT_ID, 0);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *colors() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_COLORS);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_OBJECT_ID, 8) &&
+           VerifyOffset(verifier, VT_COLORS) &&
+           verifier.VerifyVector(colors()) &&
+           verifier.EndTable();
+  }
+};
+
+struct UpdateMeshColorsBuilder {
+  typedef UpdateMeshColors Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_object_id(uint64_t object_id) {
+    fbb_.AddElement<uint64_t>(UpdateMeshColors::VT_OBJECT_ID, object_id, 0);
+  }
+  void add_colors(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors) {
+    fbb_.AddOffset(UpdateMeshColors::VT_COLORS, colors);
+  }
+  explicit UpdateMeshColorsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UpdateMeshColors> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UpdateMeshColors>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UpdateMeshColors> CreateUpdateMeshColors(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors = 0) {
+  UpdateMeshColorsBuilder builder_(_fbb);
+  builder_.add_object_id(object_id);
+  builder_.add_colors(colors);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<UpdateMeshColors> CreateUpdateMeshColorsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    const std::vector<slamd::flatb::Vec3> *colors = nullptr) {
+  auto colors__ = colors ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*colors) : 0;
+  return slamd::flatb::CreateUpdateMeshColors(
+      _fbb,
+      object_id,
+      colors__);
+}
+
+struct UpdateMeshNormals FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UpdateMeshNormalsBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_OBJECT_ID = 4,
+    VT_NORMALS = 6
+  };
+  uint64_t object_id() const {
+    return GetField<uint64_t>(VT_OBJECT_ID, 0);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *normals() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_NORMALS);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_OBJECT_ID, 8) &&
+           VerifyOffset(verifier, VT_NORMALS) &&
+           verifier.VerifyVector(normals()) &&
+           verifier.EndTable();
+  }
+};
+
+struct UpdateMeshNormalsBuilder {
+  typedef UpdateMeshNormals Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_object_id(uint64_t object_id) {
+    fbb_.AddElement<uint64_t>(UpdateMeshNormals::VT_OBJECT_ID, object_id, 0);
+  }
+  void add_normals(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> normals) {
+    fbb_.AddOffset(UpdateMeshNormals::VT_NORMALS, normals);
+  }
+  explicit UpdateMeshNormalsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UpdateMeshNormals> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UpdateMeshNormals>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UpdateMeshNormals> CreateUpdateMeshNormals(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> normals = 0) {
+  UpdateMeshNormalsBuilder builder_(_fbb);
+  builder_.add_object_id(object_id);
+  builder_.add_normals(normals);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<UpdateMeshNormals> CreateUpdateMeshNormalsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    const std::vector<slamd::flatb::Vec3> *normals = nullptr) {
+  auto normals__ = normals ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*normals) : 0;
+  return slamd::flatb::CreateUpdateMeshNormals(
+      _fbb,
+      object_id,
+      normals__);
+}
 
 struct SetTransform FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef SetTransformBuilder Builder;
@@ -475,6 +694,15 @@ struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::AddView *message_as_add_view() const {
     return message_type() == slamd::flatb::MessageUnion_add_view ? static_cast<const slamd::flatb::AddView *>(message()) : nullptr;
   }
+  const slamd::flatb::UpdateMeshPositions *message_as_update_mesh_positions() const {
+    return message_type() == slamd::flatb::MessageUnion_update_mesh_positions ? static_cast<const slamd::flatb::UpdateMeshPositions *>(message()) : nullptr;
+  }
+  const slamd::flatb::UpdateMeshColors *message_as_update_mesh_colors() const {
+    return message_type() == slamd::flatb::MessageUnion_update_mesh_colors ? static_cast<const slamd::flatb::UpdateMeshColors *>(message()) : nullptr;
+  }
+  const slamd::flatb::UpdateMeshNormals *message_as_update_mesh_normals() const {
+    return message_type() == slamd::flatb::MessageUnion_update_mesh_normals ? static_cast<const slamd::flatb::UpdateMeshNormals *>(message()) : nullptr;
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_MESSAGE_TYPE, 1) &&
@@ -510,6 +738,18 @@ template<> inline const slamd::flatb::AddTree *Message::message_as<slamd::flatb:
 
 template<> inline const slamd::flatb::AddView *Message::message_as<slamd::flatb::AddView>() const {
   return message_as_add_view();
+}
+
+template<> inline const slamd::flatb::UpdateMeshPositions *Message::message_as<slamd::flatb::UpdateMeshPositions>() const {
+  return message_as_update_mesh_positions();
+}
+
+template<> inline const slamd::flatb::UpdateMeshColors *Message::message_as<slamd::flatb::UpdateMeshColors>() const {
+  return message_as_update_mesh_colors();
+}
+
+template<> inline const slamd::flatb::UpdateMeshNormals *Message::message_as<slamd::flatb::UpdateMeshNormals>() const {
+  return message_as_update_mesh_normals();
 }
 
 struct MessageBuilder {
@@ -574,6 +814,18 @@ inline bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *ob
     }
     case MessageUnion_add_view: {
       auto ptr = reinterpret_cast<const slamd::flatb::AddView *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_update_mesh_positions: {
+      auto ptr = reinterpret_cast<const slamd::flatb::UpdateMeshPositions *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_update_mesh_colors: {
+      auto ptr = reinterpret_cast<const slamd::flatb::UpdateMeshColors *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_update_mesh_normals: {
+      auto ptr = reinterpret_cast<const slamd::flatb::UpdateMeshNormals *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

@@ -30,6 +30,16 @@ class StateManager {
     void handle_add_tree(const slamd::flatb::AddTree* add_tree_fb);
     void handle_add_view(const slamd::flatb::AddView* add_view_fb);
 
+    void handle_update_mesh_colors(
+        const slamd::flatb::UpdateMeshColors* update_mesh_colors_fb
+    );
+    void handle_update_mesh_positions(
+        const slamd::flatb::UpdateMeshPositions* update_mesh_positions_fb
+    );
+    void handle_update_mesh_normals(
+        const slamd::flatb::UpdateMeshNormals* update_mesh_normals_fb
+    );
+
     // fs::path layout_path();
 
    public:

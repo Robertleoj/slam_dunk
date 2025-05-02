@@ -1,8 +1,10 @@
 #include <flatb/visualizer_generated.h>
 #include <spdlog/spdlog.h>
 #include <asio.hpp>
+#include <memory>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/stringify.hpp>
+#include <slamd_window/geom/mesh.hpp>
 #include <slamd_window/state_manager.hpp>
 #include <slamd_window/view/canvas_view.hpp>
 #include <slamd_window/view/scene_view.hpp>
@@ -20,7 +22,7 @@ void StateManager::try_connect(
 }
 
 void StateManager::handle_initial_state(
-    const slamd::flatb::InitialState* full_state_fb
+    const flatb::InitialState* full_state_fb
 ) {
     // const slamd::flatb::InitialState* full_state_fb =
     // slamd::flatb::GetInitialState(data.data());
@@ -127,6 +129,33 @@ void StateManager::handle_add_view(
     this->views.insert({view_name, std::move(view)});
 }
 
+void StateManager::handle_update_mesh_colors(
+    const slamd::flatb::UpdateMeshColors* update_mesh_colors_fb
+) {
+    auto id = _id::GeometryID(update_mesh_colors_fb->object_id());
+    auto geom = std::dynamic_pointer_cast<_geom::Mesh>(this->geometries.at(id));
+    auto colors = gmath::deserialize_vector(update_mesh_colors_fb->colors());
+    geom->update_colors(colors);
+}
+void StateManager::handle_update_mesh_positions(
+    const slamd::flatb::UpdateMeshPositions* update_mesh_positions_fb
+) {
+    auto id = _id::GeometryID(update_mesh_positions_fb->object_id());
+    auto geom = std::dynamic_pointer_cast<_geom::Mesh>(this->geometries.at(id));
+    auto positions =
+        gmath::deserialize_vector(update_mesh_positions_fb->positions());
+
+    geom->update_positions(positions);
+}
+void StateManager::handle_update_mesh_normals(
+    const slamd::flatb::UpdateMeshNormals* update_mesh_normals_fb
+) {
+    auto id = _id::GeometryID(update_mesh_normals_fb->object_id());
+    auto geom = std::dynamic_pointer_cast<_geom::Mesh>(this->geometries.at(id));
+    auto normals = gmath::deserialize_vector(update_mesh_normals_fb->normals());
+    geom->update_normals(normals);
+}
+
 void StateManager::apply_updates() {
     if (!this->connection.has_value()) {
         return;
@@ -176,6 +205,25 @@ void StateManager::apply_updates() {
             }
             case (slamd::flatb::MessageUnion_add_view): {
                 this->handle_add_view(message_fb->message_as_add_view());
+                break;
+            }
+
+            case (slamd::flatb::MessageUnion_update_mesh_colors): {
+                this->handle_update_mesh_colors(
+                    message_fb->message_as_update_mesh_colors()
+                );
+                break;
+            }
+            case (slamd::flatb::MessageUnion_update_mesh_positions): {
+                this->handle_update_mesh_positions(
+                    message_fb->message_as_update_mesh_positions()
+                );
+                break;
+            }
+            case (slamd::flatb::MessageUnion_update_mesh_normals): {
+                this->handle_update_mesh_normals(
+                    message_fb->message_as_update_mesh_normals()
+                );
                 break;
             }
 

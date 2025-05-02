@@ -5,6 +5,25 @@ include "geometry.fbs";
 
 namespace slamd.flatb;
 
+// object updates
+
+table UpdateMeshPositions {
+    object_id: ulong;
+    positions: [Vec3];
+}
+
+table UpdateMeshColors {
+    object_id: ulong;
+    colors: [Vec3];
+}
+
+table UpdateMeshNormals {
+    object_id: ulong;
+    normals: [Vec3];
+}
+
+
+// general updates
 table SetTransform {
     tree_id: ulong;
     tree_path: string;
@@ -33,6 +52,8 @@ table AddView {
     view: View;
 }
 
+// message
+
 union MessageUnion {
     initial_state: InitialState,
     set_transform: SetTransform,
@@ -40,7 +61,12 @@ union MessageUnion {
     add_geometry: AddGeometry,
     remove_geometry: RemoveGeometry,
     add_tree: AddTree,
-    add_view: AddView
+    add_view: AddView,
+
+    // object updates
+    update_mesh_positions: UpdateMeshPositions,
+    update_mesh_colors: UpdateMeshColors,
+    update_mesh_normals: UpdateMeshNormals
 }
 
 table Message {

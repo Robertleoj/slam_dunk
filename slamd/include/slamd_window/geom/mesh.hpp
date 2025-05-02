@@ -30,10 +30,7 @@ class Mesh : public Geometry {
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
-    void update_positions(
-        const std::vector<glm::vec3>& positions,
-        bool recompute_normals = true
-    );
+    void update_positions(const std::vector<glm::vec3>& positions);
     void update_colors(const std::vector<glm::vec3>& colors);
     void update_normals(const std::vector<glm::vec3>& normals);
 
