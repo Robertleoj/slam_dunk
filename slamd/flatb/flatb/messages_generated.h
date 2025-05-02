@@ -29,6 +29,15 @@ struct UpdateMeshColorsBuilder;
 struct UpdateMeshNormals;
 struct UpdateMeshNormalsBuilder;
 
+struct UpdateCircles2DPositions;
+struct UpdateCircles2DPositionsBuilder;
+
+struct UpdateCircles2DColors;
+struct UpdateCircles2DColorsBuilder;
+
+struct UpdateCircles2DRadii;
+struct UpdateCircles2DRadiiBuilder;
+
 struct SetTransform;
 struct SetTransformBuilder;
 
@@ -62,11 +71,14 @@ enum MessageUnion : uint8_t {
   MessageUnion_update_mesh_positions = 8,
   MessageUnion_update_mesh_colors = 9,
   MessageUnion_update_mesh_normals = 10,
+  MessageUnion_update_circles2d_positions = 11,
+  MessageUnion_update_circles2d_colors = 12,
+  MessageUnion_update_circles2d_radii = 13,
   MessageUnion_MIN = MessageUnion_NONE,
-  MessageUnion_MAX = MessageUnion_update_mesh_normals
+  MessageUnion_MAX = MessageUnion_update_circles2d_radii
 };
 
-inline const MessageUnion (&EnumValuesMessageUnion())[11] {
+inline const MessageUnion (&EnumValuesMessageUnion())[14] {
   static const MessageUnion values[] = {
     MessageUnion_NONE,
     MessageUnion_initial_state,
@@ -78,13 +90,16 @@ inline const MessageUnion (&EnumValuesMessageUnion())[11] {
     MessageUnion_add_view,
     MessageUnion_update_mesh_positions,
     MessageUnion_update_mesh_colors,
-    MessageUnion_update_mesh_normals
+    MessageUnion_update_mesh_normals,
+    MessageUnion_update_circles2d_positions,
+    MessageUnion_update_circles2d_colors,
+    MessageUnion_update_circles2d_radii
   };
   return values;
 }
 
 inline const char * const *EnumNamesMessageUnion() {
-  static const char * const names[12] = {
+  static const char * const names[15] = {
     "NONE",
     "initial_state",
     "set_transform",
@@ -96,13 +111,16 @@ inline const char * const *EnumNamesMessageUnion() {
     "update_mesh_positions",
     "update_mesh_colors",
     "update_mesh_normals",
+    "update_circles2d_positions",
+    "update_circles2d_colors",
+    "update_circles2d_radii",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameMessageUnion(MessageUnion e) {
-  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_update_mesh_normals)) return "";
+  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_update_circles2d_radii)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesMessageUnion()[index];
 }
@@ -149,6 +167,18 @@ template<> struct MessageUnionTraits<slamd::flatb::UpdateMeshColors> {
 
 template<> struct MessageUnionTraits<slamd::flatb::UpdateMeshNormals> {
   static const MessageUnion enum_value = MessageUnion_update_mesh_normals;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::UpdateCircles2DPositions> {
+  static const MessageUnion enum_value = MessageUnion_update_circles2d_positions;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::UpdateCircles2DColors> {
+  static const MessageUnion enum_value = MessageUnion_update_circles2d_colors;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::UpdateCircles2DRadii> {
+  static const MessageUnion enum_value = MessageUnion_update_circles2d_radii;
 };
 
 bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *obj, MessageUnion type);
@@ -341,6 +371,195 @@ inline ::flatbuffers::Offset<UpdateMeshNormals> CreateUpdateMeshNormalsDirect(
       _fbb,
       object_id,
       normals__);
+}
+
+struct UpdateCircles2DPositions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UpdateCircles2DPositionsBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_OBJECT_ID = 4,
+    VT_POSITIONS = 6
+  };
+  uint64_t object_id() const {
+    return GetField<uint64_t>(VT_OBJECT_ID, 0);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec2 *> *positions() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec2 *> *>(VT_POSITIONS);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_OBJECT_ID, 8) &&
+           VerifyOffset(verifier, VT_POSITIONS) &&
+           verifier.VerifyVector(positions()) &&
+           verifier.EndTable();
+  }
+};
+
+struct UpdateCircles2DPositionsBuilder {
+  typedef UpdateCircles2DPositions Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_object_id(uint64_t object_id) {
+    fbb_.AddElement<uint64_t>(UpdateCircles2DPositions::VT_OBJECT_ID, object_id, 0);
+  }
+  void add_positions(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec2 *>> positions) {
+    fbb_.AddOffset(UpdateCircles2DPositions::VT_POSITIONS, positions);
+  }
+  explicit UpdateCircles2DPositionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UpdateCircles2DPositions> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UpdateCircles2DPositions>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UpdateCircles2DPositions> CreateUpdateCircles2DPositions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec2 *>> positions = 0) {
+  UpdateCircles2DPositionsBuilder builder_(_fbb);
+  builder_.add_object_id(object_id);
+  builder_.add_positions(positions);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<UpdateCircles2DPositions> CreateUpdateCircles2DPositionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    const std::vector<slamd::flatb::Vec2> *positions = nullptr) {
+  auto positions__ = positions ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec2>(*positions) : 0;
+  return slamd::flatb::CreateUpdateCircles2DPositions(
+      _fbb,
+      object_id,
+      positions__);
+}
+
+struct UpdateCircles2DColors FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UpdateCircles2DColorsBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_OBJECT_ID = 4,
+    VT_COLORS = 6
+  };
+  uint64_t object_id() const {
+    return GetField<uint64_t>(VT_OBJECT_ID, 0);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *colors() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_COLORS);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_OBJECT_ID, 8) &&
+           VerifyOffset(verifier, VT_COLORS) &&
+           verifier.VerifyVector(colors()) &&
+           verifier.EndTable();
+  }
+};
+
+struct UpdateCircles2DColorsBuilder {
+  typedef UpdateCircles2DColors Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_object_id(uint64_t object_id) {
+    fbb_.AddElement<uint64_t>(UpdateCircles2DColors::VT_OBJECT_ID, object_id, 0);
+  }
+  void add_colors(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors) {
+    fbb_.AddOffset(UpdateCircles2DColors::VT_COLORS, colors);
+  }
+  explicit UpdateCircles2DColorsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UpdateCircles2DColors> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UpdateCircles2DColors>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UpdateCircles2DColors> CreateUpdateCircles2DColors(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors = 0) {
+  UpdateCircles2DColorsBuilder builder_(_fbb);
+  builder_.add_object_id(object_id);
+  builder_.add_colors(colors);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<UpdateCircles2DColors> CreateUpdateCircles2DColorsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    const std::vector<slamd::flatb::Vec3> *colors = nullptr) {
+  auto colors__ = colors ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*colors) : 0;
+  return slamd::flatb::CreateUpdateCircles2DColors(
+      _fbb,
+      object_id,
+      colors__);
+}
+
+struct UpdateCircles2DRadii FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UpdateCircles2DRadiiBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_OBJECT_ID = 4,
+    VT_RADII = 6
+  };
+  uint64_t object_id() const {
+    return GetField<uint64_t>(VT_OBJECT_ID, 0);
+  }
+  const ::flatbuffers::Vector<float> *radii() const {
+    return GetPointer<const ::flatbuffers::Vector<float> *>(VT_RADII);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_OBJECT_ID, 8) &&
+           VerifyOffset(verifier, VT_RADII) &&
+           verifier.VerifyVector(radii()) &&
+           verifier.EndTable();
+  }
+};
+
+struct UpdateCircles2DRadiiBuilder {
+  typedef UpdateCircles2DRadii Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_object_id(uint64_t object_id) {
+    fbb_.AddElement<uint64_t>(UpdateCircles2DRadii::VT_OBJECT_ID, object_id, 0);
+  }
+  void add_radii(::flatbuffers::Offset<::flatbuffers::Vector<float>> radii) {
+    fbb_.AddOffset(UpdateCircles2DRadii::VT_RADII, radii);
+  }
+  explicit UpdateCircles2DRadiiBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UpdateCircles2DRadii> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UpdateCircles2DRadii>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UpdateCircles2DRadii> CreateUpdateCircles2DRadii(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<float>> radii = 0) {
+  UpdateCircles2DRadiiBuilder builder_(_fbb);
+  builder_.add_object_id(object_id);
+  builder_.add_radii(radii);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<UpdateCircles2DRadii> CreateUpdateCircles2DRadiiDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    const std::vector<float> *radii = nullptr) {
+  auto radii__ = radii ? _fbb.CreateVector<float>(*radii) : 0;
+  return slamd::flatb::CreateUpdateCircles2DRadii(
+      _fbb,
+      object_id,
+      radii__);
 }
 
 struct SetTransform FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
@@ -703,6 +922,15 @@ struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::UpdateMeshNormals *message_as_update_mesh_normals() const {
     return message_type() == slamd::flatb::MessageUnion_update_mesh_normals ? static_cast<const slamd::flatb::UpdateMeshNormals *>(message()) : nullptr;
   }
+  const slamd::flatb::UpdateCircles2DPositions *message_as_update_circles2d_positions() const {
+    return message_type() == slamd::flatb::MessageUnion_update_circles2d_positions ? static_cast<const slamd::flatb::UpdateCircles2DPositions *>(message()) : nullptr;
+  }
+  const slamd::flatb::UpdateCircles2DColors *message_as_update_circles2d_colors() const {
+    return message_type() == slamd::flatb::MessageUnion_update_circles2d_colors ? static_cast<const slamd::flatb::UpdateCircles2DColors *>(message()) : nullptr;
+  }
+  const slamd::flatb::UpdateCircles2DRadii *message_as_update_circles2d_radii() const {
+    return message_type() == slamd::flatb::MessageUnion_update_circles2d_radii ? static_cast<const slamd::flatb::UpdateCircles2DRadii *>(message()) : nullptr;
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_MESSAGE_TYPE, 1) &&
@@ -750,6 +978,18 @@ template<> inline const slamd::flatb::UpdateMeshColors *Message::message_as<slam
 
 template<> inline const slamd::flatb::UpdateMeshNormals *Message::message_as<slamd::flatb::UpdateMeshNormals>() const {
   return message_as_update_mesh_normals();
+}
+
+template<> inline const slamd::flatb::UpdateCircles2DPositions *Message::message_as<slamd::flatb::UpdateCircles2DPositions>() const {
+  return message_as_update_circles2d_positions();
+}
+
+template<> inline const slamd::flatb::UpdateCircles2DColors *Message::message_as<slamd::flatb::UpdateCircles2DColors>() const {
+  return message_as_update_circles2d_colors();
+}
+
+template<> inline const slamd::flatb::UpdateCircles2DRadii *Message::message_as<slamd::flatb::UpdateCircles2DRadii>() const {
+  return message_as_update_circles2d_radii();
 }
 
 struct MessageBuilder {
@@ -826,6 +1066,18 @@ inline bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *ob
     }
     case MessageUnion_update_mesh_normals: {
       auto ptr = reinterpret_cast<const slamd::flatb::UpdateMeshNormals *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_update_circles2d_positions: {
+      auto ptr = reinterpret_cast<const slamd::flatb::UpdateCircles2DPositions *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_update_circles2d_colors: {
+      auto ptr = reinterpret_cast<const slamd::flatb::UpdateCircles2DColors *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_update_circles2d_radii: {
+      auto ptr = reinterpret_cast<const slamd::flatb::UpdateCircles2DRadii *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

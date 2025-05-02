@@ -7,6 +7,7 @@ namespace slamd.flatb;
 
 // object updates
 
+// mesh
 table UpdateMeshPositions {
     object_id: ulong;
     positions: [Vec3];
@@ -22,6 +23,22 @@ table UpdateMeshNormals {
     normals: [Vec3];
 }
 
+
+// circles2d
+table UpdateCircles2DPositions {
+    object_id: ulong;
+    positions: [Vec2];
+}
+
+table UpdateCircles2DColors {
+    object_id: ulong;
+    colors: [Vec3];
+}
+
+table UpdateCircles2DRadii {
+    object_id: ulong;
+    radii: [float];
+}
 
 // general updates
 table SetTransform {
@@ -64,9 +81,15 @@ union MessageUnion {
     add_view: AddView,
 
     // object updates
+    // mesh
     update_mesh_positions: UpdateMeshPositions,
     update_mesh_colors: UpdateMeshColors,
-    update_mesh_normals: UpdateMeshNormals
+    update_mesh_normals: UpdateMeshNormals,
+
+    // circles 2d
+    update_circles2d_positions: UpdateCircles2DPositions,
+    update_circles2d_colors: UpdateCircles2DColors,
+    update_circles2d_radii: UpdateCircles2DRadii
 }
 
 table Message {

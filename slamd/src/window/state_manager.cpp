@@ -4,6 +4,7 @@
 #include <memory>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/stringify.hpp>
+#include <slamd_window/geom/circles_2d.hpp>
 #include <slamd_window/geom/mesh.hpp>
 #include <slamd_window/state_manager.hpp>
 #include <slamd_window/view/canvas_view.hpp>
@@ -156,6 +157,36 @@ void StateManager::handle_update_mesh_normals(
     geom->update_normals(normals);
 }
 
+void StateManager::handle_update_circles2d_positions(
+    const slamd::flatb::UpdateCircles2DPositions* update_fb
+) {
+    auto id = _id::GeometryID(update_fb->object_id());
+    auto geom =
+        std::dynamic_pointer_cast<_geom::Circles2D>(this->geometries.at(id));
+    auto data = gmath::deserialize_vector(update_fb->positions());
+    geom->update_positions(data);
+}
+
+void StateManager::handle_update_circles2d_colors(
+    const slamd::flatb::UpdateCircles2DColors* update_fb
+) {
+    auto id = _id::GeometryID(update_fb->object_id());
+    auto geom =
+        std::dynamic_pointer_cast<_geom::Circles2D>(this->geometries.at(id));
+    auto data = gmath::deserialize_vector(update_fb->colors());
+    geom->update_colors(data);
+}
+
+void StateManager::handle_update_circles2d_radii(
+    const slamd::flatb::UpdateCircles2DRadii* update_fb
+) {
+    auto id = _id::GeometryID(update_fb->object_id());
+    auto geom =
+        std::dynamic_pointer_cast<_geom::Circles2D>(this->geometries.at(id));
+    auto data = gmath::deserialize_vector(update_fb->radii());
+    geom->update_radii(data);
+}
+
 void StateManager::apply_updates() {
     if (!this->connection.has_value()) {
         return;
@@ -223,6 +254,24 @@ void StateManager::apply_updates() {
             case (slamd::flatb::MessageUnion_update_mesh_normals): {
                 this->handle_update_mesh_normals(
                     message_fb->message_as_update_mesh_normals()
+                );
+                break;
+            }
+            case (slamd::flatb::MessageUnion_update_circles2d_colors): {
+                this->handle_update_circles2d_colors(
+                    message_fb->message_as_update_circles2d_colors()
+                );
+                break;
+            }
+            case (slamd::flatb::MessageUnion_update_circles2d_positions): {
+                this->handle_update_circles2d_positions(
+                    message_fb->message_as_update_circles2d_positions()
+                );
+                break;
+            }
+            case (slamd::flatb::MessageUnion_update_circles2d_radii): {
+                this->handle_update_circles2d_radii(
+                    message_fb->message_as_update_circles2d_radii()
                 );
                 break;
             }

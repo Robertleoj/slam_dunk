@@ -40,6 +40,16 @@ class StateManager {
         const slamd::flatb::UpdateMeshNormals* update_mesh_normals_fb
     );
 
+    void handle_update_circles2d_positions(
+        const slamd::flatb::UpdateCircles2DPositions* update_fb
+    );
+    void handle_update_circles2d_colors(
+        const slamd::flatb::UpdateCircles2DColors* update_fb
+    );
+    void handle_update_circles2d_radii(
+        const slamd::flatb::UpdateCircles2DRadii* update_fb
+    );
+
     // fs::path layout_path();
 
    public:
