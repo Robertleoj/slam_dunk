@@ -33,20 +33,20 @@ class PointCloud : public Geometry {
     // SimpleMesh mesh;
 
     void initialize();
-    std::tuple<size_t, uint, uint> initialize_sphere_mesh();
-    uint initialize_pos_buffer();
-    uint initialize_radii_buffer();
-    uint initialize_color_buffer();
+    std::tuple<size_t, uint32_t, uint32_t> initialize_sphere_mesh();
+    uint32_t initialize_pos_buffer();
+    uint32_t initialize_radii_buffer();
+    uint32_t initialize_color_buffer();
     void handle_updates();
 
    private:
     ShaderProgram shader;
-    uint vao_id = 0;
-    uint mesh_vbo_id = 0;
-    uint mesh_eab_id = 0;
-    uint pos_vbo_id = 0;
-    uint radii_vbo_id = 0;
-    uint colors_vbo_id = 0;
+    uint32_t vao_id = 0;
+    uint32_t mesh_vbo_id = 0;
+    uint32_t mesh_eab_id = 0;
+    uint32_t pos_vbo_id = 0;
+    uint32_t radii_vbo_id = 0;
+    uint32_t colors_vbo_id = 0;
     size_t ball_vertex_count;
 
     std::vector<glm::vec3> positions;

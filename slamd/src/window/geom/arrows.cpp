@@ -16,7 +16,7 @@ std::shared_ptr<Arrows> Arrows::deserialize(
     );
 }
 
-constexpr uint segments = 12;
+constexpr uint32_t segments = 12;
 struct ArrowMesh {
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec3> colors;

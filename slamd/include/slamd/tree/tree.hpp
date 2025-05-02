@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <slamd/geom/geometry.hpp>
 #include <slamd/tree/tree_path.hpp>
 #include <slamd/view.hpp>

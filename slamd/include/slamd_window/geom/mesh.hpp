@@ -44,11 +44,11 @@ class Mesh : public Geometry {
    private:
     static thread_local std::optional<ShaderProgram> shader;
 
-    uint vao_id = 0;
-    uint pos_vbo_id = 0;
-    uint color_vbo_id = 0;
-    uint normal_vbo_id = 0;
-    uint eab_id = 0;
+    uint32_t vao_id = 0;
+    uint32_t pos_vbo_id = 0;
+    uint32_t color_vbo_id = 0;
+    uint32_t normal_vbo_id = 0;
+    uint32_t eab_id = 0;
 
     slamd::data::MeshData mesh_data;
     bool pos_update_pending = false;

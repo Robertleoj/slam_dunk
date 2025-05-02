@@ -25,9 +25,9 @@ class MonoInstanced : public Geometry {
 
    private:
     void initialize();
-    std::tuple<uint, uint> initialize_mesh();
-    uint initialize_trans_buffer();
-    uint initialize_color_buffer();
+    std::tuple<uint32_t, uint32_t> initialize_mesh();
+    uint32_t initialize_trans_buffer();
+    uint32_t initialize_color_buffer();
     void handle_updates();
 
    private:
@@ -36,11 +36,11 @@ class MonoInstanced : public Geometry {
     std::vector<uint32_t> triangle_indices;
 
     ShaderProgram shader;
-    uint vao_id = 0;
-    uint mesh_vbo_id = 0;
-    uint mesh_eab_id = 0;
-    uint trans_vbo_id = 0;
-    uint colors_vbo_id = 0;
+    uint32_t vao_id = 0;
+    uint32_t mesh_vbo_id = 0;
+    uint32_t mesh_eab_id = 0;
+    uint32_t trans_vbo_id = 0;
+    uint32_t colors_vbo_id = 0;
 
     std::vector<glm::mat4> transforms;
     bool pending_trans_update;

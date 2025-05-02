@@ -1,5 +1,7 @@
 #pragma once
 
+extern char **environ;
+
 #include <spawn.h>
 #include <spdlog/spdlog.h>
 
