@@ -2,7 +2,6 @@
 #include <spdlog/spdlog.h>
 #include <filesystem>
 #include <format>
-#include <iostream>
 #include <slamd/spawn_window.hpp>
 
 extern char** environ;
@@ -30,8 +29,6 @@ void spawn_window(
 ) {
     std::filesystem::path executable_path(exe_path.value_or(EXEC_PATH));
     pid_t pid;
-
-    std::cout << "Executable path: " << executable_path << std::endl;
 
     if (!std::filesystem::exists(executable_path)) {
         throw std::runtime_error(

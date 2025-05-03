@@ -1,6 +1,8 @@
 from __future__ import annotations
 from pathlib import Path
 import threading
+import subprocess
+from sys import argv
 
 from .bindings import (
     __doc__,
@@ -11,6 +13,16 @@ from .bindings import (
     geom2d,
     spawn_window as spawn_window_internal,
 )
+
+
+def _executable_path():
+    executable_path = Path(__file__).parent / "slamd_window"
+
+    if not executable_path.exists():
+        print("Executable path not found! Assuming dev install, passing None")
+        executable_path = None
+
+    return executable_path
 
 
 class Visualizer:
@@ -31,11 +43,7 @@ class Visualizer:
 
 
 def spawn_window(port: int = 5555) -> None:
-    executable_path = Path(__file__).parent / "slamd_window"
-
-    if not executable_path.exists():
-        print("Executable path not found! Assuming dev install, passing None")
-        executable_path = None
+    executable_path = _executable_path()
 
     spawn_window_internal(
         port,
@@ -43,4 +51,22 @@ def spawn_window(port: int = 5555) -> None:
     )
 
 
-__all__ = ["__doc__", "Visualizer", "Canvas", "Scene", "geom", "geom2d", "spawn_window"]
+def _window_cli():
+    exe_path = _executable_path()
+
+    if exe_path is None:
+        raise RuntimeError("Can't find exe path")
+
+    subprocess.run([exe_path, *argv[1:]])
+
+
+__all__ = [
+    "__doc__",
+    "Visualizer",
+    "Canvas",
+    "Scene",
+    "geom",
+    "geom2d",
+    "spawn_window",
+    "_window_cli",
+]

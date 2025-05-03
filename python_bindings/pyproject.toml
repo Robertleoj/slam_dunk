@@ -11,6 +11,9 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = ["numpy>=1.23"]
 
+[project.scripts]
+slamd-window = "slamd:_window_cli"
+
 [tool.scikit-build]
 minimum-version = "build-system.requires"
 
