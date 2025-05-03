@@ -1,5 +1,4 @@
 #include <spdlog/spdlog.h>
-#include <format>
 #include <slamd/geom/mono_instanced.hpp>
 
 namespace slamd {
@@ -18,14 +17,14 @@ MonoInstanced::MonoInstanced(
       transforms(transforms),
       colors(colors) {
     if (!(vertices.size() == normals.size())) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "number of vertices {}, number of normals {}",
             vertices.size(),
             normals.size()
         ));
     }
     if (!((transforms.size() == colors.size()))) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "number of transforms, and colors got "
             "{} transforms and {} colors",
             transforms.size(),

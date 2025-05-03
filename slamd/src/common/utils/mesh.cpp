@@ -1,5 +1,4 @@
-#include <numbers>
-#include <ranges>
+#include <slamd_common/numbers.hpp>
 #include <slamd_common/utils/mesh.hpp>
 
 namespace slamd {
@@ -14,18 +13,17 @@ size_t generate_sphere(
     uint32_t stackCount
 ) {
     float x, y, z, xy;
-    float pi = std::numbers::pi;
-    float sectorStep = 2 * pi / sectorCount;
-    float stackStep = pi / stackCount;
+    float sectorStep = 2 * _num::pi / sectorCount;
+    float stackStep = _num::pi / stackCount;
     float sectorAngle, stackAngle;
 
     size_t start_idx = vertices.size();
     size_t num_added = 0;
 
     for (uint32_t i = 0; i <= stackCount; ++i) {
-        stackAngle = pi / 2 - i * stackStep;  // from pi/2 to -pi/2
-        xy = radius * cosf(stackAngle);       // r * cos(u)
-        z = radius * sinf(stackAngle);        // r * sin(u)
+        stackAngle = _num::pi / 2 - i * stackStep;  // from pi/2 to -pi/2
+        xy = radius * cosf(stackAngle);             // r * cos(u)
+        z = radius * sinf(stackAngle);              // r * sin(u)
 
         for (uint32_t j = 0; j <= sectorCount; ++j) {
             sectorAngle = j * sectorStep;
@@ -35,8 +33,7 @@ size_t generate_sphere(
 
             glm::vec3 pos(x, y, z);
             vertices.push_back(pos);
-            normals.push_back(
-                glm::normalize(pos)
+            normals.push_back(glm::normalize(pos)
             );  // 💪 Normals = normalized pos
 
             ++num_added;

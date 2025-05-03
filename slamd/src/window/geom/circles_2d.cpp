@@ -1,6 +1,6 @@
-#include <numbers>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
+#include <slamd_common/numbers.hpp>
 #include <slamd_window/geom/circles_2d.hpp>
 
 namespace slamd {
@@ -59,7 +59,7 @@ std::unique_ptr<MonoInstanced> Circles2D::make_mono_instanced(
     float small_rad = 1.0f - thickness;
     // float big_rad = 1.0f;
 
-    float angle_step = 2.0f * std::numbers::pi / static_cast<float>(sections);
+    float angle_step = 2.0f * _num::pi / static_cast<float>(sections);
 
     for (size_t i = 0; i < sections; i++) {
         float angle = i * angle_step;

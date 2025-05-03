@@ -22,3 +22,6 @@
 [submodule "vendored_deps/cxxopts"]
 	path = vendored_deps/cxxopts
 	url = git@github.com:jarro2783/cxxopts.git
+[submodule "vendored_deps/fmt"]
+	path = vendored_deps/fmt
+	url = git@github.com:fmtlib/fmt.git

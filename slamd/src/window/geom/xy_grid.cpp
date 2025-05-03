@@ -2,7 +2,6 @@
 #include <glbinding/glbinding.h>
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include <slamd_window/assert.hpp>
 #include <slamd_window/gen/shader_sources.hpp>
 #include <slamd_window/geom/xy_grid.hpp>
 #include <slamd_window/paths.hpp>

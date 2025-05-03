@@ -1,11 +1,11 @@
 #include <flatb/messages_generated.h>
-#include <slamd/assert.hpp>
 #include <slamd/constants.hpp>
 #include <slamd/geom/mesh.hpp>
+#include <slamd_common/assert.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/utils/serialization.hpp>
 
-#include <format>
+#include <fmt/format.h>
 #include <slamd_common/data/mesh.hpp>
 #include <stdexcept>
 
@@ -17,7 +17,7 @@ void Mesh::update_positions(
     bool recompute_normals
 ) {
     if (positions.size() != this->mesh_data.positions.size()) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "Expected {} positions, got {}",
             this->mesh_data.positions.size(),
             positions.size()
@@ -53,7 +53,7 @@ void Mesh::update_colors(
     const std::vector<glm::vec3>& colors
 ) {
     if (colors.size() != this->mesh_data.colors.size()) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "Expected {} colors, got {}",
             this->mesh_data.colors.size(),
             colors.size()
@@ -91,7 +91,7 @@ void Mesh::update_normals_internal(
     bool assign
 ) {
     if (normals.size() != this->mesh_data.normals.size()) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "Expected {} normals, got {}",
             this->mesh_data.normals.size(),
             normals.size()

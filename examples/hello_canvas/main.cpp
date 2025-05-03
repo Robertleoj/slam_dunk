@@ -3,7 +3,6 @@
 #include <stb_image.h>
 #include <cstdint>
 #include <filesystem>
-#include <format>
 #include <iostream>
 #include <random>
 #include <slamd/slamd.hpp>

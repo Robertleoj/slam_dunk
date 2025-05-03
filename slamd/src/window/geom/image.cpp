@@ -1,5 +1,4 @@
 #include <slamd_common/gmath/transforms.hpp>
-#include <slamd_window/assert.hpp>
 #include <slamd_window/gen/shader_sources.hpp>
 #include <slamd_window/geom/image.hpp>
 #include <slamd_window/paths.hpp>

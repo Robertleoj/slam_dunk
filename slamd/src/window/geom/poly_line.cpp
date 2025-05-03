@@ -1,7 +1,7 @@
 #include <glm/gtc/matrix_transform.hpp>
-#include <numbers>
 #include <slamd_common/data/mesh.hpp>
 #include <slamd_common/gmath/serialization.hpp>
+#include <slamd_common/numbers.hpp>
 #include <slamd_window/geom/poly_line.hpp>
 
 namespace slamd {
@@ -33,7 +33,6 @@ std::unique_ptr<Mesh> make_poly_line_mesh(
 
     const int segments = 8;
     const float radius = thickness * 0.5f;
-    const float pi = std::numbers::pi;
 
     glm::vec3 prev_forward = glm::normalize(points[1] - points[0]);
     glm::vec3 prev_up = glm::vec3(0, 1, 0);
@@ -68,7 +67,7 @@ std::unique_ptr<Mesh> make_poly_line_mesh(
         uint32_t base = static_cast<uint32_t>(verts.size());
 
         for (int j = 0; j < segments; ++j) {
-            float angle = (j / (float)segments) * 2 * pi;
+            float angle = (j / (float)segments) * 2 * _num::pi;
             glm::vec3 offset =
                 glm::cos(angle) * right + glm::sin(angle) * local_up;
             verts.push_back(points[i] + offset * radius);

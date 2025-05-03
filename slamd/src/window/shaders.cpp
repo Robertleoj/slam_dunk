@@ -1,7 +1,6 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <spdlog/spdlog.h>
-#include <format>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <slamd_window/shaders.hpp>
@@ -26,7 +25,7 @@ void ensure_shader_compiled(
             nullptr,
             info_log_buf
         );
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(fmt::format(
             "Couldn't compile shader: {}",
             std::string(info_log_buf)
         ));
@@ -49,7 +48,7 @@ void ensure_shader_program_linked(
             info_log_buf
         );
         throw std::runtime_error(
-            std::format("Couldn't link program: {}", std::string(info_log_buf))
+            fmt::format("Couldn't link program: {}", std::string(info_log_buf))
         );
     }
 }

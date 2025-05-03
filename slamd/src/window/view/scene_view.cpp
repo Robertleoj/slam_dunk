@@ -1,7 +1,7 @@
 #include <imgui.h>
 #include <spdlog/spdlog.h>
-#include <numbers>
 #include <slamd_common/gmath/angle.hpp>
+#include <slamd_common/numbers.hpp>
 #include <slamd_window/view/scene_view.hpp>
 
 namespace slamd {
@@ -110,8 +110,7 @@ void SceneView::handle_mouse_input() {
             );
 
             // pi per window size
-            auto scale_factor =
-                std::numbers::pi / static_cast<float>(min_window_dim);
+            auto scale_factor = _num::pi / static_cast<float>(min_window_dim);
 
             auto x_angle_diff =
                 static_cast<float>(mouse_drag_delta_x) * scale_factor;

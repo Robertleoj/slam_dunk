@@ -1,9 +1,7 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <spdlog/spdlog.h>
-#include <format>
 #include <slamd_common/data/mesh.hpp>
-#include <slamd_window/assert.hpp>
 #include <slamd_window/constants.hpp>
 #include <slamd_window/gen/shader_sources.hpp>
 #include <slamd_window/geom/mono_instanced.hpp>
@@ -30,14 +28,14 @@ MonoInstanced::MonoInstanced(
       colors(colors),
       pending_colors_update(false) {
     if (!(vertices.size() == normals.size())) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "number of vertices {}, number of normals {}",
             vertices.size(),
             normals.size()
         ));
     }
     if (!((transforms.size() == colors.size()))) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "number of transforms, and colors got "
             "{} transforms and {} colors",
             transforms.size(),

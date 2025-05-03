@@ -1,4 +1,5 @@
 #include <flatb/messages_generated.h>
+#include <fmt/format.h>
 #include <slamd/geom/circles_2d.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
@@ -41,7 +42,7 @@ void Circles2D::update_positions(
     const std::vector<glm::vec2>& positions
 ) {
     if (positions.size() != this->positions.size()) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "Expected {} positions, got {}",
             this->positions.size(),
             positions.size()
@@ -75,7 +76,7 @@ void Circles2D::update_colors(
     const std::vector<glm::vec3>& colors
 ) {
     if (colors.size() != this->colors.size()) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "Expected {} colors, got {}",
             this->colors.size(),
             colors.size()
@@ -106,7 +107,7 @@ void Circles2D::update_radii(
     const std::vector<float>& radii
 ) {
     if (radii.size() != this->radii.size()) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "Expected {} radii, got {}",
             this->radii.size(),
             radii.size()

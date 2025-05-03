@@ -1,5 +1,5 @@
+#include <fmt/format.h>
 #include <spdlog/spdlog.h>
-#include <format>
 #include <slamd_common/data/image.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <stdexcept>
@@ -20,7 +20,7 @@ Image::Image(
       height(height),
       channels(channels) {
     if (data.size() != width * height * channels) {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(fmt::format(
             "Data should be {}, found {}",
             width * height * channels,
             data.size()
@@ -39,7 +39,7 @@ Image::Image(
       height(height),
       channels(channels) {
     if (data.size() != width * height * channels) {
-        throw std::runtime_error(std::format(
+        throw std::runtime_error(fmt::format(
             "Data should be {}, found {}",
             width * height * channels,
             data.size()
