@@ -1,17 +1,16 @@
-name: Upload Python Package to PyPI when a Release is Created
+name: Build python wheels
 
-on:
-  release:
-    types: [created]
+on: [push, pull_request]
 
 jobs:
-  pypi-publish:
-    name: Publish release to PyPI
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
-    permissions:
-      id-token: write
+  build-wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # os: [ubuntu-latest, macos-latest]
+        # only want to test macos now
+        os: [macos-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +41,7 @@ jobs:
         env:
           CIBW_ARCHS_LINUX: 'x86_64'
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
-          CIBW_BEFORE_ALL: |
+          CIBW_BEFORE_ALL_LINUX: |
             yum install -y epel-release && \
             yum install -y \
               glfw-devel \
@@ -57,12 +56,6 @@ jobs:
               SDL2-devel \
               qt5-qtbase-devel \
               gtk3-devel
-
         run: |
           cd python_bindings
           cibuildwheel --output-dir dist
-
-      # - name: Publish to PyPI
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with:
-      #     packages-dir: python_bindings/dist

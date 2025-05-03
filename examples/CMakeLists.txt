@@ -4,11 +4,18 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 project(slam_dunk_examples)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# Check if our lord and savious ccache exists
+# We use ccache to massively speed up recompile times
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+endif(CCACHE_FOUND)
+
 
 if(APPLE)
     message(STATUS "APPLE")

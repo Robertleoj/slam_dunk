@@ -16,8 +16,8 @@ if platform.system() == "Darwin":
         '-DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"',
     ]
 elif platform.system() == "Linux":
-    CPP_COMPILER_PATH = "/usr/bin/g++-13"
-    C_COMPILER_PATH = "/usr/bin/gcc-13"
+    CPP_COMPILER_PATH = "/usr/bin/g++"
+    C_COMPILER_PATH = "/usr/bin/gcc"
 
     CMAKE_FLAGS = [
         "-DCMAKE_EXPORT_COMPILE_COMMANDS=1",

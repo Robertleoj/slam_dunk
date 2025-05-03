@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -10,14 +10,6 @@ option(SLAMD_VENDOR_DEPS "Use vendored dependencies" ON)
 project(slam_dunk VERSION 0.1.0)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-# Check if our lord and savious ccache exists
-# We use ccache to massively speed up recompile times
-find_program(CCACHE_FOUND ccache)
-if(CCACHE_FOUND)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-endif(CCACHE_FOUND)
 
 set(LIB_DIR vendored_deps)
 
