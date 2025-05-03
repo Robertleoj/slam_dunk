@@ -73,9 +73,9 @@ View::View(
     slamd::flatb::ViewType view_type
 )
     : tree(tree),
-      name(name),
       view_type(view_type),
-      vis(vis) {}
+      vis(vis),
+      name(name) {}
 
 View::~View() {
     this->tree->attached_to.erase(this->id);

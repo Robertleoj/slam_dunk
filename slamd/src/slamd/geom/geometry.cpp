@@ -8,12 +8,6 @@ namespace _geom {
 Geometry::Geometry()
     : id(_id::GeometryID::next()) {}
 
-flatbuffers::Offset<slamd::flatb::Geometry> Geometry::serialize(
-    flatbuffers::FlatBufferBuilder& builder
-) {
-    throw std::runtime_error("Serialization not implemented");
-}
-
 std::shared_ptr<std::vector<uint8_t>> Geometry::get_add_geometry_message() {
     // tell the visualizer to register this object
     flatbuffers::FlatBufferBuilder builder;

@@ -12,9 +12,10 @@ class TreePath {
     bool is_root() const;
     TreePath parent() const;
     std::string string() const;
+    TreePath& operator=(const TreePath&) = default;
 
    public:
-    const std::vector<std::string> components;
+    std::vector<std::string> components;
 };
 
 TreePath operator/(const TreePath& path, const std::string& part);

@@ -188,6 +188,17 @@ void Visualizer::server_job(
 
     accept_loop();
 
+    // Spin a thread to cancel io when stop is requested
+    std::jthread stop_watcher(
+        [&](std::stop_token token) {
+            while (!token.stop_requested()) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+            io.stop();  // tell io to bounce
+        },
+        stop_token
+    );
+
     io.run();
 }
 

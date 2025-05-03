@@ -17,16 +17,16 @@ PointCloud::PointCloud(
     const std::vector<glm::vec3>& colors,
     const std::vector<float>& radii
 )
-    : positions(positions),
+    : shader(
+          shader_source::point_cloud::vert,
+          shader_source::point_cloud::frag
+      ),
+      positions(positions),
       pending_pos_update(false),
       colors(colors),
       pending_colors_update(false),
       radii(radii),
-      pending_radii_update(false),
-      shader(
-          shader_source::point_cloud::vert,
-          shader_source::point_cloud::frag
-      ) {
+      pending_radii_update(false) {
     if (!((positions.size() == colors.size()) && (colors.size() == radii.size())
         )) {
         throw std::invalid_argument(std::format(

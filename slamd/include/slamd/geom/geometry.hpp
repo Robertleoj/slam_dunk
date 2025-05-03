@@ -23,7 +23,7 @@ class Geometry {
     Geometry();
     virtual flatbuffers::Offset<slamd::flatb::Geometry> serialize(
         flatbuffers::FlatBufferBuilder& builder
-    );
+    ) = 0;
 
     virtual ~Geometry() = default;
 

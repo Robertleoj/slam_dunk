@@ -10,10 +10,10 @@
 namespace slamd {
 
 Arcball::Arcball()
-    : theta(Arcball::default_theta),
+    : center(Arcball::default_center),
+      theta(Arcball::default_theta),
       phi(Arcball::default_phi),
-      radius(Arcball::default_radius),
-      center(Arcball::default_center) {}
+      radius(Arcball::default_radius) {}
 
 void Arcball::rotate(
     slamd::gmath::Angle delta_theta,

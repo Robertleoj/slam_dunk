@@ -6,9 +6,9 @@ namespace graphics {
 ImageTexture::ImageTexture(
     const slamd::data::Image& image
 )
-    : texture_id(0),
-      width(image.width),
-      height(image.height) {
+    : width(image.width),
+      height(image.height),
+      texture_id(0) {
     gl::glGenTextures(1, &this->texture_id);
     gl::glBindTexture(gl::GL_TEXTURE_2D, this->texture_id);
 

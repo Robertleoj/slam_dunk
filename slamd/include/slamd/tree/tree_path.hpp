@@ -10,6 +10,7 @@ class TreePath {
     TreePath();
     TreePath(const TreePath& other);
     TreePath(const std::string& path_string);
+    TreePath& operator=(const TreePath&) = default;
     TreePath(const std::vector<std::string>& components);
     TreePath(const char* path_string);
     bool is_root() const;

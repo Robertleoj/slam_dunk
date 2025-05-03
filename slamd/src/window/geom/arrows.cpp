@@ -30,7 +30,7 @@ ArrowMesh generate_cone(
 ) {
     ArrowMesh mesh;
     glm::vec3 tip(0, 0, height);
-    for (int i = 0; i <= segments; ++i) {
+    for (uint32_t i = 0; i <= segments; ++i) {
         float angle = glm::two_pi<float>() * i / segments;
         float x = std::cos(angle) * radius;
         float y = std::sin(angle) * radius;
@@ -40,7 +40,7 @@ ArrowMesh generate_cone(
     mesh.vertices.push_back(tip);  // tip
     mesh.colors.push_back(color);
     uint32_t tip_idx = mesh.vertices.size() - 1;
-    for (int i = 0; i < segments; ++i) {
+    for (uint32_t i = 0; i < segments; ++i) {
         mesh.indices.insert(
             mesh.indices.end(),
             {tip_idx, static_cast<uint32_t>(i + 1), static_cast<uint32_t>(i)}
@@ -64,7 +64,7 @@ ArrowMesh generate_cylinder(
     glm::vec3 color
 ) {
     ArrowMesh mesh;
-    for (int i = 0; i <= segments; ++i) {
+    for (uint32_t i = 0; i <= segments; ++i) {
         float angle = glm::two_pi<float>() * i / segments;
         float x = std::cos(angle) * radius;
         float y = std::sin(angle) * radius;
@@ -73,7 +73,7 @@ ArrowMesh generate_cylinder(
         mesh.vertices.push_back(glm::vec3(x, y, height));
         mesh.colors.push_back(color);
     }
-    for (int i = 0; i < segments; ++i) {
+    for (uint32_t i = 0; i < segments; ++i) {
         uint32_t a = i * 2;
         uint32_t b = a + 1;
         uint32_t c = a + 2;

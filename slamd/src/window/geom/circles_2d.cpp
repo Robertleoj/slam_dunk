@@ -1,5 +1,4 @@
 #include <numbers>
-#include <ranges>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/geom/circles_2d.hpp>
@@ -14,10 +13,10 @@ Circles2D::Circles2D(
     const std::vector<float>& radii,
     float thickness
 )
-    : colors(colors),
+    : cached_bounds(Circles2D::make_bounds(positions, radii)),
+      colors(colors),
       positions(positions),
-      radii(radii),
-      cached_bounds(Circles2D::make_bounds(positions, radii)) {
+      radii(radii) {
     this->circles_instanced =
         Circles2D::make_mono_instanced(positions, colors, radii, thickness);
 }

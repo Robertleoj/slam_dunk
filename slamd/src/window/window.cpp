@@ -11,6 +11,7 @@ void framebuffer_size_callback(
     int width,
     int height
 ) {
+    (void)window;
     gl::glViewport(0, 0, width, height);
 }
 

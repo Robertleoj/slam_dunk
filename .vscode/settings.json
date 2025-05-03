@@ -2,7 +2,10 @@
   "clangd.arguments": [
     // "--compile-commands-dir=python_examples/build",
     "--compile-commands-dir=examples/build",
-    "--function-arg-placeholders=false"
+    "--function-arg-placeholders=false",
+    "--tweaks=-Wall",
+    "--tweaks=-Wextra",
+    "--clang-tidy"
   ],
   "files.associations": {
     "*.py": "python",

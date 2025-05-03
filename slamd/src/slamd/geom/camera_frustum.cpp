@@ -13,11 +13,13 @@ CameraFrustum::CameraFrustum(
     data::Image&& image,
     float scale
 )
-    : img(std::move(image)),
-      intrinsics_matrix(intrinsics_matrix),
+    : intrinsics_matrix(intrinsics_matrix),
       image_width(image_width),
       image_height(image_height),
-      scale(scale) {}
+      scale(scale),
+      img(std::move(image))
+
+{}
 
 CameraFrustum::CameraFrustum(
     glm::mat3 intrinsics_matrix,

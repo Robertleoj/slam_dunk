@@ -11,8 +11,8 @@ bool Connection::is_alive() {
 Connection::Connection(
     asio::ip::tcp::socket socket
 )
-    : socket(std::move(socket)),
-      alive(true) {
+    : alive(true),
+      socket(std::move(socket)) {
     SPDLOG_INFO("Client connected");
 
     this->worker = std::jthread([this](std::stop_token st) {

@@ -98,6 +98,7 @@ void Box::render(
 std::shared_ptr<Box> Box::deserialize(
     const slamd::flatb::Box* box_fb
 ) {
+    (void)box_fb;
     return std::make_shared<Box>();
 }
 

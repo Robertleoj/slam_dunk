@@ -102,7 +102,7 @@ std::unique_ptr<Mesh> make_poly_line_mesh(
                     .compute_normals()
                     .build();
 
-    return std::make_unique<Mesh>(data);
+    return std::make_unique<Mesh>(data, min_brightness);
 }
 
 PolyLine::PolyLine(

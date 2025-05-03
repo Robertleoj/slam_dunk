@@ -21,14 +21,14 @@ MonoInstanced::MonoInstanced(
     : vertices(vertices),
       normals(normals),
       triangle_indices(triangle_indices),
-      transforms(transforms),
-      pending_trans_update(false),
-      colors(colors),
-      pending_colors_update(false),
       shader(
           shader_source::mono_instanced::vert,
           shader_source::mono_instanced::frag
-      ) {
+      ),
+      transforms(transforms),
+      pending_trans_update(false),
+      colors(colors),
+      pending_colors_update(false) {
     if (!(vertices.size() == normals.size())) {
         throw std::invalid_argument(std::format(
             "number of vertices {}, number of normals {}",

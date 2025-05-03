@@ -64,8 +64,8 @@ void GridXYPlane::initialize() {
 GridXYPlane::GridXYPlane(
     float grid_size
 )
-    : grid_size(grid_size),
-      shader(shader_source::xy_grid::vert, shader_source::xy_grid::frag) {
+    : shader(shader_source::xy_grid::vert, shader_source::xy_grid::frag),
+      grid_size(grid_size) {
     this->initialize();
 }
 

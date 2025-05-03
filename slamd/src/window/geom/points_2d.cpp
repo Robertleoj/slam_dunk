@@ -1,5 +1,4 @@
 #include <numbers>
-#include <ranges>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_window/geom/points_2d.hpp>
 
@@ -25,8 +24,6 @@ std::unique_ptr<Mesh> make_mesh(
 
     uint32_t curr_idx = 0;
     size_t num_segments = 10;
-    float segment_size =
-        std::numbers::pi * 2.0f / static_cast<float>(num_segments);
 
     for (size_t i = 0; i < positions.size(); i++) {
         // the center of the circle
@@ -36,7 +33,7 @@ std::unique_ptr<Mesh> make_mesh(
         mesh_data
             .add_vertex(glm::vec3(pos, 0.0f), col, glm::vec3(0.0f, 0.0f, 1.0f));
 
-        for (int i = 0; i < num_segments; i++) {
+        for (uint32_t i = 0; i < num_segments; i++) {
             float segment_start =
                 std::numbers::pi * 2.0f * static_cast<float>(i) / num_segments;
 

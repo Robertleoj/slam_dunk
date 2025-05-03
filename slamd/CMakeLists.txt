@@ -11,6 +11,14 @@ project(slam_dunk VERSION 0.1.0)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+# Check if our lord and savious ccache exists
+# We use ccache to massively speed up recompile times
+find_program(CCACHE_FOUND ccache)
+if(CCACHE_FOUND)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+endif(CCACHE_FOUND)
+
 set(LIB_DIR vendored_deps)
 
 function(find_required_package 
@@ -100,6 +108,9 @@ target_include_directories(
         $<INSTALL_INTERFACE:include>
 )
 
+target_compile_options(slamd_common PRIVATE -Wall -Wextra)
+
+
 target_link_libraries(
     slamd_common
 
@@ -187,6 +198,8 @@ target_link_libraries(
         imgui::imgui
 )
 
+target_compile_options(slamd_window PRIVATE -Wall -Wextra)
+
 # SLAMD
 add_library(slamd STATIC)
 add_library(slamd::slamd ALIAS slamd)
@@ -252,6 +265,7 @@ target_link_libraries(
         slamd_flatbuff
         slamd_common
 )
+target_compile_options(slamd PRIVATE -Wall -Wextra)
 
 
 

@@ -13,6 +13,7 @@ class Rect2D {
    public:
     Rect2D(const glm::vec2& top_left, const glm::vec2& bottom_right);
     Rect2D(const Rect2D& other);
+    Rect2D& operator=(const Rect2D&) = default;
 
     Rect2D translate(glm::vec2 amount) const;
 

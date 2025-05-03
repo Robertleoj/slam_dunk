@@ -17,6 +17,13 @@ class MonoInstanced : public Geometry {
 
     void update_transforms(const std::vector<glm::mat4>& positions);
     void update_colors(const std::vector<glm::vec3>& colors);
+
+   private:
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec3> normals;
+    std::vector<uint32_t> triangle_indices;
+    std::vector<glm::mat4> transforms;
+    std::vector<glm::vec3> colors;
 };
 
 }  // namespace _geom
