@@ -20,13 +20,13 @@ def uniform_grid_points(n: int, a: float) -> np.ndarray:
 
 
 def main():
-    window = slamd.Window("hello python", 1000, 1000)
+    vis = slamd.Visualizer("hello python")
 
     coords = uniform_grid_points(100000, 10.0)
     print(uniform_grid_points)
 
     scene = slamd.Scene()
-    window.add_scene("scene", scene)
+    vis.add_scene("scene", scene)
 
     point_cloud = None
 
@@ -57,8 +57,6 @@ def main():
             point_cloud.update_radii(radii)
 
         t += 0.02
-
-    window.wait_for_close()
 
 
 if __name__ == "__main__":

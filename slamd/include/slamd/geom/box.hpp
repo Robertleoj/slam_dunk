@@ -8,10 +8,10 @@ namespace _geom {
 class Box : public Geometry {
    public:
     Box();
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
-   private:
-    Mesh box_mesh;
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
 };
 
 }  // namespace _geom

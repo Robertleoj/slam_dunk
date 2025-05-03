@@ -1,7 +1,8 @@
 #pragma once
-#include <slamd/data/mesh.hpp>
+#include <memory>
 #include <slamd/geom/geometry.hpp>
 #include <slamd/geom/mono_instanced.hpp>
+#include <slamd_common/data/mesh.hpp>
 
 namespace slamd {
 namespace _geom {
@@ -15,42 +16,19 @@ class Circles2D : public Geometry {
         float thickness
     );
 
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
-
-    std::optional<gmath::AABB> bounds() override;
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
 
     void update_positions(const std::vector<glm::vec2>& positions);
     void update_colors(const std::vector<glm::vec3>& colors);
     void update_radii(const std::vector<float>& radii);
 
    private:
-    static MonoInstanced make_mono_instanced(
-        const std::vector<glm::vec2>& positions,
-        const std::vector<glm::vec3>& colors,
-        const std::vector<float>& radii,
-        float thickness
-    );
-
-    static gmath::AABB make_bounds(
-        const std::vector<glm::vec2>& positions,
-        const std::vector<float>& radii
-    );
-
-    static std::vector<glm::mat4>
-    make_transforms(std::vector<glm::vec2> positions, std::vector<float> radii);
-
-    void handle_updates();
-
-   private:
-    MonoInstanced circles_instanced;
-    gmath::AABB cached_bounds;
-
-    std::vector<glm::vec3> colors;
     std::vector<glm::vec2> positions;
+    std::vector<glm::vec3> colors;
     std::vector<float> radii;
-
-    bool pending_trans_update = false;
-    bool pending_color_update = false;
+    float thickness;
 };
 
 }  // namespace _geom

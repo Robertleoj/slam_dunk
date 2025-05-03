@@ -1,17 +1,81 @@
 #pragma once
+#include <flatb/visualizer_generated.h>
 #include <glm/glm.hpp>
+#include <map>
+#include <memory>
+#include <mutex>
 #include <slamd/geom/geometry.hpp>
-#include <slamd/gmath/aabb.hpp>
-#include <slamd/tree/node.hpp>
 #include <slamd/tree/tree_path.hpp>
+#include <slamd/view.hpp>
+#include <slamd_common/id.hpp>
 
 namespace slamd {
+
+namespace _vis {
+class Visualizer;
+}
+namespace _view {
+class View;
+}
+
+namespace _geom {
+class Geometry;
+}
+
 namespace _tree {
 
-class Tree {
-   private:
-    std::unique_ptr<Node> root;
+class Tree;
 
+class Node : public std::enable_shared_from_this<Node> {
+   public:
+    ~Node();
+    Node(Tree* tree, TreePath path);
+
+    std::optional<glm::mat4> get_transform() const;
+
+    void set_object(std::shared_ptr<_geom::Geometry> object);
+
+    void set_transform(glm::mat4 transform);
+
+    Node() = delete;
+    Node(const Node&) = delete;
+    Node(Node&&) = delete;
+    Node& operator=(const Node&) = delete;
+
+    // should not be in public API
+    std::optional<std::shared_ptr<_geom::Geometry>> get_object() const;
+
+    flatbuffers::Offset<slamd::flatb::Node> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    );
+
+    void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
+
+    std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
+    find_visualizers();
+
+   private:
+    void detach_object();
+    void attach_object();
+
+   public:
+    std::map<std::string, std::shared_ptr<Node>> children;
+    const _id::NodeID id;
+
+   private:
+    std::optional<glm::mat4> transform;
+    std::optional<std::shared_ptr<_geom::Geometry>> object;
+
+    mutable std::mutex transform_mutex;
+    mutable std::mutex object_mutex;
+
+    // we use a raw tree pointer here as the lifetime of the node
+    // is tied to the tree.
+    Tree* tree;
+    const TreePath path;
+};
+
+class Tree {
    public:
     Tree();
 
@@ -20,9 +84,19 @@ class Tree {
         std::shared_ptr<_geom::Geometry> object
     );
 
-    void render(const glm::mat4& view, const glm::mat4& projection) const;
+    virtual flatbuffers::Offset<slamd::flatb::Tree> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    );
 
-    std::optional<gmath::AABB> bounds();
+    void add_all_geometries(
+        std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>& initial_map
+    );
+
+    std::shared_ptr<std::vector<uint8_t>> get_add_tree_message();
+
+    void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
+    std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
+    find_visualizers();
 
    protected:
     void
@@ -31,18 +105,18 @@ class Tree {
     std::optional<Node*> traverse(const TreePath& path);
     Node* make_path(TreePath path);
 
+   public:
+    const _id::TreeID id;
+    std::map<_id::ViewID, std::weak_ptr<_view::View>> attached_to;
+
    private:
-    void render_recursive(
-        const Node* node,
-        const glm::mat4& current_transform,
-        const glm::mat4& view,
-        const glm::mat4& projection
-    ) const;
+    void add_all_geometries_rec(
+        Node* node,
+        std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>& initial_map
+    );
 
-    std::optional<gmath::AABB>
-
-    bounds_recursive(const Node* node, const glm::mat4& prev_transform);
-
+   private:
+    std::shared_ptr<Node> root;
 };
 
 }  // namespace _tree

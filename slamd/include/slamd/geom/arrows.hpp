@@ -19,10 +19,15 @@ class Arrows : public Geometry {
         float thickness
     );
 
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
 
    private:
-    Mesh mesh;
+    std::vector<glm::vec3> starts;
+    std::vector<glm::vec3> ends;
+    std::vector<glm::vec3> colors;
+    float thickness;
 };
 
 }  // namespace _geom

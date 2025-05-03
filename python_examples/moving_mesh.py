@@ -35,12 +35,12 @@ def uniform_grid_points_with_mesh(n: int, a: float) -> tuple[np.ndarray, list[in
 
 
 def main():
-    window = slamd.Window("hello python", 1000, 1000)
+    vis = slamd.Visualizer("hello python")
 
     coords, indices = uniform_grid_points_with_mesh(100000, 13.0)
 
     scene = slamd.Scene()
-    window.add_scene("scene", scene)
+    vis.add_scene("scene", scene)
 
     mesh = None
 

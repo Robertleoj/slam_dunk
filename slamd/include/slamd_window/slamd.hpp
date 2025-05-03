@@ -1,0 +1,15 @@
+#include <slamd_common/data/image.hpp>
+#include <slamd_window/geom/arrows.hpp>
+#include <slamd_window/geom/box.hpp>
+#include <slamd_window/geom/camera_frustum.hpp>
+#include <slamd_window/geom/circles_2d.hpp>
+#include <slamd_window/geom/image.hpp>
+#include <slamd_window/geom/mesh.hpp>
+#include <slamd_window/geom/point_cloud.hpp>
+#include <slamd_window/geom/points_2d.hpp>
+#include <slamd_window/geom/poly_line.hpp>
+#include <slamd_window/geom/poly_line_2d.hpp>
+#include <slamd_window/geom/sphere.hpp>
+#include <slamd_window/geom/triad.hpp>
+#include <slamd_window/tree/tree.hpp>
+#include <slamd_window/window.hpp>

@@ -1,0 +1,42 @@
+include "geometry.fbs";
+include "primitives.fbs";
+
+namespace slamd.flatb;
+
+table ChildEntry {
+    key: string;
+    value: Node;
+}
+
+table Node {
+    transform: Mat4;
+    // 0 means no geometry is associated
+    geometry_id: ulong = 0;
+    children: [ChildEntry];
+}
+
+table Tree {
+    id: ulong;
+    root: Node;
+}
+
+enum ViewType: byte {
+    NONE = 0,
+    CANVAS = 1,
+    SCENE = 2
+}
+
+table View {
+    name: string;
+    tree_id: ulong;
+    view_type: ViewType;
+}
+
+table InitialState {
+    name: string;
+    views: [View];
+    trees: [Tree];
+    geometries: [Geometry];
+}
+
+root_type InitialState;

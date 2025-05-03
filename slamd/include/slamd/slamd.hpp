@@ -1,4 +1,3 @@
-#include <slamd/data/image.hpp>
 #include <slamd/geom/arrows.hpp>
 #include <slamd/geom/box.hpp>
 #include <slamd/geom/camera_frustum.hpp>
@@ -12,4 +11,5 @@
 #include <slamd/geom/sphere.hpp>
 #include <slamd/geom/triad.hpp>
 #include <slamd/tree/tree.hpp>
-#include <slamd/window.hpp>
+#include <slamd/visualizer.hpp>
+#include <slamd_common/data/image.hpp>

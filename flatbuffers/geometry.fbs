@@ -1,0 +1,93 @@
+include "primitives.fbs";
+
+namespace slamd.flatb;
+
+table Triad {
+    scale: float;
+    thickness: float;
+}
+
+table Circles2D {
+    positions: [Vec2];
+    colors: [Vec3];
+    radii: [float];
+    thickness: float;
+}
+
+table CameraFrustum {
+    intrinsics: Mat3;
+    image_width: uint32;
+    image_height: uint32;
+    scale: float;
+    image: ImageData;
+}
+
+table PointCloud {
+    positions: [Vec3];
+    colors: [Vec3];
+    radii: [float];
+}
+
+table Image {
+    img: ImageData;
+    normalized: bool;
+}
+
+table Points2D {
+    positions: [Vec2];
+    colors: [Vec3];
+    radii: [float];
+}
+
+table Box {}
+
+table Sphere {
+    radius: float;
+    color: Vec3;
+}
+
+table Arrows {
+    starts: [Vec3];
+    ends: [Vec3];
+    colors: [Vec3];
+    thickness: float;
+}
+
+table PolyLine {
+    points: [Vec3];
+    thickness: float;
+    color: Vec3;
+    min_brightness: float;
+}
+
+table PolyLine2D {
+    points: [Vec2];
+    color: Vec3;
+    thickness: float;
+}
+
+table Mesh {
+    data: MeshData;
+    min_brightness: float;
+}
+
+union GeometryUnion {
+    triad: Triad,
+    circles_2d: Circles2D,
+    camera_frustum: CameraFrustum,
+    point_cloud: PointCloud,
+    image: Image,
+    points_2d: Points2D,
+    box: Box,
+    sphere: Sphere,
+    arrows: Arrows,
+    poly_line: PolyLine,
+    poly_line_2d: PolyLine2D,
+    mesh: Mesh
+}
+
+table Geometry {
+    geometry_id: ulong;
+    geometry: GeometryUnion;
+}
+

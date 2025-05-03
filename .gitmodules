@@ -13,3 +13,12 @@
 [submodule "vendored_deps/imgui_wrapper/imgui"]
 	path = vendored_deps/imgui_wrapper/imgui
 	url = git@github.com:ocornut/imgui.git
+[submodule "vendored_deps/flatbuffers"]
+	path = vendored_deps/flatbuffers
+	url = git@github.com:google/flatbuffers.git
+[submodule "vendored_deps/asio"]
+	path = vendored_deps/asio
+	url = git@github.com:chriskohlhoff/asio.git
+[submodule "vendored_deps/cxxopts"]
+	path = vendored_deps/cxxopts
+	url = git@github.com:jarro2783/cxxopts.git

@@ -68,60 +68,168 @@ find_required_package(
 )
 
 add_subdirectory(${LIB_DIR}/glm)
+add_subdirectory(${LIB_DIR}/cxxopts)
+
+add_subdirectory(flatb)
 
 
+# COMMON
+add_library(slamd_common STATIC)
+target_sources(
+    slamd_common
+
+    PRIVATE
+        src/common/data/image.cpp
+        src/common/data/mesh.cpp
+
+        src/common/utils/mesh.cpp
+
+        src/common/gmath/aabb.cpp
+        src/common/gmath/rect2d.cpp
+        src/common/gmath/angle.cpp
+        src/common/gmath/transforms.cpp
+        src/common/gmath/serialization.cpp
+)
+
+target_include_directories(
+    slamd_common
+
+    PUBLIC
+        ${LIB_DIR}/glm
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+
+target_link_libraries(
+    slamd_common
+
+    PUBLIC
+        spdlog::spdlog
+        slamd_flatbuff
+        cxxopts
+
+    PRIVATE
+        spdlog::spdlog
+)
+
+
+# WINDOW
+add_executable(slamd_window)
+
+target_sources(
+    slamd_window
+
+    PRIVATE
+        src/window/main.cpp
+
+        src/window/camera_2d.cpp
+        src/window/image_texture.cpp
+        src/window/glfw.cpp
+        src/window/frame_buffer.cpp
+        src/window/camera.cpp
+        src/window/shaders.cpp
+        src/window/arcball.cpp
+        src/window/frame_timer.cpp
+        src/window/assert.cpp
+        src/window/window.cpp
+        src/window/state_manager.cpp
+        src/window/connection.cpp
+        src/window/message.cpp
+
+        src/window/tree/tree.cpp
+        src/window/tree/node.cpp
+        src/window/tree/tree_path.cpp
+
+        src/window/view/view.cpp
+        src/window/view/scene_view.cpp
+        src/window/view/canvas_view.cpp
+
+        src/window/geom/points_2d.cpp
+        src/window/geom/geometry.cpp
+        src/window/geom/deserialize.cpp
+        src/window/geom/box.cpp
+        src/window/geom/mesh.cpp
+        src/window/geom/arrows.cpp
+        src/window/geom/sphere.cpp
+        src/window/geom/triad.cpp
+        src/window/geom/poly_line.cpp
+        src/window/geom/xy_grid.cpp
+        src/window/geom/arcball_indicator.cpp
+        src/window/geom/image.cpp
+        src/window/geom/point_cloud.cpp
+        src/window/geom/camera_frustum.cpp
+        src/window/geom/poly_line_2d.cpp
+        src/window/geom/mono_instanced.cpp
+        src/window/geom/circles_2d.cpp
+)
+
+target_include_directories(
+    slamd_window
+
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+        ${LIB_DIR}/glm
+        ${LIB_DIR}/asio/asio/include
+)
+
+target_link_libraries(
+    slamd_window
+    
+    PRIVATE
+        glfw
+        spdlog::spdlog
+        slamd_flatbuff
+        slamd_common
+    PUBLIC
+        glbinding::glbinding
+        glbinding::glbinding-aux
+        imgui::imgui
+)
+
+# SLAMD
 add_library(slamd STATIC)
 add_library(slamd::slamd ALIAS slamd)
+
+# pass the path of the window executable into the lib
+
+target_compile_definitions(
+    slamd
+
+    PRIVATE
+        EXEC_PATH=\"$<TARGET_FILE:slamd_window>\"
+)
 
 target_sources(
     slamd
 
     PRIVATE
-        src/camera_2d.cpp
-        src/image_texture.cpp
-        src/glfw.cpp
-        src/frame_buffer.cpp
-        src/camera.cpp
-        src/io.cpp
-        src/shaders.cpp
-        src/arcball.cpp
-        src/frame_timer.cpp
-        src/assert.cpp
-        src/window.cpp
-        src/render_thread_job_queue.cpp
+        src/slamd/assert.cpp
+        src/slamd/visualizer.cpp
+        src/slamd/view.cpp
+        src/slamd/spawn_window.cpp
 
-        src/data/image.cpp
-        src/data/mesh.cpp
+        src/slamd/net/connection.cpp
+        src/slamd/net/client_set.cpp
+        src/slamd/net/broadcaster.cpp
 
-        src/tree/tree.cpp
-        src/tree/node.cpp
-        src/tree/tree_path.cpp
+        src/slamd/tree/tree.cpp
+        src/slamd/tree/tree_path.cpp
 
-        src/view/scene_view.cpp
-        src/view/canvas_view.cpp
-
-        src/gmath/aabb.cpp
-        src/gmath/rect2d.cpp
-        src/gmath/angle.cpp
-        src/gmath/transforms.cpp
-
-        src/geom/utils.cpp
-        src/geom/points_2d.cpp
-        src/geom/geometry.cpp
-        src/geom/box.cpp
-        src/geom/mesh.cpp
-        src/geom/arrows.cpp
-        src/geom/sphere.cpp
-        src/geom/triad.cpp
-        src/geom/poly_line.cpp
-        src/geom/xy_grid.cpp
-        src/geom/arcball_indicator.cpp
-        src/geom/image.cpp
-        src/geom/point_cloud.cpp
-        src/geom/camera_frustum.cpp
-        src/geom/poly_line_2d.cpp
-        src/geom/mono_instanced.cpp
-        src/geom/circles_2d.cpp
+        src/slamd/geom/points_2d.cpp
+        src/slamd/geom/geometry.cpp
+        src/slamd/geom/box.cpp
+        src/slamd/geom/mesh.cpp
+        src/slamd/geom/arrows.cpp
+        src/slamd/geom/sphere.cpp
+        src/slamd/geom/triad.cpp
+        src/slamd/geom/poly_line.cpp
+        src/slamd/geom/image.cpp
+        src/slamd/geom/point_cloud.cpp
+        src/slamd/geom/camera_frustum.cpp
+        src/slamd/geom/poly_line_2d.cpp
+        src/slamd/geom/mono_instanced.cpp
+        src/slamd/geom/circles_2d.cpp
 )
 
 target_include_directories(
@@ -131,19 +239,21 @@ target_include_directories(
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
         ${LIB_DIR}/glm
+        ${LIB_DIR}/asio/asio/include
 )
 
 target_link_libraries(
     slamd 
     
     PRIVATE
-        glfw
         spdlog::spdlog
+
     PUBLIC
-        glbinding::glbinding
-        glbinding::glbinding-aux
-        imgui::imgui
+        slamd_flatbuff
+        slamd_common
 )
+
+
 
 
 # only install if this is the top-level dir

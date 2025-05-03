@@ -12,11 +12,11 @@ def cool_spiral(n: int, t: float) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    window = slamd.Window("drawing_2d", 1000, 1000)
+    vis = slamd.Visualizer("drawing_2d")
 
     canvas = slamd.Canvas()
 
-    window.add_canvas("canvas", canvas)
+    vis.add_canvas("canvas", canvas)
 
     t = 0.0
     while True:

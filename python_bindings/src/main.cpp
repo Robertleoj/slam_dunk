@@ -2,6 +2,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <slamd/slamd.hpp>
+#include <slamd/spawn_window.hpp>
 
 namespace py = pybind11;
 
@@ -15,9 +16,8 @@ struct type_caster<glm::vec2> {
         handle src,
         bool
     ) {
-        auto buf =
-            py::array_t<float, py::array::c_style | py::array::forcecast>::
-                ensure(src);
+        auto buf = py::array_t < float,
+             py::array::c_style | py::array::forcecast > ::ensure(src);
         if (!buf || buf.ndim() != 1 || buf.shape(0) != 2) {
             return false;
         }
@@ -42,9 +42,8 @@ struct type_caster<glm::vec3> {
         handle src,
         bool
     ) {
-        auto buf =
-            py::array_t<float, py::array::c_style | py::array::forcecast>::
-                ensure(src);
+        auto buf = py::array_t < float,
+             py::array::c_style | py::array::forcecast > ::ensure(src);
         if (!buf || buf.ndim() != 1 || buf.shape(0) != 3) {
             return false;
         }
@@ -69,9 +68,8 @@ struct type_caster<glm::mat4> {
         handle src,
         bool
     ) {
-        auto buf =
-            py::array_t<float, py::array::c_style | py::array::forcecast>::
-                ensure(src);
+        auto buf = py::array_t < float,
+             py::array::c_style | py::array::forcecast > ::ensure(src);
         if (!buf || buf.ndim() != 2 || buf.shape(0) != 4 || buf.shape(1) != 4) {
             return false;
         }
@@ -107,9 +105,8 @@ struct type_caster<glm::mat3> {
         handle src,
         bool
     ) {
-        auto buf =
-            py::array_t<float, py::array::c_style | py::array::forcecast>::
-                ensure(src);
+        auto buf = py::array_t < float,
+             py::array::c_style | py::array::forcecast > ::ensure(src);
         if (!buf || buf.ndim() != 2 || buf.shape(0) != 3 || buf.shape(1) != 3) {
             return false;
         }
@@ -149,9 +146,8 @@ struct type_caster<std::vector<glm::vec3>> {
         handle src,
         bool
     ) {
-        auto buf =
-            py::array_t<float, py::array::c_style | py::array::forcecast>::
-                ensure(src);
+        auto buf = py::array_t < float,
+             py::array::c_style | py::array::forcecast > ::ensure(src);
         if (!buf || buf.ndim() != 2 || buf.shape(1) != 3) {
             return false;
         }
@@ -174,16 +170,14 @@ struct type_caster<std::vector<glm::vec3>> {
             static_cast<ssize_t>(sizeof(float))
         };
 
-        py::array_t<float> arr(
-            py::buffer_info(
-                nullptr,                                 // no data yet
-                sizeof(float),                           // size of one float
-                py::format_descriptor<float>::format(),  // format string
-                2,                                       // ndim
-                shape,                                   // shape
-                strides                                  // strides
-            )
-        );
+        py::array_t<float> arr(py::buffer_info(
+            nullptr,                                 // no data yet
+            sizeof(float),                           // size of one float
+            py::format_descriptor<float>::format(),  // format string
+            2,                                       // ndim
+            shape,                                   // shape
+            strides                                  // strides
+        ));
 
         auto r = arr.mutable_unchecked<2>();
         for (size_t i = 0; i < vecs.size(); ++i) {
@@ -208,9 +202,8 @@ struct type_caster<std::vector<glm::vec2>> {
         handle src,
         bool
     ) {
-        auto buf =
-            py::array_t<float, py::array::c_style | py::array::forcecast>::
-                ensure(src);
+        auto buf = py::array_t < float,
+             py::array::c_style | py::array::forcecast > ::ensure(src);
         if (!buf || buf.ndim() != 2 || buf.shape(1) != 2) {
             return false;
         }
@@ -233,16 +226,14 @@ struct type_caster<std::vector<glm::vec2>> {
             static_cast<ssize_t>(sizeof(float))
         };
 
-        py::array_t<float> arr(
-            py::buffer_info(
-                nullptr,                                 // no data yet
-                sizeof(float),                           // item size
-                py::format_descriptor<float>::format(),  // format string
-                2,                                       // ndim
-                shape,                                   // shape
-                strides                                  // strides
-            )
-        );
+        py::array_t<float> arr(py::buffer_info(
+            nullptr,                                 // no data yet
+            sizeof(float),                           // item size
+            py::format_descriptor<float>::format(),  // format string
+            2,                                       // ndim
+            shape,                                   // shape
+            strides                                  // strides
+        ));
 
         auto r = arr.mutable_unchecked<2>();
         for (size_t i = 0; i < vecs.size(); ++i) {
@@ -267,9 +258,8 @@ struct type_caster<slamd::data::Image> {
         bool
     ) {
         // Ensure it's a 3D numpy array of uint8
-        auto buf =
-            py::array_t<uint8_t, py::array::c_style | py::array::forcecast>::
-                ensure(src);
+        auto buf = py::array_t < uint8_t,
+             py::array::c_style | py::array::forcecast > ::ensure(src);
         if (!buf || buf.ndim() != 3) {
             return false;
         }
@@ -689,26 +679,36 @@ PYBIND11_MODULE(
             py::arg("object")
         );
 
-    py::class_<slamd::Window>(m, "Window")
+    py::class_<
+        slamd::_vis::Visualizer,
+        std::shared_ptr<slamd::_vis::Visualizer>>(m, "Visualizer")
         .def(
-            py::init<std::string, size_t, size_t>(),
+            py::init([](std::string name, bool spawn) {
+                return slamd::visualizer(name, spawn);
+            }),
             py::arg("name"),
-            py::arg("height"),
-            py::arg("width")
+            py::arg("spawn") = true
         )
-        .def("wait_for_close", &slamd::Window::wait_for_close)
+        .def("hang_forever", &slamd::_vis::Visualizer::hang_forever)
         .def(
             "add_scene",
-            &slamd::Window::add_scene,
+            &slamd::_vis::Visualizer::add_scene,
             py::arg("name"),
             py::arg("scene")
         )
         .def(
             "add_canvas",
-            &slamd::Window::add_canvas,
+            &slamd::_vis::Visualizer::add_canvas,
             py::arg("name"),
             py::arg("canvas")
         );
+
+    m.def(
+        "spawn_window",
+        &slamd::spawn_window,
+        py::arg("window_name"),
+        py::arg("executable_path")
+    );
 
     auto _geom = m.def_submodule("_geom");
     define_private_geom(_geom);

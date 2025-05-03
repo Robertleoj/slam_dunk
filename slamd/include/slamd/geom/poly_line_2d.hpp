@@ -15,20 +15,14 @@ class PolyLine2D : public Geometry {
         float thickness
     );
 
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
-
-    std::optional<gmath::AABB> bounds() override;
-
-   private:
-    static Mesh make_mesh(
-        const std::vector<glm::vec2>& points,
-        const glm::vec3& color,
-        float thickness
-    );
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
 
    private:
-    Mesh line_mesh;
-    gmath::AABB cached_bounds;
+    std::vector<glm::vec2> points;
+    glm::vec3 color;
+    float thickness;
 };
 
 }  // namespace _geom

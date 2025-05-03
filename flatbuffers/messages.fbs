@@ -1,0 +1,122 @@
+include "visualizer.fbs";
+include "primitives.fbs";
+include "geometry.fbs";
+
+
+namespace slamd.flatb;
+
+// object updates
+
+// mesh
+table UpdateMeshPositions {
+    object_id: ulong;
+    positions: [Vec3];
+}
+
+table UpdateMeshColors {
+    object_id: ulong;
+    colors: [Vec3];
+}
+
+table UpdateMeshNormals {
+    object_id: ulong;
+    normals: [Vec3];
+}
+
+
+// circles2d
+table UpdateCircles2DPositions {
+    object_id: ulong;
+    positions: [Vec2];
+}
+
+table UpdateCircles2DColors {
+    object_id: ulong;
+    colors: [Vec3];
+}
+
+table UpdateCircles2DRadii {
+    object_id: ulong;
+    radii: [float];
+}
+
+//point cloud
+table UpdatePointCloudPositions {
+    object_id: ulong;
+    positions: [Vec3];
+}
+
+table UpdatePointCloudColors {
+    object_id: ulong;
+    colors: [Vec3];
+}
+
+table UpdatePointCloudRadii {
+    object_id: ulong;
+    radii: [float];
+}
+
+
+
+// general updates
+table SetTransform {
+    tree_id: ulong;
+    tree_path: string;
+    transform: Mat4;
+}
+
+table SetObject {
+    tree_id: ulong;
+    tree_path: string;
+    geometry_id: ulong;
+}
+
+table AddGeometry {
+    geometry: Geometry;
+}
+
+table RemoveGeometry {
+    geometry_id: ulong;
+}
+
+table AddTree {
+    tree: Tree;
+}
+
+table AddView {
+    view: View;
+}
+
+// message
+
+union MessageUnion {
+    initial_state: InitialState,
+    set_transform: SetTransform,
+    set_object: SetObject,
+    add_geometry: AddGeometry,
+    remove_geometry: RemoveGeometry,
+    add_tree: AddTree,
+    add_view: AddView,
+
+    // object updates
+    // mesh
+    update_mesh_positions: UpdateMeshPositions,
+    update_mesh_colors: UpdateMeshColors,
+    update_mesh_normals: UpdateMeshNormals,
+
+    // circles 2d
+    update_circles2d_positions: UpdateCircles2DPositions,
+    update_circles2d_colors: UpdateCircles2DColors,
+    update_circles2d_radii: UpdateCircles2DRadii,
+
+    // point cloud
+    update_point_cloud_positions: UpdatePointCloudPositions,
+    update_point_cloud_colors: UpdatePointCloudColors,
+    update_point_cloud_radii: UpdatePointCloudRadii
+}
+
+table Message {
+    message: MessageUnion;
+}
+
+root_type Message;

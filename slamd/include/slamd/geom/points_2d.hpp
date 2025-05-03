@@ -14,13 +14,14 @@ class Points2D : public Geometry {
         const std::vector<float>& radii
     );
 
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
-
-    std::optional<gmath::AABB> bounds() override;
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
 
    private:
-    Mesh mesh;
-    gmath::AABB cached_bounds;
+    std::vector<glm::vec2> positions;
+    std::vector<glm::vec3> colors;
+    std::vector<float> radii;
 };
 
 }  // namespace _geom
@@ -51,11 +52,13 @@ PointsPtr points(
         final_radii = radii;
     }
 
-    return std::make_shared<_geom::Points2D>(
+    auto points_2d = std::make_shared<_geom::Points2D>(
         positions,
         std::move(final_colors),
         std::move(final_radii)
     );
+    // _global::geometries.add(points_2d->id, points_2d);
+    return points_2d;
 }
 
 }  // namespace geom2d

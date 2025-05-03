@@ -1,0 +1,42 @@
+
+namespace slamd.flatb;
+
+struct Vec2 {
+    x: float;
+    y: float;
+}
+
+struct Vec3 {
+    x: float;
+    y: float;
+    z: float;
+}
+
+struct Vec4 {
+    x: float;
+    y: float;
+    z: float;
+    w: float;
+}
+
+struct Mat3 {
+    data: [float:9];
+}
+
+struct Mat4 {
+    data: [float:16];
+}
+
+table ImageData {
+    width: uint32;
+    height: uint32;
+    pixels: [ubyte];
+}
+
+table MeshData {
+    positions: [Vec3];
+    colors: [Vec3];
+    triangle_indices: [uint32];
+    normals: [Vec3];
+}
+

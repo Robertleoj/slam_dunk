@@ -1,6 +1,8 @@
 {
-  "C_Cpp.default.compileCommands": [
-    "${workspaceFolder}/examples/build/compile_commands.json"
+  "clangd.arguments": [
+    // "--compile-commands-dir=python_examples/build",
+    "--compile-commands-dir=examples/build",
+    "--function-arg-placeholders=false"
   ],
   "files.associations": {
     "*.py": "python",
@@ -95,6 +97,7 @@
     "editor.tabSize": 4
   },
   "[cpp]": {
+    "editor.defaultFormatter": "xaver.clang-format",
     "editor.insertSpaces": true,
     "editor.tabSize": 4
   },
@@ -121,5 +124,7 @@
     "**/vendored_deps/",
     "**/vcpkg_installed"
   ],
-  "python.analysis.logLevel": "Information"
+  "python.analysis.logLevel": "Information",
+  "search.followSymlinks": false,
+  "clangd.path": "clangd-19"
 }

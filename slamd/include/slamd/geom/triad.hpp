@@ -1,7 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <slamd/geom/arrows.hpp>
 #include <slamd/geom/geometry.hpp>
 
 namespace slamd {
@@ -11,11 +10,13 @@ class Triad : public Geometry {
    public:
     Triad(float scale, float thickness);
 
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
 
    private:
-    Arrows arrows;
-    glm::mat4 scale_transform;
+    float scale;
+    float thickness;
 };
 
 }  // namespace _geom

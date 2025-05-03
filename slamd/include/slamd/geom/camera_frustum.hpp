@@ -23,27 +23,16 @@ class CameraFrustum : public Geometry {
         float scale = 1.0
     );
 
-    void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
+    flatbuffers::Offset<slamd::flatb::Geometry> serialize(
+        flatbuffers::FlatBufferBuilder& builder
+    ) override;
 
    private:
-    struct Corners {
-        glm::vec3 tl;
-        glm::vec3 tr;
-        glm::vec3 br;
-        glm::vec3 bl;
-    };
-
-    Corners corners;
-
-    struct CameraImage {
-        Image image_geometry;
-        // transform to put the image into the frustum
-        glm::mat4 transform;
-    };
-
-    glm::mat4 scale_transform;
-    std::optional<CameraImage> cam_image;
-    std::vector<PolyLine> poly_lines;
+    glm::mat3 intrinsics_matrix;
+    size_t image_width;
+    size_t image_height;
+    float scale;
+    std::optional<data::Image> img = std::nullopt;
 };
 }  // namespace _geom
 
