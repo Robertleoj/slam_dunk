@@ -2,6 +2,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <slamd/slamd.hpp>
+#include <slamd/spawn_window.hpp>
 
 namespace py = pybind11;
 
@@ -701,6 +702,13 @@ PYBIND11_MODULE(
             py::arg("name"),
             py::arg("canvas")
         );
+
+    m.def(
+        "spawn_window",
+        &slamd::spawn_window,
+        py::arg("window_name"),
+        py::arg("executable_path")
+    );
 
     auto _geom = m.def_submodule("_geom");
     define_private_geom(_geom);

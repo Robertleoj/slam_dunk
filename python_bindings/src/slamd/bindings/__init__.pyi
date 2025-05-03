@@ -3,10 +3,11 @@ SlamDunk visualization library
 """
 from __future__ import annotations
 import numpy
+import typing
 from . import _geom
 from . import geom
 from . import geom2d
-__all__ = ['Canvas', 'Scene', 'Visualizer', 'geom', 'geom2d']
+__all__ = ['Canvas', 'Scene', 'Visualizer', 'geom', 'geom2d', 'spawn_window']
 class Canvas:
     def __init__(self) -> None:
         ...
@@ -30,3 +31,5 @@ class Visualizer:
         ...
     def hang_forever(self) -> None:
         ...
+def spawn_window(window_name: str, executable_path: str | None) -> None:
+    ...

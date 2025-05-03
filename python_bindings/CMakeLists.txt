@@ -85,8 +85,14 @@ set_target_properties(bindings PROPERTIES
     INSTALL_RPATH "$ORIGIN"
 )
 
+set_target_properties(slamd_window PROPERTIES
+    INSTALL_RPATH "$ORIGIN"
+)
+
 # === Install the pybind11 module ===
 install(TARGETS bindings DESTINATION slamd)
+
+install(TARGETS slamd_window DESTINATION slamd)
 
 # === Install your shared libraries ===
 

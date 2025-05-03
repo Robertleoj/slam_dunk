@@ -207,6 +207,7 @@ target_sources(
         src/slamd/assert.cpp
         src/slamd/visualizer.cpp
         src/slamd/view.cpp
+        src/slamd/spawn_window.cpp
 
         src/slamd/net/connection.cpp
         src/slamd/net/client_set.cpp
