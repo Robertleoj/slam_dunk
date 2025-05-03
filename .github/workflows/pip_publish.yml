@@ -1,8 +1,15 @@
 name: Upload Python Package to PyPI when a Release is Created
 
+# on:
+#   release:
+#     types: [created]
+
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - window_is_process
+
+
 
 jobs:
   pypi-publish:
@@ -62,7 +69,7 @@ jobs:
           cd python_bindings
           cibuildwheel --output-dir dist
 
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: python_bindings/dist
+      # - name: Publish to PyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     packages-dir: python_bindings/dist
