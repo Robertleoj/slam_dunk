@@ -50,6 +50,16 @@ class StateManager {
         const slamd::flatb::UpdateCircles2DRadii* update_fb
     );
 
+    void handle_update_point_cloud_positions(
+        const slamd::flatb::UpdatePointCloudPositions* update_fb
+    );
+    void handle_update_point_cloud_colors(
+        const slamd::flatb::UpdatePointCloudColors* update_fb
+    );
+    void handle_update_point_cloud_radii(
+        const slamd::flatb::UpdatePointCloudRadii* update_fb
+    );
+
     // fs::path layout_path();
 
    public:

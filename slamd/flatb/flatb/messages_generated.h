@@ -38,6 +38,15 @@ struct UpdateCircles2DColorsBuilder;
 struct UpdateCircles2DRadii;
 struct UpdateCircles2DRadiiBuilder;
 
+struct UpdatePointCloudPositions;
+struct UpdatePointCloudPositionsBuilder;
+
+struct UpdatePointCloudColors;
+struct UpdatePointCloudColorsBuilder;
+
+struct UpdatePointCloudRadii;
+struct UpdatePointCloudRadiiBuilder;
+
 struct SetTransform;
 struct SetTransformBuilder;
 
@@ -74,11 +83,14 @@ enum MessageUnion : uint8_t {
   MessageUnion_update_circles2d_positions = 11,
   MessageUnion_update_circles2d_colors = 12,
   MessageUnion_update_circles2d_radii = 13,
+  MessageUnion_update_point_cloud_positions = 14,
+  MessageUnion_update_point_cloud_colors = 15,
+  MessageUnion_update_point_cloud_radii = 16,
   MessageUnion_MIN = MessageUnion_NONE,
-  MessageUnion_MAX = MessageUnion_update_circles2d_radii
+  MessageUnion_MAX = MessageUnion_update_point_cloud_radii
 };
 
-inline const MessageUnion (&EnumValuesMessageUnion())[14] {
+inline const MessageUnion (&EnumValuesMessageUnion())[17] {
   static const MessageUnion values[] = {
     MessageUnion_NONE,
     MessageUnion_initial_state,
@@ -93,13 +105,16 @@ inline const MessageUnion (&EnumValuesMessageUnion())[14] {
     MessageUnion_update_mesh_normals,
     MessageUnion_update_circles2d_positions,
     MessageUnion_update_circles2d_colors,
-    MessageUnion_update_circles2d_radii
+    MessageUnion_update_circles2d_radii,
+    MessageUnion_update_point_cloud_positions,
+    MessageUnion_update_point_cloud_colors,
+    MessageUnion_update_point_cloud_radii
   };
   return values;
 }
 
 inline const char * const *EnumNamesMessageUnion() {
-  static const char * const names[15] = {
+  static const char * const names[18] = {
     "NONE",
     "initial_state",
     "set_transform",
@@ -114,13 +129,16 @@ inline const char * const *EnumNamesMessageUnion() {
     "update_circles2d_positions",
     "update_circles2d_colors",
     "update_circles2d_radii",
+    "update_point_cloud_positions",
+    "update_point_cloud_colors",
+    "update_point_cloud_radii",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameMessageUnion(MessageUnion e) {
-  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_update_circles2d_radii)) return "";
+  if (::flatbuffers::IsOutRange(e, MessageUnion_NONE, MessageUnion_update_point_cloud_radii)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesMessageUnion()[index];
 }
@@ -179,6 +197,18 @@ template<> struct MessageUnionTraits<slamd::flatb::UpdateCircles2DColors> {
 
 template<> struct MessageUnionTraits<slamd::flatb::UpdateCircles2DRadii> {
   static const MessageUnion enum_value = MessageUnion_update_circles2d_radii;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::UpdatePointCloudPositions> {
+  static const MessageUnion enum_value = MessageUnion_update_point_cloud_positions;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::UpdatePointCloudColors> {
+  static const MessageUnion enum_value = MessageUnion_update_point_cloud_colors;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::UpdatePointCloudRadii> {
+  static const MessageUnion enum_value = MessageUnion_update_point_cloud_radii;
 };
 
 bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *obj, MessageUnion type);
@@ -562,6 +592,195 @@ inline ::flatbuffers::Offset<UpdateCircles2DRadii> CreateUpdateCircles2DRadiiDir
       radii__);
 }
 
+struct UpdatePointCloudPositions FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UpdatePointCloudPositionsBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_OBJECT_ID = 4,
+    VT_POSITIONS = 6
+  };
+  uint64_t object_id() const {
+    return GetField<uint64_t>(VT_OBJECT_ID, 0);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *positions() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_POSITIONS);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_OBJECT_ID, 8) &&
+           VerifyOffset(verifier, VT_POSITIONS) &&
+           verifier.VerifyVector(positions()) &&
+           verifier.EndTable();
+  }
+};
+
+struct UpdatePointCloudPositionsBuilder {
+  typedef UpdatePointCloudPositions Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_object_id(uint64_t object_id) {
+    fbb_.AddElement<uint64_t>(UpdatePointCloudPositions::VT_OBJECT_ID, object_id, 0);
+  }
+  void add_positions(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> positions) {
+    fbb_.AddOffset(UpdatePointCloudPositions::VT_POSITIONS, positions);
+  }
+  explicit UpdatePointCloudPositionsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UpdatePointCloudPositions> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UpdatePointCloudPositions>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UpdatePointCloudPositions> CreateUpdatePointCloudPositions(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> positions = 0) {
+  UpdatePointCloudPositionsBuilder builder_(_fbb);
+  builder_.add_object_id(object_id);
+  builder_.add_positions(positions);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<UpdatePointCloudPositions> CreateUpdatePointCloudPositionsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    const std::vector<slamd::flatb::Vec3> *positions = nullptr) {
+  auto positions__ = positions ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*positions) : 0;
+  return slamd::flatb::CreateUpdatePointCloudPositions(
+      _fbb,
+      object_id,
+      positions__);
+}
+
+struct UpdatePointCloudColors FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UpdatePointCloudColorsBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_OBJECT_ID = 4,
+    VT_COLORS = 6
+  };
+  uint64_t object_id() const {
+    return GetField<uint64_t>(VT_OBJECT_ID, 0);
+  }
+  const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *colors() const {
+    return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_COLORS);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_OBJECT_ID, 8) &&
+           VerifyOffset(verifier, VT_COLORS) &&
+           verifier.VerifyVector(colors()) &&
+           verifier.EndTable();
+  }
+};
+
+struct UpdatePointCloudColorsBuilder {
+  typedef UpdatePointCloudColors Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_object_id(uint64_t object_id) {
+    fbb_.AddElement<uint64_t>(UpdatePointCloudColors::VT_OBJECT_ID, object_id, 0);
+  }
+  void add_colors(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors) {
+    fbb_.AddOffset(UpdatePointCloudColors::VT_COLORS, colors);
+  }
+  explicit UpdatePointCloudColorsBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UpdatePointCloudColors> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UpdatePointCloudColors>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UpdatePointCloudColors> CreateUpdatePointCloudColors(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors = 0) {
+  UpdatePointCloudColorsBuilder builder_(_fbb);
+  builder_.add_object_id(object_id);
+  builder_.add_colors(colors);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<UpdatePointCloudColors> CreateUpdatePointCloudColorsDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    const std::vector<slamd::flatb::Vec3> *colors = nullptr) {
+  auto colors__ = colors ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*colors) : 0;
+  return slamd::flatb::CreateUpdatePointCloudColors(
+      _fbb,
+      object_id,
+      colors__);
+}
+
+struct UpdatePointCloudRadii FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UpdatePointCloudRadiiBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_OBJECT_ID = 4,
+    VT_RADII = 6
+  };
+  uint64_t object_id() const {
+    return GetField<uint64_t>(VT_OBJECT_ID, 0);
+  }
+  const ::flatbuffers::Vector<float> *radii() const {
+    return GetPointer<const ::flatbuffers::Vector<float> *>(VT_RADII);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_OBJECT_ID, 8) &&
+           VerifyOffset(verifier, VT_RADII) &&
+           verifier.VerifyVector(radii()) &&
+           verifier.EndTable();
+  }
+};
+
+struct UpdatePointCloudRadiiBuilder {
+  typedef UpdatePointCloudRadii Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_object_id(uint64_t object_id) {
+    fbb_.AddElement<uint64_t>(UpdatePointCloudRadii::VT_OBJECT_ID, object_id, 0);
+  }
+  void add_radii(::flatbuffers::Offset<::flatbuffers::Vector<float>> radii) {
+    fbb_.AddOffset(UpdatePointCloudRadii::VT_RADII, radii);
+  }
+  explicit UpdatePointCloudRadiiBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UpdatePointCloudRadii> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UpdatePointCloudRadii>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UpdatePointCloudRadii> CreateUpdatePointCloudRadii(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<float>> radii = 0) {
+  UpdatePointCloudRadiiBuilder builder_(_fbb);
+  builder_.add_object_id(object_id);
+  builder_.add_radii(radii);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<UpdatePointCloudRadii> CreateUpdatePointCloudRadiiDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t object_id = 0,
+    const std::vector<float> *radii = nullptr) {
+  auto radii__ = radii ? _fbb.CreateVector<float>(*radii) : 0;
+  return slamd::flatb::CreateUpdatePointCloudRadii(
+      _fbb,
+      object_id,
+      radii__);
+}
+
 struct SetTransform FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef SetTransformBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -931,6 +1150,15 @@ struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::UpdateCircles2DRadii *message_as_update_circles2d_radii() const {
     return message_type() == slamd::flatb::MessageUnion_update_circles2d_radii ? static_cast<const slamd::flatb::UpdateCircles2DRadii *>(message()) : nullptr;
   }
+  const slamd::flatb::UpdatePointCloudPositions *message_as_update_point_cloud_positions() const {
+    return message_type() == slamd::flatb::MessageUnion_update_point_cloud_positions ? static_cast<const slamd::flatb::UpdatePointCloudPositions *>(message()) : nullptr;
+  }
+  const slamd::flatb::UpdatePointCloudColors *message_as_update_point_cloud_colors() const {
+    return message_type() == slamd::flatb::MessageUnion_update_point_cloud_colors ? static_cast<const slamd::flatb::UpdatePointCloudColors *>(message()) : nullptr;
+  }
+  const slamd::flatb::UpdatePointCloudRadii *message_as_update_point_cloud_radii() const {
+    return message_type() == slamd::flatb::MessageUnion_update_point_cloud_radii ? static_cast<const slamd::flatb::UpdatePointCloudRadii *>(message()) : nullptr;
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_MESSAGE_TYPE, 1) &&
@@ -990,6 +1218,18 @@ template<> inline const slamd::flatb::UpdateCircles2DColors *Message::message_as
 
 template<> inline const slamd::flatb::UpdateCircles2DRadii *Message::message_as<slamd::flatb::UpdateCircles2DRadii>() const {
   return message_as_update_circles2d_radii();
+}
+
+template<> inline const slamd::flatb::UpdatePointCloudPositions *Message::message_as<slamd::flatb::UpdatePointCloudPositions>() const {
+  return message_as_update_point_cloud_positions();
+}
+
+template<> inline const slamd::flatb::UpdatePointCloudColors *Message::message_as<slamd::flatb::UpdatePointCloudColors>() const {
+  return message_as_update_point_cloud_colors();
+}
+
+template<> inline const slamd::flatb::UpdatePointCloudRadii *Message::message_as<slamd::flatb::UpdatePointCloudRadii>() const {
+  return message_as_update_point_cloud_radii();
 }
 
 struct MessageBuilder {
@@ -1078,6 +1318,18 @@ inline bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *ob
     }
     case MessageUnion_update_circles2d_radii: {
       auto ptr = reinterpret_cast<const slamd::flatb::UpdateCircles2DRadii *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_update_point_cloud_positions: {
+      auto ptr = reinterpret_cast<const slamd::flatb::UpdatePointCloudPositions *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_update_point_cloud_colors: {
+      auto ptr = reinterpret_cast<const slamd::flatb::UpdatePointCloudColors *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_update_point_cloud_radii: {
+      auto ptr = reinterpret_cast<const slamd::flatb::UpdatePointCloudRadii *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

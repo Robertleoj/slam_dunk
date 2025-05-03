@@ -40,6 +40,24 @@ table UpdateCircles2DRadii {
     radii: [float];
 }
 
+//point cloud
+table UpdatePointCloudPositions {
+    object_id: ulong;
+    positions: [Vec3];
+}
+
+table UpdatePointCloudColors {
+    object_id: ulong;
+    colors: [Vec3];
+}
+
+table UpdatePointCloudRadii {
+    object_id: ulong;
+    radii: [float];
+}
+
+
+
 // general updates
 table SetTransform {
     tree_id: ulong;
@@ -89,7 +107,12 @@ union MessageUnion {
     // circles 2d
     update_circles2d_positions: UpdateCircles2DPositions,
     update_circles2d_colors: UpdateCircles2DColors,
-    update_circles2d_radii: UpdateCircles2DRadii
+    update_circles2d_radii: UpdateCircles2DRadii,
+
+    // point cloud
+    update_point_cloud_positions: UpdatePointCloudPositions,
+    update_point_cloud_colors: UpdatePointCloudColors,
+    update_point_cloud_radii: UpdatePointCloudRadii
 }
 
 table Message {
