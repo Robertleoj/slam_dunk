@@ -706,7 +706,7 @@ PYBIND11_MODULE(
         "spawn_window",
         &slamd::spawn_window,
         py::arg("port") = 5555,
-        py::arg("executable_path")
+        py::arg("executable_path") = std::nullopt
     );
 
     auto _geom = m.def_submodule("_geom");
