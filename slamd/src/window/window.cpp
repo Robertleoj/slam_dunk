@@ -114,11 +114,12 @@ void Window::run() {
         }
     }
 
-    if (this->state_manager.layout_path.has_value() &&
-        fs::exists(this->state_manager.layout_path.value())) {
-        ImGui::SaveIniSettingsToDisk(
-            this->state_manager.layout_path.value().string().c_str()
-        );
+    spdlog::info("Window closed!");
+
+    if (this->state_manager.layout_path.has_value()) {
+        auto layout_path = this->state_manager.layout_path.value();
+        spdlog::info("Saving layout to {}", layout_path.string());
+        ImGui::SaveIniSettingsToDisk(layout_path.string().c_str());
     }
 
     glfwTerminate();

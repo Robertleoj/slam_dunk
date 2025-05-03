@@ -8,6 +8,11 @@ namespace _net {
 bool Connection::is_alive() {
     return this->alive;
 }
+
+Connection::~Connection() {
+    this->worker.request_stop();
+}
+
 Connection::Connection(
     asio::ip::tcp::socket socket
 )

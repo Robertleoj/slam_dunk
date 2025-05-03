@@ -10,6 +10,7 @@ namespace slamd {
 class Connection {
    public:
     Connection(std::string ip, ushort port);
+    ~Connection();
 
    public:
     const std::string ip;
@@ -18,7 +19,7 @@ class Connection {
     _utils::ThreadSafeQueue<std::unique_ptr<Message>> messages;
 
    private:
-    void job();
+    void job(std::stop_token& stop_token);
 
     std::jthread job_thread;
 };

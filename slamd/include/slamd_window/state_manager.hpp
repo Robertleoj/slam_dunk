@@ -66,7 +66,7 @@ class StateManager {
 
    public:
     std::atomic<bool> loaded = false;
-    std::optional<fs::path> layout_path;
+    std::optional<fs::path> layout_path = std::nullopt;
 
     std::map<std::string, std::unique_ptr<View>> views;
     std::map<_id::TreeID, std::shared_ptr<Tree>> trees;
