@@ -15,10 +15,10 @@ void framebuffer_size_callback(
 }
 
 Window::Window(
-    size_t height,
-    size_t width
-) {
-    this->window = glutils::make_window("Slam Dunk", width, height);
+    std::string name
+)
+    : name(name) {
+    this->window = glutils::make_window("Slam Dunk", 1000, 1000);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     IMGUI_CHECKVERSION();
@@ -32,15 +32,15 @@ Window::Window(
     ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-// fs::path Window::layout_path() {
-//     return fs::current_path() / std::format(".{}.ini", this->name);
-// }
+fs::path Window::layout_path() {
+    return fs::current_path() / std::format(".{}.ini", this->name);
+}
 
 void Window::run() {
-    // if (fs::exists(this->layout_path())) {
-    //     ImGui::LoadIniSettingsFromDisk(this->layout_path().string().c_str());
-    //     this->loaded_layout = true;
-    // }
+    if (fs::exists(this->layout_path())) {
+        ImGui::LoadIniSettingsFromDisk(this->layout_path().string().c_str());
+        this->loaded_layout = true;
+    }
 
     while (!glfwWindowShouldClose(window)) {
         this->state_manager.apply_updates();
@@ -51,12 +51,13 @@ void Window::run() {
         main_dockspace_id = ImGui::DockSpaceOverViewport();
 
         {
-            // std::scoped_lock l(this->view_map_mutex);
-
             for (auto& [scene_name, scene] : this->state_manager.views) {
-                // if (!this->loaded_layout) {
-                ImGui::SetNextWindowDockID(main_dockspace_id, ImGuiCond_Once);
-                // }
+                if (!this->loaded_layout) {
+                    ImGui::SetNextWindowDockID(
+                        main_dockspace_id,
+                        ImGuiCond_Once
+                    );
+                }
                 ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
                 ImGui::Begin(
@@ -82,7 +83,7 @@ void Window::run() {
         glfwPollEvents();
     }
 
-    // ImGui::SaveIniSettingsToDisk(this->layout_path().string().c_str());
+    ImGui::SaveIniSettingsToDisk(this->layout_path().string().c_str());
 
     glfwTerminate();
 }

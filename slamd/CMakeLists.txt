@@ -68,6 +68,7 @@ find_required_package(
 )
 
 add_subdirectory(${LIB_DIR}/glm)
+add_subdirectory(${LIB_DIR}/cxxopts)
 
 add_subdirectory(flatb)
 
@@ -105,6 +106,7 @@ target_link_libraries(
     PUBLIC
         spdlog::spdlog
         slamd_flatbuff
+        cxxopts
 
     PRIVATE
         spdlog::spdlog

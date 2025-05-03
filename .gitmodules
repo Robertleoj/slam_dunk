@@ -19,3 +19,6 @@
 [submodule "vendored_deps/asio"]
 	path = vendored_deps/asio
 	url = git@github.com:chriskohlhoff/asio.git
+[submodule "vendored_deps/cxxopts"]
+	path = vendored_deps/cxxopts
+	url = git@github.com:jarro2783/cxxopts.git

@@ -116,7 +116,7 @@
   "C_Cpp.inlayHints.parameterNames.enabled": true,
   "C_Cpp.inlayHints.referenceOperator.enabled": true,
   "python.analysis.extraPaths": ["python_bindings/src/"],
-  "cmake.sourceDirectory": "/Users/robert/personal/slam_dunk/examples",
+  "cmake.sourceDirectory": "/home/robert/learning/slam_dunk/examples",
   "python.analysis.exclude": [
     "**/build/",
     "**/.venv/",

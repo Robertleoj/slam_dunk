@@ -209,7 +209,7 @@ VisualizerPtr visualizer(
     auto visualizer = std::make_shared<_vis::Visualizer>(name);
 
     if (spawn) {
-        slamd::spawn_window();
+        slamd::spawn_window(name);
     }
 
     return visualizer;
