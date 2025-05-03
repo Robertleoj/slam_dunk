@@ -6,7 +6,6 @@
 #include <slamd/tree/tree.hpp>
 #include <slamd/view.hpp>
 #include <slamd_common/id.hpp>
-#include <stop_token>
 #include <thread>
 
 namespace slamd {
@@ -35,7 +34,7 @@ class Visualizer : public std::enable_shared_from_this<Visualizer> {
     void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
 
    private:
-    void server_job(std::stop_token& stop_token);
+    void server_job();
     std::vector<uint8_t> get_state();
     flatbuffers::Offset<
         flatbuffers::Vector<flatbuffers::Offset<flatb::Geometry>>>
@@ -49,7 +48,8 @@ class Visualizer : public std::enable_shared_from_this<Visualizer> {
    private:
     const uint16_t port;
     const std::string name;
-    std::jthread server_thread;
+    std::thread server_thread;
+    std::atomic<bool> stop_requested = false;
 
     std::mutex view_map_mutex;
 
