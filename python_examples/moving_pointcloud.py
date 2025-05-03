@@ -32,7 +32,7 @@ def main():
     vis = slamd.Visualizer("hello python")
 
     # coords = uniform_grid_points(100000, 10.0)
-    coords = uniform_grid_points(100000, 25.0)
+    coords = uniform_grid_points(100000, 30.0)
     print(uniform_grid_points)
 
     scene = slamd.Scene()
