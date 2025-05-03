@@ -15,19 +15,19 @@ The project is in very early development with many improvements coming in the ne
 Here is a simple "hello world" program for a SlamDunk visualization.
 
 ```python
-# python
+#python
 import slamd
 
 if __name__ == "__main__":
-    window = slamd.Window("Hello world", 1000, 1000)
+    vis = slamd.Visualizer("Hello world")
 
     scene = slamd.Scene()
 
     scene.set_object("/origin", slamd.geom.Triad())
 
-    window.add_scene("scene", scene)
+    vis.add_scene("scene", scene)
 
-    window.wait_for_close()
+    vis.hang_forever()
 ```
 
 ```c++
@@ -35,24 +35,24 @@ if __name__ == "__main__":
 #include <slamd/slamd.hpp>
 
 int main() {
-    slamd::Window window("Hello world", 1000, 1000);
+    auto vis = slamd::visualizer("hello_world");
 
     auto scene = slamd::scene();
 
     scene->set_object("/origin", slamd::geom::triad());
 
-    window.add_scene("scene", scene);
+    vis->add_scene("scene", scene);
 
-    window.wait_for_close();
+    vis->hang_forever();
 }
 ```
 
 This example highlights the main components of SlamDunk.
 
-1. The `Window` object handles the actual display window.
+1. The `Visualizer` object maintains the state of the visualization. It starts a TCP server, and spawns a viewer process that reads from it and displays the visualizations.
 2. A `Scene` object represents and contains a tree of 3D objects.
 3. `Geometry` objects can be added to `Scene`s with a path in the tree.
-4. To display a scene, we must add it to the window - this creates a _view_ of the scene.
+4. To display a scene, we must add it to the visualizer - this creates a _view_ of the scene.
 
 Running this program results in the following interactive visualization:
 ![](./images/hello_world.png)
@@ -67,15 +67,15 @@ import slamd
 import numpy as np
 
 if __name__ == "__main__":
-    window = slamd.Window("two windows", 1000, 1000)
+    vis = slamd.Visualizer("two windows")
 
     scene1 = slamd.Scene()
     scene2 = slamd.Scene()
 
-    window.add_scene("scene 1", scene1)
+    vis.add_scene("scene 1", scene1)
     scene1.set_object("/box", slamd.geom.Box())
 
-    window.add_scene("scene 2", scene2)
+    vis.add_scene("scene 2", scene2)
     scene2.set_object("/origin", slamd.geom.Triad())
 
     scene2.set_object("/ball", slamd.geom.Sphere(2.0))
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     scene2.set_transform("/ball", sphere_transform)
 
-    window.wait_for_close()
+    vis.hang_forever()
 
 ```
 
@@ -95,15 +95,15 @@ if __name__ == "__main__":
 #include <slamd/slamd.hpp>
 
 int main() {
-    slamd::Window window("two windows", 1000, 1000);
+    auto vis = slamd::visualizer("two windows");
 
     auto scene1 = slamd::scene();
     auto scene2 = slamd::scene();
 
-    window.add_scene("scene 1", scene1);
+    vis->add_scene("scene 1", scene1);
     scene1->set_object("/box", slamd::geom::box());
 
-    window.add_scene("scene 2", scene2);
+    vis->add_scene("scene 2", scene2);
     scene2->set_object("/origin", slamd::geom::triad());
     scene2->set_object("/ball", slamd::geom::sphere(2.0f));
 
@@ -112,7 +112,7 @@ int main() {
 
     scene2->set_transform("/ball", sphere_transform);
 
-    window.wait_for_close();
+    vis->hang_forever();
 }
 
 ```
