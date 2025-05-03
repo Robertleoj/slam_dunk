@@ -26,7 +26,7 @@ namespace _vis {
 
 class Visualizer : public std::enable_shared_from_this<Visualizer> {
    public:
-    Visualizer(std::string name);
+    Visualizer(std::string name, uint16_t port);
     ~Visualizer();
     void add_scene(std::string name, std::shared_ptr<Scene> scene);
     void add_canvas(std::string name, std::shared_ptr<Canvas> canvas);
@@ -47,7 +47,8 @@ class Visualizer : public std::enable_shared_from_this<Visualizer> {
     _id::VisualizerID id;
 
    private:
-    std::string name;
+    const uint16_t port;
+    const std::string name;
     std::jthread server_thread;
 
     std::mutex view_map_mutex;
@@ -61,6 +62,7 @@ class Visualizer : public std::enable_shared_from_this<Visualizer> {
 
 using VisualizerPtr = std::shared_ptr<_vis::Visualizer>;
 
-VisualizerPtr visualizer(std::string name, bool spawn = true);
+VisualizerPtr
+visualizer(std::string name, bool spawn = true, uint16_t port = 5555);
 
 }  // namespace slamd

@@ -17,7 +17,10 @@ int main(
     );
 
     options
-        .add_options()("w,window-name", "Name of the window (required)", cxxopts::value<std::string>())(
+        .add_options()
+        ("w,window-name", "Name of the window (required)", cxxopts::value<std::string>())
+        ("p,port", "Port number to use", cxxopts::value<int>()->default_value("5555"))
+        (
             "h,help",
             "Show help"
         );
@@ -37,9 +40,10 @@ int main(
     }
 
     std::string name = result["window-name"].as<std::string>();
+    uint16_t port = result["port"].as<int>();
 
     slamd::Window window{name};
-    window.state_manager.try_connect("127.0.0.1", 5555);
+    window.state_manager.try_connect("127.0.0.1", port);
 
     window.run();
 }

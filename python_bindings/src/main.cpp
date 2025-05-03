@@ -683,11 +683,11 @@ PYBIND11_MODULE(
         slamd::_vis::Visualizer,
         std::shared_ptr<slamd::_vis::Visualizer>>(m, "Visualizer")
         .def(
-            py::init([](std::string name, bool spawn) {
-                return slamd::visualizer(name, spawn);
+            py::init([](std::string name, uint16_t port) {
+                return slamd::visualizer(name, false, port);
             }),
             py::arg("name"),
-            py::arg("spawn") = true
+            py::arg("port") = 5555
         )
         .def("hang_forever", &slamd::_vis::Visualizer::hang_forever)
         .def(
@@ -707,6 +707,7 @@ PYBIND11_MODULE(
         "spawn_window",
         &slamd::spawn_window,
         py::arg("window_name"),
+        py::arg("port") = 5555,
         py::arg("executable_path")
     );
 

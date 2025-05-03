@@ -10,9 +10,11 @@ namespace slamd {
 namespace _vis {
 
 Visualizer::Visualizer(
-    std::string name
+    std::string name,
+    uint16_t port
 )
-    : name(name) {
+    : port(port),
+      name(name) {
     this->client_set = std::make_shared<_net::ClientSet>();
 
     this->server_thread = std::jthread([this](std::stop_token st) {
@@ -170,7 +172,7 @@ void Visualizer::server_job(
     asio::io_context io;
     asio::ip::tcp::acceptor acceptor(
         io,
-        asio::ip::tcp::endpoint(asio::ip::tcp::v4(), 5555)
+        asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)
     );
 
     std::function<void(void)> accept_loop = [&]() {
@@ -215,12 +217,13 @@ void Visualizer::hang_forever() {
 
 VisualizerPtr visualizer(
     std::string name,
-    bool spawn
+    bool spawn,
+    uint16_t port
 ) {
-    auto visualizer = std::make_shared<_vis::Visualizer>(name);
+    auto visualizer = std::make_shared<_vis::Visualizer>(name, port);
 
     if (spawn) {
-        slamd::spawn_window(name);
+        slamd::spawn_window(name, port);
     }
 
     return visualizer;

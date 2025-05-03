@@ -14,7 +14,7 @@ def cool_spiral(n: int, t: float) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    vis = slamd.Visualizer("3d_spiral")
+    vis = slamd.Visualizer("3d_spiral", True, 6000)
 
     scene = slamd.Scene()
 

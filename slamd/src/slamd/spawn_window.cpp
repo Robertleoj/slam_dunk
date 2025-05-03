@@ -1,5 +1,6 @@
 #include <spawn.h>
 #include <spdlog/spdlog.h>
+#include <filesystem>
 #include <format>
 #include <iostream>
 #include <slamd/spawn_window.hpp>
@@ -7,8 +8,25 @@
 extern char** environ;
 namespace slamd {
 
+std::string shell_escape(
+    const std::string& input
+) {
+    std::stringstream ss;
+    ss << '\'';
+    for (char c : input) {
+        if (c == '\'') {
+            ss << "'\\''";  // end, escape, reopen
+        } else {
+            ss << c;
+        }
+    }
+    ss << '\'';
+    return ss.str();
+}
+
 void spawn_window(
     std::string window_name,
+    uint16_t port,
     std::optional<std::string> exe_path
 ) {
     std::filesystem::path executable_path(exe_path.value_or(EXEC_PATH));
@@ -22,11 +40,15 @@ void spawn_window(
         );
     }
 
-    std::string window_arg = std::format("-w={}", window_name);
+    std::string window_arg = shell_escape(window_name);
+    std::string port_arg = std::format("{}", port);
 
     char* const argv[] = {
         (char*)"slamd_window",
+        (char*)"--window-name",
         (char*)window_arg.c_str(),
+        (char*)"--port",
+        (char*)port_arg.c_str(),
         NULL
     };
 
