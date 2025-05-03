@@ -3,11 +3,20 @@ import time
 import numpy as np
 
 
+def symmetric_root(x):
+    # return np.sign(x) * (np.abs(x) ** 0.5)
+    return np.abs(x) ** 0.5
+
+
 def f(inp: np.ndarray, t: float) -> np.ndarray:
     x = inp[:, 0]
     y = inp[:, 1]
 
-    return np.sin(0.1 * x**2 + t) * np.sin(0.1 * y**2 + t) * x * y * 0.1
+    return (
+        np.sin(symmetric_root(10 * x) - t)
+        * np.sin(symmetric_root(10 * y) + t)
+        * symmetric_root(x * y)
+    )
 
 
 def uniform_grid_points_with_mesh(n: int, a: float) -> tuple[np.ndarray, list[int]]:
@@ -37,7 +46,7 @@ def uniform_grid_points_with_mesh(n: int, a: float) -> tuple[np.ndarray, list[in
 def main():
     vis = slamd.Visualizer("hello python")
 
-    coords, indices = uniform_grid_points_with_mesh(100000, 13.0)
+    coords, indices = uniform_grid_points_with_mesh(100000, 30.0)
 
     scene = slamd.Scene()
     vis.add_scene("scene", scene)
