@@ -1,5 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
+import threading
 
 from .bindings import (
     __doc__,
@@ -17,10 +18,10 @@ class Visualizer:
         self._impl = Visualizer_internal(name, port)
 
         if spawn:
-            spawn_window(name, port)
+            spawn_window(port)
 
     def hang_forever(self):
-        return self._impl.hang_forever()
+        threading.Event().wait()
 
     def add_scene(self, name, scene):
         return self._impl.add_scene(name, scene)
@@ -29,7 +30,7 @@ class Visualizer:
         return self._impl.add_canvas(name, canvas)
 
 
-def spawn_window(window_name: str, port: int = 5555) -> None:
+def spawn_window(port: int = 5555) -> None:
     executable_path = Path(__file__).parent / "slamd_window"
 
     if not executable_path.exists():
@@ -37,7 +38,6 @@ def spawn_window(window_name: str, port: int = 5555) -> None:
         executable_path = None
 
     spawn_window_internal(
-        window_name,
         port,
         str(executable_path) if executable_path is not None else None,
     )

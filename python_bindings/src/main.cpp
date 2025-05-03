@@ -689,7 +689,6 @@ PYBIND11_MODULE(
             py::arg("name"),
             py::arg("port") = 5555
         )
-        .def("hang_forever", &slamd::_vis::Visualizer::hang_forever)
         .def(
             "add_scene",
             &slamd::_vis::Visualizer::add_scene,
@@ -706,7 +705,6 @@ PYBIND11_MODULE(
     m.def(
         "spawn_window",
         &slamd::spawn_window,
-        py::arg("window_name"),
         py::arg("port") = 5555,
         py::arg("executable_path")
     );

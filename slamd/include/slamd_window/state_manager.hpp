@@ -1,5 +1,7 @@
 #pragma once
 
+#include <atomic>
+#include <filesystem>
 #include <map>
 #include <memory>
 #include <slamd_common/id.hpp>
@@ -10,11 +12,13 @@
 
 namespace slamd {
 
+namespace fs = std::filesystem;
+
 class StateManager {
    public:
     StateManager();
 
-    void try_connect(std::string ip = "127.0.0.1", ushort port = 555);
+    void try_connect(std::string ip = "127.0.0.1", ushort port = 5555);
 
     void apply_updates();
 
@@ -60,11 +64,10 @@ class StateManager {
         const slamd::flatb::UpdatePointCloudRadii* update_fb
     );
 
-    // fs::path layout_path();
-
    public:
-    bool loaded = false;
-    std::string name;
+    std::atomic<bool> loaded = false;
+    std::optional<fs::path> layout_path;
+
     std::map<std::string, std::unique_ptr<View>> views;
     std::map<_id::TreeID, std::shared_ptr<Tree>> trees;
     std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>> geometries;

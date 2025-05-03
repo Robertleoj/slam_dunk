@@ -17,10 +17,7 @@ int main(
     );
 
     options
-        .add_options()
-        ("w,window-name", "Name of the window (required)", cxxopts::value<std::string>())
-        ("p,port", "Port number to use", cxxopts::value<int>()->default_value("5555"))
-        (
+        .add_options()("p,port", "Port number to use", cxxopts::value<int>()->default_value("5555"))(
             "h,help",
             "Show help"
         );
@@ -32,17 +29,9 @@ int main(
         return 0;
     }
 
-    if (!result.count("window-name")) {
-        std::cerr
-            << "Bro, you forgot the --window-name arg. Mandatory, my dude.\n";
-        std::cout << options.help() << std::endl;
-        return 1;
-    }
-
-    std::string name = result["window-name"].as<std::string>();
     uint16_t port = result["port"].as<int>();
 
-    slamd::Window window{name};
+    slamd::Window window{};
     window.state_manager.try_connect("127.0.0.1", port);
 
     window.run();

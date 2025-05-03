@@ -29,7 +29,8 @@ void StateManager::handle_initial_state(
     // const slamd::flatb::InitialState* full_state_fb =
     // slamd::flatb::GetInitialState(data.data());
 
-    this->name = full_state_fb->name()->str();
+    this->layout_path = fs::current_path() /
+                        std::format(".{}.ini", full_state_fb->name()->str());
 
     auto trees_fb = full_state_fb->trees();
 
@@ -62,6 +63,7 @@ void StateManager::handle_initial_state(
 
         this->views.insert({view_name, std::move(view)});
     }
+    this->loaded = true;
     spdlog::debug("loaded state");
 }
 

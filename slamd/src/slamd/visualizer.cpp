@@ -223,7 +223,7 @@ VisualizerPtr visualizer(
     auto visualizer = std::make_shared<_vis::Visualizer>(name, port);
 
     if (spawn) {
-        slamd::spawn_window(name, port);
+        slamd::spawn_window(port);
     }
 
     return visualizer;

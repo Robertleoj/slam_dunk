@@ -25,7 +25,6 @@ std::string shell_escape(
 }
 
 void spawn_window(
-    std::string window_name,
     uint16_t port,
     std::optional<std::string> exe_path
 ) {
@@ -40,17 +39,10 @@ void spawn_window(
         );
     }
 
-    std::string window_arg = shell_escape(window_name);
     std::string port_arg = std::format("{}", port);
 
-    char* const argv[] = {
-        (char*)"slamd_window",
-        (char*)"--window-name",
-        (char*)window_arg.c_str(),
-        (char*)"--port",
-        (char*)port_arg.c_str(),
-        NULL
-    };
+    char* const argv[] =
+        {(char*)"slamd_window", (char*)"--port", (char*)port_arg.c_str(), NULL};
 
     posix_spawn(&pid, executable_path.c_str(), NULL, NULL, argv, environ);
 }
