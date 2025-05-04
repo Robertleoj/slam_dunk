@@ -3,14 +3,15 @@ from pathlib import Path
 import threading
 import subprocess
 from sys import argv
+from . import geom, geom2d
+
 
 from .bindings import (
     __doc__,
     Visualizer as Visualizer_internal,
     Canvas,
     Scene,
-    geom,
-    geom2d,
+    # geom,
     spawn_window as spawn_window_internal,
 )
 

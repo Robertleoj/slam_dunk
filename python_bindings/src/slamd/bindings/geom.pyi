@@ -25,12 +25,6 @@ def Mesh(vertices: numpy.ndarray, vertex_colors: numpy.ndarray, triangle_indices
     """
     Create a SimpleMesh geometry from raw data
     """
-@typing.overload
-def PointCloud(positions: numpy.ndarray, color: numpy.ndarray, radius: float) -> bindings._geom.PointCloud:
-    """
-    Create a PointCloud with uniform color and radius
-    """
-@typing.overload
 def PointCloud(positions: numpy.ndarray, colors: numpy.ndarray, radii: list[float] | numpy.ndarray, min_brightness: float = 1.0) -> bindings._geom.PointCloud:
     """
     Create a PointCloud with per-point color and radius

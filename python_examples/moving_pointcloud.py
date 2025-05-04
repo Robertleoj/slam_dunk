@@ -29,7 +29,7 @@ def uniform_grid_points(n: int, a: float) -> np.ndarray:
 
 
 def main():
-    vis = slamd.Visualizer("hello python")
+    vis = slamd.Visualizer("hello python", port=6000)
 
     # coords = uniform_grid_points(100000, 10.0)
     coords = uniform_grid_points(100000, 30.0)
@@ -55,16 +55,13 @@ def main():
         colors[:, 1] = blue
         colors[:, 2] = green
 
-        radii = np.ones(points.shape[0], dtype=float) * 0.3
-
         if point_cloud is None:
-            point_cloud = slamd.geom.PointCloud(points, colors, radii)
+            point_cloud = slamd.geom.PointCloud(points, colors, 0.3, 0.5)
 
             scene.set_object("/points", point_cloud)
         else:
             point_cloud.update_positions(points)
             point_cloud.update_colors(colors)
-            point_cloud.update_radii(radii)
 
         t += 0.02
 

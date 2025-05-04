@@ -481,20 +481,6 @@ void define_geom(
         "Create a CameraFrustum geometry"
     );
 
-    // Overload: uniform color + uniform radius
-    m.def(
-        "PointCloud",
-        [](const std::vector<glm::vec3>& positions,
-           const glm::vec3& color,
-           float radius) {
-            return slamd::geom::point_cloud(positions, color, radius);
-        },
-        py::arg("positions"),
-        py::arg("color"),
-        py::arg("radius"),
-        "Create a PointCloud with uniform color and radius"
-    );
-
     // Overload: per-point color + per-point radius
     m.def(
         "PointCloud",
@@ -544,13 +530,13 @@ void define_geom(
         py::arg("triangle_indices"),
         "Create a SimpleMesh geometry from raw data"
     );
+
     m.def(
         "Mesh",
         [](const std::vector<glm::vec3>& positions,
            const std::vector<glm::vec3>& vertex_colors,
            const std::vector<uint32_t>& triangle_indices,
            const std::vector<glm::vec3>& normals
-
         ) {
             slamd::data::MeshData data = slamd::data::MeshDataBuilder()
                                              .set_positions(positions)
