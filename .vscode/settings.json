@@ -5,7 +5,8 @@
     "--function-arg-placeholders=false",
     "--tweaks=-Wall",
     "--tweaks=-Wextra",
-    "--clang-tidy"
+    "--clang-tidy",
+    "-j=5"
   ],
   "files.associations": {
     "*.py": "python",
