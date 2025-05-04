@@ -31,8 +31,6 @@ endif()
 if(NOT TARGET glbinding::glbinding-aux)
     message(STATUS "Adding glbinding...")
     add_subdirectory(${LIB_DIR}/glbinding)
-
-
 endif()
 
 if(NOT TARGET glfw)
@@ -95,30 +93,16 @@ target_link_libraries(bindings
         fmt::fmt
 )
 
-set_target_properties(bindings PROPERTIES
+set_target_properties(bindings slamd slamd_window glbinding glbinding-aux fmt glfw PROPERTIES 
     INSTALL_RPATH "${INSTALL_PATH}"
     BUILD_WITH_INSTALL_RPATH TRUE
 )
 
-set_target_properties(slamd_window PROPERTIES
-    INSTALL_RPATH "${INSTALL_PATH}"
-    BUILD_WITH_INSTALL_RPATH TRUE
-)
 
-if(APPLE)
-    set_target_properties(glbinding glbinding-aux fmt glfw PROPERTIES 
-        INSTALL_RPATH "${INSTALL_PATH}"
-        BUILD_WITH_INSTALL_RPATH TRUE
-    )
-endif()
-
-
-install(TARGETS glbinding glbinding-aux
+install(TARGETS glbinding glbinding-aux bindings
     LIBRARY DESTINATION slamd
     RUNTIME DESTINATION slamd
 )
-
-install(TARGETS bindings DESTINATION slamd)
 
 install(TARGETS slamd_window DESTINATION slamd)
 
