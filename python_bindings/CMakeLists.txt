@@ -53,7 +53,7 @@ endif()
 
 set(BUILD_SHARED_LIBS ON)
 
-find_package(Python REQUIRED COMPONENTS Interpreter Development.Module Development.Embed)
+find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 
 # Try to find installed pybind11
 find_package(pybind11 CONFIG QUIET)
