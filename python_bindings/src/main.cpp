@@ -649,10 +649,11 @@ PYBIND11_MODULE(
         )
         .def(
             "set_object",
-            &slamd::_tree::Tree::set_object,
+            &slamd::Scene::set_object,
             py::arg("path"),
             py::arg("object")
-        );
+        )
+        .def("clear", &slamd::Scene::clear, py::arg("path"));
 
     // Canvas bindings
     py::class_<slamd::Canvas, std::shared_ptr<slamd::Canvas>>(m, "Canvas")
@@ -670,7 +671,8 @@ PYBIND11_MODULE(
             &slamd::Canvas::set_object,
             py::arg("path"),
             py::arg("object")
-        );
+        )
+        .def("clear", &slamd::Scene::clear, py::arg("path"));
 
     py::class_<
         slamd::_vis::Visualizer,

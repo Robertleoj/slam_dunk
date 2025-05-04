@@ -36,6 +36,28 @@ std::shared_ptr<Tree> Tree::deserialize(
     return std::make_shared<Tree>(tree_id, std::move(root));
 }
 
+void Tree::clear(
+    const TreePath& path
+) {
+    auto current_node = this->root.get();
+
+    for (size_t i = 0; i < current_node->children.size(); i++) {
+        auto component = path.components[i];
+        auto& children = current_node->children;
+        auto it = children.find(component);
+
+        if (it == children.end()) {
+            return;
+        }
+
+        if (i == children.size() - 1) {
+            children.erase(it);
+        } else {
+            current_node = it->second.get();
+        }
+    }
+}
+
 void Tree::set_object(
     const TreePath& path,
     std::shared_ptr<_geom::Geometry> object

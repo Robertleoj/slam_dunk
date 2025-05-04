@@ -1,10 +1,12 @@
 #include <spdlog/spdlog.h>
 
 #include <flatb/messages_generated.h>
+#include <memory>
 #include <slamd/tree/tree.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
 #include <slamd_common/utils/serialization.hpp>
+#include <vector>
 
 namespace slamd {
 
@@ -66,6 +68,53 @@ void Node::set_object(
     );
     builder.Finish(message_fb);
     this->broadcast(_utils::builder_buffer(builder));
+}
+
+void Tree::clear(
+    const std::string& path
+) {
+    TreePath tree_path(path);
+
+    auto current_node = this->root.get();
+
+    for (size_t i = 0; i < tree_path.components.size(); i++) {
+        auto& component = tree_path.components[i];
+        if (i == tree_path.components.size() - 1) {
+            // we are at the parent - we delete now
+            current_node->children.erase(component);
+            break;
+        }
+        auto it = current_node->children.find(component);
+        if (it == current_node->children.end()) {
+            // nothing to do
+            return;
+        }
+
+        current_node = it->second.get();
+    }
+
+    this->broadcast(this->get_clear_path_message(path));
+}
+
+std::shared_ptr<std::vector<uint8_t>> Tree::get_clear_path_message(
+    const std::string& path
+) {
+    flatbuffers::FlatBufferBuilder builder;
+
+    auto path_fb = builder.CreateString(path);
+
+    auto clear_path_fb =
+        flatb::CreateClearPath(builder, this->id.value, path_fb);
+
+    auto message_fb = flatb::CreateMessage(
+        builder,
+        flatb::MessageUnion_clear_path,
+        clear_path_fb.Union()
+    );
+
+    builder.Finish(message_fb);
+
+    return _utils::builder_buffer(builder);
 }
 
 std::shared_ptr<std::vector<uint8_t>> Tree::get_add_tree_message() {

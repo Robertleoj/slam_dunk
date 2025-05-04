@@ -88,6 +88,8 @@ class Tree {
         flatbuffers::FlatBufferBuilder& builder
     );
 
+    void clear(const std::string& path);
+
     void add_all_geometries(
         std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>& initial_map
     );
@@ -99,11 +101,13 @@ class Tree {
     std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
     find_visualizers();
 
-
    protected:
     void
     set_transform_mat4(const std::string& path, const glm::mat4& transform);
 
+    std::shared_ptr<std::vector<uint8_t>> get_clear_path_message(
+        const std::string& path
+    );
     std::optional<Node*> traverse(const TreePath& path);
     Node* make_path(TreePath path);
 

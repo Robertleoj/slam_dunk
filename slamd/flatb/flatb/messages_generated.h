@@ -65,6 +65,9 @@ struct AddTreeBuilder;
 struct RemoveTree;
 struct RemoveTreeBuilder;
 
+struct ClearPath;
+struct ClearPathBuilder;
+
 struct AddView;
 struct AddViewBuilder;
 
@@ -83,22 +86,23 @@ enum MessageUnion : uint8_t {
   MessageUnion_remove_geometry = 5,
   MessageUnion_add_tree = 6,
   MessageUnion_remove_tree = 7,
-  MessageUnion_add_view = 8,
-  MessageUnion_remove_view = 9,
-  MessageUnion_update_mesh_positions = 10,
-  MessageUnion_update_mesh_colors = 11,
-  MessageUnion_update_mesh_normals = 12,
-  MessageUnion_update_circles2d_positions = 13,
-  MessageUnion_update_circles2d_colors = 14,
-  MessageUnion_update_circles2d_radii = 15,
-  MessageUnion_update_point_cloud_positions = 16,
-  MessageUnion_update_point_cloud_colors = 17,
-  MessageUnion_update_point_cloud_radii = 18,
+  MessageUnion_clear_path = 8,
+  MessageUnion_add_view = 9,
+  MessageUnion_remove_view = 10,
+  MessageUnion_update_mesh_positions = 11,
+  MessageUnion_update_mesh_colors = 12,
+  MessageUnion_update_mesh_normals = 13,
+  MessageUnion_update_circles2d_positions = 14,
+  MessageUnion_update_circles2d_colors = 15,
+  MessageUnion_update_circles2d_radii = 16,
+  MessageUnion_update_point_cloud_positions = 17,
+  MessageUnion_update_point_cloud_colors = 18,
+  MessageUnion_update_point_cloud_radii = 19,
   MessageUnion_MIN = MessageUnion_NONE,
   MessageUnion_MAX = MessageUnion_update_point_cloud_radii
 };
 
-inline const MessageUnion (&EnumValuesMessageUnion())[19] {
+inline const MessageUnion (&EnumValuesMessageUnion())[20] {
   static const MessageUnion values[] = {
     MessageUnion_NONE,
     MessageUnion_initial_state,
@@ -108,6 +112,7 @@ inline const MessageUnion (&EnumValuesMessageUnion())[19] {
     MessageUnion_remove_geometry,
     MessageUnion_add_tree,
     MessageUnion_remove_tree,
+    MessageUnion_clear_path,
     MessageUnion_add_view,
     MessageUnion_remove_view,
     MessageUnion_update_mesh_positions,
@@ -124,7 +129,7 @@ inline const MessageUnion (&EnumValuesMessageUnion())[19] {
 }
 
 inline const char * const *EnumNamesMessageUnion() {
-  static const char * const names[20] = {
+  static const char * const names[21] = {
     "NONE",
     "initial_state",
     "set_transform",
@@ -133,6 +138,7 @@ inline const char * const *EnumNamesMessageUnion() {
     "remove_geometry",
     "add_tree",
     "remove_tree",
+    "clear_path",
     "add_view",
     "remove_view",
     "update_mesh_positions",
@@ -185,6 +191,10 @@ template<> struct MessageUnionTraits<slamd::flatb::AddTree> {
 
 template<> struct MessageUnionTraits<slamd::flatb::RemoveTree> {
   static const MessageUnion enum_value = MessageUnion_remove_tree;
+};
+
+template<> struct MessageUnionTraits<slamd::flatb::ClearPath> {
+  static const MessageUnion enum_value = MessageUnion_clear_path;
 };
 
 template<> struct MessageUnionTraits<slamd::flatb::AddView> {
@@ -1117,6 +1127,69 @@ inline ::flatbuffers::Offset<RemoveTree> CreateRemoveTree(
   return builder_.Finish();
 }
 
+struct ClearPath FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef ClearPathBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_TREE_ID = 4,
+    VT_TREE_PATH = 6
+  };
+  uint64_t tree_id() const {
+    return GetField<uint64_t>(VT_TREE_ID, 0);
+  }
+  const ::flatbuffers::String *tree_path() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_TREE_PATH);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_TREE_ID, 8) &&
+           VerifyOffset(verifier, VT_TREE_PATH) &&
+           verifier.VerifyString(tree_path()) &&
+           verifier.EndTable();
+  }
+};
+
+struct ClearPathBuilder {
+  typedef ClearPath Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_tree_id(uint64_t tree_id) {
+    fbb_.AddElement<uint64_t>(ClearPath::VT_TREE_ID, tree_id, 0);
+  }
+  void add_tree_path(::flatbuffers::Offset<::flatbuffers::String> tree_path) {
+    fbb_.AddOffset(ClearPath::VT_TREE_PATH, tree_path);
+  }
+  explicit ClearPathBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<ClearPath> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<ClearPath>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<ClearPath> CreateClearPath(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t tree_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> tree_path = 0) {
+  ClearPathBuilder builder_(_fbb);
+  builder_.add_tree_id(tree_id);
+  builder_.add_tree_path(tree_path);
+  return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<ClearPath> CreateClearPathDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t tree_id = 0,
+    const char *tree_path = nullptr) {
+  auto tree_path__ = tree_path ? _fbb.CreateString(tree_path) : 0;
+  return slamd::flatb::CreateClearPath(
+      _fbb,
+      tree_id,
+      tree_path__);
+}
+
 struct AddView FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef AddViewBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -1244,6 +1317,9 @@ struct Message FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const slamd::flatb::RemoveTree *message_as_remove_tree() const {
     return message_type() == slamd::flatb::MessageUnion_remove_tree ? static_cast<const slamd::flatb::RemoveTree *>(message()) : nullptr;
   }
+  const slamd::flatb::ClearPath *message_as_clear_path() const {
+    return message_type() == slamd::flatb::MessageUnion_clear_path ? static_cast<const slamd::flatb::ClearPath *>(message()) : nullptr;
+  }
   const slamd::flatb::AddView *message_as_add_view() const {
     return message_type() == slamd::flatb::MessageUnion_add_view ? static_cast<const slamd::flatb::AddView *>(message()) : nullptr;
   }
@@ -1312,6 +1388,10 @@ template<> inline const slamd::flatb::AddTree *Message::message_as<slamd::flatb:
 
 template<> inline const slamd::flatb::RemoveTree *Message::message_as<slamd::flatb::RemoveTree>() const {
   return message_as_remove_tree();
+}
+
+template<> inline const slamd::flatb::ClearPath *Message::message_as<slamd::flatb::ClearPath>() const {
+  return message_as_clear_path();
 }
 
 template<> inline const slamd::flatb::AddView *Message::message_as<slamd::flatb::AddView>() const {
@@ -1420,6 +1500,10 @@ inline bool VerifyMessageUnion(::flatbuffers::Verifier &verifier, const void *ob
     }
     case MessageUnion_remove_tree: {
       auto ptr = reinterpret_cast<const slamd::flatb::RemoveTree *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageUnion_clear_path: {
+      auto ptr = reinterpret_cast<const slamd::flatb::ClearPath *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageUnion_add_view: {

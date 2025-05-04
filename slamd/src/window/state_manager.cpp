@@ -127,6 +127,16 @@ void StateManager::handle_remove_tree(
     this->trees.erase(_id::TreeID(remove_tree_fb->tree_id()));
 }
 
+void StateManager::handle_clear_path(
+    const slamd::flatb::ClearPath* clear_path_fb
+) {
+    auto tree = this->trees.at(_id::TreeID(clear_path_fb->tree_id()));
+
+    TreePath path(clear_path_fb->tree_path()->str());
+
+    tree->clear(path);
+}
+
 void StateManager::handle_remove_view(
     const slamd::flatb::RemoveView* remove_view_fb
 ) {
@@ -285,6 +295,10 @@ void StateManager::apply_updates() {
             }
             case (slamd::flatb::MessageUnion_remove_tree): {
                 this->handle_remove_tree(message_fb->message_as_remove_tree());
+                break;
+            }
+            case (flatb::MessageUnion_clear_path): {
+                this->handle_clear_path(message_fb->message_as_clear_path());
                 break;
             }
             case (slamd::flatb::MessageUnion_add_view): {

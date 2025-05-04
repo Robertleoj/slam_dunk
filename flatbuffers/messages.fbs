@@ -87,6 +87,11 @@ table RemoveTree {
     tree_id: ulong;
 }
 
+table ClearPath {
+    tree_id: ulong;
+    tree_path: string;
+}
+
 table AddView {
     view: View;
 }
@@ -106,6 +111,7 @@ union MessageUnion {
 
     add_tree: AddTree,
     remove_tree: RemoveTree,
+    clear_path: ClearPath,
 
     add_view: AddView,
     remove_view: RemoveView,

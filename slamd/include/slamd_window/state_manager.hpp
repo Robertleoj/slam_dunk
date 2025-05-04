@@ -36,6 +36,7 @@ class StateManager {
 
     void handle_add_view(const slamd::flatb::AddView* add_view_fb);
     void handle_remove_view(const slamd::flatb::RemoveView* remove_view_fb);
+    void handle_clear_path(const slamd::flatb::ClearPath* clear_path_fb);
 
     void handle_update_mesh_colors(
         const slamd::flatb::UpdateMeshColors* update_mesh_colors_fb
