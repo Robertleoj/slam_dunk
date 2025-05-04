@@ -51,7 +51,7 @@ if(NOT TARGET slamd)
 endif()
 
 
-find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
+find_package(Python REQUIRED COMPONENTS Interpreter Development.Module Development.Embed)
 
 # Try to find installed pybind11
 find_package(pybind11 CONFIG QUIET)
