@@ -97,3 +97,4 @@ target_link_libraries(bindings
 )
 
 install(TARGETS slamd_window DESTINATION slamd)
+install(TARGETS bindings DESTINATION slamd)
