@@ -53,7 +53,7 @@ endif()
 
 set(BUILD_SHARED_LIBS ON)
 
-find_package(Python REQUIRED COMPONENTS Interpreter Development.Module Development.Embed)
+find_package(Python REQUIRED COMPONENTS Interpreter Development.Module REQUIRED)
 
 # Try to find installed pybind11
 find_package(pybind11 CONFIG QUIET)
@@ -70,6 +70,7 @@ if(NOT pybind11_FOUND)
 endif()
 
 # === pybind11 module ===
+set(PYBIND11_PYTHON_TARGET "Python::Module")
 pybind11_add_module(bindings SHARED src/main.cpp)
 
 set(BUILD_SHARED_LIBS OFF)
