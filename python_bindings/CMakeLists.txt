@@ -94,19 +94,4 @@ target_link_libraries(bindings
         fmt::fmt
 )
 
-# set_target_properties(bindings slamd slamd_window glbinding glbinding-aux fmt glfw PROPERTIES 
-#     INSTALL_RPATH "${INSTALL_PATH}"
-#     BUILD_WITH_INSTALL_RPATH TRUE
-# )
-
-
-# install(TARGETS glbinding glbinding-aux bindings
-#     LIBRARY DESTINATION slamd
-#     RUNTIME DESTINATION slamd
-# )
-
 install(TARGETS slamd_window DESTINATION slamd)
-
-# === Install your shared libraries ===
-
-# Example: install slamd if it's a shared lib
