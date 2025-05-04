@@ -30,9 +30,10 @@ def PolyLine(
     points: np.ndarray,
     thickness: float = 1.0,
     color: np.ndarray | tuple[int, int, int] = Color.red,
+    min_brightness: float = 1.0,
 ):
     color_np = process_color(color, 1).reshape(3)
-    return PolyLine_internal(points, thickness, color_np)
+    return PolyLine_internal(points, thickness, color_np, min_brightness)
 
 
 __all__ = [

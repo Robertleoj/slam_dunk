@@ -508,6 +508,7 @@ void define_geom(
         py::arg("points"),
         py::arg("thickness"),
         py::arg("color"),
+        py::arg("min_brightness"),
         "Create a PolyLine geometry"
     );
 

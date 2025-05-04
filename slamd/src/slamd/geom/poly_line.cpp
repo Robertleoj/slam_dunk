@@ -46,10 +46,15 @@ namespace geom {
 PolyLinePtr poly_line(
     const std::vector<glm::vec3>& points,
     float thickness,
-    const glm::vec3& color
+    const glm::vec3& color,
+    float min_brightness
 ) {
-    auto poly_line =
-        std::make_shared<_geom::PolyLine>(points, thickness, color);
+    auto poly_line = std::make_shared<_geom::PolyLine>(
+        points,
+        thickness,
+        color,
+        min_brightness
+    );
     // _global::geometries.add(poly_line->id, poly_line);
     return poly_line;
 }

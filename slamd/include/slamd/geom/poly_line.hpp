@@ -15,7 +15,7 @@ class PolyLine : public Geometry {
         const std::vector<glm::vec3>& points,
         float thickness,
         const glm::vec3& color,
-        float min_brightness = _const::default_min_brightness
+        float min_brightness
     );
 
     flatbuffers::Offset<slamd::flatb::Geometry> serialize(
@@ -38,7 +38,8 @@ using PolyLinePtr = std::shared_ptr<_geom::PolyLine>;
 PolyLinePtr poly_line(
     const std::vector<glm::vec3>& points,
     float thickness,
-    const glm::vec3& color
+    const glm::vec3& color,
+    float min_brightness = 1.0
 );
 
 }  // namespace geom

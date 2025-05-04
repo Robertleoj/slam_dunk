@@ -29,7 +29,7 @@ def PointCloud(positions: numpy.ndarray, colors: numpy.ndarray, radii: list[floa
     """
     Create a PointCloud with per-point color and radius
     """
-def PolyLine(points: numpy.ndarray, thickness: float, color: numpy.ndarray) -> bindings._geom.PolyLine:
+def PolyLine(points: numpy.ndarray, thickness: float, color: numpy.ndarray, min_brightness: float) -> bindings._geom.PolyLine:
     """
     Create a PolyLine geometry
     """

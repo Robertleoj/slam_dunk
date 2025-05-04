@@ -36,16 +36,16 @@ class Visualizer:
     def hang_forever(self):
         threading.Event().wait()
 
-    def add_scene(self, name, scene):
+    def add_scene(self, name: str, scene: Scene) -> None:
         return self._impl.add_scene(name, scene)
 
-    def add_canvas(self, name, canvas):
+    def add_canvas(self, name: str, canvas: Canvas) -> None:
         return self._impl.add_canvas(name, canvas)
 
-    def canvas(self, name):
+    def canvas(self, name: str) -> Canvas:
         return self._impl.canvas(name)
 
-    def scene(self, name):
+    def scene(self, name: str) -> Scene:
         return self._impl.scene(name)
 
 
