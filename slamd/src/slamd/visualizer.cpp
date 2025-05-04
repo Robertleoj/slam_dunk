@@ -69,6 +69,22 @@ void Visualizer::add_scene(
     this->broadcast(view->get_add_view_message());
 }
 
+std::shared_ptr<Canvas> Visualizer::canvas(
+    std::string name
+) {
+    auto canvas = slamd::canvas();
+    this->add_canvas(name, canvas);
+    return canvas;
+}
+
+std::shared_ptr<Scene> Visualizer::scene(
+    std::string name
+) {
+    auto scene = slamd::scene();
+    this->add_scene(name, scene);
+    return scene;
+}
+
 void Visualizer::add_canvas(
     std::string name,
     std::shared_ptr<Canvas> canvas

@@ -536,8 +536,7 @@ void define_geom(
         [](const std::vector<glm::vec3>& positions,
            const std::vector<glm::vec3>& vertex_colors,
            const std::vector<uint32_t>& triangle_indices,
-           const std::vector<glm::vec3>& normals
-        ) {
+           const std::vector<glm::vec3>& normals) {
             slamd::data::MeshData data = slamd::data::MeshDataBuilder()
                                              .set_positions(positions)
                                              .set_colors(vertex_colors)
@@ -693,7 +692,9 @@ PYBIND11_MODULE(
             &slamd::_vis::Visualizer::add_canvas,
             py::arg("name"),
             py::arg("canvas")
-        );
+        )
+        .def("scene", &slamd::_vis::Visualizer::scene, py::arg("name"))
+        .def("canvas", &slamd::_vis::Visualizer::canvas, py::arg("name"));
 
     m.def(
         "spawn_window",

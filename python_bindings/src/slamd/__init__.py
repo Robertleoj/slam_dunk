@@ -42,6 +42,12 @@ class Visualizer:
     def add_canvas(self, name, canvas):
         return self._impl.add_canvas(name, canvas)
 
+    def canvas(self, name):
+        return self._impl.canvas(name)
+
+    def scene(self, name):
+        return self._impl.scene(name)
+
 
 def spawn_window(port: int = 5555) -> None:
     executable_path = _executable_path()

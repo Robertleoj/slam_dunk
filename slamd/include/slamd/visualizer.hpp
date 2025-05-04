@@ -27,8 +27,12 @@ class Visualizer : public std::enable_shared_from_this<Visualizer> {
    public:
     Visualizer(std::string name, uint16_t port);
     ~Visualizer();
+
     void add_scene(std::string name, std::shared_ptr<Scene> scene);
     void add_canvas(std::string name, std::shared_ptr<Canvas> canvas);
+    std::shared_ptr<Scene> scene(std::string name);
+    std::shared_ptr<Canvas> canvas(std::string name);
+
     void hang_forever();
 
     void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);

@@ -35,8 +35,7 @@ def main():
     coords = uniform_grid_points(100000, 30.0)
     print(uniform_grid_points)
 
-    scene = slamd.Scene()
-    vis.add_scene("scene", scene)
+    scene = vis.scene("scene")
 
     point_cloud = None
 
