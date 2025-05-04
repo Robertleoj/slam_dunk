@@ -512,7 +512,7 @@ void define_geom(
         py::arg("positions"),
         py::arg("colors"),
         py::arg("radii"),
-        py::arg("min_brightness") = 1.0,
+        py::arg("min_brightness") = 1.0f,
         "Create a PointCloud with per-point color and radius"
     );
 

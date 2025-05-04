@@ -35,8 +35,13 @@ flatbuffers::Offset<slamd::flatb::Geometry> PointCloud::serialize(
     auto colors_fb = gmath::serialize_vector(builder, this->colors);
     auto radii_fb = gmath::serialize_vector(builder, this->radii);
 
-    auto point_cloud_fb =
-        flatb::CreatePointCloud(builder, pos_fb, colors_fb, radii_fb);
+    auto point_cloud_fb = flatb::CreatePointCloud(
+        builder,
+        pos_fb,
+        colors_fb,
+        radii_fb,
+        this->min_brightness
+    );
 
     return flatb::CreateGeometry(
         builder,
