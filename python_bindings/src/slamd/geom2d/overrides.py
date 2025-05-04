@@ -1,9 +1,9 @@
 import numpy as np
 
-from .utils.colors import Color
-from .bindings.geom2d import Points as Points_internal, Image, PolyLine, Circles
+from .._utils.colors import Color
+from ..bindings.geom2d import Points as Points_internal
 
-from .utils.handle_input import process_color, process_radii
+from .._utils.handle_input import process_color, process_radii
 
 
 def Points(
@@ -16,6 +16,3 @@ def Points(
     radii_np = process_radii(radii, n)
 
     return Points_internal(positions, colors_np, radii_np)
-
-
-__all__ = ["Points", "Image", "PolyLine", "Circles"]

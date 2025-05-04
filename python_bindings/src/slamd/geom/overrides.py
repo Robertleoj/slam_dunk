@@ -1,16 +1,10 @@
 import numpy as np
-from .bindings.geom import (
-    Box,
-    Arrows,
-    CameraFrustum,
+from ..bindings.geom import (
     PointCloud as PointCloud_internal,
     PolyLine as PolyLine_internal,
-    Mesh,
-    Sphere,
-    Triad,
 )
-from .utils.colors import Color
-from .utils.handle_input import process_color, process_radii
+from .._utils.colors import Color
+from .._utils.handle_input import process_color, process_radii
 
 
 def PointCloud(
@@ -34,15 +28,3 @@ def PolyLine(
 ):
     color_np = process_color(color, 1).reshape(3)
     return PolyLine_internal(points, thickness, color_np, min_brightness)
-
-
-__all__ = [
-    "Box",
-    "Arrows",
-    "CameraFrustum",
-    "PointCloud",
-    "PolyLine",
-    "Mesh",
-    "Sphere",
-    "Triad",
-]
