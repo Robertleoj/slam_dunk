@@ -9,11 +9,13 @@ namespace _geom {
 PointCloud::PointCloud(
     const std::vector<glm::vec3>& positions,
     const std::vector<glm::vec3>& colors,
-    const std::vector<float>& radii
+    const std::vector<float>& radii,
+    float min_brightness
 )
     : positions(positions),
       colors(colors),
-      radii(radii) {
+      radii(radii),
+      min_brightness(min_brightness) {
     if (!((positions.size() == colors.size()) && (colors.size() == radii.size())
         )) {
         throw std::invalid_argument(fmt::format(

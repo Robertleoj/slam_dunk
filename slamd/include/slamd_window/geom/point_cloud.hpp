@@ -15,7 +15,8 @@ class PointCloud : public Geometry {
     PointCloud(
         const std::vector<glm::vec3>& positions,
         const std::vector<glm::vec3>& colors,
-        const std::vector<float>& radii
+        const std::vector<float>& radii,
+        float min_brightness
     );
     ~PointCloud();
 
@@ -57,6 +58,8 @@ class PointCloud : public Geometry {
 
     std::vector<float> radii;
     bool pending_radii_update;
+
+    float min_brightness;
 };
 
 }  // namespace _geom

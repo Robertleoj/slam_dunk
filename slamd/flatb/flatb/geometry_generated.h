@@ -404,7 +404,8 @@ struct PointCloud FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_POSITIONS = 4,
     VT_COLORS = 6,
-    VT_RADII = 8
+    VT_RADII = 8,
+    VT_MIN_BRIGHTNESS = 10
   };
   const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *positions() const {
     return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_POSITIONS);
@@ -415,6 +416,9 @@ struct PointCloud FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const ::flatbuffers::Vector<float> *radii() const {
     return GetPointer<const ::flatbuffers::Vector<float> *>(VT_RADII);
   }
+  float min_brightness() const {
+    return GetField<float>(VT_MIN_BRIGHTNESS, 0.0f);
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_POSITIONS) &&
@@ -423,6 +427,7 @@ struct PointCloud FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            verifier.VerifyVector(colors()) &&
            VerifyOffset(verifier, VT_RADII) &&
            verifier.VerifyVector(radii()) &&
+           VerifyField<float>(verifier, VT_MIN_BRIGHTNESS, 4) &&
            verifier.EndTable();
   }
 };
@@ -440,6 +445,9 @@ struct PointCloudBuilder {
   void add_radii(::flatbuffers::Offset<::flatbuffers::Vector<float>> radii) {
     fbb_.AddOffset(PointCloud::VT_RADII, radii);
   }
+  void add_min_brightness(float min_brightness) {
+    fbb_.AddElement<float>(PointCloud::VT_MIN_BRIGHTNESS, min_brightness, 0.0f);
+  }
   explicit PointCloudBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -455,8 +463,10 @@ inline ::flatbuffers::Offset<PointCloud> CreatePointCloud(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> positions = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors = 0,
-    ::flatbuffers::Offset<::flatbuffers::Vector<float>> radii = 0) {
+    ::flatbuffers::Offset<::flatbuffers::Vector<float>> radii = 0,
+    float min_brightness = 0.0f) {
   PointCloudBuilder builder_(_fbb);
+  builder_.add_min_brightness(min_brightness);
   builder_.add_radii(radii);
   builder_.add_colors(colors);
   builder_.add_positions(positions);
@@ -467,7 +477,8 @@ inline ::flatbuffers::Offset<PointCloud> CreatePointCloudDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const std::vector<slamd::flatb::Vec3> *positions = nullptr,
     const std::vector<slamd::flatb::Vec3> *colors = nullptr,
-    const std::vector<float> *radii = nullptr) {
+    const std::vector<float> *radii = nullptr,
+    float min_brightness = 0.0f) {
   auto positions__ = positions ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*positions) : 0;
   auto colors__ = colors ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*colors) : 0;
   auto radii__ = radii ? _fbb.CreateVector<float>(*radii) : 0;
@@ -475,7 +486,8 @@ inline ::flatbuffers::Offset<PointCloud> CreatePointCloudDirect(
       _fbb,
       positions__,
       colors__,
-      radii__);
+      radii__,
+      min_brightness);
 }
 
 struct Image FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {

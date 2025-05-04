@@ -500,12 +500,19 @@ void define_geom(
         "PointCloud",
         [](const std::vector<glm::vec3>& positions,
            const std::vector<glm::vec3>& colors,
-           const std::vector<float>& radii) {
-            return slamd::geom::point_cloud(positions, colors, radii);
+           const std::vector<float>& radii,
+           float min_brightness) {
+            return slamd::geom::point_cloud(
+                positions,
+                colors,
+                radii,
+                min_brightness
+            );
         },
         py::arg("positions"),
         py::arg("colors"),
         py::arg("radii"),
+        py::arg("min_brightness") = 1.0,
         "Create a PointCloud with per-point color and radius"
     );
 

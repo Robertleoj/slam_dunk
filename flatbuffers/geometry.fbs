@@ -26,6 +26,7 @@ table PointCloud {
     positions: [Vec3];
     colors: [Vec3];
     radii: [float];
+    min_brightness: float;
 }
 
 table Image {

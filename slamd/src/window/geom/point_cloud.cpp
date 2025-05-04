@@ -14,7 +14,8 @@ namespace _geom {
 PointCloud::PointCloud(
     const std::vector<glm::vec3>& positions,
     const std::vector<glm::vec3>& colors,
-    const std::vector<float>& radii
+    const std::vector<float>& radii,
+    float min_brightness
 )
     : shader(
           shader_source::point_cloud::vert,
@@ -25,7 +26,8 @@ PointCloud::PointCloud(
       colors(colors),
       pending_colors_update(false),
       radii(radii),
-      pending_radii_update(false) {
+      pending_radii_update(false),
+      min_brightness(min_brightness) {
     if (!((positions.size() == colors.size()) && (colors.size() == radii.size())
         )) {
         throw std::invalid_argument(fmt::format(
@@ -43,9 +45,10 @@ std::shared_ptr<PointCloud> PointCloud::deserialize(
     const slamd::flatb::PointCloud* point_cloud_fb
 ) {
     return std::make_shared<PointCloud>(
-        slamd::gmath::deserialize_vector(point_cloud_fb->positions()),
-        slamd::gmath::deserialize_vector(point_cloud_fb->colors()),
-        slamd::gmath::deserialize_vector(point_cloud_fb->radii())
+        gmath::deserialize_vector(point_cloud_fb->positions()),
+        gmath::deserialize_vector(point_cloud_fb->colors()),
+        gmath::deserialize_vector(point_cloud_fb->radii()),
+        point_cloud_fb->min_brightness()
     );
 }
 
@@ -294,10 +297,7 @@ void PointCloud::render(
     this->shader.set_uniform("u_view", view);
     this->shader.set_uniform("u_projection", projection);
     this->shader.set_uniform("u_light_dir", _const::light_dir);
-    this->shader.set_uniform(
-        "u_min_brightness",
-        _const::default_min_brightness
-    );
+    this->shader.set_uniform("u_min_brightness", this->min_brightness);
     gl::glDrawElementsInstanced(
         gl::GL_TRIANGLES,
         this->ball_vertex_count,

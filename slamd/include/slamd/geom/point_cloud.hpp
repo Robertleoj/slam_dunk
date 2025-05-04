@@ -14,7 +14,8 @@ class PointCloud : public Geometry {
     PointCloud(
         const std::vector<glm::vec3>& positions,
         const std::vector<glm::vec3>& colors,
-        const std::vector<float>& radii
+        const std::vector<float>& radii,
+        float min_brightness
     );
 
     flatbuffers::Offset<slamd::flatb::Geometry> serialize(
@@ -29,6 +30,7 @@ class PointCloud : public Geometry {
     std::vector<glm::vec3> positions;
     std::vector<glm::vec3> colors;
     std::vector<float> radii;
+    float min_brightness;
 };
 
 }  // namespace _geom
@@ -40,7 +42,8 @@ template <typename ColorType, typename RadiiType>
 PointCloudPtr point_cloud(
     const std::vector<glm::vec3>& positions,
     const ColorType& colors,
-    const RadiiType& radii
+    const RadiiType& radii,
+    float min_brightness = 1.0
 ) {
     std::vector<glm::vec3> final_colors;
     std::vector<float> final_radii;
@@ -62,7 +65,8 @@ PointCloudPtr point_cloud(
     auto pc = std::make_shared<_geom::PointCloud>(
         positions,
         std::move(final_colors),
-        std::move(final_radii)
+        std::move(final_radii),
+        min_brightness
     );
 
     // _global::geometries.add(pc->id, pc);
