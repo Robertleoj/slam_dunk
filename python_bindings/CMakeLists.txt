@@ -31,8 +31,8 @@ endif()
 if(NOT TARGET glbinding::glbinding-aux)
     message(STATUS "Adding glbinding...")
     add_subdirectory(${LIB_DIR}/glbinding)
-    install(TARGETS glbinding DESTINATION slamd)
-    install(TARGETS glbinding-aux DESTINATION slamd)
+
+
 endif()
 
 if(NOT TARGET glfw)
@@ -95,26 +95,29 @@ target_link_libraries(bindings
         fmt::fmt
 )
 
-if (APPLE)
-else()
 set_target_properties(bindings PROPERTIES
     INSTALL_RPATH "${INSTALL_PATH}"
+    BUILD_WITH_INSTALL_RPATH TRUE
 )
 
 set_target_properties(slamd_window PROPERTIES
     INSTALL_RPATH "${INSTALL_PATH}"
+    BUILD_WITH_INSTALL_RPATH TRUE
 )
+
+if(APPLE)
+    set_target_properties(glbinding glbinding-aux fmt glfw PROPERTIES 
+        INSTALL_RPATH "${INSTALL_PATH}"
+        BUILD_WITH_INSTALL_RPATH TRUE
+    )
 endif()
 
-# if(APPLE)
-#     set_target_properties(glbinding PROPERTIES INSTALL_RPATH "@loader_path")
-#     set_target_properties(glbinding-aux PROPERTIES INSTALL_RPATH "@loader_path")
-#     set_target_properties(glfw PROPERTIES INSTALL_RPATH "@loader_path")
-#     set_target_properties(fmt PROPERTIES INSTALL_RPATH "@loader_path")
-# endif()
 
+install(TARGETS glbinding glbinding-aux
+    LIBRARY DESTINATION slamd
+    RUNTIME DESTINATION slamd
+)
 
-# === Install the pybind11 module ===
 install(TARGETS bindings DESTINATION slamd)
 
 install(TARGETS slamd_window DESTINATION slamd)
