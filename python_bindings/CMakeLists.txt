@@ -13,6 +13,11 @@ if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
 endif(CCACHE_FOUND)
 
+if(APPLE)
+    set(INSTALL_PATH "@loader_path")
+else()
+    set(INSTALL_PATH "$ORIGIN")
+endif()
 
 
 add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF)
@@ -90,11 +95,11 @@ target_link_libraries(bindings
 )
 
 set_target_properties(bindings PROPERTIES
-    INSTALL_RPATH "$ORIGIN"
+    INSTALL_RPATH ${INSTALL_RPATH}
 )
 
 set_target_properties(slamd_window PROPERTIES
-    INSTALL_RPATH "$ORIGIN"
+    INSTALL_RPATH ${INSTALL_RPATH}
 )
 
 # === Install the pybind11 module ===
