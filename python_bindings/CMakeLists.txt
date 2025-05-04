@@ -51,7 +51,11 @@ if(NOT TARGET slamd)
 endif()
 
 
-find_package(Python REQUIRED COMPONENTS Interpreter Development.Module Development.Embed)
+if(APPLE)
+    find_package(Python REQUIRED COMPONENTS Interpreter Development.Module Development.Embed)
+else()
+    find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
+endif()
 
 # Try to find installed pybind11
 find_package(pybind11 CONFIG QUIET)
