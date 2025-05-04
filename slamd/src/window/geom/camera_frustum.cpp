@@ -60,10 +60,10 @@ CameraFrustum::CameraFrustum(
         slamd::gmath::scale_xy(glm::vec2(image_scale, image_scale));
     glm::mat4 translate = slamd::gmath::t3D(this->corners.tl);
 
-    this->cam_image.emplace(
+    this->cam_image = {
         std::make_unique<Image>(std::move(image), true),
         translate * scale_transform
-    );
+    };
 }
 
 CameraFrustum::CameraFrustum(

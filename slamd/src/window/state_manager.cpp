@@ -3,6 +3,7 @@
 #include <asio.hpp>
 #include <memory>
 #include <slamd_common/gmath/serialization.hpp>
+#include <fmt/format.h>
 #include <slamd_common/gmath/stringify.hpp>
 #include <slamd_window/geom/circles_2d.hpp>
 #include <slamd_window/geom/mesh.hpp>
@@ -30,7 +31,7 @@ void StateManager::handle_initial_state(
     // slamd::flatb::GetInitialState(data.data());
 
     this->layout_path = fs::current_path() /
-                        std::format(".{}.ini", full_state_fb->name()->str());
+                        fmt::format(".{}.ini", full_state_fb->name()->str());
 
     auto trees_fb = full_state_fb->trees();
 

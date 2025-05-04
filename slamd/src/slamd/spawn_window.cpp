@@ -1,7 +1,7 @@
+#include <fmt/format.h>
 #include <spawn.h>
 #include <spdlog/spdlog.h>
 #include <filesystem>
-#include <format>
 #include <slamd/spawn_window.hpp>
 
 extern char** environ;
@@ -32,11 +32,11 @@ void spawn_window(
 
     if (!std::filesystem::exists(executable_path)) {
         throw std::runtime_error(
-            std::format("Executable {} not found", executable_path.string())
+            fmt::format("Executable {} not found", executable_path.string())
         );
     }
 
-    std::string port_arg = std::format("{}", port);
+    std::string port_arg = fmt::format("{}", port);
 
     char* const argv[] =
         {(char*)"slamd_window", (char*)"--port", (char*)port_arg.c_str(), NULL};

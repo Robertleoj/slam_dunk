@@ -1,8 +1,6 @@
-name: Upload Python Package to PyPI when a Release is Created
+name: Build python wheels
 
-on:
-  release:
-    types: [created]
+on: [pull_request]
 
 jobs:
   build-wheels:
@@ -11,11 +9,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-
-    environment:
-      name: pypi
-    permissions:
-      id-token: write
 
     steps:
       - uses: actions/checkout@v4
@@ -64,8 +57,3 @@ jobs:
         run: |
           cd python_bindings
           cibuildwheel --output-dir dist
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: python_bindings/dist

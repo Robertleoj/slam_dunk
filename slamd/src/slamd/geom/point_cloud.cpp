@@ -1,5 +1,4 @@
 #include <flatb/messages_generated.h>
-#include <format>
 #include <slamd/geom/point_cloud.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/utils/serialization.hpp>
@@ -17,7 +16,7 @@ PointCloud::PointCloud(
       radii(radii) {
     if (!((positions.size() == colors.size()) && (colors.size() == radii.size())
         )) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "number of positions, colors, and radii must be the same, got "
             "{} positions, {} colors, {} radii",
             positions.size(),
@@ -49,7 +48,7 @@ void PointCloud::update_positions(
     const std::vector<glm::vec3>& positions
 ) {
     if (positions.size() != this->positions.size()) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "Expected {} positions, got {}",
             this->positions.size(),
             positions.size()
@@ -83,7 +82,7 @@ void PointCloud::update_colors(
     const std::vector<glm::vec3>& colors
 ) {
     if (colors.size() != this->colors.size()) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "Expected {} colors, got {}",
             this->colors.size(),
             colors.size()
@@ -114,7 +113,7 @@ void PointCloud::update_radii(
     const std::vector<float>& radii
 ) {
     if (radii.size() != this->radii.size()) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "Expected {} radii, got {}",
             this->radii.size(),
             radii.size()

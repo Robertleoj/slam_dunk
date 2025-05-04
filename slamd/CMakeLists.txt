@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -10,14 +10,6 @@ option(SLAMD_VENDOR_DEPS "Use vendored dependencies" ON)
 project(slam_dunk VERSION 0.1.0)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-# Check if our lord and savious ccache exists
-# We use ccache to massively speed up recompile times
-find_program(CCACHE_FOUND ccache)
-if(CCACHE_FOUND)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-endif(CCACHE_FOUND)
 
 set(LIB_DIR vendored_deps)
 
@@ -75,6 +67,7 @@ find_required_package(
     ${LIB_DIR}/imgui_wrapper
 )
 
+add_subdirectory(${LIB_DIR}/fmt)
 add_subdirectory(${LIB_DIR}/glm)
 add_subdirectory(${LIB_DIR}/cxxopts)
 
@@ -87,6 +80,8 @@ target_sources(
     slamd_common
 
     PRIVATE
+        src/common/assert.cpp
+
         src/common/data/image.cpp
         src/common/data/mesh.cpp
 
@@ -118,6 +113,7 @@ target_link_libraries(
         spdlog::spdlog
         slamd_flatbuff
         cxxopts
+        fmt::fmt
 
     PRIVATE
         spdlog::spdlog
@@ -141,7 +137,6 @@ target_sources(
         src/window/shaders.cpp
         src/window/arcball.cpp
         src/window/frame_timer.cpp
-        src/window/assert.cpp
         src/window/window.cpp
         src/window/state_manager.cpp
         src/window/connection.cpp
@@ -217,7 +212,6 @@ target_sources(
     slamd
 
     PRIVATE
-        src/slamd/assert.cpp
         src/slamd/visualizer.cpp
         src/slamd/view.cpp
         src/slamd/spawn_window.cpp

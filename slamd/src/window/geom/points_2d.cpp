@@ -1,5 +1,5 @@
-#include <numbers>
 #include <slamd_common/gmath/serialization.hpp>
+#include <slamd_common/numbers.hpp>
 #include <slamd_window/geom/points_2d.hpp>
 
 namespace slamd {
@@ -35,7 +35,7 @@ std::unique_ptr<Mesh> make_mesh(
 
         for (uint32_t i = 0; i < num_segments; i++) {
             float segment_start =
-                std::numbers::pi * 2.0f * static_cast<float>(i) / num_segments;
+                _num::pi * 2.0f * static_cast<float>(i) / num_segments;
 
             glm::vec3 start(
                 glm::cos(segment_start),

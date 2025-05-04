@@ -1,4 +1,4 @@
-#include <slamd/assert.hpp>
+#include <slamd_common/assert.hpp>
 #include <stdexcept>
 
 namespace slamd {

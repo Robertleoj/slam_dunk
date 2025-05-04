@@ -6,6 +6,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(LIB_DIR vendored_deps)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(BUILD_SHARED_LIBS OFF)
 
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
@@ -13,6 +14,11 @@ if(CCACHE_FOUND)
     set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
 endif(CCACHE_FOUND)
 
+if(APPLE)
+    set(INSTALL_PATH "@loader_path")
+else()
+    set(INSTALL_PATH "$ORIGIN")
+endif()
 
 
 add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_OFF)
@@ -26,8 +32,6 @@ endif()
 if(NOT TARGET glbinding::glbinding-aux)
     message(STATUS "Adding glbinding...")
     add_subdirectory(${LIB_DIR}/glbinding)
-    install(TARGETS glbinding DESTINATION slamd OPTIONAL)
-    install(TARGETS glbinding-aux DESTINATION slamd OPTIONAL)
 endif()
 
 if(NOT TARGET glfw)
@@ -47,7 +51,8 @@ if(NOT TARGET slamd)
 endif()
 
 
-find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
+
+find_package(Python REQUIRED COMPONENTS Interpreter Development.Module REQUIRED)
 
 # Try to find installed pybind11
 find_package(pybind11 CONFIG QUIET)
@@ -63,9 +68,10 @@ if(NOT pybind11_FOUND)
     FetchContent_MakeAvailable(pybind11)
 endif()
 
-# === pybind11 module ===
-pybind11_add_module(bindings src/main.cpp)
-
+set(BUILD_SHARED_LIBS ON)
+set(PYBIND11_PYTHON_TARGET "Python::Module")
+pybind11_add_module(bindings MODULE src/main.cpp)
+set(BUILD_SHARED_LIBS OFF)
 
 target_include_directories(
     bindings
@@ -87,21 +93,7 @@ target_link_libraries(bindings
         glfw
         glbinding::glbinding
         glbinding::glbinding-aux
+        fmt::fmt
 )
-
-set_target_properties(bindings PROPERTIES
-    INSTALL_RPATH "$ORIGIN"
-)
-
-set_target_properties(slamd_window PROPERTIES
-    INSTALL_RPATH "$ORIGIN"
-)
-
-# === Install the pybind11 module ===
-install(TARGETS bindings DESTINATION slamd)
 
 install(TARGETS slamd_window DESTINATION slamd)
-
-# === Install your shared libraries ===
-
-# Example: install slamd if it's a shared lib

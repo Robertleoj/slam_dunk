@@ -1,7 +1,6 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <slamd_common/utils/mesh.hpp>
-#include <slamd_window/assert.hpp>
 #include <slamd_window/constants.hpp>
 #include <slamd_window/gen/shader_sources.hpp>
 #include <slamd_window/geom/mesh.hpp>

@@ -3,8 +3,8 @@
 #include <spdlog/spdlog.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
-#include <numbers>
 #include <slamd_common/gmath/transforms.hpp>
+#include <slamd_common/numbers.hpp>
 #include <slamd_window/arcball.hpp>
 
 namespace slamd {
@@ -22,7 +22,7 @@ void Arcball::rotate(
     // we rotate x angles around the z axis of
     this->theta = (this->theta + delta_theta);
 
-    double vertical_range = (std::numbers::pi / 2) - (std::numbers::pi / 20);
+    double vertical_range = (_num::pi / 2) - (_num::pi / 20);
 
     this->phi = (this->phi + delta_phi)
                     .clamp(

@@ -10,7 +10,10 @@ bool Connection::is_alive() {
 }
 
 Connection::~Connection() {
-    this->worker.request_stop();
+    this->stop_requested = true;
+    if (this->worker.joinable()) {
+        this->worker.join();
+    }
 }
 
 Connection::Connection(
@@ -20,9 +23,7 @@ Connection::Connection(
       socket(std::move(socket)) {
     SPDLOG_INFO("Client connected");
 
-    this->worker = std::jthread([this](std::stop_token st) {
-        this->job(st);
-    });
+    this->worker = std::thread(&Connection::job, this);
 }
 
 void Connection::write(
@@ -38,10 +39,8 @@ void Connection::write(
     this->message_queue.push(msg);
 }
 
-void Connection::job(
-    std::stop_token& st
-) {
-    while (!st.stop_requested()) {
+void Connection::job() {
+    while (!this->stop_requested) {
         auto maybe_buffer =
             this->message_queue.timeout_pop(std::chrono::milliseconds(10));
 

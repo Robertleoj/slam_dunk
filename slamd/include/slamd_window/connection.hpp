@@ -19,9 +19,10 @@ class Connection {
     _utils::ThreadSafeQueue<std::unique_ptr<Message>> messages;
 
    private:
-    void job(std::stop_token& stop_token);
+    void job();
 
-    std::jthread job_thread;
+    std::thread job_thread;
+    std::atomic<bool> stop_requested = false;
 };
 
 }  // namespace slamd

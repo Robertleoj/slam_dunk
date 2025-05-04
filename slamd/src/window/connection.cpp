@@ -13,18 +13,17 @@ Connection::Connection(
     : ip(ip),
       port(port),
       messages() {
-    this->job_thread = std::jthread([this](std::stop_token st) {
-        this->job(st);
-    });
+    this->job_thread = std::thread(&Connection::job, this);
 }
 
 Connection::~Connection() {
-    this->job_thread.request_stop();
+    this->stop_requested = true;
+    if (this->job_thread.joinable()) {
+        this->job_thread.join();
+    }
 }
 
-void Connection::job(
-    std::stop_token& stop_token
-) {
+void Connection::job() {
     spdlog::info("Connection job started for {}:{}", ip, port);
 
     asio::io_context io_ctx;
@@ -32,7 +31,7 @@ void Connection::job(
     asio::ip::tcp::endpoint endpoint(asio::ip::make_address(ip), port);
 
     while (true) {
-        if (stop_token.stop_requested()) {
+        if (this->stop_requested) {
             return;
         }
 
@@ -47,7 +46,7 @@ void Connection::job(
         }
     }
 
-    while (connected && !stop_token.stop_requested()) {
+    while (connected && !this->stop_requested) {
         try {
             uint32_t len_net;
             asio::read(

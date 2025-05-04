@@ -1,10 +1,9 @@
+#include <fmt/format.h>
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
-#include <format>
 #include <slamd_common/data/mesh.hpp>
 #include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/utils/mesh.hpp>
-#include <slamd_window/assert.hpp>
 #include <slamd_window/constants.hpp>
 #include <slamd_window/gen/shader_sources.hpp>
 #include <slamd_window/geom/point_cloud.hpp>
@@ -29,7 +28,7 @@ PointCloud::PointCloud(
       pending_radii_update(false) {
     if (!((positions.size() == colors.size()) && (colors.size() == radii.size())
         )) {
-        throw std::invalid_argument(std::format(
+        throw std::invalid_argument(fmt::format(
             "number of positions, colors, and radii must be the same, got "
             "{} positions, {} colors, {} radii",
             positions.size(),

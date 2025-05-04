@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <memory>
 #include <slamd_common/utils/thread_safe_queue.hpp>
-#include <stop_token>
 #include <thread>
 
 namespace slamd {
@@ -18,8 +17,9 @@ class Connection : public std::enable_shared_from_this<Connection> {
     bool is_alive();
 
    private:
-    std::jthread worker;
-    void job(std::stop_token& stop_token);
+    std::thread worker;
+    std::atomic<bool> stop_requested = false;
+    void job();
 
     bool alive;
     asio::ip::tcp::socket socket;

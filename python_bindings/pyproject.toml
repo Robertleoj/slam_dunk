@@ -18,4 +18,4 @@ slamd-window = "slamd:_window_cli"
 minimum-version = "build-system.requires"
 
 [tool.cibuildwheel]
-skip = ["*musllinux*", "*win*", "*macos*", "pp*"]
+skip = ["*musllinux*", "*win*", "pp*"]

@@ -17,9 +17,7 @@ Visualizer::Visualizer(
       name(name) {
     this->client_set = std::make_shared<_net::ClientSet>();
 
-    this->server_thread = std::jthread([this](std::stop_token st) {
-        this->server_job(st);
-    });
+    this->server_thread = std::thread(&Visualizer::server_job, this);
 }
 
 void Visualizer::send_tree(
@@ -166,9 +164,7 @@ std::vector<uint8_t> Visualizer::get_state() {
     return std::vector<uint8_t>(ptr, ptr + size);
 }
 
-void Visualizer::server_job(
-    std::stop_token& stop_token
-) {
+void Visualizer::server_job() {
     asio::io_context io;
     asio::ip::tcp::acceptor acceptor(
         io,
@@ -191,21 +187,23 @@ void Visualizer::server_job(
     accept_loop();
 
     // Spin a thread to cancel io when stop is requested
-    std::jthread stop_watcher(
-        [&](std::stop_token token) {
-            while (!token.stop_requested()) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            }
-            io.stop();  // tell io to bounce
-        },
-        stop_token
-    );
+    std::thread stop_watcher([&]() {
+        while (!this->stop_requested) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+        io.stop();  // tell io to bounce
+    });
 
     io.run();
+
+    stop_watcher.join();
 }
 
 Visualizer::~Visualizer() {
-    this->server_thread.request_stop();
+    this->stop_requested = true;
+    if (this->server_thread.joinable()) {
+        this->server_thread.join();
+    }
 }
 
 void Visualizer::hang_forever() {

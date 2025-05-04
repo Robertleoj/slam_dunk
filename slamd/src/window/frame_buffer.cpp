@@ -1,7 +1,7 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
 #include <spdlog/spdlog.h>
-#include <slamd_window/assert.hpp>
+#include <slamd_common/assert.hpp>
 #include <slamd_window/frame_buffer.hpp>
 
 namespace slamd {
