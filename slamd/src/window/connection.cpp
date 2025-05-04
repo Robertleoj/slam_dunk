@@ -27,8 +27,9 @@ void Connection::job() {
     spdlog::info("Connection job started for {}:{}", ip, port);
 
     asio::io_context io_ctx;
-    asio::ip::tcp::socket socket(io_ctx);
     asio::ip::tcp::endpoint endpoint(asio::ip::make_address(ip), port);
+
+    std::optional<asio::ip::tcp::socket> socket_opt = std::nullopt;
 
     while (true) {
         if (this->stop_requested) {
@@ -36,15 +37,19 @@ void Connection::job() {
         }
 
         try {
-            socket.connect(endpoint);
+            asio::ip::tcp::socket new_socket(io_ctx);
+            new_socket.connect(endpoint);
+            socket_opt.emplace(std::move(new_socket));
             connected = true;
             spdlog::info("Successfully connected to {}:{}", ip, port);
             break;
         } catch (const std::exception& e) {
             connected = false;
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
     }
+
+    auto socket = std::move(socket_opt.value());
 
     while (connected && !this->stop_requested) {
         try {
