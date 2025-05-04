@@ -95,11 +95,11 @@ target_link_libraries(bindings
 )
 
 set_target_properties(bindings PROPERTIES
-    INSTALL_RPATH ${INSTALL_RPATH}
+    INSTALL_RPATH "${INSTALL_PATH}"
 )
 
 set_target_properties(slamd_window PROPERTIES
-    INSTALL_RPATH ${INSTALL_RPATH}
+    INSTALL_RPATH "${INSTALL_PATH}"
 )
 
 # === Install the pybind11 module ===
