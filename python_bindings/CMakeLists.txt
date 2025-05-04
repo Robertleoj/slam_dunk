@@ -51,7 +51,6 @@ if(NOT TARGET slamd)
 endif()
 
 
-set(BUILD_SHARED_LIBS ON)
 
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module REQUIRED)
 
@@ -69,10 +68,9 @@ if(NOT pybind11_FOUND)
     FetchContent_MakeAvailable(pybind11)
 endif()
 
-# === pybind11 module ===
+set(BUILD_SHARED_LIBS ON)
 set(PYBIND11_PYTHON_TARGET "Python::Module")
-pybind11_add_module(bindings SHARED src/main.cpp)
-
+pybind11_add_module(bindings MODULE src/main.cpp)
 set(BUILD_SHARED_LIBS OFF)
 
 target_include_directories(
