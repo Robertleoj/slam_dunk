@@ -54,7 +54,8 @@ jobs:
               mesa-libGLES-devel \
               SDL2-devel \
               qt5-qtbase-devel \
-              gtk3-devel
+              gtk3-devel \
+              python3-dev
         run: |
           cd python_bindings
           cibuildwheel --output-dir dist
