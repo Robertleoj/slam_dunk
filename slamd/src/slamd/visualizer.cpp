@@ -20,6 +20,140 @@ Visualizer::Visualizer(
     this->server_thread = std::thread(&Visualizer::server_job, this);
 }
 
+void Visualizer::add_view(
+    std::string name,
+    std::shared_ptr<_tree::Tree> tree,
+    slamd::flatb::ViewType type
+) {
+    std::scoped_lock l(this->view_map_mutex);
+
+    if (this->trees.find(tree->id) == this->trees.end()) {
+        this->send_tree(tree);
+        this->trees.insert({tree->id, tree});
+    }
+
+    auto view = _view::View::create(name, this->shared_from_this(), tree, type);
+
+    std::optional<std::shared_ptr<_view::View>> to_remove;
+    auto it = this->view_name_to_view.find(name);
+
+    if (it != this->view_name_to_view.end()) {
+        to_remove = it->second;
+    }
+
+    this->view_name_to_view[name] = view;
+
+    this->broadcast(view->get_add_view_message());
+
+    if (to_remove.has_value()) {
+        this->broadcast(to_remove.value()->get_remove_view_message());
+        this->remove_view_tree(to_remove.value());
+    }
+}
+
+std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>
+Visualizer::find_geometries() {
+    std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>
+        current_geometries;
+
+    for (auto [_, tree] : this->trees) {
+        tree->add_all_geometries(current_geometries);
+    }
+
+    return current_geometries;
+}
+
+void Visualizer::delete_scene(
+    std::string name
+) {
+    this->delete_view(name);
+}
+
+void Visualizer::delete_view(
+    std::string name
+) {
+    std::shared_ptr<_view::View> to_delete;
+
+    {
+        std::scoped_lock l(this->view_map_mutex);
+        auto it = this->view_name_to_view.find(name);
+
+        if (it == this->view_name_to_view.end()) {
+
+            spdlog::info("View {} not found, have", name);
+            for (auto& [view_name, _] : this->view_name_to_view) {
+                spdlog::info(" {}", view_name);
+            }
+
+            return;
+        }
+
+        to_delete = it->second;
+
+        this->view_name_to_view.erase(name);
+    }
+
+    this->broadcast(to_delete->get_remove_view_message());
+
+    this->remove_view_tree(to_delete);
+}
+
+void Visualizer::delete_canvas(
+    std::string name
+) {
+    this->delete_view(name);
+}
+
+void Visualizer::remove_view_tree(
+    std::shared_ptr<_view::View> view
+) {
+    // check if the tree is in our map
+    auto tree = view->tree;
+
+    // we will always remove the view from the tree
+    tree->attached_to.erase(view->id);
+
+    auto tree_it = this->trees.find(tree->id);
+    if (tree_it == this->trees.end()) {
+        // tree is not in our map, nothing to do
+        return;
+    }
+
+    {
+        std::scoped_lock l(this->view_map_mutex);
+        // check if any of the visualizers have the tree
+        for (auto& [_, view] : this->view_name_to_view) {
+            if (view->tree->id == tree->id) {
+                // one of our views have the tree - we won't remove it
+                return;
+            }
+        }
+    }
+
+    // the tree is in our map, and none of our views reference it - we want to
+    // remove it
+    tree->attached_to.erase(view->id);
+
+    auto current_geometries = this->find_geometries();
+
+    std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>> tree_geometries;
+    tree->add_all_geometries(tree_geometries);
+
+    for (auto [geom_id, geom] : tree_geometries) {
+        auto it = current_geometries.find(geom_id);
+
+        if (it == current_geometries.end()) {
+            // we need to remove this geometry
+            this->broadcast(geom->get_remove_geometry_message());
+        }
+    }
+
+    // now we remove the tree
+    this->trees.erase(tree->id);
+
+    this->broadcast(tree->get_remove_tree_message());
+}
+
 void Visualizer::send_tree(
     std::shared_ptr<_tree::Tree> tree
 ) {
@@ -51,22 +185,7 @@ void Visualizer::add_scene(
     std::string name,
     std::shared_ptr<Scene> scene
 ) {
-    std::scoped_lock l(this->view_map_mutex);
-
-    if (this->trees.find(scene->id) == this->trees.end()) {
-        this->send_tree(scene);
-        this->trees.insert({scene->id, scene});
-    }
-
-    auto view = _view::View::create(
-        name,
-        this->shared_from_this(),
-        scene,
-        slamd::flatb::ViewType_SCENE
-    );
-
-    this->view_name_to_view.insert({name, view});
-    this->broadcast(view->get_add_view_message());
+    this->add_view(name, scene, slamd::flatb::ViewType_SCENE);
 }
 
 std::shared_ptr<Canvas> Visualizer::canvas(
@@ -89,24 +208,9 @@ void Visualizer::add_canvas(
     std::string name,
     std::shared_ptr<Canvas> canvas
 ) {
-    std::scoped_lock l(this->view_map_mutex);
-
-    if (this->trees.find(canvas->id) == this->trees.end()) {
-        this->send_tree(canvas);
-        this->trees.insert({canvas->id, canvas});
-    }
-
-    auto view = _view::View::create(
-        name,
-        this->shared_from_this(),
-        canvas,
-        slamd::flatb::ViewType_CANVAS
-    );
-
-    this->view_name_to_view.insert({name, view});
-
-    this->broadcast(view->get_add_view_message());
+    this->add_view(name, canvas, slamd::flatb::ViewType_CANVAS);
 }
+
 flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatb::Geometry>>>
 Visualizer::get_geometries_fb(
     flatbuffers::FlatBufferBuilder& builder

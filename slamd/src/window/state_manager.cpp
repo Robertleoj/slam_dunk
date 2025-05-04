@@ -1,9 +1,9 @@
 #include <flatb/visualizer_generated.h>
+#include <fmt/format.h>
 #include <spdlog/spdlog.h>
 #include <asio.hpp>
 #include <memory>
 #include <slamd_common/gmath/serialization.hpp>
-#include <fmt/format.h>
 #include <slamd_common/gmath/stringify.hpp>
 #include <slamd_window/geom/circles_2d.hpp>
 #include <slamd_window/geom/mesh.hpp>
@@ -120,6 +120,21 @@ void StateManager::handle_add_tree(
 
     this->trees.insert({_id::TreeID(add_tree_fb->tree()->id()), tree});
 }
+
+void StateManager::handle_remove_tree(
+    const slamd::flatb::RemoveTree* remove_tree_fb
+) {
+    this->trees.erase(_id::TreeID(remove_tree_fb->tree_id()));
+}
+
+void StateManager::handle_remove_view(
+    const slamd::flatb::RemoveView* remove_view_fb
+) {
+    std::string view_name = remove_view_fb->name()->str();
+    spdlog::info("View {} removed", view_name);
+    this->views.erase(view_name);
+}
+
 void StateManager::handle_add_view(
     const slamd::flatb::AddView* add_view_fb
 ) {
@@ -268,8 +283,16 @@ void StateManager::apply_updates() {
                 this->handle_add_tree(message_fb->message_as_add_tree());
                 break;
             }
+            case (slamd::flatb::MessageUnion_remove_tree): {
+                this->handle_remove_tree(message_fb->message_as_remove_tree());
+                break;
+            }
             case (slamd::flatb::MessageUnion_add_view): {
                 this->handle_add_view(message_fb->message_as_add_view());
+                break;
+            }
+            case (slamd::flatb::MessageUnion_remove_view): {
+                this->handle_remove_view(message_fb->message_as_remove_view());
                 break;
             }
 

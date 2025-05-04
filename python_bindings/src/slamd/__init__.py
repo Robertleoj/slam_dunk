@@ -48,6 +48,12 @@ class Visualizer:
     def scene(self, name: str) -> Scene:
         return self._impl.scene(name)
 
+    def delete_scene(self, name: str) -> None:
+        self._impl.delete_scene(name)
+
+    def delete_canvas(self, name: str) -> None:
+        self._impl.delete_canvas(name)
+
 
 def spawn_window(port: int = 5555) -> None:
     executable_path = _executable_path()

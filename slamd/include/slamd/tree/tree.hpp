@@ -93,10 +93,12 @@ class Tree {
     );
 
     std::shared_ptr<std::vector<uint8_t>> get_add_tree_message();
+    std::shared_ptr<std::vector<uint8_t>> get_remove_tree_message();
 
     void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
     std::map<_id::VisualizerID, std::shared_ptr<_vis::Visualizer>>
     find_visualizers();
+
 
    protected:
     void

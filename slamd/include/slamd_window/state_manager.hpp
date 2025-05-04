@@ -32,7 +32,10 @@ class StateManager {
         const slamd::flatb::RemoveGeometry* remove_geometry_fb
     );
     void handle_add_tree(const slamd::flatb::AddTree* add_tree_fb);
+    void handle_remove_tree(const slamd::flatb::RemoveTree* remove_tree_fb);
+
     void handle_add_view(const slamd::flatb::AddView* add_view_fb);
+    void handle_remove_view(const slamd::flatb::RemoveView* remove_view_fb);
 
     void handle_update_mesh_colors(
         const slamd::flatb::UpdateMeshColors* update_mesh_colors_fb

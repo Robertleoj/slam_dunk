@@ -695,7 +695,9 @@ PYBIND11_MODULE(
             py::arg("canvas")
         )
         .def("scene", &slamd::_vis::Visualizer::scene, py::arg("name"))
-        .def("canvas", &slamd::_vis::Visualizer::canvas, py::arg("name"));
+        .def("canvas", &slamd::_vis::Visualizer::canvas, py::arg("name"))
+        .def("delete_scene", &slamd::_vis::Visualizer::delete_scene)
+        .def("delete_canvas", &slamd::_vis::Visualizer::delete_canvas);
 
     m.def(
         "spawn_window",

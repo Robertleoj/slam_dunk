@@ -10,6 +10,7 @@ option(SLAMD_VENDOR_DEPS "Use vendored dependencies" ON)
 project(slam_dunk VERSION 0.1.0)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(LIB_DIR vendored_deps)
 

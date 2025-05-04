@@ -83,8 +83,16 @@ table AddTree {
     tree: Tree;
 }
 
+table RemoveTree {
+    tree_id: ulong;
+}
+
 table AddView {
     view: View;
+}
+
+table RemoveView {
+    name: string;
 }
 
 // message
@@ -95,8 +103,12 @@ union MessageUnion {
     set_object: SetObject,
     add_geometry: AddGeometry,
     remove_geometry: RemoveGeometry,
+
     add_tree: AddTree,
+    remove_tree: RemoveTree,
+
     add_view: AddView,
+    remove_view: RemoveView,
 
     // object updates
     // mesh

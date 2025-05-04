@@ -66,6 +66,22 @@ std::shared_ptr<std::vector<uint8_t>> View::get_add_view_message() {
     return _utils::builder_buffer(builder);
 }
 
+std::shared_ptr<std::vector<uint8_t>> View::get_remove_view_message() {
+    flatbuffers::FlatBufferBuilder builder;
+    auto name_fb = builder.CreateString(this->name);
+    auto remove_view_fb = flatb::CreateRemoveView(builder, name_fb);
+
+    auto message_fb = flatb::CreateMessage(
+        builder,
+        flatb::MessageUnion_remove_view,
+        remove_view_fb.Union()
+    );
+
+    builder.Finish(message_fb);
+
+    return _utils::builder_buffer(builder);
+}
+
 View::View(
     std::string name,
     std::shared_ptr<_vis::Visualizer> vis,

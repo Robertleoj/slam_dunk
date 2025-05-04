@@ -86,6 +86,22 @@ std::shared_ptr<std::vector<uint8_t>> Tree::get_add_tree_message() {
     return _utils::builder_buffer(builder);
 }
 
+std::shared_ptr<std::vector<uint8_t>> Tree::get_remove_tree_message() {
+    flatbuffers::FlatBufferBuilder builder;
+
+    auto remove_tree_fb = flatb::CreateRemoveTree(builder, this->id.value);
+
+    auto message_fb = flatb::CreateMessage(
+        builder,
+        flatb::MessageUnion_remove_tree,
+        remove_tree_fb.Union()
+    );
+
+    builder.Finish(message_fb);
+
+    return _utils::builder_buffer(builder);
+}
+
 void Tree::add_all_geometries_rec(
     Node* node,
     std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>& initial_map

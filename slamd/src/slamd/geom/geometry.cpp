@@ -22,6 +22,20 @@ std::shared_ptr<std::vector<uint8_t>> Geometry::get_add_geometry_message() {
     builder.Finish(message_fb);
     return _utils::builder_buffer(builder);
 }
+std::shared_ptr<std::vector<uint8_t>> Geometry::get_remove_geometry_message() {
+    flatbuffers::FlatBufferBuilder builder;
+    auto remove_geometry_fb =
+        flatb::CreateRemoveGeometry(builder, this->id.value);
+    auto message_fb = flatb::CreateMessage(
+        builder,
+        flatb::MessageUnion_remove_geometry,
+        remove_geometry_fb.Union()
+    );
+
+    builder.Finish(message_fb);
+
+    return _utils::builder_buffer(builder);
+}
 
 void Geometry::attach(
     std::shared_ptr<_tree::Node> node
@@ -48,18 +62,7 @@ void Geometry::detach(
     for (auto& [key, vis] : node_vis) {
         if (vis_after.find(key) == vis_after.end()) {
             // tell the visualizer to register this object
-            flatbuffers::FlatBufferBuilder builder;
-            auto remove_geometry_fb =
-                flatb::CreateRemoveGeometry(builder, this->id.value);
-            auto message_fb = flatb::CreateMessage(
-                builder,
-                flatb::MessageUnion_remove_geometry,
-                remove_geometry_fb.Union()
-            );
-
-            builder.Finish(message_fb);
-
-            vis->broadcast(_utils::builder_buffer(builder));
+            vis->broadcast(this->get_remove_geometry_message());
         }
     }
 }

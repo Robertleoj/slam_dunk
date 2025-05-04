@@ -18,6 +18,10 @@ class View;
 namespace _tree {
 class Tree;
 }
+namespace _geom {
+class Geometry;
+}
+
 class Scene;
 class Canvas;
 
@@ -30,6 +34,10 @@ class Visualizer : public std::enable_shared_from_this<Visualizer> {
 
     void add_scene(std::string name, std::shared_ptr<Scene> scene);
     void add_canvas(std::string name, std::shared_ptr<Canvas> canvas);
+
+    void delete_scene(std::string name);
+    void delete_canvas(std::string name);
+
     std::shared_ptr<Scene> scene(std::string name);
     std::shared_ptr<Canvas> canvas(std::string name);
 
@@ -38,6 +46,19 @@ class Visualizer : public std::enable_shared_from_this<Visualizer> {
     void broadcast(std::shared_ptr<std::vector<uint8_t>> message_buffer);
 
    private:
+    void add_view(
+        std::string name,
+        std::shared_ptr<_tree::Tree> tree,
+        slamd::flatb::ViewType type
+    );
+
+
+    std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>> find_geometries(
+    );
+
+    void delete_view(std::string name);
+    void remove_view_tree(std::shared_ptr<_view::View> view);
+
     void server_job();
     std::vector<uint8_t> get_state();
     flatbuffers::Offset<

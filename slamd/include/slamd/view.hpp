@@ -35,6 +35,7 @@ class View : public std::enable_shared_from_this<View> {
         flatbuffers::FlatBufferBuilder& builder
     );
     std::shared_ptr<std::vector<uint8_t>> get_add_view_message();
+    std::shared_ptr<std::vector<uint8_t>> get_remove_view_message();
 
    private:
     View(
