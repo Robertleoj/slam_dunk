@@ -41,7 +41,7 @@ void Tree::clear(
 ) {
     auto current_node = this->root.get();
 
-    for (size_t i = 0; i < current_node->children.size(); i++) {
+    for (size_t i = 0; i < path.components.size(); i++) {
         auto component = path.components[i];
         auto& children = current_node->children;
         auto it = children.find(component);
@@ -50,7 +50,7 @@ void Tree::clear(
             return;
         }
 
-        if (i == children.size() - 1) {
+        if (i == path.components.size() - 1) {
             children.erase(it);
         } else {
             current_node = it->second.get();

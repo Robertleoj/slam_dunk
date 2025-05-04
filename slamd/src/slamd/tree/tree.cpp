@@ -79,6 +79,7 @@ void Tree::clear(
 
     for (size_t i = 0; i < tree_path.components.size(); i++) {
         auto& component = tree_path.components[i];
+
         if (i == tree_path.components.size() - 1) {
             // we are at the parent - we delete now
             current_node->children.erase(component);
