@@ -6,6 +6,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(LIB_DIR vendored_deps)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(BUILD_SHARED_LIBS OFF)
 
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
@@ -67,7 +68,7 @@ if(NOT pybind11_FOUND)
 endif()
 
 # === pybind11 module ===
-pybind11_add_module(bindings src/main.cpp)
+pybind11_add_module(bindings SHARED src/main.cpp)
 
 
 target_include_directories(
@@ -93,16 +94,16 @@ target_link_libraries(bindings
         fmt::fmt
 )
 
-set_target_properties(bindings slamd slamd_window glbinding glbinding-aux fmt glfw PROPERTIES 
-    INSTALL_RPATH "${INSTALL_PATH}"
-    BUILD_WITH_INSTALL_RPATH TRUE
-)
+# set_target_properties(bindings slamd slamd_window glbinding glbinding-aux fmt glfw PROPERTIES 
+#     INSTALL_RPATH "${INSTALL_PATH}"
+#     BUILD_WITH_INSTALL_RPATH TRUE
+# )
 
 
-install(TARGETS glbinding glbinding-aux bindings
-    LIBRARY DESTINATION slamd
-    RUNTIME DESTINATION slamd
-)
+# install(TARGETS glbinding glbinding-aux bindings
+#     LIBRARY DESTINATION slamd
+#     RUNTIME DESTINATION slamd
+# )
 
 install(TARGETS slamd_window DESTINATION slamd)
 
