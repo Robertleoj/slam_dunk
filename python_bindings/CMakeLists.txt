@@ -53,7 +53,11 @@ endif()
 
 set(BUILD_SHARED_LIBS ON)
 
-find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
+if (APPLE)
+    find_package(Python REQUIRED COMPONENTS Interpreter Development.Module Development.Embed)
+else()
+    find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
+endif()
 
 # Try to find installed pybind11
 find_package(pybind11 CONFIG QUIET)
@@ -73,7 +77,6 @@ endif()
 pybind11_add_module(bindings SHARED src/main.cpp)
 
 set(BUILD_SHARED_LIBS OFF)
-
 
 target_include_directories(
     bindings
