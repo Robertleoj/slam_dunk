@@ -92,6 +92,7 @@ target_link_libraries(bindings
         glfw
         glbinding::glbinding
         glbinding::glbinding-aux
+        fmt::fmt
 )
 
 set_target_properties(bindings PROPERTIES
@@ -101,6 +102,14 @@ set_target_properties(bindings PROPERTIES
 set_target_properties(slamd_window PROPERTIES
     INSTALL_RPATH "${INSTALL_PATH}"
 )
+
+if(APPLE)
+    set_target_properties(glbinding PROPERTIES INSTALL_RPATH "@loader_path")
+    set_target_properties(glbinding-aux PROPERTIES INSTALL_RPATH "@loader_path")
+    set_target_properties(glfw PROPERTIES INSTALL_RPATH "@loader_path")
+    set_target_properties(fmt PROPERTIES INSTALL_RPATH "@loader_path")
+endif()
+
 
 # === Install the pybind11 module ===
 install(TARGETS bindings DESTINATION slamd)
