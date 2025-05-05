@@ -16,11 +16,24 @@ int main(
         "The viewer for the SlamDunk library"
     );
 
+    // clang-format off
     options
-        .add_options()("p,port", "Port number to use", cxxopts::value<int>()->default_value("5555"))(
+        .add_options()
+        (
+            "p,port", 
+            "Port number to use", 
+            cxxopts::value<int>()->default_value("5555")
+        )
+        (
+            "i,ip", 
+            "IP address to connect to", 
+            cxxopts::value<std::string>()->default_value("127.0.0.1")
+        )
+        (
             "h,help",
             "Show help"
         );
+    // clang-format on
 
     auto result = options.parse(argc, argv);
 
@@ -30,10 +43,11 @@ int main(
     }
 
     uint16_t port = result["port"].as<int>();
+    std::string ip = result["ip"].as<std::string>();
 
     slamd::StateManager state_manager;
 
-    state_manager.try_connect("127.0.0.1", port);
+    state_manager.try_connect(ip, port);
 
     slamd::run_window(state_manager);
 }
