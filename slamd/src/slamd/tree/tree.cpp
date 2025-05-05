@@ -94,6 +94,11 @@ void Tree::clear(
         current_node = it->second.get();
     }
 
+    if (tree_path.is_root()) {
+        // special case - we want to unhook all children from the root
+        this->root->children.clear();
+    }
+
     this->broadcast(this->get_clear_path_message(path));
 }
 

@@ -56,6 +56,10 @@ void Tree::clear(
             current_node = it->second.get();
         }
     }
+
+    if (path.is_root()) {
+        this->root->children.clear();
+    }
 }
 
 void Tree::set_object(
