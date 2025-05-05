@@ -19,6 +19,8 @@ class Connection {
     _utils::ThreadSafeQueue<std::unique_ptr<Message>> messages;
 
    private:
+    asio::ip::tcp::socket connect(asio::io_context& io_context);
+
     void job();
 
     std::thread job_thread;

@@ -29,7 +29,7 @@ def uniform_grid_points(n: int, a: float) -> np.ndarray:
 
 
 def main():
-    vis = slamd.Visualizer("hello python", spawn=True, port=6000)
+    vis = slamd.Visualizer("hello python", spawn=False, port=6000)
 
     # coords = uniform_grid_points(100000, 10.0)
     coords = uniform_grid_points(100000, 30.0)

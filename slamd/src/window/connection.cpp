@@ -23,35 +23,48 @@ Connection::~Connection() {
     }
 }
 
+asio::ip::tcp::socket Connection::connect(
+    asio::io_context& io_context
+) {
+    asio::ip::tcp::endpoint endpoint(
+        asio::ip::make_address(this->ip),
+        this->port
+    );
+
+    while (true) {
+        if (this->stop_requested) {
+            throw std::runtime_error("Stop requested");
+        }
+
+        try {
+            asio::ip::tcp::socket socket(io_context);
+            socket.connect(endpoint);
+            connected = true;
+            SPDLOG_INFO("Successfully connected to {}:{}", ip, port);
+            return socket;
+        } catch (const std::exception& e) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+    }
+}
+
 void Connection::job() {
     SPDLOG_INFO("Connection job started for {}:{}", ip, port);
 
     asio::io_context io_ctx;
-    asio::ip::tcp::endpoint endpoint(asio::ip::make_address(ip), port);
-
     std::optional<asio::ip::tcp::socket> socket_opt = std::nullopt;
 
     while (true) {
-        if (this->stop_requested) {
-            return;
+        if (!connected) {
+            try {
+                socket_opt.emplace(this->connect(io_ctx));
+            } catch (...) {
+                break;
+            }
         }
 
-        try {
-            asio::ip::tcp::socket new_socket(io_ctx);
-            new_socket.connect(endpoint);
-            socket_opt.emplace(std::move(new_socket));
-            connected = true;
-            SPDLOG_INFO("Successfully connected to {}:{}", ip, port);
-            break;
-        } catch (const std::exception& e) {
-            connected = false;
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-    }
+        auto& socket = socket_opt.value();
 
-    auto socket = std::move(socket_opt.value());
-
-    while (connected && !this->stop_requested) {
         try {
             uint32_t len_net;
             asio::read(
@@ -76,7 +89,6 @@ void Connection::job() {
             connected = false;
             socket.close();
             SPDLOG_INFO("Socket closed due to error.");
-            break;
         }
     }
 

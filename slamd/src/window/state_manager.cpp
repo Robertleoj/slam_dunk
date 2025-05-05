@@ -29,6 +29,10 @@ void StateManager::handle_initial_state(
 ) {
     // const slamd::flatb::InitialState* full_state_fb =
     // slamd::flatb::GetInitialState(data.data());
+    this->views.clear();
+    this->trees.clear();
+    this->geometries.clear();
+    this->loaded = false;
 
     this->layout_path = fs::current_path() /
                         fmt::format(".{}.ini", full_state_fb->name()->str());
