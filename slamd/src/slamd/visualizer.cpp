@@ -25,8 +25,6 @@ void Visualizer::add_view(
     std::shared_ptr<_tree::Tree> tree,
     slamd::flatb::ViewType type
 ) {
-    std::scoped_lock l(this->view_map_mutex);
-
     if (this->trees.find(tree->id) == this->trees.end()) {
         this->send_tree(tree);
         this->trees.insert({tree->id, tree});
@@ -35,13 +33,16 @@ void Visualizer::add_view(
     auto view = _view::View::create(name, this->shared_from_this(), tree, type);
 
     std::optional<std::shared_ptr<_view::View>> to_remove;
-    auto it = this->view_name_to_view.find(name);
+    {
+        std::scoped_lock l(this->view_map_mutex);
+        auto it = this->view_name_to_view.find(name);
 
-    if (it != this->view_name_to_view.end()) {
-        to_remove = it->second;
+        if (it != this->view_name_to_view.end()) {
+            to_remove = it->second;
+        }
+
+        this->view_name_to_view[name] = view;
     }
-
-    this->view_name_to_view[name] = view;
 
     this->broadcast(view->get_add_view_message());
 
