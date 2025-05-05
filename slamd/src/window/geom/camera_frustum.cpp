@@ -42,16 +42,6 @@ CameraFrustum::CameraFrustum(
     // so we just need to scale it by a single number
     // we can just use the larger
 
-    spdlog::info("Configured (wh) {} {}", image_width, image_height);
-    spdlog::info("Got image of shape (wh) {}, {}", image.width, image.height);
-    spdlog::info(
-        "Expecting {} pixels, got {}",
-        image.width * image.height * image.channels,
-        image.data.size()
-    );
-
-    // spdlog::info("found zero bytes: {}", image.data[100000] == 0);
-
     float image_scale = std::fmax(
         this->corners.tr.x - this->corners.tl.x,
         this->corners.bl.y - this->corners.tr.y

@@ -45,8 +45,6 @@ std::unique_ptr<Node> Node::deserialize(
     if (transform_fb != nullptr) {
         glm::mat4 transform = slamd::gmath::deserialize(transform_fb);
 
-        spdlog::debug("Found transform {}", slamd::gmath::stringify(transform));
-
         node->set_transform(transform);
     }
 
@@ -56,7 +54,6 @@ std::unique_ptr<Node> Node::deserialize(
     }
 
     auto children_fb = node_fb->children();
-    spdlog::debug("Found {} children", children_fb->size());
 
     for (auto child_fb : *children_fb) {
         std::string key = child_fb->key()->str();

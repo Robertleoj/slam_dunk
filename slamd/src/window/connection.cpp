@@ -24,7 +24,7 @@ Connection::~Connection() {
 }
 
 void Connection::job() {
-    spdlog::info("Connection job started for {}:{}", ip, port);
+    SPDLOG_INFO("Connection job started for {}:{}", ip, port);
 
     asio::io_context io_ctx;
     asio::ip::tcp::endpoint endpoint(asio::ip::make_address(ip), port);
@@ -41,7 +41,7 @@ void Connection::job() {
             new_socket.connect(endpoint);
             socket_opt.emplace(std::move(new_socket));
             connected = true;
-            spdlog::info("Successfully connected to {}:{}", ip, port);
+            SPDLOG_INFO("Successfully connected to {}:{}", ip, port);
             break;
         } catch (const std::exception& e) {
             connected = false;
@@ -72,15 +72,15 @@ void Connection::job() {
             this->messages.push(std::move(message));
 
         } catch (const std::exception& e) {
-            spdlog::error("Error while reading from socket: {}", e.what());
+            SPDLOG_ERROR("Error while reading from socket: {}", e.what());
             connected = false;
             socket.close();
-            spdlog::info("Socket closed due to error.");
+            SPDLOG_INFO("Socket closed due to error.");
             break;
         }
     }
 
-    spdlog::info("Connection job ended for {}:{}", ip, port);
+    SPDLOG_INFO("Connection job ended for {}:{}", ip, port);
 }
 
 }  // namespace slamd

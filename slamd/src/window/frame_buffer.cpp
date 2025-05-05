@@ -60,7 +60,6 @@ void FrameBuffer::initialize() {
 
     if (gl::glCheckFramebufferStatus(gl::GL_FRAMEBUFFER) !=
         gl::GL_FRAMEBUFFER_COMPLETE) {
-        SPDLOG_ERROR("Framebuffer is not complete!");
         throw std::runtime_error("Framebuffer not complete");
     }
 

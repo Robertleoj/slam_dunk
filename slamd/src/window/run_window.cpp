@@ -116,11 +116,11 @@ void run_window(
         }
     }
 
-    spdlog::info("Window closed!");
+    SPDLOG_INFO("Window closed!");
 
     if (state_manager.layout_path.has_value()) {
         auto layout_path = state_manager.layout_path.value();
-        spdlog::info("Saving layout to {}", layout_path.string());
+        SPDLOG_INFO("Saving layout to {}", layout_path.string());
         ImGui::SaveIniSettingsToDisk(layout_path.string().c_str());
     }
 

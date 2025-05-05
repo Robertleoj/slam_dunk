@@ -35,8 +35,6 @@ void StateManager::handle_initial_state(
 
     auto trees_fb = full_state_fb->trees();
 
-    spdlog::debug("Found {} trees", trees_fb->size());
-
     for (auto geom_fb : *full_state_fb->geometries()) {
         auto geom = _geom::Geometry::deserialize(geom_fb);
         this->geometries.insert({_id::GeometryID(geom_fb->geometry_id()), geom}
@@ -52,7 +50,6 @@ void StateManager::handle_initial_state(
     }
 
     auto views_fb = full_state_fb->views();
-    spdlog::debug("Found {} views", views_fb->size());
 
     for (auto view_fb : *views_fb) {
         auto tree_id = _id::TreeID(view_fb->tree_id());
@@ -65,7 +62,7 @@ void StateManager::handle_initial_state(
         this->views.insert({view_name, std::move(view)});
     }
     this->loaded = true;
-    spdlog::debug("loaded state");
+    SPDLOG_INFO("loaded state");
 }
 
 void StateManager::handle_set_transform(
@@ -141,7 +138,7 @@ void StateManager::handle_remove_view(
     const slamd::flatb::RemoveView* remove_view_fb
 ) {
     std::string view_name = remove_view_fb->name()->str();
-    spdlog::info("View {} removed", view_name);
+    SPDLOG_DEBUG("View {} removed", view_name);
     this->views.erase(view_name);
 }
 
@@ -366,7 +363,7 @@ void StateManager::apply_updates() {
             }
 
             default: {
-                spdlog::info(
+                SPDLOG_ERROR(
                     "Unknown message type {}",
                     static_cast<uint32_t>(message_fb->message_type())
                 );

@@ -79,12 +79,7 @@ void Visualizer::delete_view(
         auto it = this->view_name_to_view.find(name);
 
         if (it == this->view_name_to_view.end()) {
-
-            spdlog::info("View {} not found, have", name);
-            for (auto& [view_name, _] : this->view_name_to_view) {
-                spdlog::info(" {}", view_name);
-            }
-
+            // did not find view, nothing to do
             return;
         }
 
