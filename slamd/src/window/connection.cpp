@@ -54,7 +54,7 @@ void Connection::job() {
     asio::io_context io_ctx;
     std::optional<asio::ip::tcp::socket> socket_opt = std::nullopt;
 
-    while (true) {
+    while (!this->stop_requested) {
         if (!connected) {
             try {
                 socket_opt.emplace(this->connect(io_ctx));

@@ -44,12 +44,12 @@ void Visualizer::add_view(
         this->view_name_to_view[name] = view;
     }
 
-    this->broadcast(view->get_add_view_message());
-
     if (to_remove.has_value()) {
         this->broadcast(to_remove.value()->get_remove_view_message());
         this->remove_view_tree(to_remove.value());
     }
+
+    this->broadcast(view->get_add_view_message());
 }
 
 std::map<_id::GeometryID, std::shared_ptr<_geom::Geometry>>
