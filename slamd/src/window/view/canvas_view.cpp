@@ -87,6 +87,7 @@ void CanvasView::render_to_frame_buffer() {
     this->tree->render(glm::mat4(1.0), projection_matrix);
 
     this->frame_buffer.unbind();
+    this->frame_buffer.resolve();
 }
 
 void CanvasView::handle_input() {

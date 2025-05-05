@@ -75,6 +75,7 @@ void SceneView::render_to_frame_buffer() {
     this->arcball_indicator.render(this->arcball.center, view, projection);
 
     this->frame_buffer.unbind();
+    this->frame_buffer.resolve();
 }
 
 void SceneView::handle_input() {

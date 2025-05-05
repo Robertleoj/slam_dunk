@@ -1,71 +1,104 @@
 #include <glbinding/gl/gl.h>
 #include <glbinding/glbinding.h>
-#include <spdlog/spdlog.h>
-#include <slamd_common/assert.hpp>
 #include <slamd_window/frame_buffer.hpp>
+#include <stdexcept>
+
+using namespace gl;
 
 namespace slamd {
 
 void FrameBuffer::initialize() {
-    gl::glGenFramebuffers(1, &this->frame_buffer_object_id);
-    gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, this->frame_buffer_object_id);
+    // === MSAA FBO ===
+    glGenFramebuffers(1, &msaa_framebuffer_id);
+    glBindFramebuffer(GL_FRAMEBUFFER, msaa_framebuffer_id);
 
-    gl::glGenTextures(1, &this->texture_id);
-    gl::glBindTexture(gl::GL_TEXTURE_2D, this->texture_id);
-    gl::glTexImage2D(
-        gl::GL_TEXTURE_2D,
-        0,
-        gl::GL_RGB,
-        this->current_width,
-        this->current_height,
-        0,
-        gl::GL_RGB,
-        gl::GL_UNSIGNED_BYTE,
-        nullptr
+    glGenTextures(1, &msaa_color_buffer_id);
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, msaa_color_buffer_id);
+    glTexImage2DMultisample(
+        GL_TEXTURE_2D_MULTISAMPLE,
+        samples,
+        GL_RGB8,
+        current_width,
+        current_height,
+        GL_TRUE
     );
-    gl::glTexParameteri(
-        gl::GL_TEXTURE_2D,
-        gl::GL_TEXTURE_MIN_FILTER,
-        gl::GL_LINEAR
-    );
-    gl::glTexParameteri(
-        gl::GL_TEXTURE_2D,
-        gl::GL_TEXTURE_MAG_FILTER,
-        gl::GL_LINEAR
-    );
-
-    gl::glFramebufferTexture2D(
-        gl::GL_FRAMEBUFFER,
-        gl::GL_COLOR_ATTACHMENT0,
-        gl::GL_TEXTURE_2D,
-        this->texture_id,
+    glFramebufferTexture2D(
+        GL_FRAMEBUFFER,
+        GL_COLOR_ATTACHMENT0,
+        GL_TEXTURE_2D_MULTISAMPLE,
+        msaa_color_buffer_id,
         0
     );
 
-    gl::glGenRenderbuffers(1, &this->render_buffer_object_id);
-    gl::glBindRenderbuffer(gl::GL_RENDERBUFFER, this->render_buffer_object_id);
-    gl::glRenderbufferStorage(
-        gl::GL_RENDERBUFFER,
-        gl::GL_DEPTH24_STENCIL8,
-        this->current_width,
-        this->current_height
+    glGenRenderbuffers(1, &msaa_depth_buffer_id);
+    glBindRenderbuffer(GL_RENDERBUFFER, msaa_depth_buffer_id);
+    glRenderbufferStorageMultisample(
+        GL_RENDERBUFFER,
+        samples,
+        GL_DEPTH24_STENCIL8,
+        current_width,
+        current_height
+    );
+    glFramebufferRenderbuffer(
+        GL_FRAMEBUFFER,
+        GL_DEPTH_STENCIL_ATTACHMENT,
+        GL_RENDERBUFFER,
+        msaa_depth_buffer_id
     );
 
-    gl::glFramebufferRenderbuffer(
-        gl::GL_FRAMEBUFFER,
-        gl::GL_DEPTH_STENCIL_ATTACHMENT,
-        gl::GL_RENDERBUFFER,
-        this->render_buffer_object_id
-    );
-
-    if (gl::glCheckFramebufferStatus(gl::GL_FRAMEBUFFER) !=
-        gl::GL_FRAMEBUFFER_COMPLETE) {
-        throw std::runtime_error("Framebuffer not complete");
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        throw std::runtime_error("MSAA framebuffer not complete");
     }
 
-    gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, 0);
-    gl::glBindTexture(gl::GL_TEXTURE_2D, 0);
-    gl::glBindRenderbuffer(gl::GL_RENDERBUFFER, 0);
+    // === Resolve FBO ===
+    glGenFramebuffers(1, &frame_buffer_object_id);
+    glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer_object_id);
+
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glTexImage2D(
+        GL_TEXTURE_2D,
+        0,
+        GL_RGB,
+        current_width,
+        current_height,
+        0,
+        GL_RGB,
+        GL_UNSIGNED_BYTE,
+        nullptr
+    );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(
+        GL_FRAMEBUFFER,
+        GL_COLOR_ATTACHMENT0,
+        GL_TEXTURE_2D,
+        texture_id,
+        0
+    );
+
+    glGenRenderbuffers(1, &render_buffer_object_id);
+    glBindRenderbuffer(GL_RENDERBUFFER, render_buffer_object_id);
+    glRenderbufferStorage(
+        GL_RENDERBUFFER,
+        GL_DEPTH24_STENCIL8,
+        current_width,
+        current_height
+    );
+    glFramebufferRenderbuffer(
+        GL_FRAMEBUFFER,
+        GL_DEPTH_STENCIL_ATTACHMENT,
+        GL_RENDERBUFFER,
+        render_buffer_object_id
+    );
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        throw std::runtime_error("Resolve framebuffer not complete");
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 FrameBuffer::FrameBuffer(
@@ -74,98 +107,110 @@ FrameBuffer::FrameBuffer(
 )
     : current_height(height),
       current_width(width) {
-    this->initialize();
+    initialize();
 }
 
 FrameBuffer::~FrameBuffer() {
-    gl::glDeleteFramebuffers(1, &this->frame_buffer_object_id);
-    gl::glDeleteTextures(1, &this->texture_id);
-    gl::glDeleteRenderbuffers(1, &this->render_buffer_object_id);
+    glDeleteFramebuffers(1, &frame_buffer_object_id);
+    glDeleteTextures(1, &texture_id);
+    glDeleteRenderbuffers(1, &render_buffer_object_id);
+
+    glDeleteFramebuffers(1, &msaa_framebuffer_id);
+    glDeleteTextures(1, &msaa_color_buffer_id);
+    glDeleteRenderbuffers(1, &msaa_depth_buffer_id);
 }
 
-uint FrameBuffer::frame_texture() {
-    return this->texture_id;
+uint32_t FrameBuffer::frame_texture() {
+    return texture_id;
+}
+
+void FrameBuffer::bind() {
+    glBindFramebuffer(GL_FRAMEBUFFER, msaa_framebuffer_id);
+    glViewport(0, 0, current_width, current_height);
+}
+
+void FrameBuffer::unbind() {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void FrameBuffer::resolve() {
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, msaa_framebuffer_id);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frame_buffer_object_id);
+    glBlitFramebuffer(
+        0,
+        0,
+        current_width,
+        current_height,
+        0,
+        0,
+        current_width,
+        current_height,
+        GL_COLOR_BUFFER_BIT,
+        GL_NEAREST
+    );
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void FrameBuffer::rescale(
     size_t width,
     size_t height
 ) {
-    if (this->current_height == height && this->current_width == width) {
+    if (width == current_width && height == current_height) {
         return;
     }
 
-    gl::glViewport(0, 0, width, height);
+    current_width = width;
+    current_height = height;
 
-    gl::glBindTexture(gl::GL_TEXTURE_2D, this->texture_id);
-    gl::glTexImage2D(
-        gl::GL_TEXTURE_2D,
-        0,
-        gl::GL_RGB,
+    // Realloc MSAA targets
+    glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, msaa_color_buffer_id);
+    glTexImage2DMultisample(
+        GL_TEXTURE_2D_MULTISAMPLE,
+        samples,
+        GL_RGB8,
         width,
         height,
-        0,
-        gl::GL_RGB,
-        gl::GL_UNSIGNED_BYTE,
-        nullptr
-    );
-    gl::glTexParameteri(
-        gl::GL_TEXTURE_2D,
-        gl::GL_TEXTURE_MIN_FILTER,
-        gl::GL_LINEAR
+        GL_TRUE
     );
 
-    gl::glTexParameteri(
-        gl::GL_TEXTURE_2D,
-        gl::GL_TEXTURE_MAG_FILTER,
-        gl::GL_LINEAR
-    );
-    gl::glFramebufferTexture2D(
-        gl::GL_FRAMEBUFFER,
-        gl::GL_COLOR_ATTACHMENT0,
-        gl::GL_TEXTURE_2D,
-        this->texture_id,
-        0
-    );
-
-    gl::glBindRenderbuffer(gl::GL_RENDERBUFFER, this->render_buffer_object_id);
-    gl::glRenderbufferStorage(
-        gl::GL_RENDERBUFFER,
-        gl::GL_DEPTH24_STENCIL8,
+    glBindRenderbuffer(GL_RENDERBUFFER, msaa_depth_buffer_id);
+    glRenderbufferStorageMultisample(
+        GL_RENDERBUFFER,
+        samples,
+        GL_DEPTH24_STENCIL8,
         width,
         height
     );
-    gl::glFramebufferRenderbuffer(
-        gl::GL_FRAMEBUFFER,
-        gl::GL_DEPTH_STENCIL_ATTACHMENT,
-        gl::GL_RENDERBUFFER,
-        this->render_buffer_object_id
+
+    // Realloc resolve target
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glTexImage2D(
+        GL_TEXTURE_2D,
+        0,
+        GL_RGB,
+        width,
+        height,
+        0,
+        GL_RGB,
+        GL_UNSIGNED_BYTE,
+        nullptr
     );
 
-    this->current_height = height;
-    this->current_width = width;
-}
-
-void FrameBuffer::bind() {
-    gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, this->frame_buffer_object_id);
-    gl::glViewport(0, 0, this->width(), this->height());
-}
-
-void FrameBuffer::unbind() {
-    gl::glBindFramebuffer(gl::GL_FRAMEBUFFER, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, render_buffer_object_id);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 }
 
 double FrameBuffer::aspect() const {
-    return static_cast<double>(this->current_width) /
-           static_cast<double>(this->current_height);
+    return static_cast<double>(current_width) /
+           static_cast<double>(current_height);
 }
 
 size_t FrameBuffer::width() const {
-    return this->current_width;
+    return current_width;
 }
 
 size_t FrameBuffer::height() const {
-    return this->current_height;
+    return current_height;
 }
 
 }  // namespace slamd
