@@ -1,8 +1,11 @@
+#include <glbinding/gl/gl.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <spdlog/spdlog.h>
-#include <slamd_window/window.hpp>
+#include <slamd_window/frame_timer.hpp>
+#include <slamd_window/glfw.hpp>
+#include <slamd_window/run_window.hpp>
 
 namespace slamd {
 
@@ -15,8 +18,10 @@ void framebuffer_size_callback(
     gl::glViewport(0, 0, width, height);
 }
 
-Window::Window() {
-    this->window = glutils::make_window("Slam Dunk", 1000, 1000);
+void run_window(
+    StateManager& state_manager
+) {
+    auto window = glutils::make_window("Slam Dunk", 1000, 1000);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     IMGUI_CHECKVERSION();
@@ -28,22 +33,19 @@ Window::Window() {
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
-}
-
-void Window::run() {
     FrameTimer frame_timer;
     constexpr double target_frame_time = 1.0 / 120.0;  // ~0.00833 seconds
     bool loaded_layout = false;
     bool checked_layout = false;
 
     while (!glfwWindowShouldClose(window)) {
-        this->state_manager.apply_updates();
+        state_manager.apply_updates();
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        if (!this->state_manager.loaded) {
+        if (!state_manager.loaded) {
             // render a window with a message
             ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
             ImGui::SetNextWindowSize(ImVec2(400, 100), ImGuiCond_Always);
@@ -58,8 +60,8 @@ void Window::run() {
             ImGuiID main_dockspace_id;
 
             if (!loaded_layout && !checked_layout) {
-                if (this->state_manager.layout_path.has_value()) {
-                    auto layout_path = this->state_manager.layout_path.value();
+                if (state_manager.layout_path.has_value()) {
+                    auto layout_path = state_manager.layout_path.value();
                     if (fs::exists(layout_path)) {
                         ImGui::LoadIniSettingsFromDisk(
                             layout_path.string().c_str()
@@ -72,7 +74,7 @@ void Window::run() {
 
             main_dockspace_id = ImGui::DockSpaceOverViewport();
 
-            for (auto& [scene_name, scene] : this->state_manager.views) {
+            for (auto& [scene_name, scene] : state_manager.views) {
                 if (!loaded_layout) {
                     ImGui::SetNextWindowDockID(
                         main_dockspace_id,
@@ -116,15 +118,16 @@ void Window::run() {
 
     spdlog::info("Window closed!");
 
-    if (this->state_manager.layout_path.has_value()) {
-        auto layout_path = this->state_manager.layout_path.value();
+    if (state_manager.layout_path.has_value()) {
+        auto layout_path = state_manager.layout_path.value();
         spdlog::info("Saving layout to {}", layout_path.string());
         ImGui::SaveIniSettingsToDisk(layout_path.string().c_str());
     }
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     glfwTerminate();
 }
-
-Window::~Window() {}
-
 }  // namespace slamd

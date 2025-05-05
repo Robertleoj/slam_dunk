@@ -3,7 +3,7 @@
 #include <asio.hpp>
 #include <cxxopts.hpp>
 #include <iostream>
-#include <slamd_window/window.hpp>
+#include <slamd_window/run_window.hpp>
 
 int main(
     int argc,
@@ -31,8 +31,9 @@ int main(
 
     uint16_t port = result["port"].as<int>();
 
-    slamd::Window window{};
-    window.state_manager.try_connect("127.0.0.1", port);
+    slamd::StateManager state_manager;
 
-    window.run();
+    state_manager.try_connect("127.0.0.1", port);
+
+    slamd::run_window(state_manager);
 }

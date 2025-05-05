@@ -138,7 +138,7 @@ target_sources(
         src/window/shaders.cpp
         src/window/arcball.cpp
         src/window/frame_timer.cpp
-        src/window/window.cpp
+        src/window/run_window.cpp
         src/window/state_manager.cpp
         src/window/connection.cpp
         src/window/message.cpp
