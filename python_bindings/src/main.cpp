@@ -574,21 +574,6 @@ void define_geom(
 void define_geom2d(
     py::module_& m
 ) {
-    // Overload: uniform color + radius
-    m.def(
-        "Points",
-        [](const std::vector<glm::vec2>& positions,
-           const glm::vec3& color,
-           float radius) {
-            return slamd::geom2d::points(positions, color, radius);
-        },
-        py::arg("positions"),
-        py::arg("color"),
-        py::arg("radius"),
-        "Create 2D points with uniform color and radius"
-    );
-
-    // Overload: per-point color + radius
     m.def(
         "Points",
         [](const std::vector<glm::vec2>& positions,
