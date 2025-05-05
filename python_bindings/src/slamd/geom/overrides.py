@@ -2,9 +2,11 @@ import numpy as np
 from ..bindings.geom import (
     PointCloud as PointCloud_internal,
     PolyLine as PolyLine_internal,
+    Sphere as Sphere_internal,
+    Arrows as Arrows_internal,
 )
 from .._utils.colors import Color
-from .._utils.handle_input import process_color, process_radii
+from .._utils.handle_input import process_color, process_radii, process_single_color
 
 
 def PointCloud(
@@ -26,5 +28,20 @@ def PolyLine(
     color: np.ndarray | tuple[int, int, int] = Color.red,
     min_brightness: float = 1.0,
 ):
-    color_np = process_color(color, 1).reshape(3)
+    color_np = process_single_color(color)
     return PolyLine_internal(points, thickness, color_np, min_brightness)
+
+
+def Sphere(radius: float, color: np.ndarray | tuple[int, int, int] = Color.blue):
+    return Sphere_internal(radius, process_single_color(color))
+
+
+def Arrows(
+    starts: np.ndarray,
+    ends: np.ndarray,
+    colors: np.ndarray | tuple[int, int, int] = Color.dark_red,
+    thickness: float = 0.5,
+):
+    return Arrows_internal(
+        starts, ends, process_color(colors, starts.shape[0]), thickness
+    )

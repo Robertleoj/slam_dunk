@@ -1,12 +1,10 @@
 from ..bindings.geom import (
     Box,
-    Arrows,
     CameraFrustum,
     Mesh,
-    Sphere,
     Triad,
 )
-from .overrides import PointCloud, PolyLine
+from .overrides import PointCloud, PolyLine, Sphere, Arrows
 
 
 __all__ = [

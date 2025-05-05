@@ -38,3 +38,17 @@ def process_color(
         raise TypeError("colors must be an np.ndarray or a (R, G, B) tuple")
 
     return colors_np
+
+def process_single_color(color: np.ndarray | tuple[int, int, int]) -> np.ndarray:
+    if isinstance(color, tuple):
+        return np.array(color, dtype=np.float32) / 255.0
+    elif isinstance(color, np.ndarray):
+        color = color.astype(np.float32)
+        if color.max() > 1.0:
+            color /= 255.0
+        if color.shape in [(3,), (1, 3)]:
+            return color.reshape(3,)
+        else:
+            raise ValueError(f"Invalid color shape: {color.shape}")
+    else:
+        raise TypeError("color must be an np.ndarray or a (R, G, B) tuple")
