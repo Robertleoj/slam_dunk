@@ -68,7 +68,13 @@ find_required_package(
     ${LIB_DIR}/imgui_wrapper
 )
 
-add_subdirectory(${LIB_DIR}/fmt)
+find_required_package(
+    fmt
+    fmt::fmt
+    fmt_FOUND
+    ${LIB_DIR}/fmt
+)
+
 add_subdirectory(${LIB_DIR}/glm)
 add_subdirectory(${LIB_DIR}/cxxopts)
 
