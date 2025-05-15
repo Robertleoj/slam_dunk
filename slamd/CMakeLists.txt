@@ -181,9 +181,9 @@ target_include_directories(
 
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${LIB_DIR}/glm>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${LIB_DIR}/asio/asio/include>
         $<INSTALL_INTERFACE:include>
-        ${LIB_DIR}/glm
-        ${LIB_DIR}/asio/asio/include
 )
 
 target_link_libraries(
@@ -246,14 +246,24 @@ target_sources(
         src/slamd/geom/circles_2d.cpp
 )
 
+# target_include_directories(
+#     slamd
+
+#     PUBLIC
+#         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#         $<INSTALL_INTERFACE:include>
+#         ${LIB_DIR}/glm
+#         ${LIB_DIR}/asio/asio/include
+# )
+
 target_include_directories(
     slamd
 
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${LIB_DIR}/glm>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${LIB_DIR}/asio/asio/include>
         $<INSTALL_INTERFACE:include>
-        ${LIB_DIR}/glm
-        ${LIB_DIR}/asio/asio/include
 )
 
 target_link_libraries(
