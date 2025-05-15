@@ -318,4 +318,20 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         NAMESPACE slamd::
         DESTINATION share/slamd
     )
+
+    install(TARGETS slamd_common
+
+    EXPORT slamdTargets
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        INCLUDES DESTINATION include
+    )
+
+    install(TARGETS slamd_flatbuff
+
+    EXPORT slamdTargets
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        INCLUDES DESTINATION include
+    )
 endif()
