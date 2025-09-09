@@ -9,12 +9,8 @@ namespace slamd {
 glm::vec3 make_background_color(
     const glm::mat4& view
 ) {
-    glm::vec3 dir = -glm::vec3(view[2]);
-    return glm::vec3(
-        (dir.x + 1.0f) * 0.5f,
-        (dir.y + 1.0f) * 0.5f,
-        (dir.z + 1.0f) * 0.5f
-    );
+    (void)view;
+    return glm::vec3(0.1f, 0.1f, 0.1f);
 }
 
 SceneView::SceneView(

@@ -2,6 +2,7 @@
 
 """A script to build the C++ backend and install the bindings into the source tree."""
 
+import sys
 import os
 import shutil
 import subprocess
@@ -22,6 +23,10 @@ LIB_PATH = Path("./build") / TARGET_NAME
 DEST_PATH = Path("./src/slamd/") / TARGET_NAME
 
 
+def _python_exe() -> str:
+    return sys.executable
+
+
 def build(debug: bool) -> None:
     """(Re)build the C++ backend."""
     embed_shaders()
@@ -30,7 +35,16 @@ def build(debug: bool) -> None:
     build_path = Path("build")
     build_path.mkdir(exist_ok=True)
 
-    compile_cmd = ["cmake", "-B", str(build_path), "-G", "Ninja", *CMAKE_FLAGS]
+    compile_cmd = [
+        "cmake",
+        "-B",
+        str(build_path),
+        "-G",
+        "Ninja",
+        *CMAKE_FLAGS,
+        f"-DPython_EXECUTABLE={_python_exe()}",
+        "-DPython_FIND_VIRTUALENV=ONLY",
+    ]
 
     if debug:
         compile_cmd.append("-DCMAKE_BUILD_TYPE=Debug")
