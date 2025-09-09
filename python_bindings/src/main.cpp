@@ -248,10 +248,7 @@ struct type_caster<std::vector<glm::vec2>> {
 
 template <>
 struct type_caster<slamd::data::Image> {
-    PYBIND11_TYPE_CASTER(
-        slamd::data::Image,
-        _("numpy.ndarray[uint8[H][W][C]]")
-    );
+    PYBIND11_TYPE_CASTER(slamd::data::Image, _("numpy.ndarray"));
 
     bool load(
         handle src,

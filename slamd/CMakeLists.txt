@@ -225,7 +225,6 @@ target_sources(
 
         src/slamd/net/connection.cpp
         src/slamd/net/client_set.cpp
-        src/slamd/net/broadcaster.cpp
 
         src/slamd/tree/tree.cpp
         src/slamd/tree/tree_path.cpp
