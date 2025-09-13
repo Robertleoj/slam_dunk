@@ -332,6 +332,11 @@ void define_private_geom(
         std::shared_ptr<slamd::_geom::Box>>(m, "Box");
 
     py::class_<
+        slamd::_geom::Plane,
+        slamd::_geom::Geometry,
+        std::shared_ptr<slamd::_geom::Plane>>(m, "Plane");
+
+    py::class_<
         slamd::_geom::Arrows,
         slamd::_geom::Geometry,
         std::shared_ptr<slamd::_geom::Arrows>>(m, "Arrows");
@@ -445,6 +450,16 @@ void define_geom(
         py::arg("colors"),
         py::arg("thickness"),
         "Create an Arrows geometry"
+    );
+    m.def(
+        "Plane",
+        &slamd::geom::plane,
+        py::arg("normal"),
+        py::arg("point"),
+        py::arg("color"),
+        py::arg("radius"),
+        py::arg("alpha"),
+        "Create a Plane geometry"
     );
 
     m.def(

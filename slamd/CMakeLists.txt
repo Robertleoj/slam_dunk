@@ -237,6 +237,7 @@ target_sources(
         src/slamd/geom/sphere.cpp
         src/slamd/geom/triad.cpp
         src/slamd/geom/poly_line.cpp
+        src/slamd/geom/plane.cpp
         src/slamd/geom/image.cpp
         src/slamd/geom/point_cloud.cpp
         src/slamd/geom/camera_frustum.cpp
