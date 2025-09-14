@@ -99,6 +99,7 @@ target_sources(
         src/common/gmath/angle.cpp
         src/common/gmath/transforms.cpp
         src/common/gmath/serialization.cpp
+        src/common/gmath/misc.cpp
 )
 
 target_include_directories(
@@ -174,6 +175,7 @@ target_sources(
         src/window/geom/poly_line_2d.cpp
         src/window/geom/mono_instanced.cpp
         src/window/geom/circles_2d.cpp
+        src/window/geom/plane.cpp
 )
 
 target_include_directories(
@@ -237,6 +239,7 @@ target_sources(
         src/slamd/geom/sphere.cpp
         src/slamd/geom/triad.cpp
         src/slamd/geom/poly_line.cpp
+        src/slamd/geom/plane.cpp
         src/slamd/geom/image.cpp
         src/slamd/geom/point_cloud.cpp
         src/slamd/geom/camera_frustum.cpp

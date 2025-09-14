@@ -54,6 +54,9 @@ struct PolyLine2DBuilder;
 struct Mesh;
 struct MeshBuilder;
 
+struct Plane;
+struct PlaneBuilder;
+
 struct Geometry;
 struct GeometryBuilder;
 
@@ -71,11 +74,12 @@ enum GeometryUnion : uint8_t {
   GeometryUnion_poly_line = 10,
   GeometryUnion_poly_line_2d = 11,
   GeometryUnion_mesh = 12,
+  GeometryUnion_plane = 13,
   GeometryUnion_MIN = GeometryUnion_NONE,
-  GeometryUnion_MAX = GeometryUnion_mesh
+  GeometryUnion_MAX = GeometryUnion_plane
 };
 
-inline const GeometryUnion (&EnumValuesGeometryUnion())[13] {
+inline const GeometryUnion (&EnumValuesGeometryUnion())[14] {
   static const GeometryUnion values[] = {
     GeometryUnion_NONE,
     GeometryUnion_triad,
@@ -89,13 +93,14 @@ inline const GeometryUnion (&EnumValuesGeometryUnion())[13] {
     GeometryUnion_arrows,
     GeometryUnion_poly_line,
     GeometryUnion_poly_line_2d,
-    GeometryUnion_mesh
+    GeometryUnion_mesh,
+    GeometryUnion_plane
   };
   return values;
 }
 
 inline const char * const *EnumNamesGeometryUnion() {
-  static const char * const names[14] = {
+  static const char * const names[15] = {
     "NONE",
     "triad",
     "circles_2d",
@@ -109,13 +114,14 @@ inline const char * const *EnumNamesGeometryUnion() {
     "poly_line",
     "poly_line_2d",
     "mesh",
+    "plane",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameGeometryUnion(GeometryUnion e) {
-  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_mesh)) return "";
+  if (::flatbuffers::IsOutRange(e, GeometryUnion_NONE, GeometryUnion_plane)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesGeometryUnion()[index];
 }
@@ -170,6 +176,10 @@ template<> struct GeometryUnionTraits<slamd::flatb::PolyLine2D> {
 
 template<> struct GeometryUnionTraits<slamd::flatb::Mesh> {
   static const GeometryUnion enum_value = GeometryUnion_mesh;
+};
+
+template<> struct GeometryUnionTraits<slamd::flatb::Plane> {
+  static const GeometryUnion enum_value = GeometryUnion_plane;
 };
 
 bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *obj, GeometryUnion type);
@@ -1006,6 +1016,87 @@ inline ::flatbuffers::Offset<Mesh> CreateMesh(
   return builder_.Finish();
 }
 
+struct Plane FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef PlaneBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_NORMAL = 4,
+    VT_POINT = 6,
+    VT_COLOR = 8,
+    VT_RADIUS = 10,
+    VT_ALPHA = 12
+  };
+  const slamd::flatb::Vec3 *normal() const {
+    return GetStruct<const slamd::flatb::Vec3 *>(VT_NORMAL);
+  }
+  const slamd::flatb::Vec3 *point() const {
+    return GetStruct<const slamd::flatb::Vec3 *>(VT_POINT);
+  }
+  const slamd::flatb::Vec3 *color() const {
+    return GetStruct<const slamd::flatb::Vec3 *>(VT_COLOR);
+  }
+  float radius() const {
+    return GetField<float>(VT_RADIUS, 0.0f);
+  }
+  float alpha() const {
+    return GetField<float>(VT_ALPHA, 0.0f);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<slamd::flatb::Vec3>(verifier, VT_NORMAL, 4) &&
+           VerifyField<slamd::flatb::Vec3>(verifier, VT_POINT, 4) &&
+           VerifyField<slamd::flatb::Vec3>(verifier, VT_COLOR, 4) &&
+           VerifyField<float>(verifier, VT_RADIUS, 4) &&
+           VerifyField<float>(verifier, VT_ALPHA, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct PlaneBuilder {
+  typedef Plane Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_normal(const slamd::flatb::Vec3 *normal) {
+    fbb_.AddStruct(Plane::VT_NORMAL, normal);
+  }
+  void add_point(const slamd::flatb::Vec3 *point) {
+    fbb_.AddStruct(Plane::VT_POINT, point);
+  }
+  void add_color(const slamd::flatb::Vec3 *color) {
+    fbb_.AddStruct(Plane::VT_COLOR, color);
+  }
+  void add_radius(float radius) {
+    fbb_.AddElement<float>(Plane::VT_RADIUS, radius, 0.0f);
+  }
+  void add_alpha(float alpha) {
+    fbb_.AddElement<float>(Plane::VT_ALPHA, alpha, 0.0f);
+  }
+  explicit PlaneBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<Plane> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<Plane>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<Plane> CreatePlane(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const slamd::flatb::Vec3 *normal = nullptr,
+    const slamd::flatb::Vec3 *point = nullptr,
+    const slamd::flatb::Vec3 *color = nullptr,
+    float radius = 0.0f,
+    float alpha = 0.0f) {
+  PlaneBuilder builder_(_fbb);
+  builder_.add_alpha(alpha);
+  builder_.add_radius(radius);
+  builder_.add_color(color);
+  builder_.add_point(point);
+  builder_.add_normal(normal);
+  return builder_.Finish();
+}
+
 struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GeometryBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -1058,6 +1149,9 @@ struct Geometry FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   const slamd::flatb::Mesh *geometry_as_mesh() const {
     return geometry_type() == slamd::flatb::GeometryUnion_mesh ? static_cast<const slamd::flatb::Mesh *>(geometry()) : nullptr;
+  }
+  const slamd::flatb::Plane *geometry_as_plane() const {
+    return geometry_type() == slamd::flatb::GeometryUnion_plane ? static_cast<const slamd::flatb::Plane *>(geometry()) : nullptr;
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1115,6 +1209,10 @@ template<> inline const slamd::flatb::PolyLine2D *Geometry::geometry_as<slamd::f
 
 template<> inline const slamd::flatb::Mesh *Geometry::geometry_as<slamd::flatb::Mesh>() const {
   return geometry_as_mesh();
+}
+
+template<> inline const slamd::flatb::Plane *Geometry::geometry_as<slamd::flatb::Plane>() const {
+  return geometry_as_plane();
 }
 
 struct GeometryBuilder {
@@ -1204,6 +1302,10 @@ inline bool VerifyGeometryUnion(::flatbuffers::Verifier &verifier, const void *o
     }
     case GeometryUnion_mesh: {
       auto ptr = reinterpret_cast<const slamd::flatb::Mesh *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case GeometryUnion_plane: {
+      auto ptr = reinterpret_cast<const slamd::flatb::Plane *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

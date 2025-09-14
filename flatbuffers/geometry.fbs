@@ -72,6 +72,14 @@ table Mesh {
     min_brightness: float;
 }
 
+table Plane {
+    normal: Vec3;
+    point: Vec3;
+    color: Vec3;
+    radius: float;
+    alpha: float;
+}
+
 union GeometryUnion {
     triad: Triad,
     circles_2d: Circles2D,
@@ -84,7 +92,8 @@ union GeometryUnion {
     arrows: Arrows,
     poly_line: PolyLine,
     poly_line_2d: PolyLine2D,
-    mesh: Mesh
+    mesh: Mesh,
+    plane: Plane
 }
 
 table Geometry {

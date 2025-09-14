@@ -86,5 +86,14 @@ glm::mat4 scale_all(
     return scale(glm::vec3(amount, amount, amount));
 }
 
+glm::vec3 transform_point(
+    glm::mat4 mat,
+    glm::vec3 point
+) {
+    glm::vec4 homo(point, 1.0f);
+    glm::vec4 transformed_homo = mat * homo;
+    return glm::vec3(transformed_homo) / transformed_homo.w;
+}
+
 }  // namespace gmath
 }  // namespace slamd

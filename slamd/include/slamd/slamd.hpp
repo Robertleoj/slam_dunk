@@ -4,6 +4,7 @@
 #include <slamd/geom/circles_2d.hpp>
 #include <slamd/geom/image.hpp>
 #include <slamd/geom/mesh.hpp>
+#include <slamd/geom/plane.hpp>
 #include <slamd/geom/point_cloud.hpp>
 #include <slamd/geom/points_2d.hpp>
 #include <slamd/geom/poly_line.hpp>

@@ -17,7 +17,8 @@ class MeshData {
         const std::vector<glm::vec3>& positions,
         const std::vector<glm::vec3>& colors,
         const std::vector<uint32_t>& triangle_indices,
-        const std::vector<glm::vec3>& normals
+        const std::vector<glm::vec3>& normals,
+        float alpha
     );
 
     void recompute_normals();
@@ -39,11 +40,14 @@ class MeshData {
     std::vector<glm::vec3> colors;
     std::vector<uint32_t> triangle_indices;
     std::vector<glm::vec3> normals;
+    float alpha;
 };
 
 class MeshDataBuilder {
    public:
     MeshDataBuilder();
+
+    MeshDataBuilder& set_alpha(float alpha);
 
     // Position setters
     MeshDataBuilder& set_positions(const std::vector<glm::vec3>& positions);
@@ -71,6 +75,7 @@ class MeshDataBuilder {
     std::optional<std::vector<glm::vec3>> colors;
     std::optional<std::vector<uint32_t>> triangle_indices;
     std::optional<std::vector<glm::vec3>> normals;
+    std::optional<float> alpha;
 };
 
 }  // namespace data

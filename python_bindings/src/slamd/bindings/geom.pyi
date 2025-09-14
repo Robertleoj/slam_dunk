@@ -3,7 +3,7 @@ import bindings._geom
 import collections.abc
 import numpy
 import typing
-__all__ = ['Arrows', 'Box', 'CameraFrustum', 'Mesh', 'PointCloud', 'PolyLine', 'Sphere', 'Triad']
+__all__ = ['Arrows', 'Box', 'CameraFrustum', 'Mesh', 'Plane', 'PointCloud', 'PolyLine', 'Sphere', 'Triad']
 def Arrows(starts: numpy.ndarray, ends: numpy.ndarray, colors: numpy.ndarray, thickness: typing.SupportsFloat) -> bindings._geom.Arrows:
     """
     Create an Arrows geometry
@@ -25,6 +25,10 @@ def Mesh(vertices: numpy.ndarray, vertex_colors: numpy.ndarray, triangle_indices
 def Mesh(vertices: numpy.ndarray, vertex_colors: numpy.ndarray, triangle_indices: collections.abc.Sequence[typing.SupportsInt], vertex_normals: numpy.ndarray) -> bindings._geom.Mesh:
     """
     Create a SimpleMesh geometry from raw data
+    """
+def Plane(normal: numpy.ndarray, point: numpy.ndarray, color: numpy.ndarray, radius: typing.SupportsFloat, alpha: typing.SupportsFloat) -> bindings._geom.Plane:
+    """
+    Create a Plane geometry
     """
 def PointCloud(positions: numpy.ndarray, colors: numpy.ndarray, radii: list[float] | numpy.ndarray, min_brightness: typing.SupportsFloat = 1.0) -> bindings._geom.PointCloud:
     """

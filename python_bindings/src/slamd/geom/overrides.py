@@ -4,6 +4,7 @@ from ..bindings.geom import (
     PolyLine as PolyLine_internal,
     Sphere as Sphere_internal,
     Arrows as Arrows_internal,
+    Plane as Plane_internal,
 )
 from .._utils.colors import Color
 from .._utils.handle_input import process_color, process_radii, process_single_color
@@ -84,3 +85,13 @@ def Arrows(
     return Arrows_internal(
         starts, ends, process_color(colors, starts.shape[0]), thickness
     )
+
+
+def Plane(
+    normal: np.ndarray,
+    point: np.ndarray,
+    color: np.ndarray | tuple[int, int, int] = Color.blue,
+    radius: float = 1.0,
+    alpha: float = 0.8,
+):
+    return Plane_internal(normal, point, process_single_color(color), radius, alpha)
