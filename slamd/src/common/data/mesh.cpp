@@ -15,12 +15,14 @@ MeshData::MeshData(
     const std::vector<glm::vec3>& positions,
     const std::vector<glm::vec3>& colors,
     const std::vector<uint32_t>& triangle_indices,
-    const std::vector<glm::vec3>& normals
+    const std::vector<glm::vec3>& normals,
+    float alpha
 )
     : positions(positions),
       colors(colors),
       triangle_indices(triangle_indices),
-      normals(normals) {}
+      normals(normals),
+      alpha(alpha) {}
 
 void MeshData::add_vertex(
     const glm::vec3& pos,
@@ -44,6 +46,13 @@ MeshDataBuilder& MeshDataBuilder::set_positions(
     const std::vector<glm::vec3>& pos
 ) {
     positions = pos;
+    return *this;
+}
+
+MeshDataBuilder& MeshDataBuilder::set_alpha(
+    float alpha
+) {
+    this->alpha = alpha;
     return *this;
 }
 
@@ -163,6 +172,8 @@ MeshData MeshDataBuilder::build() {
         throw std::runtime_error("Mesh needs indices");
     }
 
+    data.alpha = this->alpha.value_or(1.0);
+
     data.triangle_indices = std::move(this->triangle_indices.value());
 
     if (!normals.has_value()) {
@@ -182,7 +193,8 @@ flatbuffers::Offset<slamd::flatb::MeshData> MeshData::serialize(
         gmath::serialize_vector(builder, this->positions),
         gmath::serialize_vector(builder, this->colors),
         gmath::serialize_vector(builder, this->triangle_indices),
-        gmath::serialize_vector(builder, this->normals)
+        gmath::serialize_vector(builder, this->normals),
+        this->alpha
     );
 }
 
@@ -193,7 +205,8 @@ MeshData MeshData::deserialize(
         gmath::deserialize_vector(meshdata_fb->positions()),
         gmath::deserialize_vector(meshdata_fb->colors()),
         gmath::deserialize_vector(meshdata_fb->triangle_indices()),
-        gmath::deserialize_vector(meshdata_fb->normals())
+        gmath::deserialize_vector(meshdata_fb->normals()),
+        meshdata_fb->alpha()
     );
 }
 

@@ -72,7 +72,8 @@ auto get_mesh_data() {
         box_corners,
         vertex_colors,
         box_indices,
-        vertex_normals
+        vertex_normals,
+        1.0
     );
 }
 
@@ -83,7 +84,8 @@ Box::Box() {
         box_corners,
         vertex_colors,
         box_indices,
-        vertex_normals
+        vertex_normals,
+        1.0
     ));
 }
 

@@ -38,5 +38,6 @@ table MeshData {
     colors: [Vec3];
     triangle_indices: [uint32];
     normals: [Vec3];
+    alpha: float;
 }
 

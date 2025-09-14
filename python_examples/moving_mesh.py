@@ -44,7 +44,7 @@ def uniform_grid_points_with_mesh(n: int, a: float) -> tuple[np.ndarray, list[in
 
 
 def main():
-    vis = slamd.Visualizer("hello python", spawn=False, port=6000)
+    vis = slamd.Visualizer("hello python", port=6000)
 
     coords, indices = uniform_grid_points_with_mesh(100000, 30.0)
 

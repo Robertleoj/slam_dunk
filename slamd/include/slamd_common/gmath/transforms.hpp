@@ -26,5 +26,7 @@ glm::mat4 scale_xy(const glm::vec2& scale);
 glm::mat4 scale(const glm::vec3& scale);
 glm::mat4 scale_all(float scale);
 
+glm::vec3 transform_point(glm::mat4 mat, glm::vec3 point);
+
 }  // namespace gmath
 }  // namespace slamd

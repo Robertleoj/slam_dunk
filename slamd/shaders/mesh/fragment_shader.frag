@@ -7,10 +7,11 @@ out vec4 FragColor;
 
 uniform vec3 light_dir;
 uniform float min_brightness;
+uniform float alpha;
 
 void main() {
     vec3 norm = normalize(Normal);
     float diff =
         max(dot(norm, normalize(light_dir)), min_brightness);  // never too dark
-    FragColor = vec4(vertex_color * diff, 1.0);
+    FragColor = vec4(vertex_color * diff, alpha);
 }

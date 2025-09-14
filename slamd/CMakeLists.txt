@@ -99,6 +99,7 @@ target_sources(
         src/common/gmath/angle.cpp
         src/common/gmath/transforms.cpp
         src/common/gmath/serialization.cpp
+        src/common/gmath/misc.cpp
 )
 
 target_include_directories(
@@ -174,6 +175,7 @@ target_sources(
         src/window/geom/poly_line_2d.cpp
         src/window/geom/mono_instanced.cpp
         src/window/geom/circles_2d.cpp
+        src/window/geom/plane.cpp
 )
 
 target_include_directories(

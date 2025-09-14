@@ -213,6 +213,7 @@ void Mesh::render(
     shader.set_uniform("projection", projection);
     shader.set_uniform("light_dir", _const::light_dir);
     shader.set_uniform("min_brightness", this->min_brightness);
+    shader.set_uniform("alpha", this->mesh_data.alpha);
     gl::glDrawElements(
         gl::GL_TRIANGLES,
         this->mesh_data.triangle_indices.size(),

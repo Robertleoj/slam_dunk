@@ -4,7 +4,7 @@ from ..bindings.geom import (
     Mesh,
     Triad,
 )
-from .overrides import PointCloud, PolyLine, Sphere, Arrows
+from .overrides import PointCloud, PolyLine, Sphere, Arrows, Plane
 
 
 __all__ = [
@@ -16,4 +16,5 @@ __all__ = [
     "Mesh",
     "Sphere",
     "Triad",
+    "Plane",
 ]

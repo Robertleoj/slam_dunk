@@ -234,7 +234,8 @@ struct MeshData FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     VT_POSITIONS = 4,
     VT_COLORS = 6,
     VT_TRIANGLE_INDICES = 8,
-    VT_NORMALS = 10
+    VT_NORMALS = 10,
+    VT_ALPHA = 12
   };
   const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *positions() const {
     return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_POSITIONS);
@@ -248,6 +249,9 @@ struct MeshData FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *normals() const {
     return GetPointer<const ::flatbuffers::Vector<const slamd::flatb::Vec3 *> *>(VT_NORMALS);
   }
+  float alpha() const {
+    return GetField<float>(VT_ALPHA, 0.0f);
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_POSITIONS) &&
@@ -258,6 +262,7 @@ struct MeshData FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            verifier.VerifyVector(triangle_indices()) &&
            VerifyOffset(verifier, VT_NORMALS) &&
            verifier.VerifyVector(normals()) &&
+           VerifyField<float>(verifier, VT_ALPHA, 4) &&
            verifier.EndTable();
   }
 };
@@ -278,6 +283,9 @@ struct MeshDataBuilder {
   void add_normals(::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> normals) {
     fbb_.AddOffset(MeshData::VT_NORMALS, normals);
   }
+  void add_alpha(float alpha) {
+    fbb_.AddElement<float>(MeshData::VT_ALPHA, alpha, 0.0f);
+  }
   explicit MeshDataBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -294,8 +302,10 @@ inline ::flatbuffers::Offset<MeshData> CreateMeshData(
     ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> positions = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> colors = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<uint32_t>> triangle_indices = 0,
-    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> normals = 0) {
+    ::flatbuffers::Offset<::flatbuffers::Vector<const slamd::flatb::Vec3 *>> normals = 0,
+    float alpha = 0.0f) {
   MeshDataBuilder builder_(_fbb);
+  builder_.add_alpha(alpha);
   builder_.add_normals(normals);
   builder_.add_triangle_indices(triangle_indices);
   builder_.add_colors(colors);
@@ -308,7 +318,8 @@ inline ::flatbuffers::Offset<MeshData> CreateMeshDataDirect(
     const std::vector<slamd::flatb::Vec3> *positions = nullptr,
     const std::vector<slamd::flatb::Vec3> *colors = nullptr,
     const std::vector<uint32_t> *triangle_indices = nullptr,
-    const std::vector<slamd::flatb::Vec3> *normals = nullptr) {
+    const std::vector<slamd::flatb::Vec3> *normals = nullptr,
+    float alpha = 0.0f) {
   auto positions__ = positions ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*positions) : 0;
   auto colors__ = colors ? _fbb.CreateVectorOfStructs<slamd::flatb::Vec3>(*colors) : 0;
   auto triangle_indices__ = triangle_indices ? _fbb.CreateVector<uint32_t>(*triangle_indices) : 0;
@@ -318,7 +329,8 @@ inline ::flatbuffers::Offset<MeshData> CreateMeshDataDirect(
       positions__,
       colors__,
       triangle_indices__,
-      normals__);
+      normals__,
+      alpha);
 }
 
 }  // namespace flatb
