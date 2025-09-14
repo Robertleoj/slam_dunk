@@ -28,6 +28,7 @@ class Node {
     mutable std::mutex object_mutex;
 
    public:
+    bool checked = true;
     std::optional<std::shared_ptr<_geom::Geometry>> get_object() const;
 
     std::optional<glm::mat4> get_transform() const;

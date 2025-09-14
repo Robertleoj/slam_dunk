@@ -19,8 +19,7 @@ void framebuffer_size_callback(
 }
 
 inline void tree_menu(
-    Node* root,
-    ImGuiTreeNodeFlags node_flags = 0
+    Node* root
 ) {
     static char filter_buf[128] = "";  // text input buffer (persists)
 
@@ -41,54 +40,52 @@ inline void tree_menu(
     ImGui::InputText("##filter", filter_buf, IM_ARRAYSIZE(filter_buf));
     ImGui::Separator();
 
-    // --- Text input box above tree ---
-    // ImGui::InputText("Filter:##filter", filter_buf,
-    // IM_ARRAYSIZE(filter_buf)); ImGui::Separator();
-
-    std::function<void(Node*, std::string, int)> draw_node =
-        [&](Node* n, std::string label, int depth) {
+    std::function<void(Node*, std::string, int, bool)> draw_node =
+        [&](Node* n, std::string label, int depth, bool parent_dimmed) {
             ImGui::PushID(n);  // stable-ish ID; swap for n->id if you got one
 
             const bool has_children = !n->children.empty();
             const ImGuiTreeNodeFlags base_flags =
                 ImGuiTreeNodeFlags_SpanAvailWidth |
+                ImGuiTreeNodeFlags_SpanFullWidth |
                 ImGuiTreeNodeFlags_FramePadding |
                 (has_children ? 0
                               : ImGuiTreeNodeFlags_Leaf |
                                     ImGuiTreeNodeFlags_NoTreePushOnOpen);
 
+            // Inherit dimming if any ancestor is unchecked, or this node is
+            // unchecked
+            const bool dimmed = parent_dimmed || !n->checked;
+            bool dimmed_here = !parent_dimmed && !n->checked;
+            if (dimmed_here) {
+                float base_alpha = ImGui::GetStyle().Alpha;
+                ImGui::PushStyleVar(ImGuiStyleVar_Alpha, base_alpha * 0.45f);
+            }
+
             // Checkbox aligned to the right of the same line
-            bool visible = true;
-            ImGui::Checkbox("##visible", &visible);
+            ImGui::Checkbox("##visible", &n->checked);
             ImGui::SameLine(0.0f, 4.0f);
 
             bool open = false;
             if (has_children) {
-                open =
-                    ImGui::TreeNodeEx(label.c_str(), base_flags | node_flags);
+                open = ImGui::TreeNodeEx(label.c_str(), base_flags);
             } else {
-                ImGui::TreeNodeEx(label.c_str(), base_flags | node_flags);
-            }
-
-            // Optional context menu
-            if (ImGui::BeginPopupContextItem("tree_ctx")) {
-                ImGui::TextUnformatted(label.c_str());
-                ImGui::Separator();
-                if (ImGui::MenuItem("Select")) {
-                }
-                ImGui::EndPopup();
+                ImGui::TreeNodeEx(label.c_str(), base_flags);
             }
 
             if (open) {
                 for (const auto& c : n->children) {
-                    draw_node(c.second.get(), c.first, depth + 1);
+                    draw_node(c.second.get(), c.first, depth + 1, dimmed);
                 }
                 ImGui::TreePop();
+            }
+            if (dimmed_here) {
+                ImGui::PopStyleVar();
             }
             ImGui::PopID();
         };
 
-    draw_node(root, "/", 0);
+    draw_node(root, "/", 0, false);
 }
 
 inline void draw_tree_overlay(
@@ -131,10 +128,7 @@ inline void draw_tree_overlay(
     }
 
     // Reuse your tree renderer (defaults collapsed)
-    tree_menu(
-        root,
-        ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanFullWidth
-    );
+    tree_menu(root);
 
     ImGui::End();
 
