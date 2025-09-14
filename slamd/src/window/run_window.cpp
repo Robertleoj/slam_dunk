@@ -45,6 +45,8 @@ inline void tree_menu(
         }
     }
 
+    view->tree->mark_nodes_matching_glob(filter_path);
+
     ImGui::AlignTextToFramePadding();
     ImGui::TextUnformatted("Filter:");
     ImGui::SameLine();
@@ -129,6 +131,40 @@ inline void tree_menu(
                 open = ImGui::TreeNodeEx(label.c_str(), base_flags);
             } else {
                 ImGui::TreeNodeEx(label.c_str(), base_flags);
+            }
+
+            if (n->glob_matches.has_value()) {
+                const bool match = n->glob_matches.value_or(false);
+
+                // Get row rect from the last item (the tree node we just drew)
+                ImVec2 item_min = ImGui::GetItemRectMin();
+                ImVec2 item_max = ImGui::GetItemRectMax();
+
+                // Compute right edge of the content area (screen coords)
+                ImVec2 win_pos = ImGui::GetWindowPos();
+                ImVec2 cr_max = ImGui::GetWindowContentRegionMax();
+                float right_edge_x =
+                    win_pos.x + cr_max.x - ImGui::GetStyle().ItemInnerSpacing.x;
+
+                // Circle params
+                float radius = 4.0f;
+                float cx = right_edge_x - radius;  // right-aligned
+                float cy =
+                    0.5f * (item_min.y + item_max.y);  // vertically centered
+
+                ImU32 col_fill =
+                    ImGui::GetColorU32(ImVec4(0.30f, 0.85f, 0.40f, 1.0f)
+                    );  // green
+                ImU32 col_line = ImGui::GetColorU32(
+                    ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled)
+                );
+
+                ImDrawList* dl = ImGui::GetWindowDrawList();
+                if (match) {
+                    dl->AddCircleFilled(ImVec2(cx, cy), radius, col_fill);
+                } else {
+                    dl->AddCircle(ImVec2(cx, cy), radius, col_line, 12, 1.5f);
+                }
             }
 
             if (open) {
