@@ -9,7 +9,7 @@ namespace slamd {
 CanvasView::CanvasView(
     std::shared_ptr<Tree> tree
 )
-    : tree(tree),
+    : View(std::move(tree)),
       frame_buffer(500, 500),
       camera(slamd::gmath::Rect2D({0.0, 0.0}, {1.0, 1.0})),
       manually_moved(false) {}
