@@ -4,6 +4,11 @@
 
 namespace slamd {
 
+View::View(
+    std::shared_ptr<Tree> t
+)
+    : tree(std::move(t)) {}
+
 std::unique_ptr<View> View::deserialize(
     const flatb::View* view_fb,
     std::shared_ptr<Tree> tree

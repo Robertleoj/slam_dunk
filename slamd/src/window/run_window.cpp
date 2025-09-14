@@ -18,6 +18,227 @@ void framebuffer_size_callback(
     gl::glViewport(0, 0, width, height);
 }
 
+inline void tree_menu(
+    View* view
+) {
+    Node* root = view->tree->root.get();
+
+    // Compute a field width that fully shows the text (plus padding)
+    const float min_field_w = 250.0f;
+    const float text_w = ImGui::CalcTextSize(view->filter_buf).x;
+    const float pad_x = ImGui::GetStyle().FramePadding.x;
+
+    // A little extra so the caret isn’t jammed at the edge
+    const float desired_field_w = text_w + 2.0f * pad_x + 12.0f;
+    const float field_w =
+        (desired_field_w < min_field_w) ? min_field_w : desired_field_w;
+
+    std::optional<std::string> filter_error_text;
+    std::optional<TreePath> filter_path;
+    std::string filter_string(view->filter_buf);
+
+    if (filter_string.size() > 0) {
+        try {
+            filter_path = TreePath(filter_string);
+        } catch (const std::invalid_argument& e) {
+            filter_error_text = e.what();
+        }
+    }
+
+    view->tree->mark_nodes_matching_glob(filter_path);
+
+    ImGui::AlignTextToFramePadding();
+    ImGui::TextUnformatted("Filter:");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(field_w);  // take all remaining width on the line
+
+    if (filter_error_text.has_value()) {
+        ImGui::PushStyleColor(
+            ImGuiCol_FrameBg,
+            ImVec4(0.35f, 0.10f, 0.10f, 1.0f)
+        );
+        ImGui::PushStyleColor(
+            ImGuiCol_FrameBgHovered,
+            ImVec4(0.45f, 0.12f, 0.12f, 1.0f)
+        );
+        ImGui::PushStyleColor(
+            ImGuiCol_FrameBgActive,
+            ImVec4(0.50f, 0.13f, 0.13f, 1.0f)
+        );
+        ImGui::PushStyleColor(
+            ImGuiCol_Border,
+            ImVec4(0.90f, 0.20f, 0.20f, 1.0f)
+        );
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+    }
+    ImGui::InputText(
+        "##filter",
+        view->filter_buf,
+        IM_ARRAYSIZE(view->filter_buf)
+    );
+    if (filter_error_text.has_value()) {
+        ImGui::PopStyleVar();
+        ImGui::PopStyleColor(4);
+
+        // Tooltip on hover
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("%s", filter_error_text.value().c_str());
+        }
+
+        // Inline red "!" marker
+        ImGui::SameLine();
+        ImGui::TextColored(ImVec4(0.95f, 0.25f, 0.25f, 1.0f), "!");
+    }
+
+    ImGui::Separator();
+
+    std::function<void(Node*, std::string, int, bool, TreePath&)> draw_node =
+        [&](Node* n,
+            std::string label,
+            int depth,
+            bool parent_dimmed,
+            TreePath& full_path) {
+            ImGui::PushID(n);
+
+            if (filter_path.has_value()) {
+                n->glob_matches = full_path.matches_glob(filter_path.value());
+            } else {
+                n->glob_matches = std::nullopt;
+            }
+
+            const bool has_children = !n->children.empty();
+            const ImGuiTreeNodeFlags base_flags =
+                ImGuiTreeNodeFlags_SpanAvailWidth |
+                ImGuiTreeNodeFlags_SpanFullWidth |
+                ImGuiTreeNodeFlags_FramePadding |
+                (has_children ? 0
+                              : ImGuiTreeNodeFlags_Leaf |
+                                    ImGuiTreeNodeFlags_NoTreePushOnOpen);
+
+            const bool dimmed = parent_dimmed || !n->checked;
+            bool dimmed_here = !parent_dimmed && !n->checked;
+            if (dimmed_here) {
+                float base_alpha = ImGui::GetStyle().Alpha;
+                ImGui::PushStyleVar(ImGuiStyleVar_Alpha, base_alpha * 0.45f);
+            }
+
+            // Checkbox aligned to the right of the same line
+            ImGui::Checkbox("##visible", &n->checked);
+            ImGui::SameLine(0.0f, 4.0f);
+
+            bool open = false;
+            if (has_children) {
+                open = ImGui::TreeNodeEx(label.c_str(), base_flags);
+            } else {
+                ImGui::TreeNodeEx(label.c_str(), base_flags);
+            }
+
+            if (n->glob_matches.has_value()) {
+                const bool match = n->glob_matches.value_or(false);
+
+                // Get row rect from the last item (the tree node we just drew)
+                ImVec2 item_min = ImGui::GetItemRectMin();
+                ImVec2 item_max = ImGui::GetItemRectMax();
+
+                // Compute right edge of the content area (screen coords)
+                ImVec2 win_pos = ImGui::GetWindowPos();
+                ImVec2 cr_max = ImGui::GetWindowContentRegionMax();
+                float right_edge_x =
+                    win_pos.x + cr_max.x - ImGui::GetStyle().ItemInnerSpacing.x;
+
+                // Circle params
+                float radius = 4.0f;
+                float cx = right_edge_x - radius;  // right-aligned
+                float cy =
+                    0.5f * (item_min.y + item_max.y);  // vertically centered
+
+                ImU32 col_fill =
+                    ImGui::GetColorU32(ImVec4(0.30f, 0.85f, 0.40f, 1.0f)
+                    );  // green
+                ImU32 col_line = ImGui::GetColorU32(
+                    ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled)
+                );
+
+                ImDrawList* dl = ImGui::GetWindowDrawList();
+                if (match) {
+                    dl->AddCircleFilled(ImVec2(cx, cy), radius, col_fill);
+                } else {
+                    dl->AddCircle(ImVec2(cx, cy), radius, col_line, 12, 1.5f);
+                }
+            }
+
+            if (open) {
+                for (const auto& c : n->children) {
+                    full_path.components.push_back(c.first);
+                    draw_node(
+                        c.second.get(),
+                        c.first,
+                        depth + 1,
+                        dimmed,
+                        full_path
+                    );
+                    full_path.components.pop_back();
+                }
+                ImGui::TreePop();
+            }
+            if (dimmed_here) {
+                ImGui::PopStyleVar();
+            }
+            ImGui::PopID();
+        };
+
+    TreePath pth("/");
+    draw_node(root, "/", 0, false, pth);
+}
+
+inline void draw_tree_overlay(
+    View* view,
+    const char* overlay_id = "##scene_tree_overlay",
+    const char* header = "Tree",
+    float margin = 8.0f,
+    float min_width = 100.0f
+) {
+    // Anchor to current window's content region (screen coords)
+    ImVec2 win_pos = ImGui::GetWindowPos();
+    ImVec2 cr_min = ImGui::GetWindowContentRegionMin();
+    ImVec2 cr_max = ImGui::GetWindowContentRegionMax();
+    ImVec2 tl(win_pos.x + cr_min.x, win_pos.y + cr_min.y);
+    ImVec2 br(win_pos.x + cr_max.x, win_pos.y + cr_max.y);
+
+    ImVec2 pos(tl.x + margin, tl.y + margin);
+    ImVec2 max_size(br.x - tl.x - 2 * margin, br.y - tl.y - 2 * margin);
+
+    // Style: dark translucent bg, rounded corners, slim padding
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 1.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(6, 6));
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0.55f));
+
+    ImGui::SetNextWindowPos(pos, ImGuiCond_Always, ImVec2(0, 0));
+    ImGui::SetNextWindowViewport(ImGui::GetWindowViewport()->ID);
+    ImGui::SetNextWindowSizeConstraints(ImVec2(min_width, 0), max_size);
+
+    ImGuiWindowFlags flags =
+        ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize |
+        ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing |
+        ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove;  // pinned
+
+    ImGui::Begin(overlay_id, nullptr, flags);
+
+    if (header && *header) {
+        ImGui::TextUnformatted(header);
+        ImGui::Separator();
+    }
+
+    // Reuse your tree renderer (defaults collapsed)
+    tree_menu(view);
+
+    ImGui::End();
+
+    ImGui::PopStyleColor();
+    ImGui::PopStyleVar(3);
+}
+
 void run_window(
     StateManager& state_manager
 ) {
@@ -90,6 +311,9 @@ void run_window(
                         ImGuiWindowFlags_NoScrollWithMouse
                 );
                 scene->render_to_imgui();
+
+                draw_tree_overlay(scene.get());
+
                 ImGui::End();
                 ImGui::PopStyleVar();
             }

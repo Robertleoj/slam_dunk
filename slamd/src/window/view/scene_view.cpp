@@ -16,7 +16,7 @@ glm::vec3 make_background_color(
 SceneView::SceneView(
     std::shared_ptr<Tree> tree
 )
-    : tree(tree),
+    : View(std::move(tree)),
       frame_buffer(500, 500),
       camera(45.0, 0.1f, 100000.0f),
       xy_grid(1000.0) {

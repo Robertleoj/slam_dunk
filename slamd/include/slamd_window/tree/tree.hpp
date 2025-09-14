@@ -11,11 +11,11 @@ namespace slamd {
 class Tree {
    private:
     uint64_t id;
-    std::unique_ptr<Node> root;
 
    public:
     Tree(uint64_t id);
     Tree(uint64_t id, std::unique_ptr<Node>&& root);
+    std::unique_ptr<Node> root;
 
     virtual void
     set_object(const TreePath& path, std::shared_ptr<_geom::Geometry> object);
@@ -31,6 +31,7 @@ class Tree {
     std::optional<slamd::gmath::AABB> bounds();
     void set_transform(const TreePath& path, const glm::mat4& transform);
     void clear(const TreePath& path);
+    void mark_nodes_matching_glob(std::optional<TreePath> glob);
 
    protected:
     std::optional<Node*> traverse(const TreePath& path);

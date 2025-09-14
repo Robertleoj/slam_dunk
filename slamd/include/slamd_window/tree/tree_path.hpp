@@ -13,6 +13,7 @@ class TreePath {
     TreePath parent() const;
     std::string string() const;
     TreePath& operator=(const TreePath&) = default;
+    bool matches_glob(const TreePath& glob_path);
 
    public:
     std::vector<std::string> components;

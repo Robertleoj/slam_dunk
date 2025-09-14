@@ -18,6 +18,31 @@ Tree::Tree(
     : id(id),
       root(std::move(root)) {}
 
+void mark_glob_match_recursive(
+    Node* node,
+    TreePath& path,
+    std::optional<TreePath>& glob
+) {
+    if (!glob.has_value()) {
+        node->glob_matches = std::nullopt;
+    } else {
+        node->glob_matches = path.matches_glob(glob.value());
+    }
+
+    for (auto& [label, child] : node->children) {
+        path.components.push_back(label);
+        mark_glob_match_recursive(child.get(), path, glob);
+        path.components.pop_back();
+    }
+}
+
+void Tree::mark_nodes_matching_glob(
+    std::optional<TreePath> glob
+) {
+    TreePath pth("/");
+    mark_glob_match_recursive(this->root.get(), pth, glob);
+}
+
 std::shared_ptr<Tree> Tree::deserialize(
     const slamd::flatb::Tree* serialized,
     std::map<slamd::_id::GeometryID, std::shared_ptr<_geom::Geometry>>&
@@ -119,6 +144,10 @@ void Tree::render_recursive(
     const glm::mat4& view,
     const glm::mat4& projection
 ) const {
+    if (!node->glob_matches.has_value() && !node->checked) {
+        return;
+    }
+
     glm::mat4 next_transform = current_transform;
     auto node_transform = node->get_transform();
 
@@ -128,7 +157,7 @@ void Tree::render_recursive(
 
     const auto node_object = node->get_object();
 
-    if (node_object.has_value()) {
+    if (node_object.has_value() && node->glob_matches.value_or(true)) {
         node_object.value()->render(next_transform, view, projection);
     }
 

@@ -10,9 +10,6 @@
 
 namespace slamd {
 class SceneView : public View {
-   public:
-    std::shared_ptr<Tree> tree;
-
    private:
     FrameBuffer frame_buffer;
     Arcball arcball;
