@@ -29,6 +29,8 @@ class Node {
 
    public:
     bool checked = true;
+    std::optional<bool> glob_matches = std::nullopt;
+
     std::optional<std::shared_ptr<_geom::Geometry>> get_object() const;
 
     std::optional<glm::mat4> get_transform() const;

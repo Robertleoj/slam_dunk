@@ -90,9 +90,19 @@ inline void tree_menu(
 
     ImGui::Separator();
 
-    std::function<void(Node*, std::string, int, bool)> draw_node =
-        [&](Node* n, std::string label, int depth, bool parent_dimmed) {
+    std::function<void(Node*, std::string, int, bool, TreePath&)> draw_node =
+        [&](Node* n,
+            std::string label,
+            int depth,
+            bool parent_dimmed,
+            TreePath& full_path) {
             ImGui::PushID(n);
+
+            if (filter_path.has_value()) {
+                n->glob_matches = full_path.matches_glob(filter_path.value());
+            } else {
+                n->glob_matches = std::nullopt;
+            }
 
             const bool has_children = !n->children.empty();
             const ImGuiTreeNodeFlags base_flags =
@@ -123,7 +133,15 @@ inline void tree_menu(
 
             if (open) {
                 for (const auto& c : n->children) {
-                    draw_node(c.second.get(), c.first, depth + 1, dimmed);
+                    full_path.components.push_back(c.first);
+                    draw_node(
+                        c.second.get(),
+                        c.first,
+                        depth + 1,
+                        dimmed,
+                        full_path
+                    );
+                    full_path.components.pop_back();
                 }
                 ImGui::TreePop();
             }
@@ -133,7 +151,8 @@ inline void tree_menu(
             ImGui::PopID();
         };
 
-    draw_node(root, "/", 0, false);
+    TreePath pth("/");
+    draw_node(root, "/", 0, false, pth);
 }
 
 inline void draw_tree_overlay(

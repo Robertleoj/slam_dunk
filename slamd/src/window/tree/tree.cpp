@@ -119,6 +119,10 @@ void Tree::render_recursive(
     const glm::mat4& view,
     const glm::mat4& projection
 ) const {
+    if (!node->glob_matches.has_value() && !node->checked) {
+        return;
+    }
+
     glm::mat4 next_transform = current_transform;
     auto node_transform = node->get_transform();
 
@@ -128,7 +132,7 @@ void Tree::render_recursive(
 
     const auto node_object = node->get_object();
 
-    if (node_object.has_value()) {
+    if (node_object.has_value() && node->glob_matches.value_or(true)) {
         node_object.value()->render(next_transform, view, projection);
     }
 

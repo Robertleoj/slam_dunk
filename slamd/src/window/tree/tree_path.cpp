@@ -93,4 +93,66 @@ TreePath operator/(
     return TreePath(new_components);
 }
 
+bool match_component(
+    const std::string& pattern,
+    const std::string& text
+) {
+    // only * is supported (not ? or [])
+    size_t pi = 0, ti = 0, star = std::string::npos, match = 0;
+    while (ti < text.size()) {
+        if (pi < pattern.size() &&
+            (pattern[pi] == text[ti] || pattern[pi] == '?')) {
+            ++pi;
+            ++ti;
+        } else if (pi < pattern.size() && pattern[pi] == '*') {
+            star = pi++;
+            match = ti;
+        } else if (star != std::string::npos) {
+            pi = star + 1;
+            ti = ++match;
+        } else {
+            return false;
+        }
+    }
+    while (pi < pattern.size() && pattern[pi] == '*') {
+        ++pi;
+    }
+    return pi == pattern.size();
+}
+
+bool match_glob(
+    const std::vector<std::string>& path,
+    const std::vector<std::string>& pattern,
+    size_t pi = 0,
+    size_t si = 0
+) {
+    while (pi < pattern.size()) {
+        if (pattern[pi] == "**") {
+            // try to consume any number of segments
+            for (size_t skip = 0; si + skip <= path.size(); ++skip) {
+                if (match_glob(path, pattern, pi + 1, si + skip)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            if (si >= path.size()) {
+                return false;
+            }
+            if (!match_component(pattern[pi], path[si])) {
+                return false;
+            }
+            ++pi;
+            ++si;
+        }
+    }
+    return si == path.size();
+}
+
+bool TreePath::matches_glob(
+    const TreePath& glob_path
+) {
+    return match_glob(this->components, glob_path.components);
+}
+
 }  // namespace slamd
