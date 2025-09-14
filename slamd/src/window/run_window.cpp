@@ -19,13 +19,13 @@ void framebuffer_size_callback(
 }
 
 inline void tree_menu(
-    Node* root
+    View* view
 ) {
-    static char filter_buf[128] = "";  // text input buffer (persists)
+    Node* root = view->tree->root.get();
 
     // Compute a field width that fully shows the text (plus padding)
     const float min_field_w = 250.0f;
-    const float text_w = ImGui::CalcTextSize(filter_buf).x;
+    const float text_w = ImGui::CalcTextSize(view->filter_buf).x;
     const float pad_x = ImGui::GetStyle().FramePadding.x;
 
     // A little extra so the caret isn’t jammed at the edge
@@ -33,16 +33,66 @@ inline void tree_menu(
     const float field_w =
         (desired_field_w < min_field_w) ? min_field_w : desired_field_w;
 
+    std::optional<std::string> filter_error_text;
+    std::optional<TreePath> filter_path;
+    std::string filter_string(view->filter_buf);
+
+    if (filter_string.size() > 0) {
+        try {
+            filter_path = TreePath(filter_string);
+        } catch (const std::invalid_argument& e) {
+            filter_error_text = e.what();
+        }
+    }
+
     ImGui::AlignTextToFramePadding();
     ImGui::TextUnformatted("Filter:");
     ImGui::SameLine();
     ImGui::SetNextItemWidth(field_w);  // take all remaining width on the line
-    ImGui::InputText("##filter", filter_buf, IM_ARRAYSIZE(filter_buf));
+
+    if (filter_error_text.has_value()) {
+        ImGui::PushStyleColor(
+            ImGuiCol_FrameBg,
+            ImVec4(0.35f, 0.10f, 0.10f, 1.0f)
+        );
+        ImGui::PushStyleColor(
+            ImGuiCol_FrameBgHovered,
+            ImVec4(0.45f, 0.12f, 0.12f, 1.0f)
+        );
+        ImGui::PushStyleColor(
+            ImGuiCol_FrameBgActive,
+            ImVec4(0.50f, 0.13f, 0.13f, 1.0f)
+        );
+        ImGui::PushStyleColor(
+            ImGuiCol_Border,
+            ImVec4(0.90f, 0.20f, 0.20f, 1.0f)
+        );
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+    }
+    ImGui::InputText(
+        "##filter",
+        view->filter_buf,
+        IM_ARRAYSIZE(view->filter_buf)
+    );
+    if (filter_error_text.has_value()) {
+        ImGui::PopStyleVar();
+        ImGui::PopStyleColor(4);
+
+        // Tooltip on hover
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("%s", filter_error_text.value().c_str());
+        }
+
+        // Inline red "!" marker
+        ImGui::SameLine();
+        ImGui::TextColored(ImVec4(0.95f, 0.25f, 0.25f, 1.0f), "!");
+    }
+
     ImGui::Separator();
 
     std::function<void(Node*, std::string, int, bool)> draw_node =
         [&](Node* n, std::string label, int depth, bool parent_dimmed) {
-            ImGui::PushID(n);  // stable-ish ID; swap for n->id if you got one
+            ImGui::PushID(n);
 
             const bool has_children = !n->children.empty();
             const ImGuiTreeNodeFlags base_flags =
@@ -53,8 +103,6 @@ inline void tree_menu(
                               : ImGuiTreeNodeFlags_Leaf |
                                     ImGuiTreeNodeFlags_NoTreePushOnOpen);
 
-            // Inherit dimming if any ancestor is unchecked, or this node is
-            // unchecked
             const bool dimmed = parent_dimmed || !n->checked;
             bool dimmed_here = !parent_dimmed && !n->checked;
             if (dimmed_here) {
@@ -89,7 +137,7 @@ inline void tree_menu(
 }
 
 inline void draw_tree_overlay(
-    Node* root,
+    View* view,
     const char* overlay_id = "##scene_tree_overlay",
     const char* header = "Tree",
     float margin = 8.0f,
@@ -128,7 +176,7 @@ inline void draw_tree_overlay(
     }
 
     // Reuse your tree renderer (defaults collapsed)
-    tree_menu(root);
+    tree_menu(view);
 
     ImGui::End();
 
@@ -209,7 +257,7 @@ void run_window(
                 );
                 scene->render_to_imgui();
 
-                draw_tree_overlay(scene->tree->root.get());
+                draw_tree_overlay(scene.get());
 
                 ImGui::End();
                 ImGui::PopStyleVar();

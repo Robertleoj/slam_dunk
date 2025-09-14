@@ -12,6 +12,9 @@ class View {
     static std::unique_ptr<View>
     deserialize(const flatb::View* view, std::shared_ptr<Tree> tree);
     std::shared_ptr<Tree> tree;
+
+    std::optional<std::string> visualize_glob = std::nullopt;
+    char filter_buf[512] = "";
 };
 
 }  // namespace slamd
