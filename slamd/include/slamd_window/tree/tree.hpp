@@ -9,13 +9,13 @@
 namespace slamd {
 
 class Tree {
-   private:
+   public:
     uint64_t id;
+    std::unique_ptr<Node> root;
 
    public:
     Tree(uint64_t id);
     Tree(uint64_t id, std::unique_ptr<Node>&& root);
-    std::unique_ptr<Node> root;
 
     virtual void
     set_object(const TreePath& path, std::shared_ptr<_geom::Geometry> object);

@@ -29,6 +29,8 @@ class Node {
 
    public:
     bool checked = true;
+    float last_label_w = 0.0f;         // measured each frame
+    bool has_children_cached = false;  // convenience (we set it each draw)
     std::optional<bool> glob_matches = std::nullopt;
 
     std::optional<std::shared_ptr<_geom::Geometry>> get_object() const;
