@@ -1,3 +1,6 @@
+/**
+ * All of the tree widget stuff is vide-coded!
+ */
 #include <glbinding/gl/gl.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -18,32 +21,29 @@ void framebuffer_size_callback(
     gl::glViewport(0, 0, width, height);
 }
 
+// Vibe coded
 inline float compute_visible_tree_content_width(
     Node* root,
     const std::unordered_map<Node*, bool>& open_map
 ) {
     const ImGuiStyle& style = ImGui::GetStyle();
     const float indent = style.IndentSpacing;
-    const float row_h = ImGui::GetFrameHeight();  // checkbox/arrow size
-    const float chk_pad =
-        style.ItemInnerSpacing.x;  // between checkbox and arrow
-    const float label_pad = ImGui::GetTreeNodeToLabelSpacing();  // after arrow
-    const float badge_w = 12.0f;  // match-dot + margin
+    const float row_h = ImGui::GetFrameHeight();
+    const float chk_pad = style.ItemInnerSpacing.x;
+    const float label_pad = ImGui::GetTreeNodeToLabelSpacing();
+    const float badge_w = 12.0f;
 
     float max_w = 0.0f;
 
     std::function<void(Node*, int)> walk = [&](Node* n, int depth) {
-        // row left side = indent + checkbox + pad + (arrow if has children)
-        float left = depth * indent + row_h /*checkbox*/ + chk_pad +
-                     (n->has_children_cached ? row_h : 0.0f) /*arrow*/ +
-                     label_pad;
+        float left = depth * indent + row_h + chk_pad +
+                     (n->has_children_cached ? row_h : 0.0f) + label_pad;
 
         float total = left + n->last_label_w + badge_w;
         if (total > max_w) {
             max_w = total;
         }
 
-        // only recurse if this node is open (visible children)
         auto it = open_map.find(n);
         bool is_open = (it != open_map.end()) ? it->second : false;
         if (n->has_children_cached && is_open) {
@@ -53,22 +53,20 @@ inline float compute_visible_tree_content_width(
         }
     };
 
-    // root depth=0 (root label is "/"; its children are depth=1)
     walk(root, 0);
     return max_w;
 }
 
+// Vibe coded
 inline void tree_menu(
     View* view
 ) {
     Node* root = view->tree->root.get();
 
-    // Compute a field width that fully shows the text (plus padding)
     const float min_field_w = 250.0f;
     const float text_w = ImGui::CalcTextSize(view->filter_buf).x;
     const float pad_x = ImGui::GetStyle().FramePadding.x;
 
-    // A little extra so the caret isn’t jammed at the edge
     const float desired_field_w = text_w + 2.0f * pad_x + 12.0f;
     const float field_w =
         (desired_field_w < min_field_w) ? min_field_w : desired_field_w;
@@ -90,7 +88,7 @@ inline void tree_menu(
     ImGui::AlignTextToFramePadding();
     ImGui::TextUnformatted("Filter:");
     ImGui::SameLine();
-    ImGui::SetNextItemWidth(field_w);  // take all remaining width on the line
+    ImGui::SetNextItemWidth(field_w);
 
     if (filter_error_text.has_value()) {
         ImGui::PushStyleColor(
@@ -120,12 +118,10 @@ inline void tree_menu(
         ImGui::PopStyleVar();
         ImGui::PopStyleColor(4);
 
-        // Hover tooltip still works off the input item
         if (ImGui::IsItemHovered()) {
             ImGui::SetTooltip("%s", filter_error_text->c_str());
         }
 
-        // --- Draw a red "!" INSIDE the input box, right-aligned ---
         ImDrawList* dl = ImGui::GetWindowDrawList();
 
         ImVec2 rmin = ImGui::GetItemRectMin();
@@ -135,9 +131,8 @@ inline void tree_menu(
         const char* bang = "!";
         ImVec2 bang_sz = ImGui::CalcTextSize(bang);
 
-        float x = rmax.x - style.FramePadding.x - bang_sz.x;  // right-aligned
-        float y = rmin.y + ((rmax.y - rmin.y) - bang_sz.y) *
-                               0.5f;  // vertically centered
+        float x = rmax.x - style.FramePadding.x - bang_sz.x;
+        float y = rmin.y + ((rmax.y - rmin.y) - bang_sz.y) * 0.5f;
 
         dl->AddText(
             ImVec2(x, y),
@@ -178,7 +173,6 @@ inline void tree_menu(
                 ImGui::PushStyleVar(ImGuiStyleVar_Alpha, base_alpha * 0.45f);
             }
 
-            // Checkbox aligned to the right of the same line
             ImGui::Checkbox("##visible", &n->checked);
             ImGui::SameLine(0.0f, 4.0f);
 
@@ -197,25 +191,20 @@ inline void tree_menu(
             if (n->glob_matches.has_value()) {
                 const bool match = n->glob_matches.value_or(false);
 
-                // Get row rect from the last item (the tree node we just drew)
                 ImVec2 item_min = ImGui::GetItemRectMin();
                 ImVec2 item_max = ImGui::GetItemRectMax();
 
-                // Compute right edge of the content area (screen coords)
                 ImVec2 win_pos = ImGui::GetWindowPos();
                 ImVec2 cr_max = ImGui::GetWindowContentRegionMax();
                 float right_edge_x =
                     win_pos.x + cr_max.x - ImGui::GetStyle().ItemInnerSpacing.x;
 
-                // Circle params
                 float radius = 4.0f;
-                float cx = right_edge_x - radius;  // right-aligned
-                float cy =
-                    0.5f * (item_min.y + item_max.y);  // vertically centered
+                float cx = right_edge_x - radius;
+                float cy = 0.5f * (item_min.y + item_max.y);
 
                 ImU32 col_fill =
-                    ImGui::GetColorU32(ImVec4(0.30f, 0.85f, 0.40f, 1.0f)
-                    );  // green
+                    ImGui::GetColorU32(ImVec4(0.30f, 0.85f, 0.40f, 1.0f));
                 ImU32 col_line = ImGui::GetColorU32(
                     ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled)
                 );
@@ -252,6 +241,7 @@ inline void tree_menu(
     draw_node(root, "/", 0, false, pth);
 }
 
+// Vibe coded
 inline void draw_tree_overlay(
     View* view,
     const char* child_id = "##scene_tree_overlay_child",
@@ -260,7 +250,6 @@ inline void draw_tree_overlay(
     float min_width = 220.0f,
     float min_height = 80.0f
 ) {
-    // --- Scene content rect (screen coords)
     ImVec2 win_pos = ImGui::GetWindowPos();
     ImVec2 cr_min = ImGui::GetWindowContentRegionMin();
     ImVec2 cr_max = ImGui::GetWindowContentRegionMax();
@@ -271,13 +260,10 @@ inline void draw_tree_overlay(
     float max_w = std::max(0.0f, (br.x - tl.x) - 2.0f * margin);
     float max_h = std::max(0.0f, (br.y - tl.y) - 2.0f * margin);
 
-    // --- Predict needed CONTENT width this frame (no lag)
     const ImGuiStyle& style = ImGui::GetStyle();
     const float pad_x = style.WindowPadding.x;
-    const float border_px =
-        1.0f;  // BeginChild(..., true, ...) draws a 1px border
+    const float border_px = 1.0f;
 
-    // Filter row predicted width
     const char* filter_lbl = "Filter:";
     float filter_lbl_w = ImGui::CalcTextSize(filter_lbl).x;
     float text_w = ImGui::CalcTextSize(view->filter_buf).x;
@@ -285,47 +271,37 @@ inline void draw_tree_overlay(
         std::max(250.0f, text_w + 2.0f * style.FramePadding.x + 12.0f);
     float filter_row_w = filter_lbl_w + style.ItemSpacing.x + field_w;
 
-    // Tree predicted width (walk the data)
     float tree_w = compute_visible_tree_content_width(
         view->tree->root.get(),
         view->tree_open
     );
 
-    // Header width (optional)
     float header_w = 0.0f;
     if (header && *header) {
         header_w = ImGui::CalcTextSize(header).x;
     }
 
-    // Needed CONTENT width = max of pieces
     float need_content_w = std::max({filter_row_w, tree_w, header_w});
 
-    // Turn CONTENT width into CHILD (outer) width
     float predicted_child_w = need_content_w + pad_x * 2.0f + border_px * 2.0f;
 
-    // Use last frame as a fallback, but allow instant grow/shrink with
-    // hysteresis
     float prev_w =
         (view->tree_overlay_w > 0.0f) ? view->tree_overlay_w : min_width;
     float target_w = std::clamp(predicted_child_w, min_width, max_w);
 
-    // Hysteresis to avoid 1px jitter (allows both grow and shrink if
-    // meaningful)
     auto snap = [](float v) {
         return std::floor(v + 0.5f);
     };
     const float hysteresis_px = 2.0f;
     if (std::fabs(target_w - prev_w) <= hysteresis_px) {
-        target_w = prev_w;  // hold if change is tiny
+        target_w = prev_w;
     }
     target_w = snap(target_w);
 
-    // Height: use previous measured or min; we'll correct after measuring
     float prev_h =
         (view->tree_overlay_h > 0.0f) ? view->tree_overlay_h : min_height;
     float target_h = std::clamp(prev_h, min_height, max_h);
 
-    // --- Place and draw child
     ImVec2 prev_cursor = ImGui::GetCursorScreenPos();
     ImGui::SetCursorScreenPos(pos);
 
@@ -342,11 +318,9 @@ inline void draw_tree_overlay(
         ImGui::TextUnformatted(header);
         ImGui::Separator();
     }
-    tree_menu(view
-    );  // this draws with SpanFullWidth (fine; we predicted intrinsic)
+    tree_menu(view);
     ImGui::EndGroup();
 
-    // Measure content to get height right (and sanity-check width)
     ImVec2 content_min = ImGui::GetItemRectMin();
     ImVec2 content_max = ImGui::GetItemRectMax();
     ImVec2 content_sz =
@@ -354,13 +328,11 @@ inline void draw_tree_overlay(
 
     ImGui::EndChild();
 
-    // Recompute CHILD sizes from measured CONTENT
     float measured_child_w =
         content_sz.x + style.WindowPadding.x * 2.0f + border_px * 2.0f;
     float measured_child_h =
         content_sz.y + style.WindowPadding.y * 2.0f + border_px * 2.0f;
 
-    // Apply min/bounds + hysteresis + snap for both axes
     auto apply_axis = [&](float want, float prev, float mn, float mx) {
         want = std::clamp(want, mn, mx);
         if (std::fabs(want - prev) <= hysteresis_px) {
@@ -378,8 +350,8 @@ inline void draw_tree_overlay(
     view->tree_overlay_h =
         apply_axis(measured_child_h, target_h, min_height, max_h);
 
-    ImGui::PopStyleVar();    // WindowPadding
-    ImGui::PopStyleColor();  // ChildBg
+    ImGui::PopStyleVar();
+    ImGui::PopStyleColor();
     ImGui::SetCursorScreenPos(prev_cursor);
 }
 
