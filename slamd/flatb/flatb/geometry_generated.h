@@ -189,7 +189,8 @@ struct Triad FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TriadBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_SCALE = 4,
-    VT_THICKNESS = 6
+    VT_THICKNESS = 6,
+    VT_POSE = 8
   };
   float scale() const {
     return GetField<float>(VT_SCALE, 0.0f);
@@ -197,10 +198,14 @@ struct Triad FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   float thickness() const {
     return GetField<float>(VT_THICKNESS, 0.0f);
   }
+  const slamd::flatb::Mat4 *pose() const {
+    return GetStruct<const slamd::flatb::Mat4 *>(VT_POSE);
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<float>(verifier, VT_SCALE, 4) &&
            VerifyField<float>(verifier, VT_THICKNESS, 4) &&
+           VerifyField<slamd::flatb::Mat4>(verifier, VT_POSE, 4) &&
            verifier.EndTable();
   }
 };
@@ -214,6 +219,9 @@ struct TriadBuilder {
   }
   void add_thickness(float thickness) {
     fbb_.AddElement<float>(Triad::VT_THICKNESS, thickness, 0.0f);
+  }
+  void add_pose(const slamd::flatb::Mat4 *pose) {
+    fbb_.AddStruct(Triad::VT_POSE, pose);
   }
   explicit TriadBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -229,8 +237,10 @@ struct TriadBuilder {
 inline ::flatbuffers::Offset<Triad> CreateTriad(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     float scale = 0.0f,
-    float thickness = 0.0f) {
+    float thickness = 0.0f,
+    const slamd::flatb::Mat4 *pose = nullptr) {
   TriadBuilder builder_(_fbb);
+  builder_.add_pose(pose);
   builder_.add_thickness(thickness);
   builder_.add_scale(scale);
   return builder_.Finish();
