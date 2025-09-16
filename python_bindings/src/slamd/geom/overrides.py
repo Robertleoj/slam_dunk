@@ -5,6 +5,7 @@ from ..bindings.geom import (
     Sphere as Sphere_internal,
     Arrows as Arrows_internal,
     Plane as Plane_internal,
+    Triad as Triad_internal,
 )
 from .._utils.colors import Color
 from .._utils.handle_input import process_color, process_radii, process_single_color
@@ -95,3 +96,7 @@ def Plane(
     alpha: float = 0.8,
 ):
     return Plane_internal(normal, point, process_single_color(color), radius, alpha)
+
+
+def Triad(pose: np.ndarray | None = None, scale: float = 1.0, thickness: float = 1.0):
+    return Triad_internal(pose, scale, thickness)

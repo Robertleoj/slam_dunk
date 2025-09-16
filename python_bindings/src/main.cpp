@@ -576,7 +576,7 @@ void define_geom(
 
     m.def(
         "Triad",
-        [](std::optional<glm::mat4> pose, float thickness, float scale) {
+        [](std::optional<glm::mat4> pose, float scale, float thickness) {
             if (pose.has_value()) {
                 return slamd::geom::triad(pose.value(), scale, thickness);
             } else {

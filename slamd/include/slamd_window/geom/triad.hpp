@@ -11,7 +11,7 @@ namespace _geom {
 
 class Triad : public Geometry {
    public:
-    Triad(float scale, float thickness);
+    Triad(float scale, float thickness, glm::mat4 pose);
 
     void render(glm::mat4 model, glm::mat4 view, glm::mat4 projection) override;
 
@@ -21,6 +21,7 @@ class Triad : public Geometry {
 
    private:
     std::unique_ptr<Arrows> arrows;
+    glm::mat4 pose;
     glm::mat4 scale_transform;
 };
 
@@ -30,7 +31,11 @@ namespace geom {
 
 using TriadPtr = std::shared_ptr<_geom::Triad>;
 
-TriadPtr triad(float scale = 1.0, float thickness = 0.1);
+TriadPtr triad(
+    float scale = 1.0,
+    float thickness = 0.1,
+    glm::mat4 pose = glm::mat4(1.0)
+);
 
 }  // namespace geom
 
