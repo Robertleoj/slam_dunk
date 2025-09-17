@@ -25,6 +25,9 @@ if __name__ == "__main__":
     vis.hang_forever()
 ```
 
+Running this program results in the following interactive visualization:
+![](./images/hello_world.png)
+
 This example highlights the main components of SlamDunk.
 
 The `Visualizer` object maintains the state of the visualization, and starts a TCP server that the visualization window connects to.
@@ -42,15 +45,11 @@ A `Scene` object represents and contains a tree of 3D objects, accessed by paths
 
 `Geometry` objects represent the objects that are displayed in the scene.
 
-Running this program results in the following interactive visualization:
-![](./images/hello_world.png)
-
 ## Multiple scenes
 
 SlamDunk uses ImGui to allow multiple sub-windows with floating and docking support inside the SlamDunk viewer. The following example illustrates creating two windows, each showing its own scene.
 
 ```python
-# python
 import slamd
 import numpy as np
 
