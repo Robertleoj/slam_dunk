@@ -4,7 +4,7 @@
 
 SlamDunk is a powerful and user-friendly Python library for making 3D and 2D visualizations for prototyping, data exploration, and algorithm development.
 
-It is very lightweight, built using OpenGL and ImGui.
+It is lightweight, built using OpenGL and ImGui.
 
 # Examples
 
