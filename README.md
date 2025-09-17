@@ -113,9 +113,7 @@ The examples in `python_examples` showcase some more features of SlamDunk. Some 
 
 # Installation
 
-## Python
-
-The python binding wheels are available on [PyPi](https://pypi.org/project/slamd/), so you can simply
+Wheels are available on [PyPi](https://pypi.org/project/slamd/), so you can simply
 
 ```bash
 pip install slamd
