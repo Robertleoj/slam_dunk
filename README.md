@@ -86,6 +86,8 @@ Here is a slightly more elaborate example of something you can do with SlamDunk:
 
 Or this one:
 
+![](./images/spiral.gif)
+
 ## Supported geometry primitives
 
 ### 3D
