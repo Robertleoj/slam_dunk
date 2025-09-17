@@ -122,4 +122,4 @@ pip install slamd
 
 # Contributions
 
-All contributions and feedback are welcome and apprechiated!
+All contributions and feedback are welcome and appreciated!
