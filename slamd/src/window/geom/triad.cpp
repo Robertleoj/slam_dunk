@@ -1,3 +1,4 @@
+#include <slamd_common/gmath/serialization.hpp>
 #include <slamd_common/gmath/transforms.hpp>
 #include <slamd_window/geom/triad.hpp>
 
@@ -7,7 +8,13 @@ namespace _geom {
 std::shared_ptr<Triad> Triad::deserialize(
     const slamd::flatb::Triad* triad_fb
 ) {
-    return std::make_shared<Triad>(triad_fb->scale(), triad_fb->thickness());
+    glm::mat4 pose = gmath::deserialize(triad_fb->pose());
+
+    return std::make_shared<Triad>(
+        triad_fb->scale(),
+        triad_fb->thickness(),
+        pose
+    );
 }
 
 std::unique_ptr<Arrows> make_arrows(
@@ -25,9 +32,11 @@ std::unique_ptr<Arrows> make_arrows(
 
 Triad::Triad(
     float scale,
-    float thickness
+    float thickness,
+    glm::mat4 pose
 )
-    : arrows(make_arrows(thickness)) {
+    : arrows(make_arrows(thickness)),
+      pose(pose) {
     this->scale_transform = slamd::gmath::scale(glm::vec3(scale, scale, scale));
 }
 
@@ -36,7 +45,8 @@ void Triad::render(
     glm::mat4 view,
     glm::mat4 projection
 ) {
-    this->arrows->render(model * this->scale_transform, view, projection);
+    this->arrows
+        ->render(model * this->pose * this->scale_transform, view, projection);
 }
 
 }  // namespace _geom
@@ -45,9 +55,10 @@ namespace geom {
 
 TriadPtr triad(
     float scale,
-    float thickness
+    float thickness,
+    glm::mat4 pose
 ) {
-    return std::make_shared<_geom::Triad>(scale, thickness);
+    return std::make_shared<_geom::Triad>(scale, thickness, pose);
 }
 }  // namespace geom
 

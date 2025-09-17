@@ -576,7 +576,14 @@ void define_geom(
 
     m.def(
         "Triad",
-        &slamd::geom::triad,
+        [](std::optional<glm::mat4> pose, float scale, float thickness) {
+            if (pose.has_value()) {
+                return slamd::geom::triad(pose.value(), scale, thickness);
+            } else {
+                return slamd::geom::triad(scale, thickness);
+            }
+        },
+        py::arg("pose") = std::nullopt,
         py::arg("scale") = 1.0f,
         py::arg("thickness") = 0.1f,
         "Create a Triad geometry"

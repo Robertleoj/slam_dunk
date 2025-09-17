@@ -5,6 +5,7 @@ namespace slamd.flatb;
 table Triad {
     scale: float;
     thickness: float;
+    pose: Mat4;
 }
 
 table Circles2D {

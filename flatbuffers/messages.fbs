@@ -56,8 +56,6 @@ table UpdatePointCloudRadii {
     radii: [float];
 }
 
-
-
 // general updates
 table SetTransform {
     tree_id: ulong;
