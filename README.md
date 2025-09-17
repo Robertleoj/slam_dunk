@@ -78,7 +78,7 @@ The resulting window looks like this:
 
 ![](./images/two_scenes.png)
 
-The windows are fully controllable - you can drag them around, make tabs, use them in floating mode, dock them to the sides like you see in the screenshot. All of this is supported by [ImGui](https://github.com/ocornut/imgui).
+The windows are fully controllable - you can drag them around, make tabs, use them in floating mode, or dock them to the sides like you see in the screenshot. All of this is supported by [ImGui](https://github.com/ocornut/imgui).
 
 Here is a slightly more elaborate example of something you can do with SlamDunk:
 
