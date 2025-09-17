@@ -2,7 +2,7 @@
 
 ---
 
-SlamDunk is a powerful and user-friendly C++/Python library for making live 3D and 2D visualizations for prototyping, data exploration, and algorithm development.
+SlamDunk is a powerful and user-friendly Python library for making live 3D and 2D visualizations for prototyping, data exploration, and algorithm development.
 
 It is very lightweight, built using OpenGL and ImGui.
 
@@ -13,7 +13,6 @@ It is very lightweight, built using OpenGL and ImGui.
 Here is a simple "hello world" program for a SlamDunk visualization.
 
 ```python
-#python
 import slamd
 
 if __name__ == "__main__":
@@ -26,21 +25,6 @@ if __name__ == "__main__":
     vis.hang_forever()
 ```
 
-```c++
-// C++
-#include <slamd/slamd.hpp>
-
-int main() {
-    auto vis = slamd::visualizer("hello_world");
-
-    auto scene = vis->scene("scene");
-
-    scene->set_object("/origin", slamd::geom::triad());
-
-    vis->hang_forever();
-}
-```
-
 This example highlights the main components of SlamDunk.
 
 The `Visualizer` object maintains the state of the visualization, and starts a TCP server that the visualization window connects to.
@@ -51,8 +35,6 @@ In this case, you can start a window with the `slamd-window` executable:
 ```
 slamd-window --port [port] --ip [ip]
 ```
-
-If you are using C++, this executable is built next to the library.
 
 This client-server architecture allows launching a visualizer a remote server, and connecting to it on your local machine.
 
@@ -93,41 +75,41 @@ if __name__ == "__main__":
 
 ```
 
-```c++
-// C++
-#include <glm/glm.hpp>
-#include <slamd/slamd.hpp>
-
-int main() {
-    auto vis = slamd::visualizer("two windows");
-
-    auto scene1 = vis->scene("scene 1");
-    auto scene2 = vis->scene("scene 2");
-
-    scene1->set_object("/box", slamd::geom::box());
-
-    scene2->set_object("/origin", slamd::geom::triad());
-    scene2->set_object("/ball", slamd::geom::sphere(2.0f));
-
-    glm::mat4 sphere_transform(1.0);
-    sphere_transform[3] += glm::vec4(5.0, 1.0, 2.0, 1.0);
-
-    scene2->set_transform("/ball", sphere_transform);
-
-    vis->hang_forever();
-}
-
-```
-
 The resulting window looks like this:
 
 ![](./images/two_scenes.png)
 
 The windows are fully controllable - you can drag then around, make tabs, use them in floating mode, dock them to the sides like you see in the screenshot. All of this is supported by [ImGui](https://github.com/ocornut/imgui).
 
+Here is a slightly more elaborate example of something you can do with SlamDunk:
+
+![](./images/moving_mesh.gif)
+
+Or this one:
+
+## Supported geometry primitives
+
+### 3D
+
+- Camera Frustums (with optional image) (`slamd.geom.CameraFrustum`)
+- Arrows/Vectors (`slamd.geom.Arrows`)
+- Arbitrary meshes (`slamd.geom.Mesh`)
+- Planes (`slamd.geom.Plane`)
+- Point Clouds (`slamd.geom.PointCloud`)
+- Piecewise linear curves (`slamd.geom.PolyLine`)
+- Spheres (`slamd.geom.Sphere`)
+- Triads/reference frames (`slamd.geom.Triad`)
+
+## 2D
+
+- Images (`slamd.geom2d.Image`)
+- Points (`slamd.geom2d.Points`)
+- Piecewise linear curves (`slamd.geom2d.PolyLine`)
+- Circles (`slamd.geom2d.Circles`)
+
 ## Further reading
 
-The C++ examples in `/examples` and python examples in `python_examples` showcase some more features of SlamDunk. Some examples are canvases for 2D visualizations and lots of additional geometry primitives such as point clouds, meshes, camera frustums, etc.
+The examples in `python_examples` showcase some more features of SlamDunk. Some examples are canvases for 2D visualizations and lots of additional geometry primitives such as point clouds, meshes, camera frustums, etc.
 
 # Installation
 
@@ -137,61 +119,6 @@ The python binding wheels are available on [PyPi](https://pypi.org/project/slamd
 
 ```bash
 pip install slamd
-```
-
-## C++
-
-### With FetchContent
-
-You can use CMake's `FetchContent`. Add this to your `CMakeLists.txt`:
-
-```cmake
-include(FetchContent)
-
-FetchContent_Declare(
-  slamd
-  GIT_REPOSITORY https://github.com/Robertleoj/slam_dunk.git
-  GIT_TAG main
-  SOURCE_SUBDIR slamd
-)
-
-FetchContent_MakeAvailable(slamd)
-```
-
-Linking to it then looks like:
-
-```cmake
-target_link_libraries(
-    your_target PRIVATE
-
-    slamd::slamd
-)
-```
-
-### With git submodules
-
-If you add the repo as a submodule in your project, you can add it as a subdirectory with
-
-```cmake
-add_subdirectory(path/to/slam_dunk/slamd)
-```
-
-Just make sure to
-
-```bash
-git submodule update --init --recursive
-```
-
-inside the submodule, as all necessary dependencies are vendored.
-
-You can then link it to your executable or library with
-
-```cmake
-target_link_libraries(
-    your_target PRIVATE
-
-    slamd::slamd
-)
 ```
 
 # Contributions
