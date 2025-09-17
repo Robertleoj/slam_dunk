@@ -50,16 +50,4 @@ void Triad::render(
 }
 
 }  // namespace _geom
-
-namespace geom {
-
-TriadPtr triad(
-    float scale,
-    float thickness,
-    glm::mat4 pose
-) {
-    return std::make_shared<_geom::Triad>(scale, thickness, pose);
-}
-}  // namespace geom
-
-}  // namespace slamd
+}  // namespace slami

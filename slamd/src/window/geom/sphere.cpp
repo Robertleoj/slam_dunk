@@ -52,15 +52,4 @@ void Sphere::render(
 };
 
 }  // namespace _geom
-
-namespace geom {
-
-SpherePtr sphere(
-    float radius,
-    glm::vec3 color
-) {
-    return std::make_shared<_geom::Sphere>(radius, color);
-}
-}  // namespace geom
-
 }  // namespace slamd

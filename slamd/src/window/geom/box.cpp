@@ -105,11 +105,4 @@ std::shared_ptr<Box> Box::deserialize(
 }
 
 }  // namespace _geom
-
-namespace geom {
-BoxPtr box() {
-    return std::make_shared<_geom::Box>();
-}
-
-}  // namespace geom
 }  // namespace slamd

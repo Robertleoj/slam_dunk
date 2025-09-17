@@ -56,12 +56,4 @@ class Mesh : public Geometry {
 };
 
 }  // namespace _geom
-
-namespace geom {
-
-using MeshPtr = std::shared_ptr<_geom::Mesh>;
-
-MeshPtr mesh(const slamd::data::MeshData& mesh_data);
-
-}  // namespace geom
 }  // namespace slamd

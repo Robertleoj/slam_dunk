@@ -192,18 +192,4 @@ slamd::gmath::AABB Circles2D::make_bounds(
 
 
 }  // namespace _geom
-
-namespace geom2d {
-
-CirclesPtr circles(
-    const std::vector<glm::vec2>& positions,
-    const std::vector<glm::vec3>& colors,
-    const std::vector<float>& radii,
-    float thickness
-) {
-    return std::make_shared<_geom::Circles2D>(
-        positions,colors,radii,thickness
-    );
-}
-}  // namespace geom2d
 }  // namespace slamd

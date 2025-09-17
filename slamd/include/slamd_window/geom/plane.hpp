@@ -25,19 +25,4 @@ class Plane : public Geometry {
 };
 
 }  // namespace _geom
-
-namespace geom {
-
-using PlanePtr = std::shared_ptr<_geom::Plane>;
-
-PlanePtr poly_line(
-    const glm::vec3& normal,
-    const glm::vec3& point,
-    const glm::vec3& color,
-    float radius,
-    float alpha
-);
-
-}  // namespace geom
-
 }  // namespace slamd

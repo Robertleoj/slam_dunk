@@ -30,17 +30,4 @@ class Arrows : public Geometry {
 };
 
 }  // namespace _geom
-
-namespace geom {
-
-using ArrowsPtr = std::shared_ptr<_geom::Arrows>;
-
-ArrowsPtr arrows(
-    const std::vector<glm::vec3>& starts,
-    const std::vector<glm::vec3>& ends,
-    const std::vector<glm::vec3>& colors,
-    float thickness
-);
-
-}  // namespace geom
 }  // namespace slamd

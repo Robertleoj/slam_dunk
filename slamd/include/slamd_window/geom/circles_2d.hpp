@@ -58,15 +58,4 @@ class Circles2D : public Geometry {
 };
 
 }  // namespace _geom
-
-namespace geom2d {
-using CirclesPtr = std::shared_ptr<_geom::Circles2D>;
-
-CirclesPtr circles(
-    const std::vector<glm::vec2>& positions,
-    const std::vector<glm::vec3>& colors,
-    const std::vector<float>& radii,
-    float thickness = 0.1
-);
-}  // namespace geom2d
 }  // namespace slamd

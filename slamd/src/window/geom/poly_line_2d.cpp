@@ -106,16 +106,4 @@ std::optional<slamd::gmath::AABB> PolyLine2D::bounds() {
 }
 
 }  // namespace _geom
-
-namespace geom2d {
-
-PolyLinePtr poly_line(
-    const std::vector<glm::vec2>& points,
-    const glm::vec3& color,
-    float thickness
-) {
-    return std::make_shared<_geom::PolyLine2D>(points, color, thickness);
-}
-
-}  // namespace geom2d
 }  // namespace slamd

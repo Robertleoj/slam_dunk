@@ -148,38 +148,4 @@ void CameraFrustum::render(
     }
 }
 }  // namespace _geom
-
-namespace geom {
-
-CameraFrustumPtr camera_frustum(
-    glm::mat3 intrinsics_matrix,
-    size_t image_width,
-    size_t image_height,
-    slamd::data::Image&& image,
-    float scale
-) {
-    return std::make_shared<_geom::CameraFrustum>(
-        intrinsics_matrix,
-        image_width,
-        image_height,
-        std::move(image),
-        scale
-    );
-}
-
-CameraFrustumPtr camera_frustum(
-    glm::mat3 intrinsics_matrix,
-    size_t image_width,
-    size_t image_height,
-    float scale
-) {
-    return std::make_shared<_geom::CameraFrustum>(
-        intrinsics_matrix,
-        image_width,
-        image_height,
-        scale
-    );
-}
-
-}  // namespace geom
 }  // namespace slamd
